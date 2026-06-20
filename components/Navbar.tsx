@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Logo from "./Logo";
-import { ArrowIcon } from "./ui/ArrowIcon";
+import ActionButton from "./ActionButton";
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -56,20 +56,13 @@ function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
 /** "Join us" pill button — Figma: 132×44, bg #195236, radius 60px */
 function JoinUsButton({ onClick }: { onClick?: () => void }) {
   return (
-    <Link
+    <ActionButton
       href="/join"
       onClick={onClick}
-      className={cn(
-        "flex h-[44px] items-center justify-center gap-[10px] rounded-[60px]",
-        "bg-[#195236] px-5 text-[16px] font-medium leading-[19px] text-[#F2F7F1]",
-        "transition-opacity hover:opacity-90 active:scale-95",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A9E179] focus-visible:ring-offset-2"
-      )}
-      style={{ fontFamily: "var(--font-inter-tight)" }}
-    >
-      <ArrowIcon size={20} className="shrink-0 text-[#F2F7F1]" />
-      Join us
-    </Link>
+      label="Join us"
+      variant="dark"
+      className="h-[44px]"
+    />
   );
 }
 

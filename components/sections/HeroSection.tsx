@@ -3,7 +3,7 @@
 import { memo } from "react";
 import Image from "next/image";
 import { useAutoSlide } from "@/hooks/useAutoSlide";
-import { CTAButton } from "@/components/ui/CTAButton";
+import ActionButton from "@/components/ActionButton";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 
 
@@ -192,24 +192,20 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
 
       {/* Frame 2147229466 — CTA row */}
       <div className="flex items-center gap-4">
-        <CTAButton
+        <ActionButton
           href="/products"
+          label="Our Products"
           variant="primary"
-          heightClass="h-[44px]"
-          className="w-[152px] text-[14px] leading-[17px]"
+          className="h-[44px] w-[152px] text-[14px] leading-[17px]"
           iconSize={20}
-        >
-          Our Products
-        </CTAButton>
-        <CTAButton
+        />
+        <ActionButton
           href="/about"
+          label="Learn More"
           variant="secondary"
-          heightClass="h-[44px]"
-          className="w-[143px] text-[14px] leading-[17px]"
+          className="h-[44px] w-[143px] text-[14px] leading-[17px]"
           iconSize={20}
-        >
-          Learn More
-        </CTAButton>
+        />
       </div>
     </div>
   );
@@ -246,24 +242,20 @@ const HeroContentMobile = memo(function HeroContentMobile() {
 
       {/* CTA row: 358×41, gap:8 */}
       <div className="flex w-full items-center justify-center gap-3 sm:gap-4">
-        <CTAButton
+        <ActionButton
           href="/products"
+          label="Our Products"
           variant="primary"
-          heightClass="h-[41px]"
-          className="w-[132px] text-[14px] leading-[17px]"
+          className="h-[41px] w-[132px] text-[14px] leading-[17px]"
           iconSize={16}
-        >
-          Our Products
-        </CTAButton>
-        <CTAButton
+        />
+        <ActionButton
           href="/about"
+          label="Learn More"
           variant="secondary"
-          heightClass="h-[41px]"
-          className="w-[121px] text-[14px] leading-[17px]"
+          className="h-[41px] w-[121px] text-[14px] leading-[17px]"
           iconSize={16}
-        >
-          Learn More
-        </CTAButton>
+        />
       </div>
     </div>
   );

@@ -20,18 +20,27 @@ export function ArrowIcon({ direction = "right", size = 20, ...props }: ArrowIco
       {...props}
     >
       {direction === "right" ? (
-        <path
-          d="M5 12h14M12 5l7 7-7 7"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        <>
+          <path
+            d="M18 8L22 12L18 16"
+            stroke="currentColor"
+            strokeWidth={props.strokeWidth || 1.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M2.00195 12H22.002"
+            stroke="currentColor"
+            strokeWidth={props.strokeWidth || 1.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </>
       ) : (
         <path
           d="M12 5v14M5 12l7 7 7-7"
           stroke="currentColor"
-          strokeWidth={2}
+          strokeWidth={props.strokeWidth || 2}
           strokeLinecap="round"
           strokeLinejoin="round"
         />

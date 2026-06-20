@@ -1,48 +1,60 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { ArrowIcon } from "./ui/ArrowIcon";
+
+export type ActionButtonVariant = "primary" | "secondary" | "dark";
 
 interface ActionButtonProps {
   label: string;
   href: string;
+  variant?: ActionButtonVariant;
   className?: string;
   containerClassName?: string;
   onClick?: () => void;
   showArrow?: boolean;
+  iconSize?: number;
 }
+
+const variantStyles: Record<ActionButtonVariant, string> = {
+  // #A9E179 green — used in hero "Our Products" and most CTAs
+  primary: "bg-[#A9E179] text-[#195236] hover:bg-[#96d270] focus-visible:ring-[#A9E179]",
+  // #F2F7F1 off-white — used in hero "Learn More"
+  secondary: "bg-[#F2F7F1] text-[#195236] hover:bg-white focus-visible:ring-white",
+  // #195236 dark green — used in "Join us", "View Openings", About CTAs
+  dark: "bg-[#195236] text-[#F2F7F1] hover:bg-[#153e28] focus-visible:ring-[#A9E179]",
+};
 
 export default function ActionButton({
   label,
   href,
+  variant = "dark",
   className,
-  containerClassName = "w-full",
+  containerClassName,
   onClick,
   showArrow = true,
+  iconSize = 20,
 }: ActionButtonProps) {
   return (
-    <Link href={href} onClick={onClick} className={containerClassName}>
+    <Link 
+      href={href} 
+      onClick={onClick} 
+      className={cn("w-fit inline-flex focus:outline-none", containerClassName)}
+    >
       <span
         className={cn(
-          "group/button text-base font-medium flex h-full w-full cursor-pointer items-center justify-center gap-1.5 rounded-full bg-brand-primary text-white transition-colors duration-200 hover:bg-brand-primary-hover focus:ring-brand-primary",
+          "group/button text-[16px] font-medium leading-[19px] flex items-center justify-center gap-[10px] rounded-[60px] px-5 transition-all duration-200 active:scale-95 cursor-pointer select-none",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+          variantStyles[variant],
           className
         )}
+        style={{ fontFamily: "var(--font-inter-tight)" }}
       >
         <span>{label}</span>
         {showArrow && (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="shrink-0 transition-transform duration-200 group-hover/button:translate-x-0.5"
-          >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
+          <ArrowIcon 
+            size={iconSize} 
+            className="shrink-0 transition-transform duration-200 group-hover/button:translate-x-0.5" 
+          />
         )}
       </span>
     </Link>
