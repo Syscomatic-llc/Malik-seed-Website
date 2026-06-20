@@ -35,6 +35,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${interTight.variable} ${inter.variable} ${anton.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
