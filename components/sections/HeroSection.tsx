@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useAutoSlide } from "@/hooks/useAutoSlide";
 import ActionButton from "@/components/ActionButton";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
+import Link from "next/link";
 
 
 interface HeroSlide {
@@ -284,9 +285,10 @@ const ScrollIndicator = memo(function ScrollIndicator() {
       </div>
 
       {/* Mobile */}
-      <div
+      <Link
+        href="#about"
         aria-label="Scroll to explore"
-        className="absolute left-0 right-0 mx-auto w-fit bottom-[67px] z-30 flex items-center gap-[10px] md:hidden"
+        className="absolute left-0 cursor-pointer right-0 mx-auto w-fit bottom-[67px] z-30 flex items-center gap-[10px] md:hidden"
       >
         <span
           className="text-[14px] font-medium leading-[17px] text-[#F2F7F1]"
@@ -295,7 +297,7 @@ const ScrollIndicator = memo(function ScrollIndicator() {
           Scroll to explore
         </span>
         <ArrowIcon direction="down" size={16} className="text-[#F2F7F1]" />
-      </div>
+      </Link>
     </>
   );
 });

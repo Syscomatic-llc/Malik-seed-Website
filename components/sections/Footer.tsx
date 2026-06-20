@@ -33,9 +33,9 @@ export default function Footer() {
               <Image
                 src="/malik_seeds_logo.svg"
                 alt="Malik Seeds"
-                width={170}
-                height={22}
-                style={{ width: "auto", height: "22px", filter: "brightness(0) invert(1)" }}
+                width={340}
+                height={45}
+                style={{ width: "170px", height: "auto", filter: "brightness(0) invert(1)" }}
               />
             </Link>
 
@@ -139,19 +139,14 @@ export default function Footer() {
         {/* Bottom — Figma: Frame 2147229574, 1240x272 */}
         {/* "Malik Seeds" large gradient wordmark */}
         <div className="mt-16 md:mt-[100px]">
-          <div
-            className="overflow-hidden text-[80px] font-bold leading-none tracking-tight md:text-[151px]"
-            style={{
-              background:
-                "linear-gradient(180deg, #75BC43 0%, rgba(117, 188, 67, 0.2) 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              fontFamily: "var(--font-inter-tight)",
-            }}
-          >
-            Malik Seeds
-          </div>
+          <Image
+            src="/footer_logo.svg"
+            alt="Malik Seeds"
+            width={1240}
+            height={272}
+            style={{ width: "1240px", height: "auto" }}
+            priority
+          />
         </div>
 
         {/* Divider + copyright */}

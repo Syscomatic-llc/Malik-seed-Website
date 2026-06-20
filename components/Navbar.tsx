@@ -54,14 +54,23 @@ function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
 }
 
 /** "Join us" pill button — Figma: 132×44, bg #195236, radius 60px */
-function JoinUsButton({ onClick }: { onClick?: () => void }) {
+function JoinUsButton({ 
+  onClick, 
+  className, 
+  containerClassName 
+}: { 
+  onClick?: () => void; 
+  className?: string; 
+  containerClassName?: string; 
+}) {
   return (
     <ActionButton
       href="/join"
       onClick={onClick}
       label="Join us"
       variant="dark"
-      className="h-[44px]"
+      className={cn("h-[44px]", className)}
+      containerClassName={containerClassName}
     />
   );
 }
@@ -77,7 +86,7 @@ function DesktopNav() {
     >
       <Logo />
 
-      {/* Nav links — Frame 5: 542×44, gap:4, centered */}
+      {/* Nav links */}
       <nav
         aria-label="Main navigation"
         className="flex flex-1 items-center justify-center gap-1"
@@ -159,7 +168,11 @@ function MobileNav() {
             ))}
           </nav>
           <div className="mt-8">
-            <JoinUsButton onClick={close} />
+            <JoinUsButton 
+              onClick={close} 
+              containerClassName="w-full"
+              className="w-full h-[44px] justify-center"
+            />
           </div>
         </div>
       </div>

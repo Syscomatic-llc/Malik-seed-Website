@@ -10,9 +10,9 @@ export default function Logo() {
       <Image
         src="/malik_seeds_logo.svg"
         alt="Malik Seeds"
-        width={170}
-        height={22}
-        style={{ width: "auto", height: "22px" }}
+        width={340}
+        height={45}
+        style={{ width: "170px", height: "auto" }}
         priority
       />
     </Link>

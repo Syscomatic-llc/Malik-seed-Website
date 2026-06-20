@@ -57,8 +57,10 @@ export default function ProductsSection() {
   return (
     <section className="w-full bg-brand-bg" id="products">
       <div className="mx-auto max-w-[1440px]">
-        {/* Figma: Frame 53 = 1440x754, contains 2 rows × 3 columns of cards (each 480x377) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+
+        {/* ===== Desktop/Tablet Grid Layout ===== */}
+        {/* Frame 53 — 1440x754, grid of 3x2 cards */}
+        <div className="hidden grid-cols-3 md:grid">
           {products.map((product) => (
             <Link
               key={product.id}
@@ -71,30 +73,32 @@ export default function ProductsSection() {
                   src={product.image}
                   alt={product.name}
                   fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  sizes="(max-width: 1024px) 50vw, 33vw"
                   className="object-cover"
                   priority={product.id <= 3}
                 />
               </div>
 
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/10 to-brand-dark/90 transition-opacity duration-300" />
+              {/* Gradient Overlay - Rectangle 2 */}
+              <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/0 via-brand-dark/30 to-[#0D1A14]/80 transition-opacity duration-300" />
 
-              {/* Card Content */}
-              <div className="absolute inset-0 z-20 flex flex-col justify-end p-9 text-brand-bg">
-                {/* Icon wrapper - Figma has 48x48 icon */}
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-bg/20 backdrop-blur-xs transition-transform duration-300 group-hover:scale-110 group-hover:bg-brand-light-green group-hover:text-brand-active">
-                  <ArrowIcon size={24} className="text-brand-bg group-hover:text-brand-active transition-colors" />
-                </div>
+              {/* Card Content - Frame 43 */}
+              <div className="absolute left-[37px] bottom-[30px] z-20 flex w-[calc(100%-74px)] flex-col gap-[16px] transition-transform duration-300 ease-out group-hover:-translate-y-[20px]">
+                {/* Arrow Icon — 48x48 */}
+                <ArrowIcon 
+                  size={48} 
+                  strokeWidth={2}
+                  className="text-[#F2F7F1] shrink-0 transition-transform duration-300 group-hover:translate-x-1" 
+                />
 
-                <div className="flex flex-col gap-1">
-                  <h3 className="font-sans text-[32px] font-medium leading-[38px] tracking-tight text-brand-bg">
+                <div className="flex flex-col gap-[16px]">
+                  <h3 className="font-sans text-[32px] font-medium leading-[48px] text-[#F2F7F1]">
                     {product.name}
                   </h3>
 
-                  {/* Description container - visible on hover, collapsed by default */}
-                  <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[120px] group-hover:opacity-100">
-                    <p className="font-inter mt-2 text-[18px] leading-[27px] text-brand-bg/90">
+                  {/* Description container - visible on hover */}
+                  <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-h-[120px] group-hover:opacity-100">
+                    <p className="font-sans text-[20px] font-normal leading-[30px] text-[#F2F7F1]">
                       {product.description}
                     </p>
                   </div>
@@ -103,6 +107,49 @@ export default function ProductsSection() {
             </Link>
           ))}
         </div>
+
+        {/* ===== Mobile Layout ===== */}
+        {/* Voice of Impact section — horizontal scrollable cards */}
+        <div className="md:hidden py-10 px-4 w-full bg-brand-bg">
+          <div className="flex flex-row overflow-x-auto gap-4 scrollbar-none scroll-smooth pb-2">
+            {products.map((product) => (
+              <Link
+                key={product.id}
+                href={product.href}
+                className="group relative flex h-[350px] w-[280px] shrink-0 overflow-hidden rounded-[24px]"
+              >
+                {/* Background Image */}
+                <div className="absolute inset-0 z-0">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    sizes="280px"
+                    className="object-cover"
+                  />
+                </div>
+
+                {/* Gradient Overlay - Rectangle 2 */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/0 via-brand-dark/40 to-[#0D1A14]/80" />
+
+                {/* Card Content - Frame 43 */}
+                <div className="absolute left-[24px] bottom-[24px] z-20 flex w-[calc(100%-48px)] flex-col gap-[8px]">
+                  {/* Arrow Icon — 32x32 */}
+                  <ArrowIcon 
+                    size={32} 
+                    strokeWidth={2}
+                    className="text-[#F2F7F1] shrink-0" 
+                  />
+
+                  <h3 className="font-sans text-[20px] font-medium leading-[30px] text-[#F2F7F1]">
+                    {product.name}
+                  </h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
       </div>
     </section>
   );

@@ -42,7 +42,7 @@ export default function ActionButton({
     >
       <span
         className={cn(
-          "group/button text-[16px] font-medium leading-[19px] flex items-center justify-center gap-[10px] rounded-[60px] px-5 transition-all duration-200 active:scale-95 cursor-pointer select-none",
+          "group/button text-[16px] font-medium leading-[19px] flex items-center justify-center gap-[10px] rounded-[60px] px-5 transition-all duration-200 active:scale-95 cursor-pointer select-none whitespace-nowrap",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
           variantStyles[variant],
           className
