@@ -15,22 +15,21 @@ interface HeroSlide {
 
 const HERO_SLIDES: HeroSlide[] = [
   {
-    src: "/hero_bg.png",
+    src: "/images/hero/hero-bg.png",
     alt: "hero image 1",
   },
   {
-    src: "/hero_image2.jpg",
+    src: "/images/hero/hero-slide-1.jpg",
     alt: "hero image 2",
   },
   {
-    src: "/hero_image4.jpg",
+    src: "/images/hero/hero-slide-2.jpg",
     alt: "hero image 4",
   },
   {
-    src: "/hero_image3.jpg",
+    src: "/images/hero/hero-slide-3.jpg",
     alt: "hero image 3",
   },
-
 ];
 
 const HERO_INTERVAL_MS = 7500;

@@ -45,7 +45,7 @@ export default function JoinTeamSection() {
           <div className="relative hidden flex-1 overflow-hidden md:block">
             <div className="absolute inset-0 overflow-hidden rounded-[32px]">
               <Image
-                src="/malik_seeds_team.png"
+                src="/images/team/team-banner.png"
                 alt="Join the Malik Seeds Team"
                 fill
                 sizes="(max-width: 768px) 0px, 690px"
@@ -57,7 +57,7 @@ export default function JoinTeamSection() {
           {/* Mobile image */}
           <div className="relative h-[200px] w-full overflow-hidden md:hidden">
             <Image
-              src="/malik_seeds_team.png"
+              src="/images/team/team-banner.png"
               alt="Join the Malik Seeds Team"
               fill
               sizes="100vw"

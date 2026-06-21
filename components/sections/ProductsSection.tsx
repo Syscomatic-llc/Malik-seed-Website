@@ -8,7 +8,7 @@ const products = [
     category: "Vegetable Seeds",
     name: "Vegetable Seeds",
     description: "Research-Backed Vegetable Seeds Farmers rely on",
-    image: "/11_1.png",
+    image: "/images/products/product-1.png",
     href: "/brands/vegetable-seeds",
   },
   {
@@ -16,7 +16,7 @@ const products = [
     category: "Potato Seed",
     name: "Potato Seed",
     description: "Bringing Next-Generation Potato Seeds to Farmers",
-    image: "/dscf7423.png",
+    image: "/images/products/product-2.png",
     href: "/brands/potato-seed",
   },
   {
@@ -24,7 +24,7 @@ const products = [
     category: "Malik’s Farm",
     name: "Malik’s Farm",
     description: "Research and Innovation Hub Behind Malik Seeds",
-    image: "/maliks_farm_rd.png",
+    image: "/images/products/product-3.png",
     href: "/brands/maliks-farm",
   },
   {
@@ -32,7 +32,7 @@ const products = [
     category: "Origene by Malik",
     name: "Origene by Malik",
     description: "Safe Fruits and Vegetables for Health Conscious Urban Consumers",
-    image: "/planted_10_2.png",
+    image: "/images/products/product-4.png",
     href: "/brands/origene",
   },
   {
@@ -40,7 +40,7 @@ const products = [
     category: "Malik’s Flower",
     name: "Malik’s Flower",
     description: "Premium Flower Varieties Bringing Global Genetics to Local Growers",
-    image: "/image_43.png",
+    image: "/images/products/product-5.png",
     href: "/brands/maliks-flower",
   },
   {
@@ -48,7 +48,7 @@ const products = [
     category: "Innovation & Development",
     name: "Innovation & Development",
     description: "Empowering Farmers Through Knowledge, Technology, and Market Access",
-    image: "/dscf8693_1.png",
+    image: "/images/products/product-6.png",
     href: "/brands/innovation-development",
   },
 ];

@@ -62,7 +62,7 @@ export default function AboutSection() {
             {/* Frame 32 — 503x340, bg-[#F9FAFB], radius 24px */}
             <div className="relative aspect-[503/340] w-full overflow-hidden rounded-[16px] bg-[#F9FAFB] xl:rounded-[24px]">
               <Image
-                src="/malik_seeds_team-3_1.png"
+                src="/images/team/team-banner.png"
                 alt="Malik Seeds Team"
                 fill
                 sizes="(max-width: 768px) 358px, (max-width: 1200px) 440px, 503px"
@@ -76,7 +76,7 @@ export default function AboutSection() {
               {/* Frame 33 — 243x226 */}
               <div className="relative aspect-[243/226] flex-1 rounded-[16px] xl:rounded-[24px] overflow-hidden">
                 <Image
-                  src="/frame_33.png"
+                  src="/images/about/about-1.png"
                   alt="Years of Experience"
                   fill
                   sizes="(max-width: 1200px) 200px, 243px"
@@ -86,7 +86,7 @@ export default function AboutSection() {
               {/* Frame 34 — 243x226 */}
               <div className="relative aspect-[243/226] flex-1 rounded-[16px] xl:rounded-[24px] overflow-hidden">
                 <Image
-                  src="/frame_34.png"
+                  src="/images/about/about-2.png"
                   alt="Farmer Partners"
                   fill
                   sizes="(max-width: 1200px) 200px, 243px"
@@ -157,7 +157,7 @@ export default function AboutSection() {
               {/* Frame 32 — 358x240, bg #F9FAFB, radius 16px */}
               <div className="relative h-[240px] w-full overflow-hidden rounded-[16px] bg-[#F9FAFB]">
                 <Image
-                  src="/malik_seeds_team-3_1.png"
+                  src="/images/team/team-banner.png"
                   alt="Malik Seeds Team"
                   fill
                   sizes="358px"
@@ -170,7 +170,7 @@ export default function AboutSection() {
                 {/* Frame 33 — 171x160 */}
                 <div className="relative h-[160px] flex-1">
                   <Image
-                    src="/frame_33_mobile.png"
+                    src="/images/about/about-1-mobile.png"
                     alt="Years of Experience"
                     fill
                     sizes="171px"
@@ -180,7 +180,7 @@ export default function AboutSection() {
                 {/* Frame 34 — 171x160 */}
                 <div className="relative h-[160px] flex-1">
                   <Image
-                    src="/frame_34_mobile.png"
+                    src="/images/about/about-2-mobile.png"
                     alt="Farmer Partners"
                     fill
                     sizes="171px"

@@ -31,7 +31,7 @@ export default function Footer() {
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <Image
-                src="/malik_seeds_logo.svg"
+                src="/images/brand/logo.svg"
                 alt="Malik Seeds"
                 width={340}
                 height={45}
@@ -129,7 +129,7 @@ export default function Footer() {
         {/* "Malik Seeds" large gradient wordmark */}
         <div className="mt-16 md:mt-[100px]">
           <Image
-            src="/footer_logo.svg"
+            src="/images/brand/logo-footer.svg"
             alt="Malik Seeds"
             width={1240}
             height={272}

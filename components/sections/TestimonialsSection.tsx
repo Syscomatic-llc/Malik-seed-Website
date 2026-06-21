@@ -26,7 +26,7 @@ const testimonials = [
     location: "Maitka, Hemayetpur, Savar",
     quote:
       "After losing his father in 2003, he carried my family through farming and Malik Seeds has been with him all the way. Green Crown variety has a special place in his broccoli project.",
-    images: ["/testimonial_ovi.png"],
+    images: ["/images/testimonials/ovi.png"],
   },
   {
     id: 2,
@@ -34,7 +34,7 @@ const testimonials = [
     location: "Nabagram, Baldhara, Singair",
     quote:
       "22 years abroad, then back to the soil. He learned about companion cropping from our FB page and now farms multiple varieties successfully.",
-    images: ["/testimonial_farmers10.png"],
+    images: ["/images/testimonials/rafiq-alt.png"],
   },
   {
     id: 3,
@@ -42,7 +42,7 @@ const testimonials = [
     location: "Nabagram, Baldhara, Singair",
     quote:
       "22 years abroad, then back to the soil. He learned about companion cropping from our FB page and now farms multiple varieties successfully.",
-    images: ["/testimonial_rafiq.png"],
+    images: ["/images/testimonials/rafiq.png"],
   },
   {
     id: 4,
@@ -50,7 +50,7 @@ const testimonials = [
     location: "Brahmankanda",
     quote:
       "Became talk of the town after harvesting PurpleBeauty in only 60 days, and within 120 days, total production reached 4.5 tons.",
-    images: ["/testimonial_jangir.png"],
+    images: ["/images/testimonials/jangir.png"],
   },
   {
     id: 5,
@@ -58,7 +58,10 @@ const testimonials = [
     location: "Sakrail, Garpara, Sadar, Manikganj",
     quote:
       "Ex-electrician turned farmer. In 2021, I bet 1.3 lakh on Malik Seeds' Ice Green cucumber and walked away with 3.0 lakh revenue.",
-    images: ["/testimonial_saiful_1.png", "/testimonial_saiful_2.png"],
+    images: [
+      "/images/testimonials/saiful-1.png",
+      "/images/testimonials/saiful-2.png",
+    ],
   },
 ];
 
