@@ -14,7 +14,7 @@ export default function Home() {
     <>
       {/* Navbar is positioned absolutely inside the HeroSection wrapper */}
       <Navbar />
-      
+
       <main className="relative flex-grow">
         {/* Hero Section */}
         <HeroSection />
