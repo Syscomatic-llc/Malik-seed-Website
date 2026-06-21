@@ -43,12 +43,12 @@ function NavLink({ item, onClick, dark }: { item: NavItem; onClick?: () => void;
         dark 
           ? "h-auto py-1 px-0 text-[16px] font-medium leading-[19px]" 
           : "h-[35px] rounded-full px-3 text-[16px] font-medium leading-[19px] hover:bg-neutral-50",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A9E179]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-light-green",
         isActive
-          ? "text-[#75BC43]"
+          ? "text-brand-accent"
           : dark
-          ? "text-[#F2F7F1] hover:text-white"
-          : "text-[#0D1A14]"
+          ? "text-brand-bg hover:text-white"
+          : "text-brand-dark"
       )}
       style={{ fontFamily: "var(--font-inter-tight)" }}
     >
@@ -127,9 +127,9 @@ function MobileMenuButton({
       aria-controls="mobile-menu"
       className={cn(
         "flex h-8 w-8 items-center justify-center rounded-full",
-        dark ? "text-[#F2F7F1] hover:bg-white/10" : "text-[#0D1A14] hover:bg-neutral-100",
+        dark ? "text-brand-bg hover:bg-white/10" : "text-brand-dark hover:bg-neutral-100",
         "transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A9E179]"
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-light-green"
       )}
     >
       {isOpen ? (
@@ -165,7 +165,7 @@ function MobileNav() {
       {/* Open State (unified card) */}
       <div
         className={cn(
-          "absolute top-0 left-0 w-full rounded-[24px] bg-[#0D1A14] shadow-lg transition-all duration-300 origin-top flex flex-col justify-between overflow-hidden z-50",
+          "absolute top-0 left-0 w-full rounded-[24px] bg-brand-dark shadow-lg transition-all duration-300 origin-top flex flex-col justify-between overflow-hidden z-50",
           isOpen 
             ? "opacity-100 scale-100 pointer-events-auto" 
             : "opacity-0 scale-95 pointer-events-none h-0"
@@ -189,7 +189,7 @@ function MobileNav() {
             <JoinUsButton
               onClick={close}
               containerClassName="w-full"
-              className="w-full h-[44px] justify-center bg-[#195236] hover:bg-[#153e28] text-[#F2F7F1]"
+              className="w-full h-[44px] justify-center bg-brand-active hover:bg-brand-primary-hover text-brand-bg"
             />
           </div>
         </div>

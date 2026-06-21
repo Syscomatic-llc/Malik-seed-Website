@@ -1,5 +1,6 @@
 import ActionButton from "@/components/ActionButton";
 import Image from "next/image";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 export default function JoinTeamSection() {
   return (
@@ -10,13 +11,10 @@ export default function JoinTeamSection() {
         <div className="relative flex flex-col overflow-hidden rounded-[24px] bg-white md:h-[490px] md:flex-row md:rounded-[32px]">
           {/* Left content — Figma: 403x301, left:60px, top:95px */}
           <div className="flex flex-col justify-center gap-4 px-6 py-10 md:w-[490px] md:px-[60px] md:py-0">
-            {/* Badge — Figma: "Join our Team", bg #F9FAFB, border #E4E7EC, radius 30px */}
-            <div className="flex w-fit items-center gap-2 rounded-[30px] border border-neutral-200 bg-[#F9FAFB] px-4 py-2">
-              <div className="h-[6px] w-[6px] rounded-sm bg-brand-active" />
-              <span className="font-inter text-[14px] font-medium leading-[21px] text-brand-active">
-                Join our Team
-              </span>
-            </div>
+            {/* Badge — Figma: "Join our Team" */}
+            <SectionBadge variant="outline" showDot>
+              Join our Team
+            </SectionBadge>
 
             {/* Title */}
             <div className="flex flex-col gap-6">

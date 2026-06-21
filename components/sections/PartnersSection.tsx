@@ -54,7 +54,7 @@ export default memo(function PartnersSection({ partners = MOCK_DB_PARTNERS }: Pa
   return (
     // Figma: 1440x430, bg #F2F7F1, border-bottom 1px solid #CED2DA
     <section
-      className="w-full overflow-hidden border-b border-[#CED2DA] bg-brand-bg py-15 md:py-25"
+      className="w-full overflow-hidden border-b border-brand-partners-border bg-brand-bg py-15 md:py-25"
       id="partners"
     >
       <div className="mx-auto max-w-[1440px]">

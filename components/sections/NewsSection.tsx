@@ -1,168 +1,215 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
+import Image from "next/image";
+import { SectionBadge } from "@/components/ui/SectionBadge";
+
+// Production Constants
+const CARD_WIDTH = 361;
+const CARD_GAP = 25;
+const CARD_SLOT_WIDTH = CARD_WIDTH + CARD_GAP; // 386px
 
 const articles = [
   {
     id: 1,
     category: "Climate",
-    date: "September 12, 2024",
+    date: "SEP 12, 2024",
     title: "Strengthening Climate-Resilient Farming Through Hybrid Innovation",
-    excerpt:
-      "Malik Seeds is developing hybrid varieties with higher resilience to extreme climate events, assisting local growers in securing their yields.",
-    readTime: "4 min read",
+    image: "/images/news/news-1.png",
   },
   {
     id: 2,
     category: "Commercial Growers",
-    date: "June 18, 2024",
+    date: "JUN 18, 2024",
     title: "Introducing High-Yield Pumpkin Variety for Commercial Growers",
-    excerpt:
-      "Our new hybrid pumpkin variety provides uniform size, disease resistance, and longer shelf-life, maximizing profits for commercial growers.",
-    readTime: "6 min read",
+    image: "/images/news/news-2.png",
   },
   {
     id: 3,
-    category: "Training",
-    date: "August 03, 2024",
+    category: "",
+    date: "AUG 03, 2024",
     title: "Expanding Farmer Training Programs Across Northern Regions",
-    excerpt:
-      "With support from development partners, we're expanding our agronomist training sessions to teach modern seed selection and cultivation techniques.",
-    readTime: "5 min read",
+    image: "/images/news/news-3.png",
   },
 ];
 
+interface NewsCardProps {
+  article: typeof articles[0];
+  isMobile?: boolean;
+}
+
+/**
+ * Reusable, memoized NewsCard component to avoid unneeded re-renders during slide transitions
+ */
+const NewsCard = memo(function NewsCard({ article, isMobile = false }: NewsCardProps) {
+  return (
+    <div
+      className={
+        isMobile
+          ? "flex flex-col w-[290px] sm:w-[320px] h-[430px] rounded-[24px] border border-brand-border-light bg-brand-neutral-light overflow-hidden shrink-0 snap-center"
+          : "flex flex-col w-[361px] h-[488px] rounded-[24px] border border-brand-border-light bg-brand-neutral-light overflow-hidden shrink-0 transition-opacity duration-300"
+      }
+    >
+      {/* Card Image */}
+      <div className={isMobile ? "relative w-full h-[220px] bg-neutral-100" : "relative w-full h-[264px] bg-neutral-100"}>
+        <Image
+          src={article.image}
+          alt={article.title}
+          fill
+          sizes={isMobile ? "(max-width: 640px) 290px, 320px" : "361px"}
+          className="object-cover object-center"
+          priority={!isMobile && article.id === 1}
+        />
+      </div>
+
+      {/* Card Content */}
+      <div className={isMobile ? "flex flex-col justify-between flex-1 p-5 pb-6" : "flex flex-col justify-between flex-1 p-6 pb-8"}>
+        {/* Category & Date Row */}
+        <div className="flex items-center gap-3 h-[29px]">
+          <span className={isMobile ? "font-inter text-[12px] leading-[18px] text-brand-dark/60" : "font-inter text-[14px] leading-[21px] text-brand-dark/60"}>
+            {article.date}
+          </span>
+          {article.category ? (
+            <>
+              <span className="text-brand-dark/40 text-sm">
+                •
+              </span>
+              <div className={isMobile ? "inline-flex h-[29px] items-center justify-center rounded-[8px] border border-brand-border bg-brand-bg px-3 text-[12px] font-medium text-brand-active" : "inline-flex h-[29px] items-center justify-center rounded-[8px] border border-brand-border bg-brand-bg px-4 text-[14px] font-medium text-brand-active"}>
+                {article.category}
+              </div>
+            </>
+          ) : null}
+        </div>
+
+        {/* Card Title */}
+        <h3 className={isMobile ? "font-sans text-[20px] font-medium leading-[25px] text-brand-dark line-clamp-3" : "font-sans text-[24px] font-medium leading-[29px] text-brand-dark line-clamp-3"}>
+          {article.title}
+        </h3>
+      </div>
+    </div>
+  );
+});
 
 export default function NewsSection() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const maxIdx = articles.length - 2; // On desktop, 2 cards are visible at a time
+
+  const handlePrev = useCallback(() => {
+    setActiveIdx((prev) => Math.max(0, prev - 1));
+  }, []);
+
+  const handleNext = useCallback(() => {
+    setActiveIdx((prev) => Math.min(maxIdx, prev + 1));
+  }, [maxIdx]);
 
   return (
-    // Desktop: 1439x688, bg #F2F7F1
+    // Figma desktop section: height 688px, bg #F2F7F1 (bg-brand-bg)
     <section className="w-full bg-brand-bg py-16 md:py-[100px]" id="news">
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
-        {/* Header row */}
-        <div className="mb-10 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between">
-          <div className="flex flex-col gap-4">
-            {/* Badge — Figma: 163x33, bg #F9FAFB, border #E4E7EC, radius 30px */}
-            <div className="flex w-fit items-center gap-2 rounded-[30px] border border-neutral-200 bg-[#F9FAFB] px-4 py-2">
-              <div className="h-[6px] w-[6px] rounded-sm bg-brand-active" />
-              <span className="font-inter text-[14px] font-medium leading-[21px] text-brand-active">
+        
+        {/* Responsive Grid System */}
+        <div className="flex flex-col lg:flex-row lg:gap-16 xl:gap-[64px]">
+          
+          {/* Left Column — Sticky info on desktop, standard flow on mobile */}
+          <div className="flex flex-col justify-between items-start gap-8 shrink-0 w-full lg:w-[429px] lg:h-[319px] mb-8 lg:mb-0">
+            <div className="flex flex-col gap-4 items-start w-full">
+              {/* Badge — Figma: bg #F9FAFB, border #E4E7EC, radius 30px */}
+              <SectionBadge variant="outline" showDot>
                 News & Stories
-              </span>
+              </SectionBadge>
+
+              {/* Title — Figma: "Insights from agricultural research & field experts" (48px / line-height 58px) */}
+              <h2 className="text-h2-title text-brand-dark max-w-[466px]">
+                Insights from agricultural research &amp; field experts
+              </h2>
             </div>
 
-            {/* Title — Figma: "Insights from agricultural research & field experts", 48px */}
-            <h2 className="text-h2-title text-brand-dark max-w-[466px]">
-              Insights from agricultural research &amp; field experts
-            </h2>
-          </div>
-
-          {/* Navigation arrows — Figma: 2× 48x48 circle */}
-          <div className="flex gap-4">
-            <button
-              onClick={() =>
-                setActiveIdx(
-                  (i) => (i - 1 + articles.length) % articles.length
-                )
-              }
-              aria-label="Previous article"
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-neutral-200 bg-neutral-200 transition-colors hover:bg-brand-active hover:text-white"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            {/* Navigation buttons — Figma: 2x 48x48 circles with 16px gap (hidden on mobile) */}
+            <div className="hidden lg:flex gap-4">
+              <button
+                onClick={handlePrev}
+                disabled={activeIdx === 0}
+                aria-label="Previous articles"
+                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${
+                  activeIdx === 0
+                    ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent"
+                    : "border-brand-border text-brand-dark hover:bg-brand-active hover:text-white hover:border-brand-active"
+                }`}
               >
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              onClick={() =>
-                setActiveIdx((i) => (i + 1) % articles.length)
-              }
-              aria-label="Next article"
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-active text-white transition-opacity hover:opacity-90"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Article cards — Figma: 361x488 each, bg #F9FAFB, border #F2F4F7, radius 24px */}
-        <div className="flex flex-col gap-4 md:flex-row md:gap-[25px]">
-          {articles.map((article, idx) => (
-            <div
-              key={article.id}
-              className={`flex flex-col gap-6 rounded-[24px] border border-[#F2F4F7] bg-[#F9FAFB] p-6 transition-opacity md:flex-1 md:p-8 ${
-                idx === activeIdx ? "opacity-100" : "opacity-60 md:opacity-60"
-              }`}
-            >
-              {/* Category tag */}
-              <div className="flex items-center justify-between">
-                <span className="font-inter rounded-full bg-brand-light-green/30 px-3 py-1 text-[12px] font-medium text-brand-active">
-                  {article.category}
-                </span>
-                <span className="font-inter text-[13px] text-brand-dark/40">
-                  {article.date}
-                </span>
-              </div>
-
-              {/* Article image placeholder */}
-              <div className="h-[160px] w-full rounded-[16px] bg-neutral-200 md:h-[200px]" />
-
-              {/* Content */}
-              <div className="flex flex-col gap-3">
-                <h3 className="text-h3-title font-semibold text-brand-dark">
-                  {article.title}
-                </h3>
-                <p className="font-inter text-[14px] leading-[22px] text-brand-dark/60 md:text-[15px]">
-                  {article.excerpt}
-                </p>
-              </div>
-
-              {/* Footer */}
-              <div className="mt-auto flex items-center justify-between">
-                <span className="font-inter text-[13px] text-brand-dark/40">
-                  {article.readTime}
-                </span>
-                <a
-                  href="/news"
-                  className="font-sans flex items-center gap-1.5 text-[14px] font-medium text-brand-active hover:underline"
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  Read more
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </a>
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={activeIdx === maxIdx}
+                aria-label="Next articles"
+                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${
+                  activeIdx === maxIdx
+                    ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent"
+                    : "border-brand-border text-brand-dark hover:bg-brand-active hover:text-white hover:border-brand-active"
+                }`}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column — Horizontal slider on desktop, native snap scroll on mobile */}
+          <div className="relative w-full lg:w-[748px] h-auto lg:h-[488px] overflow-hidden">
+            
+            {/* Side Fade Mask — Smoothly fades cards out on the right edge */}
+            <div
+              className="pointer-events-none absolute right-0 top-0 z-20 h-full w-[120px] bg-gradient-to-l from-brand-bg to-transparent hidden lg:block"
+            />
+
+            {/* Desktop Sliding Container (>=1024px) */}
+            <div className="hidden lg:block w-full h-full overflow-hidden">
+              <div
+                className="flex gap-[25px] transition-transform duration-500 ease-out"
+                style={{
+                  transform: `translateX(-${activeIdx * CARD_SLOT_WIDTH}px)`,
+                }}
+              >
+                {articles.map((article) => (
+                  <NewsCard key={article.id} article={article} />
+                ))}
               </div>
             </div>
-          ))}
+
+            {/* Mobile Native Swipe Container (<1024px) */}
+            <div className="block lg:hidden w-full overflow-x-auto scrollbar-none snap-x snap-mandatory pb-4">
+              <div className="flex gap-4">
+                {articles.map((article) => (
+                  <NewsCard key={article.id} article={article} isMobile />
+                ))}
+              </div>
+            </div>
+
+          </div>
+
         </div>
+
       </div>
     </section>
   );

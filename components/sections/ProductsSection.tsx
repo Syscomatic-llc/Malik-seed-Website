@@ -80,7 +80,7 @@ export default function ProductsSection() {
               </div>
 
               {/* Gradient Overlay - Rectangle 2 */}
-              <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/0 via-brand-dark/30 to-[#0D1A14]/80 transition-opacity duration-300" />
+              <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/0 via-brand-dark/30 to-brand-dark/80 transition-opacity duration-300" />
 
               {/* Card Content - Frame 43 */}
               <div className="absolute left-[37px] bottom-[30px] z-20 flex w-[calc(100%-74px)] flex-col gap-[16px] transition-transform duration-300 ease-out group-hover:-translate-y-[20px]">
@@ -88,17 +88,17 @@ export default function ProductsSection() {
                 <ArrowIcon 
                   size={48} 
                   strokeWidth={2}
-                  className="text-[#F2F7F1] shrink-0 transition-transform duration-300 group-hover:translate-x-1" 
+                  className="text-brand-bg shrink-0 transition-transform duration-300 group-hover:translate-x-1" 
                 />
 
                 <div className="flex flex-col gap-[16px]">
-                  <h3 className="text-h2-title text-[#F2F7F1]">
+                  <h3 className="text-h2-title text-brand-bg">
                     {product.name}
                   </h3>
 
                   {/* Description container - visible on hover */}
                   <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-h-[120px] group-hover:opacity-100">
-                    <p className="text-h3-title font-normal text-[#F2F7F1]">
+                    <p className="text-h3-title font-normal text-brand-bg">
                       {product.description}
                     </p>
                   </div>
@@ -130,7 +130,7 @@ export default function ProductsSection() {
                 </div>
 
                 {/* Gradient Overlay - Rectangle 2 */}
-                <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/0 via-brand-dark/40 to-[#0D1A14]/80" />
+                <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/0 via-brand-dark/40 to-brand-dark/80" />
 
                 {/* Card Content - Frame 43 */}
                 <div className="absolute left-[24px] bottom-[24px] z-20 flex w-[calc(100%-48px)] flex-col gap-[8px]">
@@ -138,10 +138,10 @@ export default function ProductsSection() {
                   <ArrowIcon 
                     size={32} 
                     strokeWidth={2}
-                    className="text-[#F2F7F1] shrink-0" 
+                    className="text-brand-bg shrink-0" 
                   />
 
-                  <h3 className="text-h3-title text-[#F2F7F1]">
+                  <h3 className="text-h3-title text-brand-bg">
                     {product.name}
                   </h3>
                 </div>

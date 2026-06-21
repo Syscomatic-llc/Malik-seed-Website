@@ -11,12 +11,12 @@ interface SectionBadgeProps {
 }
 
 const badgeVariants: Record<SectionBadgeVariant, string> = {
-  // #A9E179 green pill — Figma "About Malik Seeds", "Success stories", etc.
-  green: "bg-[#A9E179] text-[#195236]",
-  // White pill with #E4E7EC border — Figma "Success stories", "News & Stories"
-  outline: "bg-[#F9FAFB] border border-[#E4E7EC] text-[#195236]",
+  // Green pill — Figma "About Malik Seeds", "Success stories", etc.
+  green: "bg-brand-light-green text-brand-active",
+  // White pill with border — Figma "Success stories", "News & Stories"
+  outline: "bg-brand-neutral-light border border-brand-border text-brand-active",
   // Dark translucent — Figma "Timeline" badge on dark bg
-  dark: "bg-[#0D1A14]/32 border border-white/12 text-[#F2F7F1]",
+  dark: "bg-brand-dark/32 border border-white/12 text-brand-bg",
 };
 
 /**

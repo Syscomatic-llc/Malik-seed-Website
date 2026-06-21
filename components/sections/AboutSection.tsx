@@ -1,6 +1,7 @@
 import Image from "next/image";
 import ActionButton from "@/components/ActionButton";
 import CountUp from "@/components/ui/CountUp";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 const stats = [
   { value: "10k+", label: "Seed Varieties Trialed" },
@@ -31,19 +32,17 @@ export default function AboutSection() {
         <div className="hidden flex-row items-start gap-8 px-6 py-12 md:flex lg:gap-16 lg:px-16 lg:py-20 xl:gap-[129px] xl:px-[100px] xl:pt-[100px] xl:pb-0">
           {/* Left — Frame 22: 608x591, col, gap 32 */}
           <div className="flex flex-1 max-w-[608px] flex-col gap-6 lg:gap-8 xl:gap-[32px]">
-            {/* Section badge — Frame 20: 177x33, bg #A9E179, radius 30px */}
-            <div className="flex h-[33px] w-[177px] items-center justify-center rounded-[30px] bg-brand-light-green">
-              <span className="font-inter text-[14px] font-medium leading-[21px] text-brand-active">
-                About Malik Seeds
-              </span>
-            </div>
+            {/* Section badge — Figma "About Malik Seeds" */}
+            <SectionBadge variant="green">
+              About Malik Seeds
+            </SectionBadge>
 
             {/* Frame 2147229506 — 608x526, col, gap 48 */}
             <div className="flex flex-col gap-8 lg:gap-12 xl:gap-[48px]">
               {/* Group 1 — text content */}
               <p className="text-body-intro text-brand-dark">
                 <span>Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history goes back to 1969 when our founder, A. R. Malik launched &ldquo;Atlas-70&rdquo; Cabbage from Sakata Seed Corporation, based </span>
-                <span className="text-[#0D1A1499]"> in Japan. Today, we are among the most trusted brands in the agriculture industry.</span>
+                <span className="text-brand-dark/60"> in Japan. Today, we are among the most trusted brands in the agriculture industry.</span>
               </p>
 
               {/* Frame 6 CTA — 159x46, bg #195236, radius 60px */}
@@ -60,7 +59,7 @@ export default function AboutSection() {
           {/* Right — Frame 37: 503x582, left:737px, col, gap 16 */}
           <div className="flex w-[320px] shrink-0 flex-col gap-[16px] sm:w-[400px] lg:w-[440px] xl:w-[503px]">
             {/* Frame 32 — 503x340, bg-[#F9FAFB], radius 24px */}
-            <div className="relative aspect-[503/340] w-full overflow-hidden rounded-[16px] bg-[#F9FAFB] xl:rounded-[24px]">
+            <div className="relative aspect-[503/340] w-full overflow-hidden rounded-[16px] bg-brand-neutral-light xl:rounded-[24px]">
               <Image
                 src="/images/team/team-banner.png"
                 alt="Malik Seeds Team"
@@ -113,7 +112,7 @@ export default function AboutSection() {
                   </span>
                 </div>
                 {index < parsedStats.length - 1 && (
-                  <div className="ml-auto mr-0 h-[60px] lg:h-[72px] xl:h-[86px] w-[1px] bg-[#CED2DA]" />
+                  <div className="ml-auto mr-0 h-[60px] lg:h-[72px] xl:h-[86px] w-[1px] bg-brand-partners-border" />
                 )}
               </div>
             ))}
@@ -127,12 +126,10 @@ export default function AboutSection() {
           <div className="flex flex-col gap-[48px] px-[16px]">
             {/* Frame 22 — 358x559, col, gap 24, items-center */}
             <div className="flex flex-col items-center gap-[24px]">
-              {/* Badge — 157x30, bg #A9E179, radius 30px */}
-              <div className="flex h-[30px] w-[157px] items-center justify-center rounded-[30px] bg-brand-light-green">
-                <span className="font-inter text-[12px] font-medium leading-[18px] text-brand-active">
-                  About Malik Seeds
-                </span>
-              </div>
+              {/* Badge — Figma "About Malik Seeds" */}
+              <SectionBadge variant="green">
+                About Malik Seeds
+              </SectionBadge>
 
               {/* Main text + CTA */}
               <div className="flex flex-col items-center gap-[32px]">
@@ -155,7 +152,7 @@ export default function AboutSection() {
             {/* Frame 37 — 358x416, col, gap 16 */}
             <div className="flex flex-col gap-[16px]">
               {/* Frame 32 — 358x240, bg #F9FAFB, radius 16px */}
-              <div className="relative h-[240px] w-full overflow-hidden rounded-[16px] bg-[#F9FAFB]">
+              <div className="relative h-[240px] w-full overflow-hidden rounded-[16px] bg-brand-neutral-light">
                 <Image
                   src="/images/team/team-banner.png"
                   alt="Malik Seeds Team"
@@ -207,7 +204,7 @@ export default function AboutSection() {
               ))}
             </div>
             {/* Divider */}
-            <div className="h-[1px] w-[72px] bg-[#CED2DA]" />
+            <div className="h-[1px] w-[72px] bg-brand-partners-border" />
             {/* Row 2 — 2 stats */}
             <div className="flex w-full flex-row gap-[16px]">
               {parsedStats.slice(2, 4).map((stat) => (
@@ -222,7 +219,7 @@ export default function AboutSection() {
               ))}
             </div>
             {/* Divider */}
-            <div className="h-[1px] w-[72px] bg-[#CED2DA]" />
+            <div className="h-[1px] w-[72px] bg-brand-partners-border" />
             {/* Row 3 — 1 stat centered */}
             <div className="flex w-full">
               <div className="flex h-[125px] w-full flex-col items-center justify-center gap-[8px] rounded-[24px] px-3">
@@ -231,7 +228,7 @@ export default function AboutSection() {
                   <CountUp to={parsedStats[4].toValue} />
                   {parsedStats[4].suffix}
                 </span>
-                <span className="font-inter text-center text-[14px] leading-[21px] text-[#0D1A14]">{parsedStats[4].label}</span>
+                <span className="font-inter text-center text-[14px] leading-[21px] text-brand-dark">{parsedStats[4].label}</span>
               </div>
             </div>
           </div>

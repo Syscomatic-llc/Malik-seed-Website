@@ -106,7 +106,7 @@ const HeroOverlays = memo(function HeroOverlays() {
   return (
     <>
       {/* --- Desktop overlays --- */}
-      {/* Rectangle 30: gradient fade from transparent to #050D07 with 0.61 opacity */}
+      {/* Rectangle 30: gradient fade from transparent to brand-hero-dark with 0.61 opacity */}
       <div
         aria-hidden="true"
         className="absolute bottom-0 left-0 right-0 z-20 hidden w-full md:block"
@@ -114,7 +114,7 @@ const HeroOverlays = memo(function HeroOverlays() {
           height: 543,
           opacity: 0.61,
           background:
-            "linear-gradient(180deg, rgba(5, 13, 7, 0.00) 0%, #050D07 61.12%, #050D07 100%)",
+            "linear-gradient(180deg, rgba(5, 13, 7, 0.00) 0%, var(--brand-hero-dark) 61.12%, var(--brand-hero-dark) 100%)",
         }}
       />
       {/* Rectangle 1: blur overlay at very bottom */}
@@ -139,7 +139,7 @@ const HeroOverlays = memo(function HeroOverlays() {
           height: 389,
           opacity: 0.61,
           background:
-            "linear-gradient(180deg, rgba(5, 13, 7, 0.00) 0%, #050D07 61.12%, #050D07 100%)",
+            "linear-gradient(180deg, rgba(5, 13, 7, 0.00) 0%, var(--brand-hero-dark) 61.12%, var(--brand-hero-dark) 100%)",
         }}
       />
       {/* Rectangle 1 mobile: bottom-0 h:204px, blur */}
@@ -174,13 +174,13 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
     >
       {/* Frame 2147229465 — text stack */}
       <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
-        <h1 className="w-full text-center text-display text-[#F2F7F1]">
+        <h1 className="w-full text-center text-display text-brand-bg">
           Helping Farmers Grow
           <br />
           with Confidence
         </h1>
         <p
-          className="text-center text-[16px] lg:text-[18px] font-semibold leading-[24px] lg:leading-[27px] text-[#F2F7F1]"
+          className="text-center text-[16px] lg:text-[18px] font-semibold leading-[24px] lg:leading-[27px] text-brand-bg"
           style={{ fontFamily: "var(--font-inter)" }}
         >
           Since 1969
@@ -223,11 +223,11 @@ const HeroContentMobile = memo(function HeroContentMobile() {
     >
       {/* Text block: col, gap:8, items-center */}
       <div className="flex flex-col items-center gap-2">
-        <h1 className="w-full text-center text-h2-title font-semibold text-[#F2F7F1]">
+        <h1 className="w-full text-center text-h2-title font-semibold text-brand-bg">
           Helping Farmers Grow with Confidence
         </h1>
         <p
-          className="text-center text-[14px] sm:text-[16px] font-semibold leading-[20px] sm:leading-[24px] text-[#F2F7F1]"
+          className="text-center text-[14px] sm:text-[16px] font-semibold leading-[20px] sm:leading-[24px] text-brand-bg"
           style={{ fontFamily: "var(--font-inter)" }}
         >
           Since 1969
@@ -269,12 +269,12 @@ const ScrollIndicator = memo(function ScrollIndicator() {
         className="absolute left-0 right-0 mx-auto w-fit bottom-[85px] z-30 hidden items-center gap-[10px] md:flex"
       >
         <span
-          className="text-[18px] font-medium leading-[22px] text-[#F2F7F1]"
+          className="text-[18px] font-medium leading-[22px] text-brand-bg"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
           Scroll to explore
         </span>
-        <ArrowIcon direction="down" size={20} className="text-[#F2F7F1]" />
+        <ArrowIcon direction="down" size={20} className="text-brand-bg" />
       </div>
 
       {/* Mobile */}
@@ -284,12 +284,12 @@ const ScrollIndicator = memo(function ScrollIndicator() {
         className="absolute left-0 cursor-pointer right-0 mx-auto w-fit bottom-[67px] z-30 flex items-center gap-[10px] md:hidden"
       >
         <span
-          className="text-[14px] font-medium leading-[17px] text-[#F2F7F1]"
+          className="text-[14px] font-medium leading-[17px] text-brand-bg"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
           Scroll to explore
         </span>
-        <ArrowIcon direction="down" size={16} className="text-[#F2F7F1]" />
+        <ArrowIcon direction="down" size={16} className="text-brand-bg" />
       </Link>
     </>
   );
@@ -305,7 +305,7 @@ export default function HeroSection() {
     <section
       id="hero"
       aria-label="Hero section — Helping Farmers Grow with Confidence"
-      className="relative h-screen w-full overflow-hidden bg-[#050D07]"
+      className="relative h-screen w-full overflow-hidden bg-brand-hero-dark"
     >
       <HeroSlideshow slides={HERO_SLIDES} currentIndex={currentIndex} />
       <HeroOverlays />

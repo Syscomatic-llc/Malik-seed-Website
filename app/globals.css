@@ -60,6 +60,11 @@
   --color-brand-light-green: var(--brand-light-green);
   --color-brand-bg: var(--brand-bg);
   --color-brand-dark: var(--brand-dark);
+  --color-brand-border: var(--brand-border);
+  --color-brand-border-light: var(--brand-border-light);
+  --color-brand-neutral-light: var(--brand-neutral-light);
+  --color-brand-partners-border: var(--brand-partners-border);
+  --color-brand-hero-dark: var(--brand-hero-dark);
 
   /* Font families */
   --font-inter-tight: var(--font-inter-tight);
@@ -114,6 +119,11 @@
   --brand-light-green: #a9e179;
   --brand-bg: #f2f7f1;
   --brand-dark: #0d1a14;
+  --brand-border: #e4e7ec;
+  --brand-border-light: #f2f4f7;
+  --brand-neutral-light: #f9fafb;
+  --brand-partners-border: #ced2da;
+  --brand-hero-dark: #050d07;
 }
 
 .dark {
@@ -222,6 +232,10 @@
   @media (min-width: 768px) {
     font-size: 2.5rem; /* 40px */
     line-height: 3rem; /* 48px */
+  }
+  @media (min-width: 1024px) {
+    font-size: 3rem; /* 48px */
+    line-height: 3.625rem; /* 58px */
   }
 }
 

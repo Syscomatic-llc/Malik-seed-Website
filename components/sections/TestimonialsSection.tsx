@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 // Redesign Constants (Desktop & Mobile sizing configurations)
 const CARD_WIDTH_DESKTOP = 398;
@@ -164,7 +165,7 @@ function TestimonialCard({
         )}
         style={{
           background:
-            "linear-gradient(180deg, rgba(13, 26, 20, 0) 0%, rgba(13, 26, 20, 0.64) 34%, #0D1A14 100%)",
+            "linear-gradient(180deg, rgba(13, 26, 20, 0) 0%, rgba(13, 26, 20, 0.64) 34%, var(--brand-dark) 100%)",
         }}
       >
         <p className={cn("font-sans text-white font-normal", quoteTextSizeClass)}>
@@ -253,13 +254,10 @@ export default function TestimonialsSection() {
       <div className="mx-auto max-w-full">
         {/* Header - Figma centered, with Success Stories badge */}
         <div className="mb-[48px] md:mb-[64px] flex flex-col items-center gap-6 md:gap-4">
-          {/* Badge - Figma: bg #F9FAFB, border #E4E7EC, radius 30px */}
-          <div className="flex h-[30px] items-center gap-2 rounded-[30px] border border-[#E4E7EC] bg-[#F9FAFB] px-4 py-1.5 md:h-[33px]">
-            <div className="h-[6px] w-[6px] rounded-[2px] bg-brand-active" />
-            <span className="font-inter text-[12px] font-medium leading-[18px] text-brand-active md:text-[14px] md:leading-[21px]">
-              Success stories
-            </span>
-          </div>
+          {/* Badge - Figma: Success stories */}
+          <SectionBadge variant="outline" showDot>
+            Success stories
+          </SectionBadge>
 
           {/* Title - Figma: "Voice of Impact", 48px/32px */}
           <h2 className="font-sans text-[32px] font-medium leading-[38px] text-brand-dark md:text-[48px] md:leading-[58px]">
