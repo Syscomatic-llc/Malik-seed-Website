@@ -175,10 +175,7 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
     >
       {/* Frame 2147229465 — text stack */}
       <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
-        <h1
-          className="w-full text-center text-[44px] lg:text-[54px] xl:text-[64px] font-semibold leading-[52px] lg:leading-[64px] xl:leading-[77px] text-[#F2F7F1]"
-          style={{ fontFamily: "var(--font-inter-tight)" }}
-        >
+        <h1 className="w-full text-center text-display text-[#F2F7F1]">
           Helping Farmers Grow
           <br />
           with Confidence
@@ -227,10 +224,7 @@ const HeroContentMobile = memo(function HeroContentMobile() {
     >
       {/* Text block: col, gap:8, items-center */}
       <div className="flex flex-col items-center gap-2">
-        <h1
-          className="w-full text-center text-[32px] sm:text-[40px] font-semibold leading-[38px] sm:leading-[48px] text-[#F2F7F1]"
-          style={{ fontFamily: "var(--font-inter-tight)" }}
-        >
+        <h1 className="w-full text-center text-h2-title font-semibold text-[#F2F7F1]">
           Helping Farmers Grow with Confidence
         </h1>
         <p

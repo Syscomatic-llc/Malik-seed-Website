@@ -25,10 +25,7 @@ export default function PartnersSection() {
     >
       <div className="mx-auto max-w-[1440px] px-4">
         {/* Title — Figma: "Our Development Partners", Inter 18px, center */}
-        <p
-          className="mb-8 text-center text-[16px] leading-[22px] text-[#0D1A14] md:mb-12 md:text-[18px]"
-          style={{ fontFamily: "var(--font-inter)" }}
-        >
+        <p className="font-inter mb-8 text-center text-[16px] leading-[22px] text-[#0D1A14] md:mb-12 md:text-[18px]">
           Our Development Partners
         </p>
 
@@ -57,10 +54,7 @@ export default function PartnersSection() {
                 key={idx}
                 className="flex h-[40px] shrink-0 items-center justify-center rounded-full border border-[#CED2DA] bg-white px-4 md:h-[60px] md:px-6"
               >
-                <span
-                  className="whitespace-nowrap text-[12px] font-medium text-[#0D1A14] md:text-[14px]"
-                  style={{ fontFamily: "var(--font-inter)" }}
-                >
+                <span className="font-inter whitespace-nowrap text-[12px] font-medium text-[#0D1A14] md:text-[14px]">
                   {partner}
                 </span>
               </div>
@@ -91,10 +85,7 @@ export default function PartnersSection() {
                 key={idx}
                 className="flex h-[40px] shrink-0 items-center justify-center rounded-full border border-[#CED2DA] bg-white px-4 md:h-[60px] md:px-6"
               >
-                <span
-                  className="whitespace-nowrap text-[12px] font-medium text-[#0D1A14] md:text-[14px]"
-                  style={{ fontFamily: "var(--font-inter)" }}
-                >
+                <span className="font-inter whitespace-nowrap text-[12px] font-medium text-[#0D1A14] md:text-[14px]">
                   {partner}
                 </span>
               </div>

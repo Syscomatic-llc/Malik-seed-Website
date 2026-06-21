@@ -40,10 +40,7 @@ export default function Footer() {
             </Link>
 
             {/* Description */}
-            <p
-              className="text-[15px] leading-[24px] text-[#F2F7F1]/60 md:text-[16px]"
-              style={{ fontFamily: "var(--font-inter)" }}
-            >
+            <p className="font-inter text-[15px] leading-[24px] text-[#F2F7F1]/60 md:text-[16px]">
               We are committed to deliver high-performance hybrid seed varieties that empower farmers with better yield, climate resilience, disease resistance, and profitability.
             </p>
 
@@ -90,10 +87,7 @@ export default function Footer() {
           <div className="grid grid-cols-2 gap-10 md:ml-auto md:gap-16">
             {/* Company */}
             <div className="flex flex-col gap-4">
-              <h3
-                className="text-[14px] font-semibold uppercase tracking-wider text-[#A9E179]"
-                style={{ fontFamily: "var(--font-inter)" }}
-              >
+              <h3 className="font-inter text-[14px] font-semibold uppercase tracking-wider text-[#A9E179]">
                 Company
               </h3>
               <ul className="flex flex-col gap-3">
@@ -101,8 +95,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[14px] leading-[20px] text-[#F2F7F1]/60 transition-colors hover:text-[#F2F7F1] md:text-[15px]"
-                      style={{ fontFamily: "var(--font-inter)" }}
+                      className="font-inter text-[14px] leading-[20px] text-[#F2F7F1]/60 transition-colors hover:text-[#F2F7F1] md:text-[15px]"
                     >
                       {link.label}
                     </Link>
@@ -113,10 +106,7 @@ export default function Footer() {
 
             {/* Our Brands */}
             <div className="flex flex-col gap-4">
-              <h3
-                className="text-[14px] font-semibold uppercase tracking-wider text-[#A9E179]"
-                style={{ fontFamily: "var(--font-inter)" }}
-              >
+              <h3 className="font-inter text-[14px] font-semibold uppercase tracking-wider text-[#A9E179]">
                 Our Brands
               </h3>
               <ul className="flex flex-col gap-3">
@@ -124,8 +114,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[14px] leading-[20px] text-[#F2F7F1]/60 transition-colors hover:text-[#F2F7F1] md:text-[15px]"
-                      style={{ fontFamily: "var(--font-inter)" }}
+                      className="font-inter text-[14px] leading-[20px] text-[#F2F7F1]/60 transition-colors hover:text-[#F2F7F1] md:text-[15px]"
                     >
                       {link.label}
                     </Link>
@@ -152,10 +141,7 @@ export default function Footer() {
         {/* Divider + copyright */}
         <div className="mt-8 flex flex-col gap-4">
           <div className="h-[1px] w-full bg-white/10" />
-          <p
-            className="text-center text-[13px] leading-[17px] text-[#A9E179] md:text-[14px]"
-            style={{ fontFamily: "var(--font-inter-tight)" }}
-          >
+          <p className="font-inter-tight text-center text-[13px] leading-[17px] text-[#A9E179] md:text-[14px]">
             Copyright ©armalikseeds2026. All rights reserved.
           </p>
         </div>

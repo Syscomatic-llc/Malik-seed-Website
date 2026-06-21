@@ -1,0 +1,49 @@
+"use client";
+import { useInView, useMotionValue, useSpring } from "motion/react";
+import { useEffect, useRef } from "react";
+
+interface CountUpProps {
+  to: number;
+  from?: number;
+  className?: string;
+}
+
+export default function CountUp({
+  to,
+  from = 0,
+  className = "",
+}: CountUpProps) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const motionValue = useMotionValue(from);
+
+  const springValue = useSpring(motionValue, {
+    damping: 30,
+    stiffness: 100,
+  });
+
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.textContent = String(from);
+    }
+  }, [from]);
+
+  useEffect(() => {
+    if (isInView) {
+      motionValue.set(to);
+    }
+  }, [isInView, motionValue, to]);
+
+  useEffect(() => {
+    const unsubscribe = springValue.on("change", (latest: number) => {
+      if (ref.current) {
+        ref.current.textContent = String(Math.round(latest));
+      }
+    });
+
+    return () => unsubscribe();
+  }, [springValue]);
+
+  return <span className={className} ref={ref} />;
+}

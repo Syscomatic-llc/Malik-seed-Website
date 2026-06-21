@@ -196,3 +196,86 @@
   }
 }
 
+/* Malik Seeds typography design tokens extracted from Figma */
+@utility text-display {
+  font-family: var(--font-inter-tight);
+  font-weight: 600;
+  font-size: 2.75rem; /* 44px */
+  line-height: 3.25rem; /* 52px */
+  
+  @media (min-width: 1024px) {
+    font-size: 3.375rem; /* 54px */
+    line-height: 4rem; /* 64px */
+  }
+  @media (min-width: 1280px) {
+    font-size: 4rem; /* 64px */
+    line-height: 4.8125rem; /* 77px */
+  }
+}
+
+@utility text-h2-title {
+  font-family: var(--font-inter-tight);
+  font-weight: 500;
+  font-size: 1.75rem; /* 28px */
+  line-height: 2.125rem; /* 34px */
+  
+  @media (min-width: 768px) {
+    font-size: 2.5rem; /* 40px */
+    line-height: 3rem; /* 48px */
+  }
+}
+
+@utility text-h3-title {
+  font-family: var(--font-inter-tight);
+  font-weight: 500;
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.875rem; /* 30px */
+  
+  @media (min-width: 768px) {
+    font-size: 1.5rem; /* 24px */
+    line-height: 2.25rem; /* 36px */
+  }
+}
+
+@utility text-body-intro {
+  font-family: var(--font-inter-tight);
+  font-weight: 500;
+  font-size: 1.375rem; /* 22px */
+  line-height: 2.125rem; /* 34px */
+  
+  @media (min-width: 1024px) {
+    font-size: 1.75rem; /* 28px */
+    line-height: 2.625rem; /* 42px */
+  }
+  @media (min-width: 1280px) {
+    font-size: 2rem; /* 32px */
+    line-height: 3rem; /* 48px */
+  }
+}
+
+@utility text-stat-number {
+  font-family: var(--font-anton);
+  font-size: 2.5rem; /* 40px */
+  line-height: 3rem; /* 48px */
+}
+
+@utility text-stat-number-desktop {
+  font-family: var(--font-anton);
+  font-size: 1.75rem; /* 28px */
+  line-height: 2.25rem; /* 36px */
+  
+  @media (min-width: 768px) {
+    font-size: 2.25rem; /* 36px */
+    line-height: 2.75rem; /* 44px */
+  }
+  @media (min-width: 1024px) {
+    font-size: 2.625rem; /* 42px */
+    line-height: 3.125rem; /* 50px */
+  }
+  @media (min-width: 1280px) {
+    font-size: 3rem; /* 48px */
+    line-height: 3.625rem; /* 58px */
+  }
+}
+
+

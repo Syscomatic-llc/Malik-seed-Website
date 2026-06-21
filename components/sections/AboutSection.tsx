@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ActionButton from "@/components/ActionButton";
+import CountUp from "@/components/ui/CountUp";
 
 const stats = [
   { value: "10k+", label: "Seed Varieties Trialed" },
@@ -8,6 +9,17 @@ const stats = [
   { value: "13+", label: "Agri-Innovation Projects" },
   { value: "5+", label: "decades Farming Legacy" },
 ];
+
+// Pre-parse stats once at module level to eliminate runtime regex parsing and IIFE overhead
+const parsedStats = stats.map((stat) => {
+  const match = stat.value.match(/^([^0-9]*)([0-9]+)([^0-9]*)$/);
+  return {
+    label: stat.label,
+    toValue: match ? parseInt(match[2], 10) : 0,
+    prefix: match ? match[1] : "",
+    suffix: match ? match[3] : stat.value,
+  };
+});
 
 export default function AboutSection() {
   return (
@@ -29,7 +41,7 @@ export default function AboutSection() {
             {/* Frame 2147229506 — 608x526, col, gap 48 */}
             <div className="flex flex-col gap-8 lg:gap-12 xl:gap-[48px]">
               {/* Group 1 — text content */}
-              <p className="font-sans text-[22px] font-medium leading-[34px] text-brand-dark lg:text-[28px] lg:leading-[42px] xl:text-[32px] xl:leading-[48px]">
+              <p className="text-body-intro text-brand-dark">
                 <span>Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history goes back to 1969 when our founder, A. R. Malik launched &ldquo;Atlas-70&rdquo; Cabbage from Sakata Seed Corporation, based </span>
                 <span className="text-[#0D1A1499]"> in Japan. Today, we are among the most trusted brands in the agriculture industry.</span>
               </p>
@@ -88,17 +100,19 @@ export default function AboutSection() {
         {/* Desktop Stats row — Frame 2147229657: 1240x178 */}
         <div className="hidden px-[24px] pb-[40px] pt-[40px] md:block md:px-[60px] md:pb-[60px] md:pt-[50px] xl:px-[100px] xl:pb-[100px] xl:pt-[60px]">
           <div className="flex w-full flex-row items-center justify-between rounded-[16px]">
-            {stats.map((stat, index) => (
+            {parsedStats.map((stat, index) => (
               <div key={stat.label} className="flex flex-1 flex-row items-center justify-center">
                 <div className="flex flex-col items-center gap-[8px] lg:gap-[12px] xl:gap-[16px]">
-                  <span className="font-anton text-[28px] leading-[36px] md:text-[36px] md:leading-[44px] lg:text-[42px] lg:leading-[50px] xl:text-[48px] xl:leading-[58px] text-brand-active">
-                    {stat.value}
+                  <span className="text-stat-number-desktop text-brand-active">
+                    {stat.prefix}
+                    <CountUp to={stat.toValue} />
+                    {stat.suffix}
                   </span>
                   <span className="font-inter text-center text-[12px] leading-[18px] lg:text-[14px] lg:leading-[21px] xl:text-[16px] xl:leading-[24px] text-brand-dark max-w-[192px]">
                     {stat.label}
                   </span>
                 </div>
-                {index < stats.length - 1 && (
+                {index < parsedStats.length - 1 && (
                   <div className="ml-auto mr-0 h-[60px] lg:h-[72px] xl:h-[86px] w-[1px] bg-[#CED2DA]" />
                 )}
               </div>
@@ -181,9 +195,13 @@ export default function AboutSection() {
           <div className="flex flex-col items-center gap-[8px] px-[16px]">
             {/* Row 1 — 2 stats */}
             <div className="flex w-full flex-row gap-[16px]">
-              {stats.slice(0, 2).map((stat) => (
+              {parsedStats.slice(0, 2).map((stat) => (
                 <div key={stat.label} className="flex h-[125px] flex-1 flex-col items-center justify-center gap-[8px] rounded-[24px] px-3">
-                  <span className="font-anton text-[40px] leading-[48px] text-brand-active">{stat.value}</span>
+                  <span className="text-stat-number text-brand-active">
+                    {stat.prefix}
+                    <CountUp to={stat.toValue} />
+                    {stat.suffix}
+                  </span>
                   <span className="font-inter text-center text-[14px] leading-[21px] text-brand-dark">{stat.label}</span>
                 </div>
               ))}
@@ -192,9 +210,13 @@ export default function AboutSection() {
             <div className="h-[1px] w-[72px] bg-[#CED2DA]" />
             {/* Row 2 — 2 stats */}
             <div className="flex w-full flex-row gap-[16px]">
-              {stats.slice(2, 4).map((stat) => (
+              {parsedStats.slice(2, 4).map((stat) => (
                 <div key={stat.label} className="flex h-[125px] flex-1 flex-col items-center justify-center gap-[8px] rounded-[24px] px-3">
-                  <span className="font-anton text-[40px] leading-[48px] text-brand-active">{stat.value}</span>
+                  <span className="text-stat-number text-brand-active">
+                    {stat.prefix}
+                    <CountUp to={stat.toValue} />
+                    {stat.suffix}
+                  </span>
                   <span className="font-inter text-center text-[14px] leading-[21px] text-brand-dark">{stat.label}</span>
                 </div>
               ))}
@@ -204,8 +226,12 @@ export default function AboutSection() {
             {/* Row 3 — 1 stat centered */}
             <div className="flex w-full">
               <div className="flex h-[125px] w-full flex-col items-center justify-center gap-[8px] rounded-[24px] px-3">
-                <span className="font-anton text-[40px] leading-[48px] text-brand-active">{stats[4].value}</span>
-                <span className="font-inter text-center text-[14px] leading-[21px] text-[#0D1A14]">{stats[4].label}</span>
+                <span className="text-stat-number text-brand-active">
+                  {parsedStats[4].prefix}
+                  <CountUp to={parsedStats[4].toValue} />
+                  {parsedStats[4].suffix}
+                </span>
+                <span className="font-inter text-center text-[14px] leading-[21px] text-[#0D1A14]">{parsedStats[4].label}</span>
               </div>
             </div>
           </div>

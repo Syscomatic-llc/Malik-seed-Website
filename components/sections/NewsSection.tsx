@@ -52,7 +52,7 @@ export default function NewsSection() {
             </div>
 
             {/* Title — Figma: "Insights from agricultural research & field experts", 48px */}
-            <h2 className="font-sans max-w-[466px] text-[28px] font-medium leading-[34px] text-brand-dark md:text-[48px] md:leading-[58px]">
+            <h2 className="text-h2-title text-brand-dark max-w-[466px]">
               Insights from agricultural research &amp; field experts
             </h2>
           </div>
@@ -128,7 +128,7 @@ export default function NewsSection() {
 
               {/* Content */}
               <div className="flex flex-col gap-3">
-                <h3 className="font-sans text-[18px] font-semibold leading-[26px] text-brand-dark md:text-[20px]">
+                <h3 className="text-h3-title font-semibold text-brand-dark">
                   {article.title}
                 </h3>
                 <p className="font-inter text-[14px] leading-[22px] text-brand-dark/60 md:text-[15px]">

@@ -29,7 +29,7 @@ const NAV_ITEMS: NavItem[] = [
 // Sub-components
 // ---------------------------------------------------------------------------
 
-function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
+function NavLink({ item, onClick, dark }: { item: NavItem; onClick?: () => void; dark?: boolean }) {
   const pathname = usePathname();
   const isActive =
     item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href);
@@ -39,12 +39,16 @@ function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
       href={item.href}
       onClick={onClick}
       className={cn(
-        "flex h-[35px] items-center rounded-full px-3",
-        "text-[16px] font-medium leading-[19px] transition-colors duration-200",
+        "flex items-center transition-colors duration-200",
+        dark 
+          ? "h-auto py-1 px-0 text-[16px] font-medium leading-[19px]" 
+          : "h-[35px] rounded-full px-3 text-[16px] font-medium leading-[19px] hover:bg-neutral-50",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A9E179]",
         isActive
           ? "text-[#75BC43]"
-          : "text-[#0D1A14] hover:bg-neutral-50"
+          : dark
+          ? "text-[#F2F7F1] hover:text-white"
+          : "text-[#0D1A14]"
       )}
       style={{ fontFamily: "var(--font-inter-tight)" }}
     >
@@ -62,7 +66,7 @@ function JoinUsButton({
   onClick?: () => void; 
   className?: string; 
   containerClassName?: string; 
-}) {
+ }) {
   return (
     <ActionButton
       href="/join"
@@ -109,9 +113,11 @@ function DesktopNav() {
 function MobileMenuButton({
   isOpen,
   onToggle,
+  dark,
 }: {
   isOpen: boolean;
   onToggle: () => void;
+  dark?: boolean;
 }) {
   return (
     <button
@@ -120,8 +126,9 @@ function MobileMenuButton({
       aria-expanded={isOpen}
       aria-controls="mobile-menu"
       className={cn(
-        "flex h-8 w-8 items-center justify-center rounded-full text-[#0D1A14]",
-        "transition-colors hover:bg-neutral-100",
+        "flex h-8 w-8 items-center justify-center rounded-full",
+        dark ? "text-[#F2F7F1] hover:bg-white/10" : "text-[#0D1A14] hover:bg-neutral-100",
+        "transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A9E179]"
       )}
     >
@@ -143,35 +150,46 @@ function MobileNav() {
   const close = () => setIsOpen(false);
 
   return (
-    <div className="flex w-full flex-col lg:hidden">
-      {/* Header bar: 358×48, radius 50px */}
-      <div className="flex h-[48px] w-full items-center justify-between rounded-[50px] bg-white px-5 shadow-sm">
-        <Logo />
-        <MobileMenuButton isOpen={isOpen} onToggle={() => setIsOpen((v) => !v)} />
-      </div>
-
-      {/* Drawer */}
+    <div className="relative w-full max-w-[358px] mx-auto lg:hidden">
+      {/* Closed State (Pill) */}
       <div
-        id="mobile-menu"
-        aria-hidden={!isOpen}
         className={cn(
-          "overflow-hidden transition-all duration-300 ease-in-out",
-          isOpen
-            ? "mt-3 max-h-[520px] opacity-100"
-            : "pointer-events-none mt-0 max-h-0 opacity-0"
+          "flex h-[48px] w-full items-center justify-between rounded-[50px] bg-white px-5 shadow-sm transition-all duration-300",
+          isOpen ? "pointer-events-none opacity-0 scale-95" : "opacity-100 scale-100"
         )}
       >
-        <div className="flex flex-col justify-between rounded-[24px] bg-white p-6 shadow-lg" style={{ minHeight: 380 }}>
-          <nav aria-label="Mobile navigation" className="flex flex-col gap-6 pt-2">
+        <Logo />
+        <MobileMenuButton isOpen={isOpen} onToggle={() => setIsOpen(true)} />
+      </div>
+
+      {/* Open State (unified card) */}
+      <div
+        className={cn(
+          "absolute top-0 left-0 w-full rounded-[24px] bg-[#0D1A14] shadow-lg transition-all duration-300 origin-top flex flex-col justify-between overflow-hidden z-50",
+          isOpen 
+            ? "opacity-100 scale-100 pointer-events-auto" 
+            : "opacity-0 scale-95 pointer-events-none h-0"
+        )}
+        style={{ height: isOpen ? "568px" : "0px" }}
+      >
+        {/* Header inside card */}
+        <div className="flex h-[48px] items-center justify-between px-5">
+          <Logo light />
+          <MobileMenuButton isOpen={isOpen} onToggle={() => setIsOpen(false)} dark />
+        </div>
+
+        {/* Links + Join Us inside card */}
+        <div className="flex flex-1 flex-col justify-between px-8 pb-8 pt-4">
+          <nav aria-label="Mobile navigation" className="flex flex-col gap-[16px] pt-4">
             {NAV_ITEMS.map((item) => (
-              <NavLink key={item.href} item={item} onClick={close} />
+              <NavLink key={item.href} item={item} onClick={close} dark />
             ))}
           </nav>
-          <div className="mt-8">
-            <JoinUsButton 
-              onClick={close} 
+          <div className="mt-auto">
+            <JoinUsButton
+              onClick={close}
               containerClassName="w-full"
-              className="w-full h-[44px] justify-center"
+              className="w-full h-[44px] justify-center bg-[#195236] hover:bg-[#153e28] text-[#F2F7F1]"
             />
           </div>
         </div>

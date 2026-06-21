@@ -21,7 +21,7 @@ export default function JoinTeamSection() {
             {/* Title */}
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-4">
-                <h2 className="font-sans text-[28px] font-medium leading-[34px] text-brand-dark md:text-[40px] md:leading-[48px]">
+                <h2 className="text-h2-title text-brand-dark">
                   Shape the Future of Agriculture with Malik Seeds
                 </h2>
                 <p className="font-inter text-[15px] leading-[24px] text-brand-dark/60 md:text-[16px]">

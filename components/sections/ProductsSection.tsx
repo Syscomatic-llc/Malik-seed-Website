@@ -92,13 +92,13 @@ export default function ProductsSection() {
                 />
 
                 <div className="flex flex-col gap-[16px]">
-                  <h3 className="font-sans text-[32px] font-medium leading-[48px] text-[#F2F7F1]">
+                  <h3 className="text-h2-title text-[#F2F7F1]">
                     {product.name}
                   </h3>
 
                   {/* Description container - visible on hover */}
                   <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-h-[120px] group-hover:opacity-100">
-                    <p className="font-sans text-[20px] font-normal leading-[30px] text-[#F2F7F1]">
+                    <p className="text-h3-title font-normal text-[#F2F7F1]">
                       {product.description}
                     </p>
                   </div>
@@ -141,7 +141,7 @@ export default function ProductsSection() {
                     className="text-[#F2F7F1] shrink-0" 
                   />
 
-                  <h3 className="font-sans text-[20px] font-medium leading-[30px] text-[#F2F7F1]">
+                  <h3 className="text-h3-title text-[#F2F7F1]">
                     {product.name}
                   </h3>
                 </div>

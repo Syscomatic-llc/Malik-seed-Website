@@ -68,7 +68,7 @@ export default function TestimonialsSection() {
           </div>
 
           {/* Title — Figma: "Voice of Impact", 48px, #0D1A14, center */}
-          <h2 className="font-sans text-center text-[32px] font-medium leading-[38px] text-brand-dark md:text-[48px] md:leading-[58px]">
+          <h2 className="text-h2-title text-center text-brand-dark">
             Voice of Impact
           </h2>
         </div>
