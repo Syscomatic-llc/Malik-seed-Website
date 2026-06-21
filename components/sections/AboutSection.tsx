@@ -124,8 +124,7 @@ export default function AboutSection() {
               <div className="flex flex-col items-center gap-[32px]">
                 {/* Text — 358px, 24px, weight 500, center, lineHeight 36px */}
                 <p className="font-sans text-center text-[24px] font-medium leading-[36px] text-brand-dark">
-                  <span>Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history goes back to 1969 when our founder, A. R. Malik launched &ldquo;Atlas-70&rdquo; Cabbage from Sakata Seed Corporation, based</span>
-                  <span className="text-[#0D1A1499]"> in Japan. Today, we are among the most trusted brands in the agriculture industry.</span>
+                  <span>Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history...</span>
                 </p>
 
                 {/* CTA — 123x41, bg #195236, radius 60px */}
