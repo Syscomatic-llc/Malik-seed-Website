@@ -46,6 +46,7 @@ export default function JoinTeamSection() {
                 src="/images/team/team-banner.png"
                 alt="Join the Malik Seeds Team"
                 fill
+                loading="eager"
                 sizes="(max-width: 768px) 0px, 690px"
                 className="object-cover"
               />
@@ -57,6 +58,7 @@ export default function JoinTeamSection() {
             <Image
               src="/images/team/team-banner.png"
               alt="Join the Malik Seeds Team"
+              loading="eager"
               fill
               sizes="100vw"
               className="object-cover"

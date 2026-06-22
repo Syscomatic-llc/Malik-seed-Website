@@ -147,6 +147,7 @@ function ContentCard({
           alt=""
           width={252}
           height={186}
+          style={{ width: "252px", height: "186px" }}
           className="absolute right-0 top-0 mix-blend-screen opacity-70"
           aria-hidden="true"
         />
@@ -322,6 +323,7 @@ function TabletTimelineRow({ item, isLast }: { item: TimelineItem; isLast: boole
               alt=""
               width={200}
               height={148}
+              style={{ width: "200px", height: "148px" }}
               className="absolute right-0 top-0 mix-blend-screen opacity-70"
               aria-hidden="true"
             />
@@ -487,6 +489,7 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
                     alt=""
                     width={140}
                     height={100}
+                    style={{ width: "140px", height: "100px" }}
                     className={`absolute z-0 mix-blend-screen opacity-70 pointer-events-none ${isEven ? "left-0 bottom-0" : "right-0 top-0"
                       }`}
                     aria-hidden="true"

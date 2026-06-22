@@ -55,6 +55,7 @@ const NewsCard = memo(function NewsCard({ article, isMobile = false }: NewsCardP
         <Image
           src={article.image}
           alt={article.title}
+          loading="eager"
           fill
           sizes={isMobile ? "(max-width: 640px) 290px, 320px" : "361px"}
           className="object-cover object-center"

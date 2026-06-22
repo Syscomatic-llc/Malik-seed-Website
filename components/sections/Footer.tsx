@@ -131,9 +131,9 @@ export default function Footer() {
           <Image
             src="/images/brand/logo-footer.svg"
             alt="Malik Seeds"
-            width={1240}
-            height={272}
-            style={{ width: "1240px", height: "auto" }}
+            width={1225}
+            height={151}
+            style={{ width: "100%", height: "auto", maxWidth: "1225px" }}
             priority
           />
         </div>

@@ -1,26 +1,16 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import ActionButton from "@/components/ActionButton";
 import CountUp from "@/components/ui/CountUp";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 
-const stats = [
-  { value: "10k+", label: "Seed Varieties Trialed" },
-  { value: "200", label: "Ton Seeds Distributed" },
-  { value: "100+", label: "Distributor Network" },
-  { value: "13+", label: "Agri-Innovation Projects" },
-  { value: "5+", label: "decades Farming Legacy" },
-];
-
-// Pre-parse stats once at module level to eliminate runtime regex parsing and IIFE overhead
-const parsedStats = stats.map((stat) => {
-  const match = stat.value.match(/^([^0-9]*)([0-9]+)([^0-9]*)$/);
-  return {
-    label: stat.label,
-    toValue: match ? parseInt(match[2], 10) : 0,
-    prefix: match ? match[1] : "",
-    suffix: match ? match[3] : stat.value,
-  };
-});
+const STATS = [
+  { prefix: "", toValue: 10, suffix: "k+", label: "Seed Varieties Trialed" },
+  { prefix: "", toValue: 200, suffix: "", label: "Ton Seeds Distributed" },
+  { prefix: "", toValue: 100, suffix: "+", label: "Distributor Network" },
+  { prefix: "", toValue: 13, suffix: "+", label: "Agri-Innovation Projects" },
+  { prefix: "", toValue: 5, suffix: "+", label: "decades Farming Legacy" },
+] as const;
 
 export default function AboutSection() {
   return (
@@ -97,11 +87,11 @@ export default function AboutSection() {
         </div>
 
         {/* Desktop Stats row — Frame 2147229657: 1240x178 */}
-        <div className="hidden px-[24px] pb-[40px] pt-[40px] md:block md:px-[60px] md:pb-[60px] md:pt-[50px] xl:px-[100px] xl:pb-[100px] xl:pt-[60px]">
+        <div className="hidden px-[24px] pb-[40px] pt-[40px] md:block md:px-6 md:pb-[60px] md:pt-[50px] lg:px-16 xl:px-[100px] xl:pb-[100px] xl:pt-[60px]">
           <div className="flex w-full flex-row items-center justify-between rounded-[16px]">
-            {parsedStats.map((stat, index) => (
-              <div key={stat.label} className="flex flex-1 flex-row items-center justify-center">
-                <div className="flex flex-col items-center gap-[8px] lg:gap-[12px] xl:gap-[16px]">
+            {STATS.map((stat, index) => (
+              <Fragment key={stat.label}>
+                <div className="flex flex-1 max-w-[235px] h-[140px] lg:h-[160px] xl:h-[178px] flex-col items-center justify-center text-center">
                   <span className="text-stat-number-desktop text-brand-active">
                     {stat.prefix}
                     <CountUp to={stat.toValue} />
@@ -111,10 +101,10 @@ export default function AboutSection() {
                     {stat.label}
                   </span>
                 </div>
-                {index < parsedStats.length - 1 && (
-                  <div className="ml-auto mr-0 h-[60px] lg:h-[72px] xl:h-[86px] w-[1px] bg-brand-partners-border" />
+                {index < STATS.length - 1 && (
+                  <div className="h-[60px] lg:h-[72px] xl:h-[86px] w-[1px] bg-brand-partners-border shrink-0" />
                 )}
-              </div>
+              </Fragment>
             ))}
           </div>
         </div>
@@ -190,47 +180,34 @@ export default function AboutSection() {
 
           {/* Mobile Stats — Frame 2147229657: 390x407, padding 0 16, col, gap 8 */}
           <div className="flex flex-col items-center gap-[8px] px-[16px]">
-            {/* Row 1 — 2 stats */}
-            <div className="flex w-full flex-row gap-[16px]">
-              {parsedStats.slice(0, 2).map((stat) => (
-                <div key={stat.label} className="flex h-[125px] flex-1 flex-col items-center justify-center gap-[8px] rounded-[24px] px-3">
-                  <span className="text-stat-number text-brand-active">
-                    {stat.prefix}
-                    <CountUp to={stat.toValue} />
-                    {stat.suffix}
-                  </span>
-                  <span className="font-inter text-center text-[14px] leading-[21px] text-brand-dark">{stat.label}</span>
+            {[
+              [STATS[0], STATS[1]],
+              [STATS[2], STATS[3]],
+              [STATS[4]],
+            ].map((row, rowIndex) => (
+              <Fragment key={rowIndex}>
+                {rowIndex > 0 && (
+                  <div className="h-[1px] w-[72px] bg-brand-partners-border" />
+                )}
+                <div className="flex w-full flex-row gap-[16px]">
+                  {row.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="flex h-[125px] flex-1 flex-col items-center justify-center gap-[8px] rounded-[24px] px-3"
+                    >
+                      <span className="text-stat-number text-brand-active">
+                        {stat.prefix}
+                        <CountUp to={stat.toValue} />
+                        {stat.suffix}
+                      </span>
+                      <span className="font-inter text-center text-[14px] leading-[21px] text-brand-dark">
+                        {stat.label}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            {/* Divider */}
-            <div className="h-[1px] w-[72px] bg-brand-partners-border" />
-            {/* Row 2 — 2 stats */}
-            <div className="flex w-full flex-row gap-[16px]">
-              {parsedStats.slice(2, 4).map((stat) => (
-                <div key={stat.label} className="flex h-[125px] flex-1 flex-col items-center justify-center gap-[8px] rounded-[24px] px-3">
-                  <span className="text-stat-number text-brand-active">
-                    {stat.prefix}
-                    <CountUp to={stat.toValue} />
-                    {stat.suffix}
-                  </span>
-                  <span className="font-inter text-center text-[14px] leading-[21px] text-brand-dark">{stat.label}</span>
-                </div>
-              ))}
-            </div>
-            {/* Divider */}
-            <div className="h-[1px] w-[72px] bg-brand-partners-border" />
-            {/* Row 3 — 1 stat centered */}
-            <div className="flex w-full">
-              <div className="flex h-[125px] w-full flex-col items-center justify-center gap-[8px] rounded-[24px] px-3">
-                <span className="text-stat-number text-brand-active">
-                  {parsedStats[4].prefix}
-                  <CountUp to={parsedStats[4].toValue} />
-                  {parsedStats[4].suffix}
-                </span>
-                <span className="font-inter text-center text-[14px] leading-[21px] text-brand-dark">{parsedStats[4].label}</span>
-              </div>
-            </div>
+              </Fragment>
+            ))}
           </div>
         </div>
       </div>
