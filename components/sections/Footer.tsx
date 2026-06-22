@@ -149,7 +149,7 @@ export default memo(function Footer() {
             </div>
 
             {/* Contact Information */}
-            <address className="flex flex-col gap-6 md:gap-8 w-full lg:w-54 shrink-0 mt-10 lg:mt-0 not-italic">
+            <address className="flex flex-col gap-6 md:gap-8 w-full lg:w-54 shrink-0 lg:mt-0 not-italic">
               <div className="flex flex-col gap-2 md:gap-4">
                 <h4 className={TYPOGRAPHY.label}>Contact</h4>
                 <a href={CONTACT_INFO.phone.href} className={TYPOGRAPHY.contact}>
