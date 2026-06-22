@@ -339,7 +339,7 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Navigation Arrows - Figma: w-12 h-12, rounded-full bg-brand-active, arrows from /arrow.svg, 16px gap, hidden on mobile */}
-        <div className="hidden md:flex justify-center gap-4 mt-[48px]">
+        <div className="hidden sm:flex justify-center gap-4 mt-[48px]">
           <button
             onClick={prev}
             aria-label="Previous testimonial"
