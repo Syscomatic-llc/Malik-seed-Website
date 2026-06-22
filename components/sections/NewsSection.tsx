@@ -35,39 +35,31 @@ const articles = [
 
 interface NewsCardProps {
   article: typeof articles[0];
-  isMobile?: boolean;
 }
 
 /**
  * Reusable, memoized NewsCard component to avoid unneeded re-renders during slide transitions
  */
-const NewsCard = memo(function NewsCard({ article, isMobile = false }: NewsCardProps) {
+const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
   return (
-    <div
-      className={
-        isMobile
-          ? "flex flex-col w-[290px] sm:w-[320px] h-[430px] rounded-[24px] border border-brand-border-light bg-brand-neutral-light overflow-hidden shrink-0 snap-center"
-          : "flex flex-col w-[361px] h-[488px] rounded-[24px] border border-brand-border-light bg-brand-neutral-light overflow-hidden shrink-0 transition-opacity duration-300"
-      }
-    >
+    <div className="flex flex-col w-[330px] h-[434px] xl:w-[361px] xl:h-[488px] rounded-[24px] border border-brand-border-light bg-brand-neutral-light overflow-hidden shrink-0 snap-center transition-opacity duration-300">
       {/* Card Image */}
-      <div className={isMobile ? "relative w-full h-[220px] bg-neutral-100" : "relative w-full h-[264px] bg-neutral-100"}>
+      <div className="relative w-full h-[256px] xl:h-[264px] bg-neutral-100">
         <Image
           src={article.image}
           alt={article.title}
           loading="eager"
           fill
-          sizes={isMobile ? "(max-width: 640px) 290px, 320px" : "361px"}
+          sizes="(max-width: 1280px) 330px, 361px"
           className="object-cover object-center"
-          priority={!isMobile && article.id === 1}
         />
       </div>
 
       {/* Card Content */}
-      <div className={isMobile ? "flex flex-col justify-between flex-1 p-5 pb-6" : "flex flex-col justify-between flex-1 p-6 pb-8"}>
+      <div className="flex flex-col justify-between flex-1 p-4 pb-8 xl:p-6 xl:pb-8">
         {/* Category & Date Row */}
-        <div className="flex items-center gap-3 h-[29px]">
-          <span className={isMobile ? "font-inter text-[12px] leading-[18px] text-brand-dark/60" : "font-inter text-[14px] leading-[21px] text-brand-dark/60"}>
+        <div className="flex items-center gap-3 h-[26px] xl:h-[29px]">
+          <span className="font-inter text-[12px] xl:text-[14px] leading-normal text-brand-dark/60">
             {article.date}
           </span>
           {article.category ? (
@@ -75,7 +67,7 @@ const NewsCard = memo(function NewsCard({ article, isMobile = false }: NewsCardP
               <span className="text-brand-dark/40 text-sm">
                 •
               </span>
-              <div className={isMobile ? "inline-flex h-[29px] items-center justify-center rounded-[8px] border border-brand-border bg-brand-bg px-3 text-[12px] font-medium text-brand-active" : "inline-flex h-[29px] items-center justify-center rounded-[8px] border border-brand-border bg-brand-bg px-4 text-[14px] font-medium text-brand-active"}>
+              <div className="inline-flex h-[26px] xl:h-[29px] items-center justify-center rounded-[8px] border border-brand-border bg-brand-bg px-3 xl:px-4 text-[12px] xl:text-[14px] font-medium text-brand-active">
                 {article.category}
               </div>
             </>
@@ -83,7 +75,7 @@ const NewsCard = memo(function NewsCard({ article, isMobile = false }: NewsCardP
         </div>
 
         {/* Card Title */}
-        <h3 className={isMobile ? "font-sans text-[20px] font-medium leading-[25px] text-brand-dark line-clamp-3" : "font-sans text-[24px] font-medium leading-[29px] text-brand-dark line-clamp-3"}>
+        <h3 className="font-sans text-[20px] leading-[24px] xl:text-[24px] xl:leading-[29px] font-medium text-brand-dark line-clamp-3">
           {article.title}
         </h3>
       </div>
@@ -104,29 +96,32 @@ export default function NewsSection() {
   }, [maxIdx]);
 
   return (
-    // Figma desktop section: height 688px, bg #F2F7F1 (bg-brand-bg)
-    <section className="w-full bg-brand-bg py-16 md:py-[100px]" id="news">
+    // Figma desktop section: height 688px, bg #F2F7F1 (bg-brand-bg), mobile padding py-10
+    <section className="w-full bg-brand-bg py-10 xl:py-[100px]" id="news">
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
         
         {/* Responsive Grid System */}
-        <div className="flex flex-col lg:flex-row lg:gap-16 xl:gap-[64px]">
+        <div className="flex flex-col xl:flex-row xl:gap-[64px]">
           
-          {/* Left Column — Sticky info on desktop, standard flow on mobile */}
-          <div className="flex flex-col justify-between items-start gap-8 shrink-0 w-full lg:w-[429px] lg:h-[319px] mb-8 lg:mb-0">
+          {/* Left Column — Sticky info on desktop, standard flow on mobile/tablet */}
+          <div className="flex flex-col justify-between items-start gap-8 shrink-0 w-full xl:w-[429px] xl:h-[319px] mb-8 xl:mb-0">
             <div className="flex flex-col gap-4 items-start w-full">
               {/* Badge — Figma: bg #F9FAFB, border #E4E7EC, radius 30px */}
-              <SectionBadge variant="outline" showDot>
+              <SectionBadge variant="outline" showDot className="h-[30px] text-[12px] leading-[18px] px-4 gap-[8px] xl:h-[33px] xl:text-[14px] xl:leading-[21px] xl:gap-[8px]">
                 News & Stories
               </SectionBadge>
 
-              {/* Title — Figma: "Insights from agricultural research & field experts" (48px / line-height 58px) */}
-              <h2 className="text-h2-title text-brand-dark max-w-[466px]">
+              {/* Title — Figma: "Insights from agricultural research & field experts" (48px / line-height 58px on desktop, 32px / 38px on mobile) */}
+              <h2 
+                className="text-[32px] leading-[38px] xl:text-[48px] xl:leading-[58px] font-medium text-brand-dark max-w-[466px]"
+                style={{ fontFamily: "var(--font-inter-tight)", fontWeight: 500 }}
+              >
                 Insights from agricultural research &amp; field experts
               </h2>
             </div>
 
-            {/* Navigation buttons — Figma: 2x 48x48 circles with 16px gap (hidden on mobile) */}
-            <div className="hidden lg:flex gap-4">
+            {/* Navigation buttons — Figma: 2x 48x48 circles with 16px gap (hidden on mobile/tablet) */}
+            <div className="hidden xl:flex gap-4">
               <button
                 onClick={handlePrev}
                 disabled={activeIdx === 0}
@@ -176,16 +171,16 @@ export default function NewsSection() {
             </div>
           </div>
 
-          {/* Right Column — Horizontal slider on desktop, native snap scroll on mobile */}
-          <div className="relative w-full lg:w-[748px] h-auto lg:h-[488px] overflow-hidden">
+          {/* Right Column — Horizontal slider on desktop, native snap scroll on mobile/tablet */}
+          <div className="relative w-full xl:w-[748px] h-auto xl:h-[488px] overflow-hidden">
             
             {/* Side Fade Mask — Smoothly fades cards out on the right edge */}
             <div
-              className="pointer-events-none absolute right-0 top-0 z-20 h-full w-[120px] bg-gradient-to-l from-brand-bg to-transparent hidden lg:block"
+              className="pointer-events-none absolute right-0 top-0 z-20 h-full w-[120px] bg-gradient-to-l from-brand-bg to-transparent hidden xl:block"
             />
 
-            {/* Desktop Sliding Container (>=1024px) */}
-            <div className="hidden lg:block w-full h-full overflow-hidden">
+            {/* Desktop Sliding Container (>=1280px) */}
+            <div className="hidden xl:block w-full h-full overflow-hidden">
               <div
                 className="flex gap-[25px] transition-transform duration-500 ease-out"
                 style={{
@@ -198,11 +193,11 @@ export default function NewsSection() {
               </div>
             </div>
 
-            {/* Mobile Native Swipe Container (<1024px) */}
-            <div className="block lg:hidden w-full overflow-x-auto scrollbar-none snap-x snap-mandatory pb-4">
-              <div className="flex gap-4">
+            {/* Mobile/Tablet Native Swipe Container (<1280px) */}
+            <div className="block xl:hidden w-full overflow-x-auto scrollbar-none snap-x snap-mandatory pb-4">
+              <div className="flex gap-4 pr-8">
                 {articles.map((article) => (
-                  <NewsCard key={article.id} article={article} isMobile />
+                  <NewsCard key={article.id} article={article} />
                 ))}
               </div>
             </div>
