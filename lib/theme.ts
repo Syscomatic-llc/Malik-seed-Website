@@ -1,14 +1,3 @@
-/**
- * Theme — re-exports from design-tokens for backward compatibility.
- *
- * New code should import from `@/lib/design-tokens` directly.
- * This file is kept so existing imports continue to work.
- */
-export { colors, typography, spacing, borderRadius, components, images, designTokens as default } from "./design-tokens";
-
-/**
- * @deprecated Use `import { colors, typography } from "@/lib/design-tokens"` instead.
- */
 export const theme = {
   colors: {
     brandPrimary: "#1b4d32",
