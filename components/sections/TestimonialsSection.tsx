@@ -124,37 +124,14 @@ function TestimonialCard({
           isActive ? "scale-105" : "scale-100"
         )}
       >
-        {testimonial.images.length === 2 ? (
-          <div className="absolute inset-0 flex flex-col">
-            <div className="relative h-1/2 w-full">
-              <Image
-                src={testimonial.images[0]}
-                alt={testimonial.name}
-                fill
-                className="object-cover object-center"
-                sizes={imageSizes}
-              />
-            </div>
-            <div className="relative h-1/2 w-full">
-              <Image
-                src={testimonial.images[1]}
-                alt={testimonial.name}
-                fill
-                className="object-cover object-center"
-                sizes={imageSizes}
-              />
-            </div>
-          </div>
-        ) : (
-          <Image
-            src={testimonial.images[0]}
-            alt={testimonial.name}
-            fill
-            className="object-cover object-center"
-            sizes={imageSizes}
-            priority={priority}
-          />
-        )}
+        <Image
+          src={testimonial.images[0]}
+          alt={testimonial.name}
+          fill
+          className="object-cover object-center"
+          sizes={imageSizes}
+          priority={priority}
+        />
       </div>
 
       {/* Bottom Gradient overlay & text */}
