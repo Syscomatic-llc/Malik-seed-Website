@@ -7,25 +7,24 @@ import { aboutData } from "@/data/sections-data";
 
 export default function AboutSection() {
   return (
-    <section className="w-full bg-brand-bg" id="about">
+    <section className="bg-brand-bg w-full" id="about">
       <div className="mx-auto max-w-[1440px]">
-
         {/* ===== Desktop Layout ===== */}
         {/* Frame 23 — 1240x591, left:100px, top:100px */}
         <div className="hidden flex-row items-start gap-8 px-6 py-12 md:flex lg:gap-16 lg:px-16 lg:py-20 xl:gap-[129px] xl:px-[100px] xl:pt-[100px] xl:pb-0">
           {/* Left — Frame 22: 608x591, col, gap 32 */}
-          <div className="flex flex-1 max-w-[608px] flex-col gap-6 lg:gap-8 xl:gap-[32px]">
+          <div className="flex max-w-[608px] flex-1 flex-col gap-6 lg:gap-8 xl:gap-[32px]">
             {/* Section badge — Figma "About Malik Seeds" */}
-            <SectionBadge variant="green">
-              {aboutData.badge}
-            </SectionBadge>
+            <SectionBadge variant="green">{aboutData.badge}</SectionBadge>
 
             {/* Frame 2147229506 — 608x526, col, gap 48 */}
             <div className="flex flex-col gap-8 lg:gap-12 xl:gap-[48px]">
               {/* Group 1 — text content */}
               <p className="text-body-intro text-brand-dark">
                 <span>{aboutData.introDesktop.highlight}</span>
-                <span className="text-brand-dark/60">{aboutData.introDesktop.muted}</span>
+                <span className="text-brand-dark/60">
+                  {aboutData.introDesktop.muted}
+                </span>
               </p>
 
               {/* Frame 6 CTA — 159x46, bg #195236, radius 60px */}
@@ -42,7 +41,7 @@ export default function AboutSection() {
           {/* Right — Frame 37: 503x582, left:737px, col, gap 16 */}
           <div className="flex w-[320px] shrink-0 flex-col gap-[16px] sm:w-[400px] lg:w-[440px] xl:w-[503px]">
             {/* Frame 32 — 503x340, bg-[#F9FAFB], radius 24px */}
-            <div className="relative aspect-[503/340] w-full overflow-hidden rounded-[16px] bg-brand-neutral-light xl:rounded-[24px]">
+            <div className="bg-brand-neutral-light relative aspect-[503/340] w-full overflow-hidden rounded-[16px] xl:rounded-[24px]">
               <Image
                 src={aboutData.images.teamBanner}
                 alt="Malik Seeds Team"
@@ -56,7 +55,7 @@ export default function AboutSection() {
             {/* Frame 35 — 503x226, gap 16 */}
             <div className="flex w-full flex-row gap-[16px]">
               {/* Frame 33 — 243x226 */}
-              <div className="relative aspect-[243/226] flex-1 rounded-[16px] xl:rounded-[24px] overflow-hidden">
+              <div className="relative aspect-[243/226] flex-1 overflow-hidden rounded-[16px] xl:rounded-[24px]">
                 <Image
                   src={aboutData.images.about1}
                   alt="Years of Experience"
@@ -66,7 +65,7 @@ export default function AboutSection() {
                 />
               </div>
               {/* Frame 34 — 243x226 */}
-              <div className="relative aspect-[243/226] flex-1 rounded-[16px] xl:rounded-[24px] overflow-hidden">
+              <div className="relative aspect-[243/226] flex-1 overflow-hidden rounded-[16px] xl:rounded-[24px]">
                 <Image
                   src={aboutData.images.about2}
                   alt="Farmer Partners"
@@ -80,22 +79,22 @@ export default function AboutSection() {
         </div>
 
         {/* Desktop Stats row — Frame 2147229657: 1240x178 */}
-        <div className="hidden px-[24px] pb-[40px] pt-[40px] md:block md:px-6 md:pb-[60px] md:pt-[50px] lg:px-16 xl:px-[100px] xl:pb-[100px] xl:pt-[60px]">
+        <div className="hidden px-[24px] pt-[40px] pb-[40px] md:block md:px-6 md:pt-[50px] md:pb-[60px] lg:px-16 xl:px-[100px] xl:pt-[60px] xl:pb-[100px]">
           <div className="flex w-full flex-row items-center justify-between rounded-[16px]">
             {aboutData.stats.map((stat, index) => (
               <Fragment key={stat.label}>
-                <div className="flex flex-1 max-w-[235px] h-[140px] lg:h-[160px] xl:h-[178px] flex-col items-center justify-center text-center">
+                <div className="flex h-[140px] max-w-[235px] flex-1 flex-col items-center justify-center text-center lg:h-[160px] xl:h-[178px]">
                   <span className="text-stat-number-desktop text-brand-active">
                     {stat.prefix}
                     <CountUp to={stat.toValue} />
                     {stat.suffix}
                   </span>
-                  <span className="font-inter text-center text-[12px] leading-[18px] lg:text-[14px] lg:leading-[21px] xl:text-[16px] xl:leading-[24px] text-brand-dark max-w-[192px]">
+                  <span className="font-inter text-brand-dark max-w-[192px] text-center text-[12px] leading-[18px] lg:text-[14px] lg:leading-[21px] xl:text-[16px] xl:leading-[24px]">
                     {stat.label}
                   </span>
                 </div>
                 {index < aboutData.stats.length - 1 && (
-                  <div className="h-[60px] lg:h-[72px] xl:h-[86px] w-[1px] bg-brand-partners-border shrink-0" />
+                  <div className="bg-brand-partners-border h-[60px] w-[1px] shrink-0 lg:h-[72px] xl:h-[86px]" />
                 )}
               </Fragment>
             ))}
@@ -110,14 +109,12 @@ export default function AboutSection() {
             {/* Frame 22 — 358x559, col, gap 24, items-center */}
             <div className="flex flex-col items-center gap-[24px]">
               {/* Badge — Figma "About Malik Seeds" */}
-              <SectionBadge variant="green">
-                {aboutData.badge}
-              </SectionBadge>
+              <SectionBadge variant="green">{aboutData.badge}</SectionBadge>
 
               {/* Main text + CTA */}
               <div className="flex flex-col items-center gap-[32px]">
                 {/* Text — 358px, 24px, weight 500, center, lineHeight 36px */}
-                <p className="font-sans text-center text-[24px] font-medium leading-[36px] text-brand-dark">
+                <p className="text-brand-dark text-center font-sans text-[24px] leading-[36px] font-medium">
                   <span>{aboutData.introMobile}</span>
                 </p>
 
@@ -126,7 +123,7 @@ export default function AboutSection() {
                   href={aboutData.cta.href}
                   label={aboutData.cta.label}
                   variant="dark"
-                  className="h-[41px] w-[123px] text-[14px] px-0 gap-[6px]"
+                  className="h-[41px] w-[123px] gap-[6px] px-0 text-[14px]"
                   iconSize={16}
                 />
               </div>
@@ -135,7 +132,7 @@ export default function AboutSection() {
             {/* Frame 37 — 358x416, col, gap 16 */}
             <div className="flex flex-col gap-[16px]">
               {/* Frame 32 — 358x240, bg #F9FAFB, radius 16px */}
-              <div className="relative h-[240px] w-full overflow-hidden rounded-[16px] bg-brand-neutral-light">
+              <div className="bg-brand-neutral-light relative h-[240px] w-full overflow-hidden rounded-[16px]">
                 <Image
                   src={aboutData.images.teamBanner}
                   alt="Malik Seeds Team"
@@ -180,7 +177,7 @@ export default function AboutSection() {
             ].map((row, rowIndex) => (
               <Fragment key={rowIndex}>
                 {rowIndex > 0 && (
-                  <div className="h-[1px] w-[72px] bg-brand-partners-border" />
+                  <div className="bg-brand-partners-border h-[1px] w-[72px]" />
                 )}
                 <div className="flex w-full flex-row gap-[16px]">
                   {row.map((stat) => (
@@ -193,7 +190,7 @@ export default function AboutSection() {
                         <CountUp to={stat.toValue} />
                         {stat.suffix}
                       </span>
-                      <span className="font-inter text-center text-[14px] leading-[21px] text-brand-dark">
+                      <span className="font-inter text-brand-dark text-center text-[14px] leading-[21px]">
                         {stat.label}
                       </span>
                     </div>

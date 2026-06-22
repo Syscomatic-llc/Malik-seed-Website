@@ -79,15 +79,11 @@ function TimelineSpine({ isLast = false }: { isLast?: boolean }) {
         alt="Dot"
         width={18}
         height={18}
-        className="absolute left-[27px] top-0"
+        className="absolute top-0 left-[27px]"
       />
       {/* Dotted line — starts just below the dot */}
-      <div className="absolute left-[35.5px] top-[18px]">
-        {isLast ? (
-          <TimelineLineLast />
-        ) : (
-          <TimelineLine />
-        )}
+      <div className="absolute top-[18px] left-[35.5px]">
+        {isLast ? <TimelineLineLast /> : <TimelineLine />}
       </div>
     </div>
   );
@@ -96,9 +92,9 @@ function TimelineSpine({ isLast = false }: { isLast?: boolean }) {
 /** Year label centered above the spine column */
 function YearLabel({ year }: { year: string }) {
   return (
-    <div className="flex justify-center w-full">
+    <div className="flex w-full justify-center">
       <span
-        className="font-anton text-brand-light-green text-5xl leading-[58px] text-center whitespace-nowrap"
+        className="font-anton text-brand-light-green text-center text-5xl leading-[58px] whitespace-nowrap"
         style={{ fontFamily: "var(--font-anton)" }}
       >
         {year}
@@ -110,7 +106,7 @@ function YearLabel({ year }: { year: string }) {
 /** Image panel — 503 × 372, rounded‑[32px], overflow hidden */
 function ImagePanel({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="relative w-full max-w-[503px] aspect-[503/372] rounded-[32px] overflow-hidden bg-[#E4E7EC] shrink-0">
+    <div className="relative aspect-[503/372] w-full max-w-[503px] shrink-0 overflow-hidden rounded-[32px] bg-[#E4E7EC]">
       <Image
         src={src}
         alt={alt}
@@ -138,23 +134,23 @@ function ContentCard({
 }) {
   return (
     <div
-      className={`relative rounded-[24px] w-full max-w-[474px] ${cardTop ?? "top-[-44px]"} ${cardHeight ?? "h-[462px]"}`}
+      className={`relative w-full max-w-[474px] rounded-[24px] ${cardTop ?? "top-[-44px]"} ${cardHeight ?? "h-[462px]"}`}
     >
       {/* Glow overlay */}
-      <div className="absolute inset-0 overflow-hidden rounded-[24px] pointer-events-none">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[24px]">
         <Image
           src={glow}
           alt=""
           width={252}
           height={186}
           style={{ width: "252px", height: "186px" }}
-          className="absolute right-0 top-0 mix-blend-screen opacity-70"
+          className="absolute top-0 right-0 opacity-70 mix-blend-screen"
           aria-hidden="true"
         />
       </div>
 
       {/* Text content — vertically centered inside the card */}
-      <div className="absolute left-[32px] top-1/2 -translate-y-1/2 flex flex-col gap-4 max-w-[410px]">
+      <div className="absolute top-1/2 left-[32px] flex max-w-[410px] -translate-y-1/2 flex-col gap-4">
         <h3
           className="font-anton text-brand-bg text-[44px] leading-[53px] whitespace-pre-line"
           style={{ fontFamily: "var(--font-anton)" }}
@@ -182,12 +178,18 @@ function ContentCard({
  * "left"  → card on left, spine in centre, image on right
  * "right" → image on left, spine in centre, card on right
  */
-function TimelineRow({ item, isLast }: { item: TimelineItem; isLast: boolean }) {
+function TimelineRow({
+  item,
+  isLast,
+}: {
+  item: TimelineItem;
+  isLast: boolean;
+}) {
   const spine = <TimelineSpine isLast={isLast} />;
 
   if (item.side === "left") {
     return (
-      <div className="grid grid-cols-[1fr_72px_1fr] items-start w-full">
+      <div className="grid w-full grid-cols-[1fr_72px_1fr] items-start">
         {/* Left: card */}
         <div className="flex justify-start">
           <ContentCard
@@ -210,7 +212,7 @@ function TimelineRow({ item, isLast }: { item: TimelineItem; isLast: boolean }) 
 
   // side === "right"
   return (
-    <div className="grid grid-cols-[1fr_72px_1fr] items-start w-full">
+    <div className="grid w-full grid-cols-[1fr_72px_1fr] items-start">
       {/* Left: image */}
       <div className="flex justify-start pl-[15px]">
         <ImagePanel src={item.image} alt={item.title} />
@@ -238,28 +240,36 @@ function TimelineRow({ item, isLast }: { item: TimelineItem; isLast: boolean }) 
  * Each item: year + dot, then image, then text card — all stacked.
  */
 
-function TabletTimelineRow({ item, isLast }: { item: TimelineItem; isLast: boolean }) {
+function TabletTimelineRow({
+  item,
+  isLast,
+}: {
+  item: TimelineItem;
+  isLast: boolean;
+}) {
   return (
-    <div className="grid grid-cols-[40px_1fr] items-stretch w-full">
+    <div className="grid w-full grid-cols-[40px_1fr] items-stretch">
       {/* Left: spine */}
-      <div className="relative shrink-0 w-10">
+      <div className="relative w-10 shrink-0">
         <Image
           src="/images/timeline/Ellipse.svg"
           alt="Dot"
           width={14}
           height={14}
-          className="absolute left-[13px] top-0 z-10"
+          className="absolute top-0 left-[13px] z-10"
         />
         {isLast ? (
           <div
-            className="absolute left-[19px] top-[14px] w-[1px] h-[200px]"
+            className="absolute top-[14px] left-[19px] h-[200px] w-[1px]"
             style={{
-              maskImage: "linear-gradient(to bottom, black 0%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to bottom, black 0%, transparent 100%)",
+              maskImage:
+                "linear-gradient(to bottom, black 0%, transparent 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, black 0%, transparent 100%)",
             }}
           >
             <svg
-              className="w-[1px] h-full"
+              className="h-full w-[1px]"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -276,9 +286,9 @@ function TabletTimelineRow({ item, isLast }: { item: TimelineItem; isLast: boole
             </svg>
           </div>
         ) : (
-          <div className="absolute left-[19px] top-[14px] bottom-16 w-[1px]">
+          <div className="absolute top-[14px] bottom-16 left-[19px] w-[1px]">
             <svg
-              className="w-[1px] h-full"
+              className="h-full w-[1px]"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -306,7 +316,7 @@ function TabletTimelineRow({ item, isLast }: { item: TimelineItem; isLast: boole
           {item.year}
         </span>
         {/* Image */}
-        <div className="relative w-full aspect-[503/372] rounded-[24px] overflow-hidden bg-[#E4E7EC]">
+        <div className="relative aspect-[503/372] w-full overflow-hidden rounded-[24px] bg-[#E4E7EC]">
           <Image
             src={item.image}
             alt={item.title}
@@ -316,15 +326,15 @@ function TabletTimelineRow({ item, isLast }: { item: TimelineItem; isLast: boole
           />
         </div>
         {/* Text card */}
-        <div className="relative rounded-[24px] overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none">
+        <div className="relative overflow-hidden rounded-[24px]">
+          <div className="pointer-events-none absolute inset-0">
             <Image
               src={item.glow}
               alt=""
               width={200}
               height={148}
               style={{ width: "200px", height: "148px" }}
-              className="absolute right-0 top-0 mix-blend-screen opacity-70"
+              className="absolute top-0 right-0 opacity-70 mix-blend-screen"
               aria-hidden="true"
             />
           </div>
@@ -350,29 +360,30 @@ function TabletTimelineRow({ item, isLast }: { item: TimelineItem; isLast: boole
 
 /* ────────────────── main section ────────────────── */
 
-export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }) {
+export default function TimelineStory({
+  items = [],
+}: {
+  items?: TimelineItem[];
+}) {
   return (
-    <section
-      className="w-full bg-brand-dark overflow-hidden"
-      id="timeline"
-    >
+    <section className="bg-brand-dark w-full overflow-hidden" id="timeline">
       {/* ===== Desktop View (lg+) — two-column alternating with per-item spine ===== */}
-      <div className="hidden lg:flex flex-col justify-end bg-white">
-        <div className="self-stretch bg-brand-dark pt-[100px] px-[99px]">
-          <div className="flex flex-col items-center self-stretch max-w-[1242px] mx-auto">
+      <div className="hidden flex-col justify-end bg-white lg:flex">
+        <div className="bg-brand-dark self-stretch px-[99px] pt-[100px]">
+          <div className="mx-auto flex max-w-[1242px] flex-col items-center self-stretch">
             {/* ── Header ── */}
-            <div className="flex flex-col items-start self-start mb-[63px] ml-[1px] gap-8">
-              <div className="flex items-center bg-brand-dark/30 py-1.5 px-4 gap-2 rounded-[40px] border border-solid border-white/10">
-                <div className="bg-brand-light-green w-2 h-2 rounded-[1px]" />
+            <div className="mb-[63px] ml-[1px] flex flex-col items-start gap-8 self-start">
+              <div className="bg-brand-dark/30 flex items-center gap-2 rounded-[40px] border border-solid border-white/10 px-4 py-1.5">
+                <div className="bg-brand-light-green h-2 w-2 rounded-[1px]" />
                 <span
-                  className="text-white text-sm font-medium"
+                  className="text-sm font-medium text-white"
                   style={{ fontFamily: "var(--font-inter-tight)" }}
                 >
                   Timeline
                 </span>
               </div>
               <span
-                className="text-brand-bg text-5xl font-medium leading-[58px]"
+                className="text-brand-bg text-5xl leading-[58px] font-medium"
                 style={{ fontFamily: "var(--font-inter-tight)" }}
               >
                 From Humble Beginnings
@@ -380,7 +391,7 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
             </div>
 
             {/* ── Timeline items ── */}
-            <div className="flex flex-col items-center self-stretch gap-6">
+            <div className="flex flex-col items-center gap-6 self-stretch">
               {items.map((item, idx) => {
                 const isLast = idx === items.length - 1;
                 return (
@@ -389,7 +400,7 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
                     className="flex flex-col items-center self-stretch"
                   >
                     {/* Year label — centred above the spine column via grid */}
-                    <div className="grid grid-cols-[1fr_72px_1fr] w-full mb-6">
+                    <div className="mb-6 grid w-full grid-cols-[1fr_72px_1fr]">
                       <div />
                       <YearLabel year={item.year} />
                       <div />
@@ -405,22 +416,22 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
       </div>
 
       {/* ===== Tablet View (md → lg) — single-column with left spine ===== */}
-      <div className="hidden md:flex lg:hidden flex-col bg-white">
-        <div className="self-stretch bg-brand-dark pt-[80px] px-6 sm:px-10">
-          <div className="flex flex-col items-start max-w-[700px] mx-auto">
+      <div className="hidden flex-col bg-white md:flex lg:hidden">
+        <div className="bg-brand-dark self-stretch px-6 pt-[80px] sm:px-10">
+          <div className="mx-auto flex max-w-[700px] flex-col items-start">
             {/* ── Header ── */}
-            <div className="flex flex-col items-start mb-12 gap-6">
-              <div className="flex items-center bg-brand-dark/30 py-1.5 px-4 gap-2 rounded-[40px] border border-solid border-white/10">
-                <div className="bg-brand-light-green w-2 h-2 rounded-[1px]" />
+            <div className="mb-12 flex flex-col items-start gap-6">
+              <div className="bg-brand-dark/30 flex items-center gap-2 rounded-[40px] border border-solid border-white/10 px-4 py-1.5">
+                <div className="bg-brand-light-green h-2 w-2 rounded-[1px]" />
                 <span
-                  className="text-white text-sm font-medium"
+                  className="text-sm font-medium text-white"
                   style={{ fontFamily: "var(--font-inter-tight)" }}
                 >
                   Timeline
                 </span>
               </div>
               <h2
-                className="text-brand-bg text-4xl font-medium leading-[44px]"
+                className="text-brand-bg text-4xl leading-[44px] font-medium"
                 style={{ fontFamily: "var(--font-inter-tight)" }}
               >
                 From Humble Beginnings
@@ -432,7 +443,11 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
               {items.map((item, idx) => {
                 const isLast = idx === items.length - 1;
                 return (
-                  <TabletTimelineRow key={item.year} item={item} isLast={isLast} />
+                  <TabletTimelineRow
+                    key={item.year}
+                    item={item}
+                    isLast={isLast}
+                  />
                 );
               })}
             </div>
@@ -441,21 +456,21 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
       </div>
 
       {/* ===== Mobile View (<md) — horizontal scroll ===== */}
-      <div className="block md:hidden pt-[54px] pb-[74px] w-full">
-        <div className="px-4 flex flex-col items-center gap-[48px]">
+      <div className="block w-full pt-[54px] pb-[74px] md:hidden">
+        <div className="flex flex-col items-center gap-[48px] px-4">
           {/* Header */}
-          <div className="flex flex-col items-center gap-6 text-center max-w-[358px]">
-            <div className="flex items-center bg-brand-dark/32 py-1.5 px-4 gap-2 rounded-[40px] border border-solid border-white/12">
-              <div className="bg-brand-light-green w-1.5 h-1.5 rounded-[1px]" />
+          <div className="flex max-w-[358px] flex-col items-center gap-6 text-center">
+            <div className="bg-brand-dark/32 flex items-center gap-2 rounded-[40px] border border-solid border-white/12 px-4 py-1.5">
+              <div className="bg-brand-light-green h-1.5 w-1.5 rounded-[1px]" />
               <span
-                className="text-white text-xs font-medium leading-[18px]"
+                className="text-xs leading-[18px] font-medium text-white"
                 style={{ fontFamily: "var(--font-inter-tight)" }}
               >
                 Timeline
               </span>
             </div>
             <h2
-              className="text-brand-bg text-[32px] font-medium leading-[38px]"
+              className="text-brand-bg text-[32px] leading-[38px] font-medium"
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
               From Humble Beginnings
@@ -463,12 +478,12 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
           </div>
 
           {/* Horizontal Scroll Track */}
-          <div className="w-full flex flex-row overflow-x-auto gap-[95px] px-6 pb-8 scrollbar-none snap-x snap-mandatory">
+          <div className="flex w-full snap-x snap-mandatory scrollbar-none flex-row gap-[95px] overflow-x-auto px-6 pb-8">
             {items.map((item, idx) => {
               const isEven = idx % 2 === 0;
 
               const imageEl = (
-                <div className="relative w-[310px] h-[240px] rounded-[24px] overflow-hidden bg-[#F2F4F7] shrink-0">
+                <div className="relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[24px] bg-[#F2F4F7]">
                   {item.image && (
                     <Image
                       src={item.image}
@@ -482,7 +497,7 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
               );
 
               const textEl = (
-                <div className="relative flex flex-col items-center justify-center text-center w-[310px] h-[240px] overflow-hidden">
+                <div className="relative flex h-[240px] w-[310px] flex-col items-center justify-center overflow-hidden text-center">
                   {/* Glow overlay */}
                   <Image
                     src={item.glow}
@@ -490,18 +505,19 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
                     width={140}
                     height={100}
                     style={{ width: "140px", height: "100px" }}
-                    className={`absolute z-0 mix-blend-screen opacity-70 pointer-events-none ${isEven ? "left-0 bottom-0" : "right-0 top-0"
-                      }`}
+                    className={`pointer-events-none absolute z-0 opacity-70 mix-blend-screen ${
+                      isEven ? "bottom-0 left-0" : "top-0 right-0"
+                    }`}
                     aria-hidden="true"
                   />
                   <h3
-                    className="relative z-10 font-anton text-brand-bg text-[32px] leading-[38px] mb-4 whitespace-pre-line"
+                    className="font-anton text-brand-bg relative z-10 mb-4 text-[32px] leading-[38px] whitespace-pre-line"
                     style={{ fontFamily: "var(--font-anton)" }}
                   >
                     {item.title}
                   </h3>
                   <p
-                    className="relative z-10 text-brand-bg/95 text-base leading-[24px] whitespace-pre-line"
+                    className="text-brand-bg/95 relative z-10 text-base leading-[24px] whitespace-pre-line"
                     style={{ fontFamily: "var(--font-inter)" }}
                   >
                     {item.description}
@@ -512,20 +528,20 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
               return (
                 <div
                   key={item.year}
-                  className="w-[310px] shrink-0 snap-center flex flex-col items-center"
+                  className="flex w-[310px] shrink-0 snap-center flex-col items-center"
                 >
                   {isEven ? imageEl : textEl}
 
                   {/* Year & Connecting Line (Middle) */}
-                  <div className="relative w-full h-[48px] flex items-center justify-center mt-[54px] mb-[70px]">
+                  <div className="relative mt-[54px] mb-[70px] flex h-[48px] w-full items-center justify-center">
                     {/* Connecting Line (only render if not the last item) */}
                     {idx < items.length - 1 && (
-                      <div className="absolute left-[50%] w-[405px] h-[1px] border-t border-dashed border-brand-bg z-0" />
+                      <div className="border-brand-bg absolute left-[50%] z-0 h-[1px] w-[405px] border-t border-dashed" />
                     )}
                     {/* Year & Dot centered, Year masks the line while Dot sits on it */}
                     <div className="relative z-10 flex items-center select-none">
                       <span
-                        className="font-anton text-brand-light-green text-[40px] leading-[48px] bg-brand-dark px-[2rem]"
+                        className="font-anton text-brand-light-green bg-brand-dark px-[2rem] text-[40px] leading-[48px]"
                         style={{ fontFamily: "var(--font-anton)" }}
                       >
                         {item.year}
@@ -536,7 +552,7 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
                           alt="Dot"
                           width={16}
                           height={16}
-                          className="shrink-0 relative z-10 bg-brand-dark rounded-full"
+                          className="bg-brand-dark relative z-10 shrink-0 rounded-full"
                         />
                       )}
                     </div>

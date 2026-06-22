@@ -51,13 +51,23 @@ function TestimonialCard({
   // Sizing definitions
   const widthClass = isMobile ? "w-[310px]" : "w-[398px]";
   const heightClass = isMobile
-    ? isActive ? "h-[450px]" : "h-[400px]"
-    : isActive ? "h-[560px]" : "h-[480px]";
+    ? isActive
+      ? "h-[450px]"
+      : "h-[400px]"
+    : isActive
+      ? "h-[560px]"
+      : "h-[480px]";
 
   const overlayHeightClass = isMobile ? "h-[221px] p-6" : "h-[234px] p-8";
-  const quoteTextSizeClass = isMobile ? "text-[14px] leading-[21px]" : "text-[16px] leading-[24px]";
-  const authorNameSizeClass = isMobile ? "text-[16px] leading-[19px]" : "text-[18px] leading-[22px]";
-  const locationSizeClass = isMobile ? "text-[14px] leading-[21px]" : "text-[16px] leading-[24px]";
+  const quoteTextSizeClass = isMobile
+    ? "text-[14px] leading-[21px]"
+    : "text-[16px] leading-[24px]";
+  const authorNameSizeClass = isMobile
+    ? "text-[16px] leading-[19px]"
+    : "text-[18px] leading-[22px]";
+  const locationSizeClass = isMobile
+    ? "text-[14px] leading-[21px]"
+    : "text-[16px] leading-[24px]";
 
   const imageSizes = isMobile ? "310px" : "398px";
 
@@ -92,7 +102,7 @@ function TestimonialCard({
       {/* Bottom Gradient overlay & text */}
       <div
         className={cn(
-          "absolute bottom-0 left-0 right-0 flex flex-col justify-between text-white",
+          "absolute right-0 bottom-0 left-0 flex flex-col justify-between text-white",
           overlayHeightClass
         )}
         style={{
@@ -100,14 +110,26 @@ function TestimonialCard({
             "linear-gradient(180deg, rgba(13, 26, 20, 0) 0%, rgba(13, 26, 20, 0.64) 34%, var(--brand-dark) 100%)",
         }}
       >
-        <p className={cn("font-sans text-white font-normal", quoteTextSizeClass)}>
+        <p
+          className={cn("font-sans font-normal text-white", quoteTextSizeClass)}
+        >
           {testimonial.quote}
         </p>
         <div className="flex flex-col gap-1">
-          <h4 className={cn("font-sans font-medium text-white", authorNameSizeClass)}>
+          <h4
+            className={cn(
+              "font-sans font-medium text-white",
+              authorNameSizeClass
+            )}
+          >
             {testimonial.name}
           </h4>
-          <p className={cn("font-inter text-white/80 font-normal", locationSizeClass)}>
+          <p
+            className={cn(
+              "font-inter font-normal text-white/80",
+              locationSizeClass
+            )}
+          >
             {testimonial.location}
           </p>
         </div>
@@ -135,16 +157,22 @@ export default function TestimonialsSection() {
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   // Touch Swipe handlers for mobile (useCallback for performance stability)
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (isResetting) return;
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  }, [isResetting]);
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      if (isResetting) return;
+      setTouchEnd(null);
+      setTouchStart(e.targetTouches[0].clientX);
+    },
+    [isResetting]
+  );
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (isResetting) return;
-    setTouchEnd(e.targetTouches[0].clientX);
-  }, [isResetting]);
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (isResetting) return;
+      setTouchEnd(e.targetTouches[0].clientX);
+    },
+    [isResetting]
+  );
 
   const handleTouchEnd = useCallback(() => {
     if (!touchStart || !touchEnd) return;
@@ -180,19 +208,19 @@ export default function TestimonialsSection() {
 
   return (
     <section
-      className="w-full overflow-hidden bg-brand-bg py-[40px] md:py-[100px]"
+      className="bg-brand-bg w-full overflow-hidden py-[40px] md:py-[100px]"
       id="testimonials"
     >
       <div className="mx-auto max-w-full">
         {/* Header - Figma centered, with Success Stories badge */}
-        <div className="mb-[48px] md:mb-[64px] flex flex-col items-center gap-6 md:gap-4">
+        <div className="mb-[48px] flex flex-col items-center gap-6 md:mb-[64px] md:gap-4">
           {/* Badge - Figma: Success stories */}
           <SectionBadge variant="outline" showDot>
             {testimonialsData.badge}
           </SectionBadge>
 
           {/* Title - Figma: "Voice of Impact", 48px/32px */}
-          <h2 className="font-sans text-[32px] font-medium leading-[38px] text-brand-dark md:text-[48px] md:leading-[58px]">
+          <h2 className="text-brand-dark font-sans text-[32px] leading-[38px] font-medium md:text-[48px] md:leading-[58px]">
             {testimonialsData.title}
           </h2>
         </div>
@@ -205,7 +233,9 @@ export default function TestimonialsSection() {
               <div
                 className={cn(
                   "flex items-center gap-6 overflow-visible",
-                  isResetting ? "transition-none" : "transition-transform duration-500 ease-out"
+                  isResetting
+                    ? "transition-none"
+                    : "transition-transform duration-500 ease-out"
                 )}
                 style={{
                   transform: `translateX(calc(50vw - ${HALF_CARD_DESKTOP}px - (${activeIndex} * ${SLOT_WIDTH_DESKTOP}px)))`,
@@ -234,7 +264,7 @@ export default function TestimonialsSection() {
           {/* Mobile Carousel View (< 768px) */}
           <div className="block w-full overflow-visible md:hidden">
             <div
-              className="relative h-[450px] w-full overflow-visible touch-pan-y"
+              className="relative h-[450px] w-full touch-pan-y overflow-visible"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -242,7 +272,9 @@ export default function TestimonialsSection() {
               <div
                 className={cn(
                   "flex items-center gap-4 overflow-visible",
-                  isResetting ? "transition-none" : "transition-transform duration-500 ease-out"
+                  isResetting
+                    ? "transition-none"
+                    : "transition-transform duration-500 ease-out"
                 )}
                 style={{
                   transform: `translateX(calc(50vw - ${HALF_CARD_MOBILE}px - (${activeIndex} * ${SLOT_WIDTH_MOBILE}px)))`,
@@ -271,11 +303,11 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Navigation Arrows - Figma: w-12 h-12, rounded-full bg-brand-active, arrows from /arrow.svg, 16px gap, hidden on mobile */}
-        <div className="hidden sm:flex justify-center gap-4 mt-[48px]">
+        <div className="mt-[48px] hidden justify-center gap-4 sm:flex">
           <button
             onClick={prev}
             aria-label="Previous testimonial"
-            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-brand-active shadow-md transition-all duration-300 hover:bg-brand-primary-hover active:scale-95"
+            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
           >
             <Image
               src="/arrow.svg"
@@ -288,14 +320,9 @@ export default function TestimonialsSection() {
           <button
             onClick={next}
             aria-label="Next testimonial"
-            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-brand-active shadow-md transition-all duration-300 hover:bg-brand-primary-hover active:scale-95"
+            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
           >
-            <Image
-              src="/arrow.svg"
-              alt="Next"
-              width={24}
-              height={24}
-            />
+            <Image src="/arrow.svg" alt="Next" width={24} height={24} />
           </button>
         </div>
       </div>

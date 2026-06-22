@@ -5,9 +5,8 @@ import { productsData } from "@/data/sections-data";
 
 export default function ProductsSection() {
   return (
-    <section className="w-full bg-brand-bg" id="products">
+    <section className="bg-brand-bg w-full" id="products">
       <div className="mx-auto max-w-[1440px]">
-
         {/* ===== Desktop/Tablet Grid Layout ===== */}
         {/* Frame 53 — 1440x754, grid of 3x2 cards */}
         <div className="hidden grid-cols-3 md:grid">
@@ -15,7 +14,7 @@ export default function ProductsSection() {
             <Link
               key={product.id}
               href={product.href}
-              className="group relative flex h-[377px] w-full overflow-hidden border-r border-b border-brand-dark/10"
+              className="group border-brand-dark/10 relative flex h-[377px] w-full overflow-hidden border-r border-b"
             >
               {/* Background Image */}
               <div className="absolute inset-0 z-0 transition-transform duration-700 ease-out group-hover:scale-105">
@@ -30,15 +29,15 @@ export default function ProductsSection() {
               </div>
 
               {/* Gradient Overlay - Rectangle 2 */}
-              <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/0 via-brand-dark/30 to-brand-dark/80 transition-opacity duration-300" />
+              <div className="from-brand-dark/0 via-brand-dark/30 to-brand-dark/80 absolute inset-0 z-10 bg-gradient-to-b transition-opacity duration-300" />
 
               {/* Card Content - Frame 43 */}
-              <div className="absolute left-[37px] bottom-[30px] z-20 flex w-[calc(100%-74px)] flex-col gap-[16px] transition-transform duration-300 ease-out group-hover:-translate-y-[20px]">
+              <div className="absolute bottom-[30px] left-[37px] z-20 flex w-[calc(100%-74px)] flex-col gap-[16px] transition-transform duration-300 ease-out group-hover:-translate-y-[20px]">
                 {/* Arrow Icon — 48x48 */}
-                <ArrowIcon 
-                  size={48} 
+                <ArrowIcon
+                  size={48}
                   strokeWidth={2}
-                  className="text-brand-bg shrink-0 transition-transform duration-300 group-hover:translate-x-1" 
+                  className="text-brand-bg shrink-0 transition-transform duration-300 group-hover:translate-x-1"
                 />
 
                 <div className="flex flex-col gap-[16px]">
@@ -48,7 +47,7 @@ export default function ProductsSection() {
 
                   {/* Description container - visible on hover */}
                   <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-h-[120px] group-hover:opacity-100">
-                    <p className="text-h3-title font-normal text-brand-bg">
+                    <p className="text-h3-title text-brand-bg font-normal">
                       {product.description}
                     </p>
                   </div>
@@ -60,8 +59,8 @@ export default function ProductsSection() {
 
         {/* ===== Mobile Layout ===== */}
         {/* Voice of Impact section — horizontal scrollable cards */}
-        <div className="md:hidden py-10 px-4 w-full bg-brand-bg">
-          <div className="flex flex-row overflow-x-auto gap-4 scrollbar-none scroll-smooth pb-2">
+        <div className="bg-brand-bg w-full px-4 py-10 md:hidden">
+          <div className="flex scrollbar-none flex-row gap-4 overflow-x-auto scroll-smooth pb-2">
             {productsData.items.map((product) => (
               <Link
                 key={product.id}
@@ -80,15 +79,15 @@ export default function ProductsSection() {
                 </div>
 
                 {/* Gradient Overlay - Rectangle 2 */}
-                <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/0 via-brand-dark/40 to-brand-dark/80" />
+                <div className="from-brand-dark/0 via-brand-dark/40 to-brand-dark/80 absolute inset-0 z-10 bg-gradient-to-b" />
 
                 {/* Card Content - Frame 43 */}
-                <div className="absolute left-[24px] bottom-[24px] z-20 flex w-[calc(100%-48px)] flex-col gap-[8px]">
+                <div className="absolute bottom-[24px] left-[24px] z-20 flex w-[calc(100%-48px)] flex-col gap-[8px]">
                   {/* Arrow Icon — 32x32 */}
-                  <ArrowIcon 
-                    size={32} 
+                  <ArrowIcon
+                    size={32}
                     strokeWidth={2}
-                    className="text-brand-bg shrink-0" 
+                    className="text-brand-bg shrink-0"
                   />
 
                   <h3 className="text-h3-title text-brand-bg">
@@ -99,10 +98,7 @@ export default function ProductsSection() {
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );
 }
-
-

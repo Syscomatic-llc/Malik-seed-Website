@@ -9,7 +9,11 @@ interface ArrowIconProps extends SVGProps<SVGSVGElement> {
   size?: number;
 }
 
-export function ArrowIcon({ direction = "right", size = 20, ...props }: ArrowIconProps) {
+export function ArrowIcon({
+  direction = "right",
+  size = 20,
+  ...props
+}: ArrowIconProps) {
   return (
     <svg
       width={size}

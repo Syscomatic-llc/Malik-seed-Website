@@ -21,7 +21,9 @@ interface PartnersSectionProps {
   partners?: Partner[];
 }
 
-export default memo(function PartnersSection({ partners = partnersData.items }: PartnersSectionProps) {
+export default memo(function PartnersSection({
+  partners = partnersData.items,
+}: PartnersSectionProps) {
   // Dynamically split unique partners down the middle and duplicate the list for infinite loops
   const { row1Items, row2Items } = useMemo(() => {
     const half = Math.ceil(partners.length / 2);
@@ -38,31 +40,30 @@ export default memo(function PartnersSection({ partners = partnersData.items }: 
   return (
     // Figma: 1440x430, bg #F2F7F1, border-bottom 1px solid #CED2DA
     <section
-      className="w-full overflow-hidden border-b border-brand-partners-border bg-brand-bg py-15 md:py-25"
+      className="border-brand-partners-border bg-brand-bg w-full overflow-hidden border-b py-15 md:py-25"
       id="partners"
     >
       <div className="mx-auto max-w-[1440px]">
         {/* Title — Figma: "Our Development Partners", Inter 18px, weight 500, center */}
-        <p className="font-inter mb-8 text-center opacity-70 text-base font-medium leading-[22px] text-brand-dark md:mb-12 md:text-lg">
+        <p className="font-inter text-brand-dark mb-8 text-center text-base leading-[22px] font-medium opacity-70 md:mb-12 md:text-lg">
           {partnersData.title}
         </p>
 
         {/* Sliders Container — Figma Frame 16: gap 24px (mobile) to 40px (desktop) */}
         <div className="relative flex flex-col gap-6 md:gap-10">
-          
           {/* Side Fades — Figma: Left & Right linear gradient overlays, width 202px on desktop */}
           <div
-            className="pointer-events-none absolute left-0 top-0 z-20 h-full w-24 md:w-[202px]"
+            className="pointer-events-none absolute top-0 left-0 z-20 h-full w-24 md:w-[202px]"
             style={LEFT_FADE_STYLE}
           />
           <div
-            className="pointer-events-none absolute right-0 top-0 z-20 h-full w-24 md:w-[202px]"
+            className="pointer-events-none absolute top-0 right-0 z-20 h-full w-24 md:w-[202px]"
             style={RIGHT_FADE_STYLE}
           />
 
           {/* Row 1 — Scrolling Left */}
-          <div className="relative overflow-hidden w-full">
-            <div className="flex animate-marquee gap-2 w-max">
+          <div className="relative w-full overflow-hidden">
+            <div className="animate-marquee flex w-max gap-2">
               {row1Items.map((item, idx) => (
                 <Image
                   key={`r1-${item.id}-${idx}`}
@@ -78,8 +79,8 @@ export default memo(function PartnersSection({ partners = partnersData.items }: 
           </div>
 
           {/* Row 2 — Scrolling Right */}
-          <div className="relative overflow-hidden w-full">
-            <div className="flex animate-marquee-reverse gap-2 w-max">
+          <div className="relative w-full overflow-hidden">
+            <div className="animate-marquee-reverse flex w-max gap-2">
               {row2Items.map((item, idx) => (
                 <Image
                   key={`r2-${item.id}-${idx}`}
@@ -93,7 +94,6 @@ export default memo(function PartnersSection({ partners = partnersData.items }: 
               ))}
             </div>
           </div>
-
         </div>
       </div>
     </section>

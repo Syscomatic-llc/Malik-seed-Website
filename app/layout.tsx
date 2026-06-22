@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter_Tight, Inter, Anton } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/sections/Footer";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -37,7 +39,11 @@ export default function RootLayout({
       className={`${interTight.variable} ${inter.variable} ${anton.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <Navbar />
+        <main className="relative flex-grow">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

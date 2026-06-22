@@ -178,10 +178,13 @@ export const heroData: HeroData = {
 export const aboutData: AboutData = {
   badge: "About Malik Seeds",
   introDesktop: {
-    highlight: "Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history goes back to 1969 when our founder, A. R. Malik launched \"Atlas-70\" Cabbage from Sakata Seed Corporation, based ",
-    muted: "in Japan. Today, we are among the most trusted brands in the agriculture industry.",
+    highlight:
+      'Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history goes back to 1969 when our founder, A. R. Malik launched "Atlas-70" Cabbage from Sakata Seed Corporation, based ',
+    muted:
+      "in Japan. Today, we are among the most trusted brands in the agriculture industry.",
   },
-  introMobile: "Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history...",
+  introMobile:
+    "Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history...",
   cta: {
     label: "Learn More",
     href: "/about",
@@ -232,7 +235,8 @@ export const productsData: ProductsData = {
       id: 4,
       category: "Origene by Malik",
       name: "Origene by Malik",
-      description: "Safe Fruits and Vegetables for Health Conscious Urban Consumers",
+      description:
+        "Safe Fruits and Vegetables for Health Conscious Urban Consumers",
       image: "/images/products/product-4.png",
       href: "/brands/origene",
     },
@@ -240,7 +244,8 @@ export const productsData: ProductsData = {
       id: 5,
       category: "Malik’s Flower",
       name: "Malik’s Flower",
-      description: "Premium Flower Varieties Bringing Global Genetics to Local Growers",
+      description:
+        "Premium Flower Varieties Bringing Global Genetics to Local Growers",
       image: "/images/products/product-5.png",
       href: "/brands/maliks-flower",
     },
@@ -248,7 +253,8 @@ export const productsData: ProductsData = {
       id: 6,
       category: "Innovation & Development",
       name: "Innovation & Development",
-      description: "Empowering Farmers Through Knowledge, Technology, and Market Access",
+      description:
+        "Empowering Farmers Through Knowledge, Technology, and Market Access",
       image: "/images/products/product-6.png",
       href: "/brands/innovation-development",
     },
@@ -261,11 +267,23 @@ export const partnersData: PartnersData = {
     { id: 1, name: "CIMMYT", src: "/images/partners/partner-1.png" },
     { id: 2, name: "IRRI", src: "/images/partners/partner-2.png" },
     { id: 3, name: "PARC", src: "/images/partners/partner-3.png" },
-    { id: 4, name: "Punjab Seed Council", src: "/images/partners/partner-4.png" },
-    { id: 5, name: "Agri. Univ. Faisalabad", src: "/images/partners/partner-5.png" },
+    {
+      id: 4,
+      name: "Punjab Seed Council",
+      src: "/images/partners/partner-4.png",
+    },
+    {
+      id: 5,
+      name: "Agri. Univ. Faisalabad",
+      src: "/images/partners/partner-5.png",
+    },
     { id: 6, name: "NARC", src: "/images/partners/partner-6.png" },
     { id: 7, name: "FAO", src: "/images/partners/partner-7.png" },
-    { id: 8, name: "USAID Agri Program", src: "/images/partners/partner-8.png" },
+    {
+      id: 8,
+      name: "USAID Agri Program",
+      src: "/images/partners/partner-8.png",
+    },
     { id: 9, name: "Partner 9", src: "/images/partners/partner-9.png" },
     { id: 10, name: "Partner 10", src: "/images/partners/partner-10.png" },
     { id: 11, name: "Partner 11", src: "/images/partners/partner-11.png" },
@@ -332,7 +350,8 @@ export const newsData: NewsData = {
       id: 1,
       category: "Climate",
       date: "SEP 12, 2024",
-      title: "Strengthening Climate-Resilient Farming Through Hybrid Innovation",
+      title:
+        "Strengthening Climate-Resilient Farming Through Hybrid Innovation",
       image: "/images/news/news-1.png",
     },
     {
@@ -385,7 +404,10 @@ export const footerData: FooterData = {
       { label: "Malik's Farm", href: "/brands/maliks-farm" },
       { label: "Origene by Malik", href: "/brands/origene" },
       { label: "Malik's Flower", href: "/brands/maliks-flower" },
-      { label: "Innovation & Development", href: "/brands/innovation-development" },
+      {
+        label: "Innovation & Development",
+        href: "/brands/innovation-development",
+      },
     ],
   },
   socials: [
@@ -407,7 +429,10 @@ export const footerData: FooterData = {
   ],
   contact: {
     phone: { label: "+44 01929 739037", href: "tel:+4401929739037" },
-    email: { label: "support@armalikseeds.com", href: "mailto:support@armalikseeds.com" },
+    email: {
+      label: "support@armalikseeds.com",
+      href: "mailto:support@armalikseeds.com",
+    },
     copyright: "Copyright ©armalikseeds2026. All rights reserved.",
   },
 };

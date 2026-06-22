@@ -66,6 +66,17 @@
   --color-brand-partners-border: var(--brand-partners-border);
   --color-brand-hero-dark: var(--brand-hero-dark);
 
+  /* Extended brand colors (from Figma Contact pages) */
+  --color-brand-mint-green: var(--brand-mint-green);
+  --color-brand-error: var(--brand-error);
+  --color-brand-muted: var(--brand-muted);
+
+  /* Overlay / transparency colors */
+  --color-overlay-dark-tag: var(--overlay-dark-tag);
+  --color-overlay-white-border: var(--overlay-white-border);
+  --color-overlay-input-bg: var(--overlay-input-bg);
+  --color-overlay-input-border: var(--overlay-input-border);
+
   /* Font families */
   --font-inter-tight: var(--font-inter-tight);
   --font-inter: var(--font-inter);
@@ -124,6 +135,17 @@
   --brand-neutral-light: #f9fafb;
   --brand-partners-border: #ced2da;
   --brand-hero-dark: #050d07;
+
+  /* Extended tokens from Figma Contact pages */
+  --brand-mint-green: #dcf3c7;
+  --brand-error: #ff4242;
+  --brand-muted: #667085;
+
+  /* Overlay / transparency tokens */
+  --overlay-dark-tag: rgba(13, 26, 20, 0.32);
+  --overlay-white-border: rgba(255, 255, 255, 0.12);
+  --overlay-input-bg: rgba(255, 255, 255, 0.04);
+  --overlay-input-border: rgba(228, 231, 236, 0.1);
 }
 
 .dark {
@@ -212,7 +234,7 @@
   font-weight: 600;
   font-size: 2.75rem; /* 44px */
   line-height: 3.25rem; /* 52px */
-  
+
   @media (min-width: 1024px) {
     font-size: 3.375rem; /* 54px */
     line-height: 4rem; /* 64px */
@@ -228,7 +250,7 @@
   font-weight: 500;
   font-size: 1.75rem; /* 28px */
   line-height: 2.125rem; /* 34px */
-  
+
   @media (min-width: 768px) {
     font-size: 2.5rem; /* 40px */
     line-height: 3rem; /* 48px */
@@ -244,7 +266,7 @@
   font-weight: 500;
   font-size: 1.25rem; /* 20px */
   line-height: 1.875rem; /* 30px */
-  
+
   @media (min-width: 768px) {
     font-size: 1.5rem; /* 24px */
     line-height: 2.25rem; /* 36px */
@@ -256,7 +278,7 @@
   font-weight: 500;
   font-size: 1.375rem; /* 22px */
   line-height: 2.125rem; /* 34px */
-  
+
   @media (min-width: 1024px) {
     font-size: 1.75rem; /* 28px */
     line-height: 2.625rem; /* 42px */
@@ -277,7 +299,7 @@
   font-family: var(--font-anton);
   font-size: 1.75rem; /* 28px */
   line-height: 2.25rem; /* 36px */
-  
+
   @media (min-width: 768px) {
     font-size: 2.25rem; /* 36px */
     line-height: 2.75rem; /* 44px */
@@ -292,4 +314,130 @@
   }
 }
 
+/* ── Page title (inner page hero headlines) ─────────────────────────────────── */
+@utility text-page-title {
+  font-family: var(--font-inter-tight);
+  font-weight: 500;
+  font-size: 2.375rem; /* 38px */
+  line-height: 2.875rem; /* 46px */
 
+  @media (min-width: 1024px) {
+    font-size: 4rem; /* 64px */
+    line-height: 4.8125rem; /* 77px */
+  }
+}
+
+/* ── Card title (company names in info cards) ───────────────────────────────── */
+@utility text-card-title {
+  font-family: var(--font-inter-tight);
+  font-weight: 500;
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.75rem; /* 28px */
+
+  @media (min-width: 1024px) {
+    font-size: 1.875rem; /* 30px */
+    line-height: 1.875rem; /* 30px */
+  }
+}
+
+/* ── Card label (sub-labels like "Head Office") ─────────────────────────────── */
+@utility text-card-label {
+  font-family: var(--font-inter-tight);
+  font-weight: 500;
+  font-size: 0.875rem; /* 14px */
+  line-height: 0.875rem; /* 14px */
+
+  @media (min-width: 1024px) {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.125rem; /* 18px */
+  }
+}
+
+/* ── Body text (default body copy) ──────────────────────────────────────────── */
+@utility text-body-default {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 1rem; /* 16px */
+  line-height: 1.1875rem; /* 19px */
+}
+
+/* ── Body text small ────────────────────────────────────────────────────────── */
+@utility text-body-small {
+  font-family: var(--font-inter);
+  font-weight: 400;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.3125rem; /* 21px */
+}
+
+/* ── Button text ────────────────────────────────────────────────────────────── */
+@utility text-button {
+  font-family: var(--font-inter-tight);
+  font-weight: 500;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.0625rem; /* 17px */
+
+  @media (min-width: 1024px) {
+    font-size: 1rem; /* 16px */
+    line-height: 1.1875rem; /* 19px */
+  }
+}
+
+/* ── Tag / pill text ────────────────────────────────────────────────────────── */
+@utility text-tag {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.125rem; /* 18px */
+
+  @media (min-width: 1024px) {
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.3125rem; /* 21px */
+  }
+}
+
+/* ── Form label ─────────────────────────────────────────────────────────────── */
+@utility text-form-label {
+  font-family: var(--font-inter);
+  font-weight: 400;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.3125rem; /* 21px */
+}
+
+/* ── Copyright text ─────────────────────────────────────────────────────────── */
+@utility text-copyright {
+  font-family: var(--font-inter-tight);
+  font-weight: 400;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.0625rem; /* 17px */
+  text-align: center;
+}
+
+/* ── Hero subtitle ──────────────────────────────────────────────────────────── */
+@utility text-hero-subtitle {
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
+
+  @media (min-width: 640px) {
+    font-size: 1rem; /* 16px */
+    line-height: 1.5rem; /* 24px */
+  }
+  @media (min-width: 1024px) {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.6875rem; /* 27px */
+  }
+}
+
+/* ── Scroll indicator text ──────────────────────────────────────────────────── */
+@utility text-scroll-indicator {
+  font-family: var(--font-inter-tight);
+  font-weight: 500;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.0625rem; /* 17px */
+
+  @media (min-width: 768px) {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.375rem; /* 22px */
+  }
+}

@@ -49,7 +49,9 @@ const HeroSlideshow = memo(function HeroSlideshow({
             key={slide.src + index}
             className={[
               "absolute inset-0 transition-opacity duration-[2000ms] ease-in-out",
-              isActive ? "z-10 opacity-100" : "z-0 opacity-0 pointer-events-none",
+              isActive
+                ? "z-10 opacity-100"
+                : "pointer-events-none z-0 opacity-0",
             ].join(" ")}
           >
             <Image
@@ -59,9 +61,9 @@ const HeroSlideshow = memo(function HeroSlideshow({
               sizes="100vw"
               priority={index === 0}
               quality={90}
-              className="object-cover object-center bg-no-repeat"
+              className="bg-no-repeat object-cover object-center"
               style={{
-                backgroundColor: "lightgray"
+                backgroundColor: "lightgray",
               }}
             />
           </div>
@@ -83,7 +85,7 @@ const HeroOverlays = memo(function HeroOverlays() {
       {/* Rectangle 30: gradient fade from transparent to brand-hero-dark with 0.61 opacity */}
       <div
         aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 z-20 hidden w-full md:block"
+        className="absolute right-0 bottom-0 left-0 z-20 hidden w-full md:block"
         style={{
           height: 543,
           opacity: 0.61,
@@ -94,7 +96,7 @@ const HeroOverlays = memo(function HeroOverlays() {
       {/* Rectangle 1: blur overlay at very bottom */}
       <div
         aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 z-20 hidden w-full md:block"
+        className="absolute right-0 bottom-0 left-0 z-20 hidden w-full md:block"
         style={{
           height: 213,
           background:
@@ -108,7 +110,7 @@ const HeroOverlays = memo(function HeroOverlays() {
       {/* Rectangle 30 mobile: bottom-0 h:389px */}
       <div
         aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 z-20 w-full md:hidden"
+        className="absolute right-0 bottom-0 left-0 z-20 w-full md:hidden"
         style={{
           height: 389,
           opacity: 0.61,
@@ -119,7 +121,7 @@ const HeroOverlays = memo(function HeroOverlays() {
       {/* Rectangle 1 mobile: bottom-0 h:204px, blur */}
       <div
         aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 z-20 w-full md:hidden"
+        className="absolute right-0 bottom-0 left-0 z-20 w-full md:hidden"
         style={{
           height: 204,
           background:
@@ -140,7 +142,7 @@ const HeroOverlays = memo(function HeroOverlays() {
 const HeroContentDesktop = memo(function HeroContentDesktop() {
   return (
     <div
-      className="absolute left-0 right-0 mx-auto z-30 hidden w-full max-w-[786px] px-6 flex-col items-center md:flex"
+      className="absolute right-0 left-0 z-30 mx-auto hidden w-full max-w-[786px] flex-col items-center px-6 md:flex"
       style={{
         top: "min(426px, 45vh)",
         gap: "clamp(24px, 4vh, 48px)",
@@ -148,7 +150,7 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
     >
       {/* Frame 2147229465 — text stack */}
       <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
-        <h1 className="w-full text-center text-display text-brand-bg">
+        <h1 className="text-display text-brand-bg w-full text-center">
           {heroData.titleDesktop.split("\n").map((line, idx) => (
             <Fragment key={idx}>
               {idx > 0 && <br />}
@@ -157,7 +159,7 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
           ))}
         </h1>
         <p
-          className="text-center text-[16px] lg:text-[18px] font-semibold leading-[24px] lg:leading-[27px] text-brand-bg"
+          className="text-brand-bg text-center text-[16px] leading-[24px] font-semibold lg:text-[18px] lg:leading-[27px]"
           style={{ fontFamily: "var(--font-inter)" }}
         >
           {heroData.subtitle}
@@ -192,7 +194,7 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
 const HeroContentMobile = memo(function HeroContentMobile() {
   return (
     <div
-      className="absolute left-0 right-0 mx-auto z-30 flex w-full max-w-[358px] px-4 flex-col md:hidden"
+      className="absolute right-0 left-0 z-30 mx-auto flex w-full max-w-[358px] flex-col px-4 md:hidden"
       style={{
         top: "min(313px, 45vh)",
         gap: 32,
@@ -200,11 +202,11 @@ const HeroContentMobile = memo(function HeroContentMobile() {
     >
       {/* Text block: col, gap:8, items-center */}
       <div className="flex flex-col items-center gap-2">
-        <h1 className="w-full text-center text-h2-title font-semibold text-brand-bg">
+        <h1 className="text-h2-title text-brand-bg w-full text-center font-semibold">
           {heroData.titleMobile}
         </h1>
         <p
-          className="text-center text-[14px] sm:text-[16px] font-semibold leading-[20px] sm:leading-[24px] text-brand-bg"
+          className="text-brand-bg text-center text-[14px] leading-[20px] font-semibold sm:text-[16px] sm:leading-[24px]"
           style={{ fontFamily: "var(--font-inter)" }}
         >
           {heroData.subtitle}
@@ -243,10 +245,10 @@ const ScrollIndicator = memo(function ScrollIndicator() {
       {/* Desktop */}
       <div
         aria-label={heroData.scrollText}
-        className="absolute left-0 right-0 mx-auto w-fit bottom-[85px] z-30 hidden items-center gap-[10px] md:flex"
+        className="absolute right-0 bottom-[85px] left-0 z-30 mx-auto hidden w-fit items-center gap-[10px] md:flex"
       >
         <span
-          className="text-[18px] font-medium leading-[22px] text-brand-bg"
+          className="text-brand-bg text-[18px] leading-[22px] font-medium"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
           {heroData.scrollText}
@@ -258,10 +260,10 @@ const ScrollIndicator = memo(function ScrollIndicator() {
       <Link
         href="#about"
         aria-label={heroData.scrollText}
-        className="absolute left-0 cursor-pointer right-0 mx-auto w-fit bottom-[67px] z-30 flex items-center gap-[10px] md:hidden"
+        className="absolute right-0 bottom-[67px] left-0 z-30 mx-auto flex w-fit cursor-pointer items-center gap-[10px] md:hidden"
       >
         <span
-          className="text-[14px] font-medium leading-[17px] text-brand-bg"
+          className="text-brand-bg text-[14px] leading-[17px] font-medium"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
           {heroData.scrollText}
@@ -282,7 +284,7 @@ export default function HeroSection() {
     <section
       id="hero"
       aria-label={`Hero section — ${heroData.titleMobile}`}
-      className="relative h-screen w-full overflow-hidden bg-brand-hero-dark"
+      className="bg-brand-hero-dark relative h-screen w-full overflow-hidden"
     >
       <HeroSlideshow slides={heroData.slides} currentIndex={currentIndex} />
       <HeroOverlays />
