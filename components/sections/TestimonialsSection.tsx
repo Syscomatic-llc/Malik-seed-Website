@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { testimonialsData, TestimonialItem } from "@/data/sections-data";
 
 // Redesign Constants (Desktop & Mobile sizing configurations)
 const CARD_WIDTH_DESKTOP = 398;
@@ -16,65 +17,19 @@ const GAP_MOBILE = 16;
 const SLOT_WIDTH_MOBILE = CARD_WIDTH_MOBILE + GAP_MOBILE; // 326px
 const HALF_CARD_MOBILE = CARD_WIDTH_MOBILE / 2; // 155px
 
-const TESTIMONIALS_COUNT = 5;
+const TESTIMONIALS_COUNT = testimonialsData.items.length;
 const LOOP_SET_START = TESTIMONIALS_COUNT; // Index 5 (start of middle main set)
 const LOOP_RESET_LIMIT = TESTIMONIALS_COUNT * 2; // Index 10 (start of duplicate set)
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Md. Kobbat Hossain Ovi",
-    location: "Maitka, Hemayetpur, Savar",
-    quote:
-      "After losing his father in 2003, he carried my family through farming and Malik Seeds has been with him all the way. Green Crown variety has a special place in his broccoli project.",
-    images: ["/images/testimonials/ovi.png"],
-  },
-  {
-    id: 2,
-    name: "Md. Rafiqul Islam Rafiq",
-    location: "Nabagram, Baldhara, Singair",
-    quote:
-      "22 years abroad, then back to the soil. He learned about companion cropping from our FB page and now farms multiple varieties successfully.",
-    images: ["/images/testimonials/rafiq-alt.png"],
-  },
-  {
-    id: 3,
-    name: "Md. Rafiqul Islam Rafiq",
-    location: "Nabagram, Baldhara, Singair",
-    quote:
-      "22 years abroad, then back to the soil. He learned about companion cropping from our FB page and now farms multiple varieties successfully.",
-    images: ["/images/testimonials/rafiq.png"],
-  },
-  {
-    id: 4,
-    name: "Md. Jangir Alam",
-    location: "Brahmankanda",
-    quote:
-      "Became talk of the town after harvesting PurpleBeauty in only 60 days, and within 120 days, total production reached 4.5 tons.",
-    images: ["/images/testimonials/jangir.png"],
-  },
-  {
-    id: 5,
-    name: "Md. Saiful Islam",
-    location: "Sakrail, Garpara, Sadar, Manikganj",
-    quote:
-      "Ex-electrician turned farmer. In 2021, I bet 1.3 lakh on Malik Seeds' Ice Green cucumber and walked away with 3.0 lakh revenue.",
-    images: [
-      "/images/testimonials/saiful-1.png",
-      "/images/testimonials/saiful-2.png",
-    ],
-  },
-];
-
 // Tripled extended array for loop sliding
 const extendedTestimonials = [
-  ...testimonials,
-  ...testimonials,
-  ...testimonials,
+  ...testimonialsData.items,
+  ...testimonialsData.items,
+  ...testimonialsData.items,
 ];
 
 interface TestimonialCardProps {
-  testimonial: (typeof testimonials)[0];
+  testimonial: TestimonialItem;
   isActive: boolean;
   isResetting: boolean;
   isMobile?: boolean;
@@ -233,12 +188,12 @@ export default function TestimonialsSection() {
         <div className="mb-[48px] md:mb-[64px] flex flex-col items-center gap-6 md:gap-4">
           {/* Badge - Figma: Success stories */}
           <SectionBadge variant="outline" showDot>
-            Success stories
+            {testimonialsData.badge}
           </SectionBadge>
 
           {/* Title - Figma: "Voice of Impact", 48px/32px */}
           <h2 className="font-sans text-[32px] font-medium leading-[38px] text-brand-dark md:text-[48px] md:leading-[58px]">
-            Voice of Impact
+            {testimonialsData.title}
           </h2>
         </div>
 

@@ -1,38 +1,12 @@
 "use client";
 
-import { memo } from "react";
+import { memo, Fragment } from "react";
 import Image from "next/image";
 import { useAutoSlide } from "@/hooks/useAutoSlide";
 import ActionButton from "@/components/ActionButton";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import Link from "next/link";
-
-
-interface HeroSlide {
-  src: string;
-  alt: string;
-}
-
-const HERO_SLIDES: HeroSlide[] = [
-  {
-    src: "/images/hero/hero-bg.png",
-    alt: "hero image 1",
-  },
-  {
-    src: "/images/hero/hero-slide-1.jpg",
-    alt: "hero image 2",
-  },
-  {
-    src: "/images/hero/hero-slide-2.jpg",
-    alt: "hero image 4",
-  },
-  {
-    src: "/images/hero/hero-slide-3.jpg",
-    alt: "hero image 3",
-  },
-];
-
-const HERO_INTERVAL_MS = 7500;
+import { heroData, HeroSlide } from "@/data/sections-data";
 
 // ---------------------------------------------------------------------------
 // Sub-components
@@ -175,30 +149,33 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
       {/* Frame 2147229465 — text stack */}
       <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
         <h1 className="w-full text-center text-display text-brand-bg">
-          Helping Farmers Grow
-          <br />
-          with Confidence
+          {heroData.titleDesktop.split("\n").map((line, idx) => (
+            <Fragment key={idx}>
+              {idx > 0 && <br />}
+              {line}
+            </Fragment>
+          ))}
         </h1>
         <p
           className="text-center text-[16px] lg:text-[18px] font-semibold leading-[24px] lg:leading-[27px] text-brand-bg"
           style={{ fontFamily: "var(--font-inter)" }}
         >
-          Since 1969
+          {heroData.subtitle}
         </p>
       </div>
 
       {/* Frame 2147229466 — CTA row */}
       <div className="flex items-center gap-4">
         <ActionButton
-          href="/products"
-          label="Our Products"
+          href={heroData.ctaProducts.href}
+          label={heroData.ctaProducts.label}
           variant="primary"
           className="h-[44px] w-[152px] text-[14px] leading-[17px]"
           iconSize={20}
         />
         <ActionButton
-          href="/about"
-          label="Learn More"
+          href={heroData.ctaAbout.href}
+          label={heroData.ctaAbout.label}
           variant="secondary"
           className="h-[44px] w-[143px] text-[14px] leading-[17px]"
           iconSize={20}
@@ -224,28 +201,28 @@ const HeroContentMobile = memo(function HeroContentMobile() {
       {/* Text block: col, gap:8, items-center */}
       <div className="flex flex-col items-center gap-2">
         <h1 className="w-full text-center text-h2-title font-semibold text-brand-bg">
-          Helping Farmers Grow with Confidence
+          {heroData.titleMobile}
         </h1>
         <p
           className="text-center text-[14px] sm:text-[16px] font-semibold leading-[20px] sm:leading-[24px] text-brand-bg"
           style={{ fontFamily: "var(--font-inter)" }}
         >
-          Since 1969
+          {heroData.subtitle}
         </p>
       </div>
 
       {/* CTA row: 358×41, gap:8 */}
       <div className="flex w-full items-center justify-center gap-3 sm:gap-4">
         <ActionButton
-          href="/products"
-          label="Our Products"
+          href={heroData.ctaProducts.href}
+          label={heroData.ctaProducts.label}
           variant="primary"
           className="h-[41px] w-[132px] text-[14px] leading-[17px]"
           iconSize={16}
         />
         <ActionButton
-          href="/about"
-          label="Learn More"
+          href={heroData.ctaAbout.href}
+          label={heroData.ctaAbout.label}
           variant="secondary"
           className="h-[41px] w-[121px] text-[14px] leading-[17px]"
           iconSize={16}
@@ -265,14 +242,14 @@ const ScrollIndicator = memo(function ScrollIndicator() {
     <>
       {/* Desktop */}
       <div
-        aria-label="Scroll to explore"
+        aria-label={heroData.scrollText}
         className="absolute left-0 right-0 mx-auto w-fit bottom-[85px] z-30 hidden items-center gap-[10px] md:flex"
       >
         <span
           className="text-[18px] font-medium leading-[22px] text-brand-bg"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
-          Scroll to explore
+          {heroData.scrollText}
         </span>
         <ArrowIcon direction="down" size={20} className="text-brand-bg" />
       </div>
@@ -280,14 +257,14 @@ const ScrollIndicator = memo(function ScrollIndicator() {
       {/* Mobile */}
       <Link
         href="#about"
-        aria-label="Scroll to explore"
+        aria-label={heroData.scrollText}
         className="absolute left-0 cursor-pointer right-0 mx-auto w-fit bottom-[67px] z-30 flex items-center gap-[10px] md:hidden"
       >
         <span
           className="text-[14px] font-medium leading-[17px] text-brand-bg"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
-          Scroll to explore
+          {heroData.scrollText}
         </span>
         <ArrowIcon direction="down" size={16} className="text-brand-bg" />
       </Link>
@@ -297,17 +274,17 @@ const ScrollIndicator = memo(function ScrollIndicator() {
 
 export default function HeroSection() {
   const { currentIndex } = useAutoSlide({
-    count: HERO_SLIDES.length,
-    interval: HERO_INTERVAL_MS,
+    count: heroData.slides.length,
+    interval: heroData.intervalMs,
   });
 
   return (
     <section
       id="hero"
-      aria-label="Hero section — Helping Farmers Grow with Confidence"
+      aria-label={`Hero section — ${heroData.titleMobile}`}
       className="relative h-screen w-full overflow-hidden bg-brand-hero-dark"
     >
-      <HeroSlideshow slides={HERO_SLIDES} currentIndex={currentIndex} />
+      <HeroSlideshow slides={heroData.slides} currentIndex={currentIndex} />
       <HeroOverlays />
       <HeroContentDesktop />
       <HeroContentMobile />

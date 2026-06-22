@@ -3,38 +3,15 @@
 import { useState, useCallback, memo } from "react";
 import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { newsData, NewsArticle } from "@/data/sections-data";
 
 // Production Constants
 const CARD_WIDTH = 361;
 const CARD_GAP = 25;
 const CARD_SLOT_WIDTH = CARD_WIDTH + CARD_GAP; // 386px
 
-const articles = [
-  {
-    id: 1,
-    category: "Climate",
-    date: "SEP 12, 2024",
-    title: "Strengthening Climate-Resilient Farming Through Hybrid Innovation",
-    image: "/images/news/news-1.png",
-  },
-  {
-    id: 2,
-    category: "Commercial Growers",
-    date: "JUN 18, 2024",
-    title: "Introducing High-Yield Pumpkin Variety for Commercial Growers",
-    image: "/images/news/news-2.png",
-  },
-  {
-    id: 3,
-    category: "",
-    date: "AUG 03, 2024",
-    title: "Expanding Farmer Training Programs Across Northern Regions",
-    image: "/images/news/news-3.png",
-  },
-];
-
 interface NewsCardProps {
-  article: typeof articles[0];
+  article: NewsArticle;
 }
 
 /**
@@ -85,7 +62,7 @@ const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
 
 export default function NewsSection() {
   const [activeIdx, setActiveIdx] = useState(0);
-  const maxIdx = articles.length - 2; // On desktop, 2 cards are visible at a time
+  const maxIdx = newsData.items.length - 2; // On desktop, 2 cards are visible at a time
 
   const handlePrev = useCallback(() => {
     setActiveIdx((prev) => Math.max(0, prev - 1));
@@ -108,7 +85,7 @@ export default function NewsSection() {
             <div className="flex flex-col gap-4 items-start w-full">
               {/* Badge — Figma: bg #F9FAFB, border #E4E7EC, radius 30px */}
               <SectionBadge variant="outline" showDot className="h-[30px] text-[12px] leading-[18px] px-4 gap-[8px] xl:h-[33px] xl:text-[14px] xl:leading-[21px] xl:gap-[8px]">
-                News & Stories
+                {newsData.badge}
               </SectionBadge>
 
               {/* Title — Figma: "Insights from agricultural research & field experts" (48px / line-height 58px on desktop, 32px / 38px on mobile) */}
@@ -116,7 +93,7 @@ export default function NewsSection() {
                 className="text-[32px] leading-[38px] xl:text-[48px] xl:leading-[58px] font-medium text-brand-dark max-w-[466px]"
                 style={{ fontFamily: "var(--font-inter-tight)", fontWeight: 500 }}
               >
-                Insights from agricultural research &amp; field experts
+                {newsData.title}
               </h2>
             </div>
 
@@ -187,7 +164,7 @@ export default function NewsSection() {
                   transform: `translateX(-${activeIdx * CARD_SLOT_WIDTH}px)`,
                 }}
               >
-                {articles.map((article) => (
+                {newsData.items.map((article) => (
                   <NewsCard key={article.id} article={article} />
                 ))}
               </div>
@@ -196,7 +173,7 @@ export default function NewsSection() {
             {/* Mobile/Tablet Native Swipe Container (<1280px) */}
             <div className="block xl:hidden w-full overflow-x-auto scrollbar-none snap-x snap-mandatory pb-4">
               <div className="flex gap-4 pr-8">
-                {articles.map((article) => (
+                {newsData.items.map((article) => (
                   <NewsCard key={article.id} article={article} />
                 ))}
               </div>

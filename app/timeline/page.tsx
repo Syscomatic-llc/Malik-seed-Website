@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import TimelineStory from "@/components/TimelineStory";
-import { timelineItems } from "@/lib";
+import { timelineItems } from "@/data/sections-data";
 
 export const metadata = {
   title: "Timeline — Malik Seeds",

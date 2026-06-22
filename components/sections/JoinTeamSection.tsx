@@ -1,6 +1,8 @@
+import { Fragment } from "react";
 import ActionButton from "@/components/ActionButton";
 import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { joinTeamData } from "@/data/sections-data";
 
 export default function JoinTeamSection() {
   return (
@@ -14,7 +16,7 @@ export default function JoinTeamSection() {
           <div className="flex flex-col gap-[16px] px-6 py-10 lg:py-0 lg:px-0 w-full lg:w-[403px] lg:h-[301px] lg:ml-[60px] xl:absolute xl:left-[60px] xl:top-[95px] xl:ml-0 justify-between items-start shrink-0">
             {/* Badge — Figma: "Join our Team" (Frame 2147229487) */}
             <SectionBadge variant="outline" showDot className="h-[33px] px-4">
-              Join our Team
+              {joinTeamData.badge}
             </SectionBadge>
 
             {/* Main content — Figma: 403x252 (Frame 2147229485) */}
@@ -28,16 +30,19 @@ export default function JoinTeamSection() {
                     fontWeight: 500
                   }}
                 >
-                  Shape the Future <br className="hidden lg:inline" />
-                  of Agriculture <br className="hidden lg:inline" />
-                  with Malik Seeds
+                  {joinTeamData.title.split("\n").map((line, idx) => (
+                    <Fragment key={idx}>
+                      {idx > 0 && <br className="hidden lg:inline" />}
+                      {line}
+                    </Fragment>
+                  ))}
                 </h2>
               </div>
 
               {/* CTA — Figma: 155x46, bg #195236, radius 60px (Frame 6) */}
               <ActionButton
-                href="/careers"
-                label="Join Today"
+                href={joinTeamData.cta.href}
+                label={joinTeamData.cta.label}
                 variant="dark"
                 className="h-[46px] w-[155px] px-0 gap-[10px]"
                 iconSize={20}
@@ -50,7 +55,7 @@ export default function JoinTeamSection() {
             {/* Overflowing team image — Figma: 726x544, left:-30px, top:-32px (Malik Seeds Team-3 2) */}
             <div className="absolute w-[726px] h-[544px] left-[-30px] top-[-32px] overflow-hidden">
               <Image
-                src="/images/team/team-banner.png"
+                src={joinTeamData.images.desktop}
                 alt="Join the Malik Seeds Team"
                 fill
                 loading="eager"
@@ -63,7 +68,7 @@ export default function JoinTeamSection() {
           {/* Mobile image fallback */}
           <div className="relative h-[200px] sm:h-[320px] w-full overflow-hidden lg:hidden">
             <Image
-              src="/images/team/team-banner.png"
+              src={joinTeamData.images.mobile}
               alt="Join the Malik Seeds Team"
               loading="eager"
               fill

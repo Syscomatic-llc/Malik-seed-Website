@@ -1,4 +1,4 @@
-import { timelineItems } from "@/lib";
+import { timelineItems } from "@/data/sections-data";
 import TimelineStory from "../TimelineStory";
 import ActionButton from "../ActionButton";
 

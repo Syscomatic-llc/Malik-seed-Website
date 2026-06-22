@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { TimelineItem } from "@/lib";
+import { TimelineItem } from "@/data/sections-data";
 
 /* ────────────────── sub‑components ────────────────── */
 

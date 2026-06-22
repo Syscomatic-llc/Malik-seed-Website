@@ -1,57 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
-
-const products = [
-  {
-    id: 1,
-    category: "Vegetable Seeds",
-    name: "Vegetable Seeds",
-    description: "Research-Backed Vegetable Seeds Farmers rely on",
-    image: "/images/products/product-1.png",
-    href: "/brands/vegetable-seeds",
-  },
-  {
-    id: 2,
-    category: "Potato Seed",
-    name: "Potato Seed",
-    description: "Bringing Next-Generation Potato Seeds to Farmers",
-    image: "/images/products/product-2.png",
-    href: "/brands/potato-seed",
-  },
-  {
-    id: 3,
-    category: "Malik’s Farm",
-    name: "Malik’s Farm",
-    description: "Research and Innovation Hub Behind Malik Seeds",
-    image: "/images/products/product-3.png",
-    href: "/brands/maliks-farm",
-  },
-  {
-    id: 4,
-    category: "Origene by Malik",
-    name: "Origene by Malik",
-    description: "Safe Fruits and Vegetables for Health Conscious Urban Consumers",
-    image: "/images/products/product-4.png",
-    href: "/brands/origene",
-  },
-  {
-    id: 5,
-    category: "Malik’s Flower",
-    name: "Malik’s Flower",
-    description: "Premium Flower Varieties Bringing Global Genetics to Local Growers",
-    image: "/images/products/product-5.png",
-    href: "/brands/maliks-flower",
-  },
-  {
-    id: 6,
-    category: "Innovation & Development",
-    name: "Innovation & Development",
-    description: "Empowering Farmers Through Knowledge, Technology, and Market Access",
-    image: "/images/products/product-6.png",
-    href: "/brands/innovation-development",
-  },
-];
+import { productsData } from "@/data/sections-data";
 
 export default function ProductsSection() {
   return (
@@ -61,7 +11,7 @@ export default function ProductsSection() {
         {/* ===== Desktop/Tablet Grid Layout ===== */}
         {/* Frame 53 — 1440x754, grid of 3x2 cards */}
         <div className="hidden grid-cols-3 md:grid">
-          {products.map((product) => (
+          {productsData.items.map((product) => (
             <Link
               key={product.id}
               href={product.href}
@@ -112,7 +62,7 @@ export default function ProductsSection() {
         {/* Voice of Impact section — horizontal scrollable cards */}
         <div className="md:hidden py-10 px-4 w-full bg-brand-bg">
           <div className="flex flex-row overflow-x-auto gap-4 scrollbar-none scroll-smooth pb-2">
-            {products.map((product) => (
+            {productsData.items.map((product) => (
               <Link
                 key={product.id}
                 href={product.href}

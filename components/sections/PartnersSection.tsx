@@ -1,28 +1,12 @@
 import { memo, useMemo } from "react";
 import Image from "next/image";
+import { partnersData } from "@/data/sections-data";
 
 export interface Partner {
   id: number;
   name: string;
   src: string;
 }
-
-// Unique database mock entries (1 instance per partner logo)
-const MOCK_DB_PARTNERS: Partner[] = [
-  { id: 1, name: "CIMMYT", src: "/images/partners/partner-1.png" },
-  { id: 2, name: "IRRI", src: "/images/partners/partner-2.png" },
-  { id: 3, name: "PARC", src: "/images/partners/partner-3.png" },
-  { id: 4, name: "Punjab Seed Council", src: "/images/partners/partner-4.png" },
-  { id: 5, name: "Agri. Univ. Faisalabad", src: "/images/partners/partner-5.png" },
-  { id: 6, name: "NARC", src: "/images/partners/partner-6.png" },
-  { id: 7, name: "FAO", src: "/images/partners/partner-7.png" },
-  { id: 8, name: "USAID Agri Program", src: "/images/partners/partner-8.png" },
-  { id: 9, name: "Partner 9", src: "/images/partners/partner-9.png" },
-  { id: 10, name: "Partner 10", src: "/images/partners/partner-10.png" },
-  { id: 11, name: "Partner 11", src: "/images/partners/partner-11.png" },
-  { id: 12, name: "Partner 12", src: "/images/partners/partner-12.png" },
-  { id: 13, name: "Partner 13", src: "/images/partners/partner-13.png" },
-];
 
 // Static style objects referencing global CSS variables to prevent recreation on render
 const LEFT_FADE_STYLE = {
@@ -37,7 +21,7 @@ interface PartnersSectionProps {
   partners?: Partner[];
 }
 
-export default memo(function PartnersSection({ partners = MOCK_DB_PARTNERS }: PartnersSectionProps) {
+export default memo(function PartnersSection({ partners = partnersData.items }: PartnersSectionProps) {
   // Dynamically split unique partners down the middle and duplicate the list for infinite loops
   const { row1Items, row2Items } = useMemo(() => {
     const half = Math.ceil(partners.length / 2);
@@ -60,7 +44,7 @@ export default memo(function PartnersSection({ partners = MOCK_DB_PARTNERS }: Pa
       <div className="mx-auto max-w-[1440px]">
         {/* Title — Figma: "Our Development Partners", Inter 18px, weight 500, center */}
         <p className="font-inter mb-8 text-center opacity-70 text-base font-medium leading-[22px] text-brand-dark md:mb-12 md:text-lg">
-          Our Development Partners
+          {partnersData.title}
         </p>
 
         {/* Sliders Container — Figma Frame 16: gap 24px (mobile) to 40px (desktop) */}

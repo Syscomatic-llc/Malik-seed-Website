@@ -1,61 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { memo } from "react";
-
-// Types
-interface FooterLink {
-  label: string;
-  href: string;
-}
-
-interface SocialLink {
-  label: string;
-  path: string;
-  href: string;
-}
-
-// Constants for production-level stability
-const FOOTER_LINKS = {
-  company: [
-    { label: "About Us", href: "/about" },
-    { label: "Our Products", href: "/products" },
-    { label: "News & Stories", href: "/news" },
-    { label: "Careers", href: "/careers" },
-    { label: "Contact Us", href: "/contact" },
-  ],
-  brands: [
-    { label: "Vegetable Seeds", href: "/brands/vegetable-seeds" },
-    { label: "Potato Seeds", href: "/brands/potato-seed" },
-    { label: "Malik's Farm", href: "/brands/maliks-farm" },
-    { label: "Origene by Malik", href: "/brands/origene" },
-    { label: "Malik's Flower", href: "/brands/maliks-flower" },
-    { label: "Innovation & Development", href: "/brands/innovation-development" },
-  ],
-} as const;
-
-const SOCIAL_LINKS: SocialLink[] = [
-  {
-    label: "Facebook",
-    path: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z",
-    href: "https://facebook.com",
-  },
-  {
-    label: "Twitter",
-    path: "M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z",
-    href: "https://twitter.com",
-  },
-  {
-    label: "LinkedIn",
-    path: "M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z M4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
-    href: "https://linkedin.com",
-  },
-];
-
-const CONTACT_INFO = {
-  phone: { label: "+44 01929 739037", href: "tel:+4401929739037" },
-  email: { label: "support@armalikseeds.com", href: "mailto:support@armalikseeds.com" },
-  copyright: "Copyright ©armalikseeds2026. All rights reserved.",
-} as const;
+import { footerData, FooterLink, SocialLink } from "@/data/sections-data";
 
 // Common Typography Classes for Scalability
 const TYPOGRAPHY = {
@@ -66,7 +12,7 @@ const TYPOGRAPHY = {
 } as const;
 
 // Reusable Sub-components for better code quality
-const FooterLinkColumn = ({ title, links }: { title: string; links: readonly FooterLink[] }) => (
+const FooterLinkColumn = ({ title, links }: { title: string; links: FooterLink[] }) => (
   <div className="flex flex-col gap-4 w-44.75 lg:w-54 shrink-0">
     <h3 className={TYPOGRAPHY.title}>{title}</h3>
     <ul className="flex flex-col gap-3 md:gap-4">
@@ -116,7 +62,7 @@ export default memo(function Footer() {
           <div className="flex flex-col w-full lg:w-102.25 shrink-0">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/brand/logo.svg"
+                src={footerData.logo}
                 alt="Malik Seeds Logo"
                 width={270}
                 height={35}
@@ -126,13 +72,13 @@ export default memo(function Footer() {
             </Link>
 
             <p className="font-inter text-[16px] md:text-[18px] leading-6 md:leading-6.75 text-brand-light-green font-normal mt-4 md:mt-6">
-              We are committed to deliver high-performance hybrid seed varieties that empower farmers with better yield, climate resilience, disease resistance, and profitability.
+              {footerData.mission}
             </p>
 
             <div className="flex flex-col gap-4 mt-8 lg:mt-16.75">
-              <span className={TYPOGRAPHY.label}>Follow us on</span>
+              <span className={TYPOGRAPHY.label}>{footerData.followUsText}</span>
               <div className="flex gap-2">
-                {SOCIAL_LINKS.map((social) => (
+                {footerData.socials.map((social) => (
                   <SocialIcon key={social.label} social={social} />
                 ))}
               </div>
@@ -144,23 +90,23 @@ export default memo(function Footer() {
 
             {/* Navigation Grid */}
             <div className="flex justify-between w-full lg:contents max-w-100 lg:max-w-none">
-              <FooterLinkColumn title="Company" links={FOOTER_LINKS.company} />
-              <FooterLinkColumn title="Our Brands" links={FOOTER_LINKS.brands} />
+              <FooterLinkColumn title="Company" links={footerData.links.company} />
+              <FooterLinkColumn title="Our Brands" links={footerData.links.brands} />
             </div>
 
             {/* Contact Information */}
             <address className="flex flex-col gap-6 md:gap-8 w-full lg:w-54 shrink-0 lg:mt-0 not-italic">
               <div className="flex flex-col gap-2 md:gap-4">
                 <h4 className={TYPOGRAPHY.label}>Contact</h4>
-                <a href={CONTACT_INFO.phone.href} className={TYPOGRAPHY.contact}>
-                  {CONTACT_INFO.phone.label}
+                <a href={footerData.contact.phone.href} className={TYPOGRAPHY.contact}>
+                  {footerData.contact.phone.label}
                 </a>
               </div>
 
               <div className="flex flex-col gap-2 md:gap-4">
                 <h4 className={TYPOGRAPHY.label}>Email</h4>
-                <a href={CONTACT_INFO.email.href} className={`${TYPOGRAPHY.contact} break-all`}>
-                  {CONTACT_INFO.email.label}
+                <a href={footerData.contact.email.href} className={`${TYPOGRAPHY.contact} break-all`}>
+                  {footerData.contact.email.label}
                 </a>
               </div>
             </address>
@@ -171,7 +117,7 @@ export default memo(function Footer() {
         {/* Global Brand Wordmark */}
         <div className="mt-12 lg:mt-24 w-full flex justify-center">
           <Image
-            src="/images/brand/logo-footer.svg"
+            src={footerData.wordmark}
             alt="Malik Seeds Wordmark"
             width={1225}
             height={151}
@@ -184,7 +130,7 @@ export default memo(function Footer() {
         <div className="mt-8 lg:mt-16 flex flex-col gap-8 lg:gap-10">
           <div className="h-px w-full bg-white/10" aria-hidden="true" />
           <p className="font-inter-tight text-center text-[14px] leading-4.25 text-brand-light-green font-normal">
-            {CONTACT_INFO.copyright}
+            {footerData.contact.copyright}
           </p>
         </div>
       </div>

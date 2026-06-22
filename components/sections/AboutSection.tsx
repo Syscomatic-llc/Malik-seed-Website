@@ -3,14 +3,7 @@ import Image from "next/image";
 import ActionButton from "@/components/ActionButton";
 import CountUp from "@/components/ui/CountUp";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-
-const STATS = [
-  { prefix: "", toValue: 10, suffix: "k+", label: "Seed Varieties Trialed" },
-  { prefix: "", toValue: 200, suffix: "", label: "Ton Seeds Distributed" },
-  { prefix: "", toValue: 100, suffix: "+", label: "Distributor Network" },
-  { prefix: "", toValue: 13, suffix: "+", label: "Agri-Innovation Projects" },
-  { prefix: "", toValue: 5, suffix: "+", label: "decades Farming Legacy" },
-] as const;
+import { aboutData } from "@/data/sections-data";
 
 export default function AboutSection() {
   return (
@@ -24,21 +17,21 @@ export default function AboutSection() {
           <div className="flex flex-1 max-w-[608px] flex-col gap-6 lg:gap-8 xl:gap-[32px]">
             {/* Section badge — Figma "About Malik Seeds" */}
             <SectionBadge variant="green">
-              About Malik Seeds
+              {aboutData.badge}
             </SectionBadge>
 
             {/* Frame 2147229506 — 608x526, col, gap 48 */}
             <div className="flex flex-col gap-8 lg:gap-12 xl:gap-[48px]">
               {/* Group 1 — text content */}
               <p className="text-body-intro text-brand-dark">
-                <span>Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history goes back to 1969 when our founder, A. R. Malik launched &ldquo;Atlas-70&rdquo; Cabbage from Sakata Seed Corporation, based </span>
-                <span className="text-brand-dark/60"> in Japan. Today, we are among the most trusted brands in the agriculture industry.</span>
+                <span>{aboutData.introDesktop.highlight}</span>
+                <span className="text-brand-dark/60">{aboutData.introDesktop.muted}</span>
               </p>
 
               {/* Frame 6 CTA — 159x46, bg #195236, radius 60px */}
               <ActionButton
-                href="/about"
-                label="Learn More"
+                href={aboutData.cta.href}
+                label={aboutData.cta.label}
                 variant="dark"
                 className="h-[46px] w-[159px] px-0"
                 iconSize={20}
@@ -51,7 +44,7 @@ export default function AboutSection() {
             {/* Frame 32 — 503x340, bg-[#F9FAFB], radius 24px */}
             <div className="relative aspect-[503/340] w-full overflow-hidden rounded-[16px] bg-brand-neutral-light xl:rounded-[24px]">
               <Image
-                src="/images/team/team-banner.png"
+                src={aboutData.images.teamBanner}
                 alt="Malik Seeds Team"
                 fill
                 sizes="(max-width: 768px) 358px, (max-width: 1200px) 440px, 503px"
@@ -65,7 +58,7 @@ export default function AboutSection() {
               {/* Frame 33 — 243x226 */}
               <div className="relative aspect-[243/226] flex-1 rounded-[16px] xl:rounded-[24px] overflow-hidden">
                 <Image
-                  src="/images/about/about-1.png"
+                  src={aboutData.images.about1}
                   alt="Years of Experience"
                   fill
                   sizes="(max-width: 1200px) 200px, 243px"
@@ -75,7 +68,7 @@ export default function AboutSection() {
               {/* Frame 34 — 243x226 */}
               <div className="relative aspect-[243/226] flex-1 rounded-[16px] xl:rounded-[24px] overflow-hidden">
                 <Image
-                  src="/images/about/about-2.png"
+                  src={aboutData.images.about2}
                   alt="Farmer Partners"
                   fill
                   sizes="(max-width: 1200px) 200px, 243px"
@@ -89,7 +82,7 @@ export default function AboutSection() {
         {/* Desktop Stats row — Frame 2147229657: 1240x178 */}
         <div className="hidden px-[24px] pb-[40px] pt-[40px] md:block md:px-6 md:pb-[60px] md:pt-[50px] lg:px-16 xl:px-[100px] xl:pb-[100px] xl:pt-[60px]">
           <div className="flex w-full flex-row items-center justify-between rounded-[16px]">
-            {STATS.map((stat, index) => (
+            {aboutData.stats.map((stat, index) => (
               <Fragment key={stat.label}>
                 <div className="flex flex-1 max-w-[235px] h-[140px] lg:h-[160px] xl:h-[178px] flex-col items-center justify-center text-center">
                   <span className="text-stat-number-desktop text-brand-active">
@@ -101,7 +94,7 @@ export default function AboutSection() {
                     {stat.label}
                   </span>
                 </div>
-                {index < STATS.length - 1 && (
+                {index < aboutData.stats.length - 1 && (
                   <div className="h-[60px] lg:h-[72px] xl:h-[86px] w-[1px] bg-brand-partners-border shrink-0" />
                 )}
               </Fragment>
@@ -118,20 +111,20 @@ export default function AboutSection() {
             <div className="flex flex-col items-center gap-[24px]">
               {/* Badge — Figma "About Malik Seeds" */}
               <SectionBadge variant="green">
-                About Malik Seeds
+                {aboutData.badge}
               </SectionBadge>
 
               {/* Main text + CTA */}
               <div className="flex flex-col items-center gap-[32px]">
                 {/* Text — 358px, 24px, weight 500, center, lineHeight 36px */}
                 <p className="font-sans text-center text-[24px] font-medium leading-[36px] text-brand-dark">
-                  <span>Malik Seeds is the pioneer of hybrid vegetable seeds in Bangladesh. We introduce international seed varieties to Bangladeshi farmers. Our history...</span>
+                  <span>{aboutData.introMobile}</span>
                 </p>
 
                 {/* CTA — 123x41, bg #195236, radius 60px */}
                 <ActionButton
-                  href="/about"
-                  label="Learn More"
+                  href={aboutData.cta.href}
+                  label={aboutData.cta.label}
                   variant="dark"
                   className="h-[41px] w-[123px] text-[14px] px-0 gap-[6px]"
                   iconSize={16}
@@ -144,7 +137,7 @@ export default function AboutSection() {
               {/* Frame 32 — 358x240, bg #F9FAFB, radius 16px */}
               <div className="relative h-[240px] w-full overflow-hidden rounded-[16px] bg-brand-neutral-light">
                 <Image
-                  src="/images/team/team-banner.png"
+                  src={aboutData.images.teamBanner}
                   alt="Malik Seeds Team"
                   fill
                   sizes="358px"
@@ -157,7 +150,7 @@ export default function AboutSection() {
                 {/* Frame 33 — 171x160 */}
                 <div className="relative h-[160px] flex-1">
                   <Image
-                    src="/images/about/about-1-mobile.png"
+                    src={aboutData.images.about1Mobile}
                     alt="Years of Experience"
                     fill
                     sizes="171px"
@@ -167,7 +160,7 @@ export default function AboutSection() {
                 {/* Frame 34 — 171x160 */}
                 <div className="relative h-[160px] flex-1">
                   <Image
-                    src="/images/about/about-2-mobile.png"
+                    src={aboutData.images.about2Mobile}
                     alt="Farmer Partners"
                     fill
                     sizes="171px"
@@ -181,9 +174,9 @@ export default function AboutSection() {
           {/* Mobile Stats — Frame 2147229657: 390x407, padding 0 16, col, gap 8 */}
           <div className="flex flex-col items-center gap-[8px] px-[16px]">
             {[
-              [STATS[0], STATS[1]],
-              [STATS[2], STATS[3]],
-              [STATS[4]],
+              [aboutData.stats[0], aboutData.stats[1]],
+              [aboutData.stats[2], aboutData.stats[3]],
+              [aboutData.stats[4]],
             ].map((row, rowIndex) => (
               <Fragment key={rowIndex}>
                 {rowIndex > 0 && (
