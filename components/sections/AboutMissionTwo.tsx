@@ -5,9 +5,9 @@ import Image from "next/image";
 // ---------------------------------------------------------------------------
 function MissionBadge({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-[40px] border border-overlay-white-border bg-overlay-dark-tag px-4 py-1.5 select-none w-max">
-      <div className="h-1.5 w-1.5 shrink-0 rounded-[2px] bg-brand-light-green" />
-      <span className="font-sans text-white text-[12px] font-medium tracking-wider md:text-[14px]">
+    <div className="border-overlay-white-border bg-overlay-dark-tag flex w-max items-center gap-2 rounded-[40px] border px-4 py-1.5 select-none">
+      <div className="bg-brand-light-green h-1.5 w-1.5 shrink-0 rounded-[2px]" />
+      <span className="font-sans text-[12px] font-medium tracking-wider text-white md:text-[14px]">
         {label}
       </span>
     </div>
@@ -19,13 +19,16 @@ function MissionBadge({ label }: { label: string }) {
 // ---------------------------------------------------------------------------
 export default function AboutMissionTwo() {
   return (
-    <section className="w-full bg-brand-bg pt-[100px] pb-12 md:pb-[100px]" id="vision">
+    <section
+      className="bg-brand-bg w-full pt-[100px] pb-12 md:pb-[100px]"
+      id="vision"
+    >
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
-        <div className="w-full bg-brand-dark rounded-[24px] overflow-hidden p-6 flex flex-col items-start gap-8 md:rounded-[32px] md:p-[56px] md:gap-16">
+        <div className="bg-brand-dark flex w-full flex-col items-start gap-8 overflow-hidden rounded-[24px] p-6 md:gap-16 md:rounded-[32px] md:p-[56px]">
           <MissionBadge label="OUR MISSION" />
 
           {/* Highlighted mission statement — second half fades to 50% opacity */}
-          <h2 className="text-brand-light-green font-sans font-medium tracking-tight max-w-[1128px] text-[24px] leading-[29px] md:text-[40px] md:leading-[50px] xl:text-[48px] xl:leading-[58px]">
+          <h2 className="text-brand-light-green max-w-[1128px] font-sans text-[24px] leading-[29px] font-medium tracking-tight md:text-[40px] md:leading-[50px] xl:text-[48px] xl:leading-[58px]">
             Helping farmers grow with confidence, by providing the highest
             quality seeds, research backed{" "}
             <span className="text-brand-light-green/50">
@@ -34,7 +37,7 @@ export default function AboutMissionTwo() {
           </h2>
 
           {/* Farm banner */}
-          <div className="w-full aspect-[310/200] relative rounded-[18px] overflow-hidden bg-brand-neutral-light/5 md:aspect-[1128/532] md:rounded-[24px]">
+          <div className="bg-brand-neutral-light/5 relative aspect-[310/200] w-full overflow-hidden rounded-[18px] md:aspect-[1128/532] md:rounded-[24px]">
             <Image
               src="/images/about/maliks_farm_new_3_1.png"
               alt="Malik's Farm modern agriculture fields and seed trials"

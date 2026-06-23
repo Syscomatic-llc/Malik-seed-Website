@@ -505,8 +505,9 @@ export default function TimelineStory({
                     width={140}
                     height={100}
                     style={{ width: "140px", height: "100px" }}
-                    className={`pointer-events-none absolute z-0 opacity-70 mix-blend-screen ${isEven ? "bottom-0 left-0" : "top-0 right-0"
-                      }`}
+                    className={`pointer-events-none absolute z-0 opacity-70 mix-blend-screen ${
+                      isEven ? "bottom-0 left-0" : "top-0 right-0"
+                    }`}
                     aria-hidden="true"
                   />
                   <h3
@@ -537,6 +538,9 @@ export default function TimelineStory({
                     {idx < items.length - 1 && (
                       <div className="border-brand-bg absolute left-[50%] z-0 h-[1px] w-[405px] border-t border-dashed" />
                     )}
+                    {idx == items.length - 1 && (
+                      <div className="border-brand-bg absolute left-[50%] z-0 h-[1px] w-[200px] border-t border-dashed" />
+                    )}
                     {/* Year & Dot centered, Year masks the line while Dot sits on it */}
                     <div className="relative z-10 flex items-center select-none">
                       <span
@@ -545,7 +549,7 @@ export default function TimelineStory({
                       >
                         {item.year}
                       </span>
-                      {idx < items.length - 1 && (
+                      {idx < items.length && (
                         <Image
                           src="/images/timeline/Ellipse.svg"
                           alt="Dot"

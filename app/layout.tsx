@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   title: "Malik Seeds — Helping Farmers Grow with Confidence",
   description:
     "Malik Seeds has been empowering farmers with high-quality seed varieties since 1969. Discover our products, success stories, and agricultural innovations.",
-  manifest: "/favicons/site.webmanifest", 
+  manifest: "/favicons/site.webmanifest",
   icons: {
     icon: [
       {
