@@ -144,7 +144,7 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
     <div
       className="absolute right-0 left-0 z-30 mx-auto hidden w-full max-w-[786px] flex-col items-center px-6 md:flex"
       style={{
-        top: "min(426px, 45vh)",
+        top: "45vh",
         gap: "clamp(24px, 4vh, 48px)",
       }}
     >
@@ -196,7 +196,7 @@ const HeroContentMobile = memo(function HeroContentMobile() {
     <div
       className="absolute right-0 left-0 z-30 mx-auto flex w-full max-w-[358px] flex-col px-4 md:hidden"
       style={{
-        top: "min(313px, 45vh)",
+        top: "55vh",
         gap: 32,
       }}
     >
