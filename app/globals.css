@@ -327,6 +327,33 @@
   }
 }
 
+@utility contact-page-hero-title {
+  font-family: var(--font-inter-tight);
+  font-weight: 500;
+  font-size: 38px;
+  line-height: 120%;
+
+  @media (min-width: 1024px) {
+    font-size: 64px;
+    line-height: 120%;
+  }
+}
+
+.spin-infinite {
+  animation: spin 2s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ── Card title (company names in info cards) ───────────────────────────────── */
 @utility text-card-title {
   font-family: var(--font-inter-tight);

@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "./Logo";
 import ActionButton from "./ActionButton";
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
-// Data
+// Static data — module scope for O(1) lookup
 // ---------------------------------------------------------------------------
 
 interface NavItem {
@@ -26,17 +26,18 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Sub-components
+// Shared sub-components
 // ---------------------------------------------------------------------------
 
+/** Single nav link — handles active state via pathname */
 function NavLink({
   item,
   onClick,
-  dark,
+  compact,
 }: {
   item: NavItem;
   onClick?: () => void;
-  dark?: boolean;
+  compact?: boolean;
 }) {
   const pathname = usePathname();
   const isActive =
@@ -47,16 +48,12 @@ function NavLink({
       href={item.href}
       onClick={onClick}
       className={cn(
-        "flex items-center transition-colors duration-200",
-        dark
-          ? "h-auto px-0 py-1 text-[16px] leading-[19px] font-medium"
-          : "h-[35px] rounded-full px-3 text-[16px] leading-[19px] font-medium hover:bg-neutral-50",
-        "focus-visible:ring-brand-light-green focus-visible:ring-2 focus-visible:outline-none",
-        isActive
-          ? "text-brand-accent"
-          : dark
-            ? "text-brand-bg hover:text-white"
-            : "text-brand-dark"
+        "flex items-center font-medium transition-colors duration-200",
+        "focus-visible:ring-2 focus-visible:ring-[#A9E179] focus-visible:outline-none",
+        compact
+          ? "h-[30px] rounded-full px-2.5 text-[13px] leading-[17px] hover:bg-neutral-50"
+          : "h-[35px] rounded-full px-3 text-[16px] leading-[19px] hover:bg-neutral-50",
+        isActive ? "text-[#75BC43]" : "text-[#0D1A14]"
       )}
       style={{ fontFamily: "var(--font-inter-tight)" }}
     >
@@ -65,83 +62,31 @@ function NavLink({
   );
 }
 
-/** "Join us" pill button — Figma: 132×44, bg #195236, radius 60px */
-function JoinUsButton({
-  onClick,
-  className,
-  containerClassName,
-}: {
-  onClick?: () => void;
-  className?: string;
-  containerClassName?: string;
-}) {
-  return (
-    <ActionButton
-      href="/join"
-      onClick={onClick}
-      label="Join us"
-      variant="dark"
-      className={cn("h-[44px]", className)}
-      containerClassName={containerClassName}
-    />
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Desktop Navbar — Figma: Frame 2147229670, 1240×60 at left:100 top:24, radius 80px
-// ---------------------------------------------------------------------------
-
-function DesktopNav() {
-  return (
-    <div className="hidden h-[60px] w-full items-center justify-between rounded-[80px] bg-white pr-2 pl-8 shadow-sm lg:flex">
-      <Logo />
-
-      {/* Nav links */}
-      <nav
-        aria-label="Main navigation"
-        className="flex flex-1 items-center justify-center gap-1"
-      >
-        {NAV_ITEMS.map((item) => (
-          <NavLink key={item.href} item={item} />
-        ))}
-      </nav>
-
-      {/* Frame 7: 132×44, bg #195236, left:1100 from container */}
-      <JoinUsButton />
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Mobile Navbar — Figma: 358×48 pill + collapsible drawer
-// ---------------------------------------------------------------------------
-
-function MobileMenuButton({
+/** Hamburger / close icon button */
+function MenuToggle({
   isOpen,
   onToggle,
-  dark,
 }: {
   isOpen: boolean;
   onToggle: () => void;
-  dark?: boolean;
 }) {
   return (
     <button
       onClick={onToggle}
       aria-label={isOpen ? "Close menu" : "Open menu"}
       aria-expanded={isOpen}
-      aria-controls="mobile-menu"
-      className={cn(
-        "flex h-8 w-8 items-center justify-center rounded-full",
-        dark
-          ? "text-brand-bg hover:bg-white/10"
-          : "text-brand-dark hover:bg-neutral-100",
-        "transition-colors",
-        "focus-visible:ring-brand-light-green focus-visible:ring-2 focus-visible:outline-none"
-      )}
+      aria-controls="mobile-nav-drawer"
+      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#0D1A14] transition-colors hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-[#A9E179] focus-visible:outline-none"
     >
       {isOpen ? (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+        /* X icon — 24×24 */
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
           <path
             d="M18 6L6 18M6 6l12 12"
             stroke="currentColor"
@@ -150,7 +95,14 @@ function MobileMenuButton({
           />
         </svg>
       ) : (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+        /* Hamburger icon — 24×24 */
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
           <path
             d="M4 6h16M4 12h16M4 18h16"
             stroke="currentColor"
@@ -163,87 +115,150 @@ function MobileMenuButton({
   );
 }
 
-function MobileNav() {
-  const [isOpen, setIsOpen] = useState(false);
-  const close = () => setIsOpen(false);
-
+function DesktopNav({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="relative mx-auto w-full max-w-[358px] lg:hidden">
-      {/* Closed State (Pill) */}
-      <div
+    <div
+      className={cn(
+        "w-full items-center justify-between rounded-[80px] bg-white shadow-sm",
+        compact ? "flex h-[52px] pr-1.5 pl-5" : "flex h-[60px] pr-2 pl-8"
+      )}
+    >
+      <Logo />
+
+      <nav
+        aria-label="Primary navigation"
         className={cn(
-          "flex h-[48px] w-full items-center justify-between rounded-[50px] bg-white px-5 shadow-sm transition-all duration-300",
-          isOpen
-            ? "pointer-events-none scale-95 opacity-0"
-            : "scale-100 opacity-100"
+          "flex flex-1 items-center justify-center",
+          compact ? "gap-0" : "gap-1"
         )}
       >
-        <Logo />
-        <MobileMenuButton isOpen={isOpen} onToggle={() => setIsOpen(true)} />
-      </div>
+        {NAV_ITEMS.map((item) => (
+          <NavLink key={item.href} item={item} compact={compact} />
+        ))}
+      </nav>
 
-      {/* Open State (unified card) */}
-      <div
-        className={cn(
-          "bg-brand-dark absolute top-0 left-0 z-50 flex w-full origin-top flex-col justify-between overflow-hidden rounded-[24px] shadow-lg transition-all duration-300",
-          isOpen
-            ? "pointer-events-auto scale-100 opacity-100"
-            : "pointer-events-none h-0 scale-95 opacity-0"
-        )}
-        style={{ height: isOpen ? "568px" : "0px" }}
-      >
-        {/* Header inside card */}
-        <div className="flex h-[48px] items-center justify-between px-5">
-          <Logo light />
-          <MobileMenuButton
-            isOpen={isOpen}
-            onToggle={() => setIsOpen(false)}
-            dark
-          />
-        </div>
-
-        {/* Links + Join Us inside card */}
-        <div className="flex flex-1 flex-col justify-between px-8 pt-4 pb-8">
-          <nav
-            aria-label="Mobile navigation"
-            className="flex flex-col gap-[16px] pt-4"
-          >
-            {NAV_ITEMS.map((item) => (
-              <NavLink key={item.href} item={item} onClick={close} dark />
-            ))}
-          </nav>
-          <div className="mt-auto">
-            <JoinUsButton
-              onClick={close}
-              containerClassName="w-full"
-              className="bg-brand-active hover:bg-brand-primary-hover text-brand-bg h-[44px] w-full justify-center"
-            />
-          </div>
-        </div>
-      </div>
+      {/* "Join us" CTA — Figma: 132×44 */}
+      <ActionButton
+        href="/join"
+        label="Join us"
+        variant="dark"
+        className="h-[44px]"
+      />
     </div>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Main export
-// ---------------------------------------------------------------------------
+function MobileNav() {
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
-/**
- * Navbar — Figma: Frame 2147229670 (desktop) + mobile variant.
- *
- * Architecture:
- *  - DesktopNav  → white pill 1240×60 with logo, links, and "Join us" CTA
- *  - MobileNav   → 358×48 pill + collapsible drawer with ArrowIcon, JoinUsButton
- *  - NavLink     → handles active state via usePathname
- *  - JoinUsButton → reusable across desktop + mobile
- */
+  // Close on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const close = () => setIsOpen(false);
+
+  return (
+    <>
+      {/* Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px]"
+          onClick={close}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Pill + drawer container — max-w matches Figma 358px, centred on mobile */}
+      {/* On phones: centred 358px pill. On tablets (md+): full container width pill */}
+      <div className="relative z-50 mx-auto w-full max-w-[358px] md:max-w-full">
+        {/* ── PILL (always visible) ── 358×48, bg #FFF, radius 50px */}
+        <div className="flex h-[48px] w-full items-center justify-between rounded-[50px] bg-white px-[15px] shadow-sm">
+          <Logo />
+          <MenuToggle isOpen={isOpen} onToggle={() => setIsOpen((v) => !v)} />
+        </div>
+
+        {/* ── CARD DRAWER ── 358×684, bg #FFF, radius 24px, gap 16px below pill */}
+        <div
+          id="mobile-nav-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
+          className={cn(
+            "absolute top-[calc(48px+16px)] left-0 w-full overflow-hidden rounded-[24px] bg-white shadow-lg transition-all duration-300 ease-in-out",
+            isOpen
+              ? "pointer-events-auto max-h-[684px] opacity-100"
+              : "pointer-events-none max-h-0 opacity-0"
+          )}
+        >
+          {/* Inner content — mirrors Figma Frame 2147229900 */}
+          <div className="flex min-h-[684px] flex-col justify-between px-[24px] pt-[24px] pb-[24px]">
+            {/* ── Nav links ── each row 35px tall, gap 24px, text 16px #0D1A14 */}
+            <nav
+              aria-label="Mobile navigation"
+              className="flex flex-col gap-[24px]"
+            >
+              {NAV_ITEMS.map((item) => {
+                const isActive =
+                  item.href === "/"
+                    ? pathname === "/"
+                    : pathname?.startsWith(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={close}
+                    className={cn(
+                      "flex h-[35px] items-center text-[16px] leading-[19px] font-medium transition-colors",
+                      "focus-visible:ring-2 focus-visible:ring-[#A9E179] focus-visible:outline-none",
+                      isActive ? "text-[#75BC43]" : "text-[#0D1A14]"
+                    )}
+                    style={{ fontFamily: "var(--font-inter-tight)" }}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* ── Join Us button ── Figma: 310×48, bg #195236, radius 60px */}
+            <ActionButton
+              href="/join"
+              label="Join us"
+              variant="dark"
+              onClick={close}
+              containerClassName="w-full mt-auto"
+              className="h-[48px] w-full justify-center"
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function Navbar() {
   return (
     <header className="absolute top-6 z-50 w-full px-4 lg:px-[100px]">
       <div className="mx-auto w-full max-w-[1240px]">
-        <DesktopNav />
-        <MobileNav />
+        {/* Desktop pill — 1024px and above */}
+        <div className="hidden lg:block">
+          <DesktopNav />
+        </div>
+
+        {/* Mobile/Tablet drawer — below 1024px */}
+        <div className="lg:hidden">
+          <MobileNav />
+        </div>
       </div>
     </header>
   );

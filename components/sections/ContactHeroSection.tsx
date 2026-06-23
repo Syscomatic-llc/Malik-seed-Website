@@ -17,7 +17,6 @@ type FormState = {
   message: string;
 };
 
-
 // Strict Regex Validations (Production-Grade Security)
 const NAME_REGEX = /^[a-zA-Z\s\-'.]{2,80}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -61,7 +60,9 @@ export default function ContactHeroSection() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FormState, string>>
+  >({});
 
   // Focus modal button when it opens, and restore submit button focus when it closes
   useEffect(() => {
@@ -140,15 +141,20 @@ export default function ContactHeroSection() {
     // Abort if validation fails
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      
+
       // Auto-focus the first invalid field for better UX/Keyboard navigation
       const firstErrorField = Object.keys(newErrors)[0] as keyof FormState;
       let fieldElement: HTMLElement | null = null;
-      if (firstErrorField === "name") fieldElement = document.getElementById(nameId);
-      if (firstErrorField === "email") fieldElement = document.getElementById(emailId);
-      if (firstErrorField === "phone") fieldElement = document.getElementById(phoneId);
-      if (firstErrorField === "subject") fieldElement = document.getElementById(subjectId);
-      if (firstErrorField === "message") fieldElement = document.getElementById(messageId);
+      if (firstErrorField === "name")
+        fieldElement = document.getElementById(nameId);
+      if (firstErrorField === "email")
+        fieldElement = document.getElementById(emailId);
+      if (firstErrorField === "phone")
+        fieldElement = document.getElementById(phoneId);
+      if (firstErrorField === "subject")
+        fieldElement = document.getElementById(subjectId);
+      if (firstErrorField === "message")
+        fieldElement = document.getElementById(messageId);
       fieldElement?.focus();
       return;
     }
@@ -170,36 +176,32 @@ export default function ContactHeroSection() {
   };
 
   return (
-    <section className="bg-brand-dark text-white relative min-h-fit w-full pt-[120px] pb-16 md:pt-[180px] md:pb-[100px]">
+    <section className="bg-brand-dark relative min-h-fit w-full pt-[120px] pb-16 text-white md:pt-[180px] md:pb-[100px]">
       <div className="mx-auto w-full max-w-[1240px] px-4 xl:px-0">
-        <div className="flex flex-col gap-10 w-full items-start justify-between lg:flex-row lg:gap-8 xl:gap-14">
-          
+        <div className="flex w-full flex-col items-start justify-between gap-10 lg:flex-row lg:gap-8 xl:gap-14">
           {/* Left Column — Badge, H1 Title, Head Office Card */}
-          <div className="flex w-full flex-col gap-8 lg:flex-1 xl:w-152 xl:flex-none lg:gap-12">
-            
+          <div className="flex w-full flex-col gap-8 lg:flex-1 lg:gap-12 xl:w-152 xl:flex-none">
             {/* Pill & Title container */}
-            <div className="flex flex-col gap-6 w-full items-start lg:gap-8">
-              
+            <div className="flex w-full flex-col items-start gap-6 lg:gap-8">
               {/* Badge Pill — Figma: 134x33 (desktop) / 122x30 (mobile) */}
-              <div className="inline-flex items-center justify-center gap-2 overflow-hidden rounded-[40px] border border-solid border-overlay-white-border bg-overlay-dark-tag px-4 py-1.5 h-[30px] lg:h-[33px]">
-                <span className="text-tag text-white uppercase tracking-[0.05em] font-medium leading-none">
+              <div className="border-overlay-white-border bg-overlay-dark-tag inline-flex h-[30px] items-center justify-center gap-2 overflow-hidden rounded-[40px] border border-solid px-4 py-1.5 lg:h-[33px]">
+                <span className="bg-brand-light-green h-2 w-2 shrink-0 rounded-[2px]" />
+                <span className="text-tag leading-[150%] font-medium tracking-[0.05em] text-white uppercase">
                   {OFFICE_DETAILS.badgeText}
                 </span>
-                <span className="bg-brand-light-green h-2 w-2 rounded-full shrink-0" />
               </div>
 
               {/* H1 Heading — Figma: 64px (desktop) / 38px (mobile) */}
-              <h1 className="text-page-title text-white tracking-tight w-full font-medium leading-[1.2] lg:max-w-md xl:max-w-none">
+              <h1 className="contact-page-hero-title white-space w-full leading-[120%] font-medium tracking-tight text-white lg:max-w-md xl:max-w-none">
                 Get in touch with Malik Seeds
               </h1>
             </div>
 
             {/* Address Card — Figma: 608x274 (desktop) / 358x224 (mobile), bg #DCF3C7 */}
-            <address className="relative flex w-full flex-col items-start gap-6 rounded-[20px] bg-brand-mint-green p-6 text-brand-dark not-italic lg:rounded-[24px] lg:px-8 xl:px-10 lg:py-8 lg:w-full xl:w-152 xl:h-68.5">
+            <address className="bg-brand-mint-green text-brand-dark relative flex w-full flex-col items-start gap-6 rounded-[20px] p-6 not-italic lg:w-full lg:rounded-[24px] lg:px-8 lg:py-8 xl:h-68.5 xl:w-152 xl:px-10">
               <div className="relative flex w-full flex-col items-start gap-4 lg:gap-6">
-                
                 {/* Office Type Label — Figma: 18px (desktop) / 14px (mobile) */}
-                <div className="text-card-label text-brand-dark opacity-90 tracking-tight font-medium uppercase">
+                <div className="text-card-label text-brand-dark font-medium tracking-tight uppercase opacity-90">
                   {OFFICE_DETAILS.officeLabel}
                 </div>
 
@@ -207,11 +209,11 @@ export default function ContactHeroSection() {
                   {/* Company Name & Address */}
                   <div className="relative inline-flex flex-col items-start gap-2.5">
                     {/* Malik Seeds Ltd. Title — Figma: 30px (desktop) / 28px (mobile) */}
-                    <div className="text-card-title text-brand-dark tracking-tight font-medium">
+                    <div className="text-card-title text-brand-dark font-medium tracking-tight">
                       {OFFICE_DETAILS.companyName}
                     </div>
                     {/* Address Text — Figma: 16px */}
-                    <p className="text-[16px] leading-[1.25] font-normal text-brand-dark opacity-90">
+                    <p className="text-brand-dark text-[16px] leading-[1.25] font-normal opacity-90">
                       {OFFICE_DETAILS.address}
                     </p>
                   </div>
@@ -229,10 +231,14 @@ export default function ContactHeroSection() {
                       />
                       <a
                         href={OFFICE_DETAILS.phone.href}
-                        className="text-[16px] leading-[19.2px] font-normal text-brand-dark hover:underline focus:outline-none"
+                        className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none"
                       >
-                        <span className="opacity-80">{OFFICE_DETAILS.phone.label}</span>
-                        <span className="font-medium">{OFFICE_DETAILS.phone.value}</span>
+                        <span className="opacity-80">
+                          {OFFICE_DETAILS.phone.label}
+                        </span>
+                        <span className="font-medium">
+                          {OFFICE_DETAILS.phone.value}
+                        </span>
                       </a>
                     </div>
 
@@ -247,18 +253,20 @@ export default function ContactHeroSection() {
                       />
                       <a
                         href={OFFICE_DETAILS.email.href}
-                        className="text-[16px] leading-[19.2px] font-normal text-brand-dark hover:underline focus:outline-none"
+                        className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none"
                       >
-                        <span className="opacity-80">{OFFICE_DETAILS.email.label}</span>
-                        <span className="font-medium">{OFFICE_DETAILS.email.value}</span>
+                        <span className="opacity-80">
+                          {OFFICE_DETAILS.email.label}
+                        </span>
+                        <span className="font-medium">
+                          {OFFICE_DETAILS.email.value}
+                        </span>
                       </a>
                     </div>
                   </div>
-
                 </div>
               </div>
             </address>
-
           </div>
 
           {/* Right Column — Form */}
@@ -270,7 +278,6 @@ export default function ContactHeroSection() {
               aria-busy={isSubmitting}
             >
               <div className="flex w-full flex-col gap-6">
-                
                 {/* Name field */}
                 <div className="flex w-full flex-col gap-3">
                   <label
@@ -278,7 +285,12 @@ export default function ContactHeroSection() {
                     className="inline-flex items-center gap-0.5"
                   >
                     <span className="text-form-label text-white">Name</span>
-                    <span className="text-brand-error font-medium" aria-hidden="true">*</span>
+                    <span
+                      className="text-brand-error font-medium"
+                      aria-hidden="true"
+                    >
+                      *
+                    </span>
                   </label>
                   <input
                     id={nameId}
@@ -291,7 +303,9 @@ export default function ContactHeroSection() {
                     onChange={handleChange("name")}
                     placeholder="Enter your name"
                     aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? `${nameId}-error` : undefined}
+                    aria-describedby={
+                      errors.name ? `${nameId}-error` : undefined
+                    }
                     className={`${INPUT_BASE_CLASS} ${getBorderClass(!!errors.name)}`}
                   />
                   {errors.name && (
@@ -311,8 +325,15 @@ export default function ContactHeroSection() {
                     htmlFor={emailId}
                     className="inline-flex items-center gap-0.5"
                   >
-                    <span className="text-form-label text-white">Email Address</span>
-                    <span className="text-brand-error font-medium" aria-hidden="true">*</span>
+                    <span className="text-form-label text-white">
+                      Email Address
+                    </span>
+                    <span
+                      className="text-brand-error font-medium"
+                      aria-hidden="true"
+                    >
+                      *
+                    </span>
                   </label>
                   <input
                     id={emailId}
@@ -325,7 +346,9 @@ export default function ContactHeroSection() {
                     onChange={handleChange("email")}
                     placeholder="Enter your email address"
                     aria-invalid={!!errors.email}
-                    aria-describedby={errors.email ? `${emailId}-error` : undefined}
+                    aria-describedby={
+                      errors.email ? `${emailId}-error` : undefined
+                    }
                     className={`${INPUT_BASE_CLASS} ${getBorderClass(!!errors.email)}`}
                   />
                   {errors.email && (
@@ -345,8 +368,15 @@ export default function ContactHeroSection() {
                     htmlFor={phoneId}
                     className="inline-flex items-center gap-0.5"
                   >
-                    <span className="text-form-label text-white">Phone Number</span>
-                    <span className="text-brand-error font-medium" aria-hidden="true">*</span>
+                    <span className="text-form-label text-white">
+                      Phone Number
+                    </span>
+                    <span
+                      className="text-brand-error font-medium"
+                      aria-hidden="true"
+                    >
+                      *
+                    </span>
                   </label>
                   <input
                     id={phoneId}
@@ -359,7 +389,9 @@ export default function ContactHeroSection() {
                     onChange={handleChange("phone")}
                     placeholder="Enter your Phone Number"
                     aria-invalid={!!errors.phone}
-                    aria-describedby={errors.phone ? `${phoneId}-error` : undefined}
+                    aria-describedby={
+                      errors.phone ? `${phoneId}-error` : undefined
+                    }
                     className={`${INPUT_BASE_CLASS} ${getBorderClass(!!errors.phone)}`}
                   />
                   {errors.phone && (
@@ -380,7 +412,12 @@ export default function ContactHeroSection() {
                     className="inline-flex items-center gap-0.5"
                   >
                     <span className="text-form-label text-white">Subject</span>
-                    <span className="text-brand-error font-medium" aria-hidden="true">*</span>
+                    <span
+                      className="text-brand-error font-medium"
+                      aria-hidden="true"
+                    >
+                      *
+                    </span>
                   </label>
                   <div className="relative w-full">
                     <select
@@ -391,8 +428,10 @@ export default function ContactHeroSection() {
                       value={formData.subject}
                       onChange={handleChange("subject")}
                       aria-invalid={!!errors.subject}
-                      aria-describedby={errors.subject ? `${subjectId}-error` : undefined}
-                      className={`appearance-none cursor-pointer pr-12 ${INPUT_BASE_CLASS} ${getBorderClass(
+                      aria-describedby={
+                        errors.subject ? `${subjectId}-error` : undefined
+                      }
+                      className={`cursor-pointer appearance-none pr-12 ${INPUT_BASE_CLASS} ${getBorderClass(
                         !!errors.subject
                       )}`}
                     >
@@ -409,7 +448,7 @@ export default function ContactHeroSection() {
                     </select>
                     {/* Chevron down arrow inside selector */}
                     <svg
-                      className="pointer-events-none absolute top-1/2 right-[18px] h-[18px] w-[18px] -translate-y-1/2 text-brand-muted shrink-0"
+                      className="text-brand-muted pointer-events-none absolute top-1/2 right-[18px] h-[18px] w-[18px] shrink-0 -translate-y-1/2"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -441,7 +480,12 @@ export default function ContactHeroSection() {
                     className="inline-flex items-center gap-0.5"
                   >
                     <span className="text-form-label text-white">Message</span>
-                    <span className="text-brand-error font-medium" aria-hidden="true">*</span>
+                    <span
+                      className="text-brand-error font-medium"
+                      aria-hidden="true"
+                    >
+                      *
+                    </span>
                   </label>
                   <textarea
                     id={messageId}
@@ -452,7 +496,9 @@ export default function ContactHeroSection() {
                     onChange={handleChange("message")}
                     placeholder="Type your message here..."
                     aria-invalid={!!errors.message}
-                    aria-describedby={errors.message ? `${messageId}-error` : undefined}
+                    aria-describedby={
+                      errors.message ? `${messageId}-error` : undefined
+                    }
                     className={`${TEXTAREA_BASE_CLASS} ${getBorderClass(!!errors.message)}`}
                   />
                   {errors.message && (
@@ -465,7 +511,6 @@ export default function ContactHeroSection() {
                     </span>
                   )}
                 </div>
-
               </div>
 
               {/* Submit button — Figma: 183x46, bg #195236, radius 60px (desktop) */}
@@ -473,44 +518,60 @@ export default function ContactHeroSection() {
                 ref={submitButtonRef}
                 type="submit"
                 disabled={isSubmitting}
-                className="group/button relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-[60px] bg-brand-active text-brand-bg px-6 h-[41px] lg:h-[46px] w-fit font-medium text-button active:scale-95 transition-all select-none duration-150 disabled:opacity-50 hover:bg-brand-primary-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-light-green cursor-pointer"
+                className="group/button bg-brand-active text-brand-bg text-button hover:bg-brand-primary-hover focus-visible:ring-brand-light-green relative inline-flex h-[41px] w-fit cursor-pointer items-center justify-center gap-2.5 overflow-hidden rounded-[60px] px-6 font-medium transition-all duration-150 select-none focus:outline-none focus-visible:ring-2 active:scale-95 disabled:opacity-50 lg:h-[46px]"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
-                    <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    <svg
+                      className="h-5 w-5 animate-spin text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
                     </svg>
                     <span>Sending...</span>
                   </span>
                 ) : (
                   <>
                     <span className="mt-[-0.50px]">Send Message</span>
-                    <ArrowIcon size={20} className="stroke-brand-bg group-hover/button:translate-x-0.5 transition-transform" />
+                    <ArrowIcon
+                      size={20}
+                      className="stroke-brand-bg transition-transform group-hover/button:translate-x-0.5"
+                    />
                   </>
                 )}
               </button>
-
             </form>
           </div>
-
         </div>
       </div>
 
       {/* Success Modal Overlay */}
       {isSubmitted && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm duration-200"
           role="dialog"
           aria-modal="true"
           aria-labelledby="success-modal-title"
           aria-describedby="success-modal-desc"
         >
-          <div className="bg-brand-dark border border-overlay-white-border rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl flex flex-col items-center text-center gap-6 animate-in zoom-in-95 duration-200">
+          <div className="bg-brand-dark border-overlay-white-border animate-in zoom-in-95 mx-4 flex w-full max-w-md flex-col items-center gap-6 rounded-3xl border p-8 text-center shadow-2xl duration-200">
             {/* Green Circle Checkmark Icon */}
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-mint-green text-brand-dark shadow-md shrink-0">
+            <div className="bg-brand-mint-green text-brand-dark flex h-16 w-16 shrink-0 items-center justify-center rounded-full shadow-md">
               <svg
-                className="h-8 w-8 text-brand-active"
+                className="text-brand-active h-8 w-8"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -529,7 +590,7 @@ export default function ContactHeroSection() {
             <div className="flex flex-col gap-2">
               <h2
                 id="success-modal-title"
-                className="text-card-title text-white tracking-tight font-medium"
+                className="text-card-title font-medium tracking-tight text-white"
               >
                 Message Sent Successfully!
               </h2>
@@ -537,7 +598,8 @@ export default function ContactHeroSection() {
                 id="success-modal-desc"
                 className="text-body-small text-brand-muted"
               >
-                Thank you for getting in touch. We have received your inquiry and our team will get back to you shortly.
+                Thank you for getting in touch. We have received your inquiry
+                and our team will get back to you shortly.
               </p>
             </div>
 
@@ -545,14 +607,13 @@ export default function ContactHeroSection() {
             <button
               ref={continueButtonRef}
               onClick={() => setIsSubmitted(false)}
-              className="bg-brand-secondary text-brand-dark hover:bg-brand-secondary-hover px-6 py-2.5 rounded-full font-medium transition-all select-none active:scale-95 duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-light-green w-full cursor-pointer"
+              className="bg-brand-secondary text-brand-dark hover:bg-brand-secondary-hover focus-visible:ring-brand-light-green w-full cursor-pointer rounded-full px-6 py-2.5 font-medium transition-all duration-150 select-none focus:outline-none focus-visible:ring-2 active:scale-95"
             >
               Continue
             </button>
           </div>
         </div>
       )}
-
     </section>
   );
 }
