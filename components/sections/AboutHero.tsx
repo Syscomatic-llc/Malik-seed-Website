@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 
@@ -39,11 +42,57 @@ const HERO_IMAGES = [
   },
 ];
 
+// Duplicate images for seamless infinite loop
+const LOOPED_IMAGES = [...HERO_IMAGES, ...HERO_IMAGES];
+
+/** Pixels per second the strip scrolls */
+const SCROLL_SPEED = 60;
+
 export default function AboutHero() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const pausedRef = useRef(false);
+  const rafRef = useRef<number | null>(null);
+  const lastTimeRef = useRef<number | null>(null);
+
+  // Keep pausedRef in sync so the rAF loop doesn't close over stale state
+  useEffect(() => {
+    pausedRef.current = isPaused;
+  }, [isPaused]);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const animate = (timestamp: number) => {
+      if (lastTimeRef.current === null) lastTimeRef.current = timestamp;
+      const delta = timestamp - lastTimeRef.current;
+      lastTimeRef.current = timestamp;
+
+      if (!pausedRef.current && track) {
+        track.scrollLeft += (SCROLL_SPEED * delta) / 1000;
+
+        // Seamless loop: once we've scrolled past the first set of images,
+        // jump back by exactly one set width (scrollWidth / 2)
+        if (track.scrollLeft >= track.scrollWidth / 2) {
+          track.scrollLeft -= track.scrollWidth / 2;
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   return (
     <section className="w-full bg-[#F2F7F1] pt-[120px] pb-12 md:pt-[150px] md:pb-[80px] xl:pt-[180px] xl:pb-[100px] overflow-hidden">
-      <div className="mx-auto flex flex-col items-center max-w-[1440px]">
-        {/* Title & Badge Container */}
+      <div className="mx-auto flex flex-col items-center max-w-full">
+        {/* Title & Badge */}
         <div className="flex flex-col items-center gap-4 px-4 md:gap-8 md:px-[100px]">
           <SectionBadge variant="outline" showDot className="h-[30px] md:h-[33px] px-4">
             Our Story
@@ -55,19 +104,30 @@ export default function AboutHero() {
           </h1>
         </div>
 
-        {/* Hero Gallery Row / Scroll Track */}
+        {/* Auto-scroll gallery strip */}
         <div className="w-full mt-[32px] md:mt-[48px]">
-          <div className="w-full overflow-x-auto scrollbar-none snap-x snap-mandatory flex gap-4 px-4 md:gap-6 md:px-8 xl:justify-center xl:px-0">
-            {HERO_IMAGES.map((img) => (
+          <div
+            ref={trackRef}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setIsPaused(false)}
+            // overflow-x-scroll (not auto) keeps the scrollbar hidden but
+            // lets JS set scrollLeft freely; scrollbar-none hides it visually
+            className="w-full overflow-x-scroll scrollbar-none flex gap-4 md:gap-6 cursor-grab active:cursor-grabbing"
+            style={{ scrollBehavior: "auto" }}
+            aria-label="Image gallery, scrolls automatically"
+          >
+            {LOOPED_IMAGES.map((img, i) => (
               <div
-                key={img.id}
-                className="w-[310px] h-[240px] md:w-[548px] md:h-[420px] relative rounded-[20px] md:rounded-[24px] overflow-hidden shrink-0 bg-white shadow-sm snap-center"
+                key={`${img.id}-${i}`}
+                className="w-[310px] h-[240px] md:w-[548px] md:h-[420px] relative rounded-[20px] md:rounded-[24px] overflow-hidden shrink-0 bg-white shadow-sm"
               >
                 <Image
                   src={img.src}
                   alt={img.alt}
                   fill
-                  priority={img.id === 1}
+                  priority={i < 3}
                   sizes="(max-width: 768px) 310px, 548px"
                   className="object-cover transition-transform duration-500 hover:scale-105"
                 />
