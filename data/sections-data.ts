@@ -379,8 +379,8 @@ export const joinTeamData: JoinTeamData = {
     href: "/careers",
   },
   images: {
-    desktop: "/images/team/team-banner.png",
-    mobile: "/images/team/team-banner.png",
+    desktop: "/images/about/join-team.png",
+    mobile: "/images/about/join-team.png",
   },
 };
 

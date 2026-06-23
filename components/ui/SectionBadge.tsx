@@ -42,7 +42,7 @@ export function SectionBadge({
       style={{ fontFamily: "var(--font-inter)" }}
     >
       {showDot && (
-        <span className="h-[6px] w-[6px] shrink-0 rounded-sm bg-current" />
+        <span className="h-[6px] w-[6px] shrink-0 rounded-[2px] bg-current" />
       )}
       {children}
     </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 
 // ---------------------------------------------------------------------------
@@ -15,6 +16,7 @@ export interface GalleryImage {
 
 interface GalleryHeroSectionProps {
     readonly initialImages?: readonly GalleryImage[];
+    readonly isHero?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -107,6 +109,7 @@ const MOBILE_SPAN_CLASSES: readonly string[] = [
 // ---------------------------------------------------------------------------
 const GalleryHeroSection = ({
     initialImages = FALLBACK_GALLERY_IMAGES,
+    isHero = true,
 }: GalleryHeroSectionProps) => {
     const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
     const [isLoading, setIsLoading] = useState(false);
@@ -126,6 +129,73 @@ const GalleryHeroSection = ({
         }, ANIMATION_DELAY_MS);
     };
 
+    // About-page variant: always show exactly 5 images + a "View Gallery" link
+    if (!isHero) {
+        const previewImages = initialImages.slice(0, 5);
+        return (
+            <section className="w-full bg-[#F2F7F1] pt-10 pb-20 md:pt-16 md:pb-[80px] xl:pt-[100px] xl:pb-[120px]">
+                <div className="mx-auto flex w-full max-w-[1242px] flex-col items-center gap-12 px-4 sm:px-6 md:px-8 xl:gap-16 xl:px-0">
+                    {/* Header — always centered */}
+                    <div
+                        className={`flex w-full flex-col gap-4 xl:gap-8 ${!isHero ? "items-left" : "items-center"}`}
+                    >
+                        <SectionBadge
+                            variant="outline"
+                            showDot={false}
+                            className="font-heading h-[30px] gap-2 border-[#E4E7EC] px-4 text-[12px] leading-[18px] xl:h-[33px] xl:text-[14px] xl:leading-[21px]"
+                        >
+                            <span className="h-[6px] w-[6px] shrink-0 rounded-[2px] bg-[#195236]" />
+                            <span className="font-medium text-[#195236]">Gallery</span>
+                        </SectionBadge>
+
+                        <h2 className="font-heading text-[34px] leading-[41px] font-semibold tracking-tight text-[#0D1A14] xl:text-[48px] xl:leading-[58px]">
+                            Our Journey in Pictures
+                        </h2>
+                    </div>
+
+                    {/* 5-image bento preview grid */}
+                    <div className="flex w-full flex-col items-center gap-12 xl:gap-[48px]">
+                        <div className="grid w-full grid-cols-2 gap-4 md:gap-6 xl:flex xl:flex-wrap xl:justify-start">
+                            {previewImages.map((image, index) => {
+                                const widthClass =
+                                    DESKTOP_WIDTH_CLASSES[index % DESKTOP_WIDTH_CLASSES.length];
+                                const mobileClass =
+                                    MOBILE_SPAN_CLASSES[index % MOBILE_SPAN_CLASSES.length];
+                                return (
+                                    <div
+                                        key={image.id}
+                                        className={`${mobileClass} ${widthClass} group relative overflow-hidden rounded-[16px] bg-neutral-100 xl:h-[450px] xl:rounded-[24px]`}
+                                    >
+                                        <Image
+                                            src={image.src}
+                                            alt={image.alt}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 768px"
+                                            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                                            priority={index < 4}
+                                        />
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* View Gallery CTA */}
+                        <div className="flex w-full justify-center">
+                            <Link
+                                href="/our-gallery"
+                                className="font-heading inline-flex items-center gap-2 rounded-[60px] bg-[#195236] px-6 py-2.5 text-sm font-medium text-[#F2F7F1] transition-all duration-200 hover:bg-[#153e28] active:scale-95 xl:px-8 xl:py-3 xl:text-base"
+                            >
+                                <span>View Gallery</span>
+                                <Image src="/arrow.svg" alt="view gallery" width={16} height={16} />
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    // Gallery-page variant: full bento with load-more
     return (
         <section className="w-full bg-[#F2F7F1] pt-[100px] pb-20 xl:pt-[180px] xl:pb-[120px]">
             <div className="mx-auto flex w-full max-w-[1242px] flex-col items-center gap-12 px-4 sm:px-6 md:px-8 xl:gap-16 xl:px-0">
@@ -140,11 +210,9 @@ const GalleryHeroSection = ({
                         <span className="font-medium text-[#195236]">Gallery</span>
                     </SectionBadge>
 
-                    <div className="flex w-full flex-col items-center gap-3">
-                        <h1 className="font-heading text-center text-[34px] leading-[41px] font-semibold tracking-tight text-[#0D1A14] xl:text-[48px] xl:leading-[58px]">
-                            Our Journey in Pictures
-                        </h1>
-                    </div>
+                    <h1 className="font-heading text-center text-[34px] leading-[41px] font-semibold tracking-tight text-[#0D1A14] xl:text-[48px] xl:leading-[58px]">
+                        Our Journey in Pictures
+                    </h1>
                 </div>
 
                 {/* Bento gallery grid */}
@@ -155,8 +223,6 @@ const GalleryHeroSection = ({
                                 DESKTOP_WIDTH_CLASSES[index % DESKTOP_WIDTH_CLASSES.length];
                             const mobileClass =
                                 MOBILE_SPAN_CLASSES[index % MOBILE_SPAN_CLASSES.length];
-                            // Hide items 5–9 on mobile/tablet until the user has expanded via Load More;
-                            // xl:flex overrides this at desktop so the bento grid is unaffected.
                             const mobileHideClass =
                                 !hasExpanded &&
                                     index >= MOBILE_INITIAL_VISIBLE &&
@@ -190,13 +256,12 @@ const GalleryHeroSection = ({
                                 disabled={isLoading}
                                 className="text-button font-heading flex h-[41px] w-[118px] cursor-pointer items-center justify-center gap-[6px] rounded-[60px] border-0 bg-[#195236] px-4 text-sm font-medium text-[#F2F7F1] transition-all duration-200 select-none hover:bg-[#153e28] active:scale-95 disabled:pointer-events-none disabled:opacity-85 xl:h-[46px] xl:w-[154px] xl:gap-[10px] xl:px-6 xl:text-base"
                             >
-                                <span className="font-medium">
-                                    Load More
-                                </span>
-                                {/* Dot rounding loading animation (reversible order matching Figma desktop vs mobile) */}
-                                {isLoading && <span className="flex h-4 w-4 items-center justify-center xl:h-5 xl:w-5">
-                                    <Image src="/loading.svg" alt="loading" width={20} height={20} className="animate-spin" />
-                                </span>}
+                                <span className="font-medium">Load More</span>
+                                {isLoading && (
+                                    <span className="flex h-4 w-4 items-center justify-center xl:h-5 xl:w-5">
+                                        <Image src="/loading.svg" alt="loading" width={20} height={20} className="animate-spin" />
+                                    </span>
+                                )}
                             </button>
                         </div>
                     )}

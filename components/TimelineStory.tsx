@@ -374,7 +374,7 @@ export default function TimelineStory({
             {/* ── Header ── */}
             <div className="mb-[63px] ml-[1px] flex flex-col items-start gap-8 self-start">
               <div className="bg-brand-dark/30 flex items-center gap-2 rounded-[40px] border border-solid border-white/10 px-4 py-1.5">
-                <div className="bg-brand-light-green h-2 w-2 rounded-[1px]" />
+                <div className="bg-brand-light-green h-2 w-2 rounded-[2px]" />
                 <span
                   className="text-sm font-medium text-white"
                   style={{ fontFamily: "var(--font-inter-tight)" }}
@@ -422,7 +422,7 @@ export default function TimelineStory({
             {/* ── Header ── */}
             <div className="mb-12 flex flex-col items-start gap-6">
               <div className="bg-brand-dark/30 flex items-center gap-2 rounded-[40px] border border-solid border-white/10 px-4 py-1.5">
-                <div className="bg-brand-light-green h-2 w-2 rounded-[1px]" />
+                <div className="bg-brand-light-green h-2 w-2 rounded-[2px]" />
                 <span
                   className="text-sm font-medium text-white"
                   style={{ fontFamily: "var(--font-inter-tight)" }}
@@ -461,7 +461,7 @@ export default function TimelineStory({
           {/* Header */}
           <div className="flex max-w-[358px] flex-col items-center gap-6 text-center">
             <div className="bg-brand-dark/32 flex items-center gap-2 rounded-[40px] border border-solid border-white/12 px-4 py-1.5">
-              <div className="bg-brand-light-green h-1.5 w-1.5 rounded-[1px]" />
+              <div className="bg-brand-light-green h-1.5 w-1.5 rounded-[2px]" />
               <span
                 className="text-xs leading-[18px] font-medium text-white"
                 style={{ fontFamily: "var(--font-inter-tight)" }}
@@ -505,9 +505,8 @@ export default function TimelineStory({
                     width={140}
                     height={100}
                     style={{ width: "140px", height: "100px" }}
-                    className={`pointer-events-none absolute z-0 opacity-70 mix-blend-screen ${
-                      isEven ? "bottom-0 left-0" : "top-0 right-0"
-                    }`}
+                    className={`pointer-events-none absolute z-0 opacity-70 mix-blend-screen ${isEven ? "bottom-0 left-0" : "top-0 right-0"
+                      }`}
                     aria-hidden="true"
                   />
                   <h3

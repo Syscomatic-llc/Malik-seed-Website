@@ -12,7 +12,7 @@ export default function TimelineSection() {
       {/* Action Button - Desktop & Tablet */}
       <div className="mb-16 flex justify-center">
         <ActionButton
-          href="/timeline"
+          href="/about#timeline"
           label="See full timeline"
           variant="dark"
           className="h-[48px] gap-3 px-[23px] text-lg"
