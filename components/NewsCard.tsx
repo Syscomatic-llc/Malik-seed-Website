@@ -10,7 +10,7 @@ interface NewsCardProps {
 export default function NewsCard({ article }: NewsCardProps) {
 
   return (
-    <div className="group flex w-full flex-col rounded-[24px] bg-white p-[16px] transition-all duration-300 hover:shadow-md border border-[#E4E7EC]/50">
+    <div className="group flex w-full flex-col rounded-[24px] bg-white p-[16px] pb-[24px] transition-all duration-300 hover:shadow-md border border-[#E4E7EC]/50">
       {/* Image Container */}
       <div className="relative h-[260px] w-full overflow-hidden rounded-[16px] bg-[#F9FAFB]">
 
