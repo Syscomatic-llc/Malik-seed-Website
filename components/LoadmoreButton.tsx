@@ -15,7 +15,7 @@ export default function LoadmoreButton({
         onClick={handleLoadMore}
         disabled={isLoading}
         aria-busy={isLoading}
-        className="font-heading flex h-[41px] w-[118px] cursor-pointer items-center justify-center gap-[6px] rounded-[60px] border-0 bg-[#195236] px-4 text-sm font-medium text-[#F2F7F1] transition-all duration-200 select-none hover:bg-[#153e28] active:scale-95 disabled:pointer-events-none disabled:opacity-85 xl:h-[46px] xl:w-[154px] xl:gap-[10px] xl:px-6 xl:text-base"
+        className="font-heading flex h-[41px] w-auto cursor-pointer items-center justify-center gap-[6px] rounded-[60px] border-0 bg-[#195236] px-6 text-sm font-medium text-[#F2F7F1] transition-all duration-300 select-none hover:bg-[#153e28] active:scale-95 disabled:pointer-events-none disabled:opacity-85 xl:h-[46px] xl:gap-[10px] xl:px-8 xl:text-base"
       >
         <span className="font-medium">Load More</span>
         {isLoading && (

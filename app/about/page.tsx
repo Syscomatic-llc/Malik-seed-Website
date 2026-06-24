@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import AboutHero from "@/components/sections/AboutHero";
 import AboutMissionOne from "@/components/sections/AboutMissionOne";
 import AboutValues from "@/components/sections/AboutValues";
@@ -21,8 +22,12 @@ export default function AboutPage() {
       <AboutValues />
       <TimelineStory items={timelineItems} />
       <AboutMissionTwo />
-      <GalleryHeroSection isHero={false} />
+      {/* Suspense required: GalleryHeroSection uses useSearchParams() internally */}
+      <Suspense fallback={null}>
+        <GalleryHeroSection isHero={false} />
+      </Suspense>
       <JoinTeamSection />
     </div>
   );
 }
+

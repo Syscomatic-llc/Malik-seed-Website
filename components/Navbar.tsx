@@ -245,7 +245,7 @@ function MobileNav() {
               variant="dark"
               onClick={close}
               containerClassName="w-full mt-auto"
-              className="z-100 h-[48px] w-full justify-center border-2 border-black"
+              className="z-100 h-[48px] w-full justify-center"
             />
           </div>
         </div>

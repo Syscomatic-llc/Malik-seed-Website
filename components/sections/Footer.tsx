@@ -7,7 +7,7 @@ import { footerData, FooterLink, SocialLink } from "@/data/sections-data";
 const TYPOGRAPHY = {
   title:
     "font-inter-tight text-[18px] md:text-[24px] font-medium leading-[27px] md:leading-[36px] text-white",
-  link: "font-inter-tight text-[14px] md:text-[16px] leading-[21px] md:leading-[24px] text-white/60 transition-colors hover:text-white",
+  link: "font-inter-tight text-[14px] md:text-[16px] leading-[21px] md:leading-[24px] text-white/60 transition-colors hover:text-brand-light-green transition-colors",
   label:
     "font-inter-tight text-[16px] md:text-[18px] leading-[19px] md:leading-[22px] text-white font-normal",
   contact:
@@ -48,7 +48,7 @@ const SocialIcon = ({ social }: { social: SocialLink }) => (
       width="18"
       height="18"
       viewBox="0 0 24 24"
-      fill="none"
+      fill="currentColor"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
@@ -81,7 +81,7 @@ export default memo(function Footer() {
               />
             </Link>
 
-            <p className="font-inter text-brand-light-green mt-4 text-[16px] leading-6 font-normal md:mt-6 md:text-[18px] md:leading-6.75">
+            <p className="font-inter text-brand-light-green/70 mt-4 text-[16px] leading-6 font-normal md:mt-6 md:text-[18px] md:leading-6.75">
               {footerData.mission}
             </p>
 
@@ -151,7 +151,7 @@ export default memo(function Footer() {
         {/* Legal & Copyright */}
         <div className="mt-8 flex flex-col gap-8 lg:mt-16 lg:gap-10">
           <div className="h-px w-full bg-white/10" aria-hidden="true" />
-          <p className="font-inter-tight text-brand-light-green text-center text-[14px] leading-4.25 font-normal">
+          <p className="font-inter-tight text-brand-light-green/50 text-center text-[14px] leading-4.25 font-normal">
             {footerData.contact.copyright}
           </p>
         </div>
