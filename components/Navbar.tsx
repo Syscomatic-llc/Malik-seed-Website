@@ -153,9 +153,11 @@ function MobileNav() {
   const pathname = usePathname();
 
   // Close on route change
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setIsOpen(false);
-  }, [pathname]);
+  }
 
   // Prevent body scroll when open
   useEffect(() => {
@@ -194,14 +196,20 @@ function MobileNav() {
           aria-modal="true"
           aria-label="Navigation menu"
           className={cn(
-            "absolute top-[calc(48px+16px)] left-0 w-full overflow-hidden rounded-[24px] bg-white shadow-lg transition-all duration-300 ease-in-out",
+            "absolute top-[calc(48px+16px)] left-0 w-full rounded-[24px] bg-white shadow-lg transition-all duration-300 ease-in-out",
             isOpen
-              ? "pointer-events-auto max-h-[684px] opacity-100"
-              : "pointer-events-none max-h-0 opacity-0"
+              ? "pointer-events-auto overflow-y-auto opacity-100"
+              : "pointer-events-none overflow-hidden opacity-0"
           )}
+          style={{
+            maxHeight: isOpen ? "min(684px, calc(100vh - 100px))" : "0px",
+          }}
         >
           {/* Inner content — mirrors Figma Frame 2147229900 */}
-          <div className="flex min-h-[684px] flex-col justify-between px-[24px] pt-[24px] pb-[24px]">
+          <div
+            className="flex flex-col justify-between px-[24px] pt-[24px] pb-[24px]"
+            style={{ minHeight: "min(75vh, 580px)" }}
+          >
             {/* ── Nav links ── each row 35px tall, gap 24px, text 16px #0D1A14 */}
             <nav
               aria-label="Mobile navigation"
@@ -237,7 +245,7 @@ function MobileNav() {
               variant="dark"
               onClick={close}
               containerClassName="w-full mt-auto"
-              className="h-[48px] w-full justify-center"
+              className="z-100 h-[48px] w-full justify-center border-2 border-black"
             />
           </div>
         </div>
