@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import LoadmoreButton from "../LoadmoreButton";
 
 // ---------------------------------------------------------------------------
 // Type Definitions
@@ -26,9 +28,10 @@ const INITIAL_VISIBLE = 10; // same slice for all breakpoints (SSR-safe)
 const MOBILE_INITIAL_VISIBLE = 5; // CSS-only cutoff for small screens
 const LOAD_MORE_STEP = 6;
 const ANIMATION_DELAY_MS = 800;
+const COUNT_PARAM = "count"; // URL query param that persists "load more" progress
 
 // Pixel-perfect image fallback assets mapped from Figma Design Node 2691:17850
-const FALLBACK_GALLERY_IMAGES: readonly GalleryImage[] = [
+export const FALLBACK_GALLERY_IMAGES: readonly GalleryImage[] = [
   { id: 1, src: "/images/gallery/061_1.png", alt: "Healthy green crops field" },
   { id: 2, src: "/images/gallery/055_1.png", alt: "Fresh cabbage head" },
   { id: 3, src: "/images/gallery/057_2.png", alt: "Farmer examining plants" },
@@ -111,21 +114,48 @@ const GalleryHeroSection = ({
   initialImages = FALLBACK_GALLERY_IMAGES,
   isHero = true,
 }: GalleryHeroSectionProps) => {
-  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Derive the initial visible count from the URL (?count=16), clamped to a
+  // safe range. This is what makes "Load more" progress survive a reload —
+  // on remount, we read where the user left off instead of always starting
+  // at INITIAL_VISIBLE.
+  const getInitialCount = useCallback(() => {
+    const raw = Number(searchParams.get(COUNT_PARAM));
+    if (!Number.isFinite(raw) || raw <= INITIAL_VISIBLE) {
+      return INITIAL_VISIBLE;
+    }
+    return Math.min(raw, initialImages.length);
+  }, [searchParams, initialImages.length]);
+
+  const [visibleCount, setVisibleCount] = useState(getInitialCount);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasExpanded, setHasExpanded] = useState(false); // tracks first "Load More" click
+
+  // Derived, not separate state — this guarantees it's always consistent
+  // with visibleCount, including right after a reload restores a count > 10.
+  const hasExpanded = visibleCount > INITIAL_VISIBLE;
 
   const visibleImages = initialImages.slice(0, visibleCount);
   const hasMore = visibleCount < initialImages.length;
 
   const handleLoadMore = () => {
     setIsLoading(true);
-    setHasExpanded(true);
     setTimeout(() => {
-      setVisibleCount((count) =>
-        Math.min(count + LOAD_MORE_STEP, initialImages.length)
+      const next = Math.min(
+        visibleCount + LOAD_MORE_STEP,
+        initialImages.length
       );
+      setVisibleCount(next);
       setIsLoading(false);
+
+      // Sync progress into the URL without a server round-trip or scroll
+      // jump. router.replace (not push) keeps "Load more" clicks out of
+      // browser history, so the back button doesn't step through them.
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(COUNT_PARAM, String(next));
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }, ANIMATION_DELAY_MS);
   };
 
@@ -230,8 +260,8 @@ const GalleryHeroSection = ({
                 MOBILE_SPAN_CLASSES[index % MOBILE_SPAN_CLASSES.length];
               const mobileHideClass =
                 !hasExpanded &&
-                index >= MOBILE_INITIAL_VISIBLE &&
-                index < INITIAL_VISIBLE
+                  index >= MOBILE_INITIAL_VISIBLE &&
+                  index < INITIAL_VISIBLE
                   ? "hidden xl:flex"
                   : "";
 
@@ -255,26 +285,10 @@ const GalleryHeroSection = ({
 
           {/* Load More Button */}
           {hasMore && (
-            <div className="mt-4 flex w-full justify-center">
-              <button
-                onClick={handleLoadMore}
-                disabled={isLoading}
-                className="text-button font-heading flex h-[41px] w-[118px] cursor-pointer items-center justify-center gap-[6px] rounded-[60px] border-0 bg-[#195236] px-4 text-sm font-medium text-[#F2F7F1] transition-all duration-200 select-none hover:bg-[#153e28] active:scale-95 disabled:pointer-events-none disabled:opacity-85 xl:h-[46px] xl:w-[154px] xl:gap-[10px] xl:px-6 xl:text-base"
-              >
-                <span className="font-medium">Load More</span>
-                {isLoading && (
-                  <span className="flex h-4 w-4 items-center justify-center xl:h-5 xl:w-5">
-                    <Image
-                      src="/loading.svg"
-                      alt="loading"
-                      width={20}
-                      height={20}
-                      className="animate-spin"
-                    />
-                  </span>
-                )}
-              </button>
-            </div>
+            <LoadmoreButton
+              handleLoadMore={handleLoadMore}
+              isLoading={isLoading}
+            />
           )}
         </div>
       </div>

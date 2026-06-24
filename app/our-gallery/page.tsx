@@ -1,11 +1,10 @@
+import { Suspense } from "react";
 import GalleryHeroSection from "@/components/sections/GalleryHeroSection";
 
-const OurGallery = () => {
+export default function OurGalleryPage() {
   return (
-    <>
+    <Suspense fallback={null}>
       <GalleryHeroSection />
-    </>
+    </Suspense>
   );
-};
-
-export default OurGallery;
+}
