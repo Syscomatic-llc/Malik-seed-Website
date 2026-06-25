@@ -10,31 +10,37 @@ export const metadata = {
 const BRANDS = [
   {
     name: "Vegetable Seeds",
+    description: "Premium hybrid vegetable seed varieties engineered for high yield, disease resistance, and consistent quality across diverse climates.",
     image: "/images/brand/11_1.png",
     logo: "/images/brand/brand_logo_1.svg",
   },
   {
     name: "Potato Seeds",
+    description: "Certified potato seed varieties selected for superior tuber quality, adaptability, and outstanding field performance.",
     image: "/images/brand/dscf7423.png",
     logo: "/images/brand/brand_logo_2.svg",
   },
   {
-    name: "Malik’s Farm",
+    name: "Malik's Farm",
+    description: "A showcase of sustainable farming practices that demonstrate the real-world performance of our seed varieties at scale.",
     image: "/images/brand/malik_farm_rd.png",
     logo: "/images/brand/brand_logo_3.svg",
   },
   {
     name: "Origene by Malik",
+    description: "Specialty crop genetics focused on rare and high-value varieties, bringing innovation from field research to market.",
     image: "/images/brand/planted_10_2.png",
     logo: "/images/brand/brand_logo_4.svg",
   },
   {
-    name: "Malik’s Flower",
+    name: "Malik's Flower",
+    description: "A curated collection of ornamental flower seeds crafted for vibrant colour, longevity, and market-ready appeal.",
     image: "/images/brand/image_43.png",
     logo: "/images/brand/brand_logo_5.svg",
   },
   {
     name: "Innovation & Development",
+    description: "Our R&D powerhouse driving next-generation seed technology through cutting-edge breeding programs and agronomic trials.",
     image: "/images/brand/dscf8693_1.png",
     logo: "/images/brand/brand_logo_6.svg",
   },
@@ -108,6 +114,13 @@ export default function BrandsPage() {
                   <h3 className="font-heading text-2xl md:text-[32px] font-medium text-[#F2F7F1] leading-tight">
                     {brand.name}
                   </h3>
+
+                  {/* Description — revealed on hover */}
+                  <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[120px] group-hover:opacity-100">
+                    <p className="font-inter text-[18px] leading-[27px] text-[#F2F7F1]/90">
+                      {brand.description}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
