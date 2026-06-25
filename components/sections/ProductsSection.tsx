@@ -3,51 +3,54 @@ import Link from "next/link";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { productsData } from "@/data/sections-data";
 
-export default function ProductsSection() {
+type Direction = "horizontal" | "vertical";
+
+interface ProductsSectionProps {
+  direction?: Direction;
+}
+
+export default function ProductsSection({
+  direction = "horizontal",
+}: ProductsSectionProps) {
+  const isVertical = direction === "vertical";
+
   return (
-    <section className="bg-brand-bg w-full" id="products">
+    <section className="w-full bg-brand-bg" id="products">
       <div className="mx-auto max-w-[1440px]">
-        {/* ===== Desktop/Tablet Grid Layout ===== */}
-        {/* Frame 53 — 1440x754, grid of 3x2 cards */}
-        <div className="hidden grid-cols-3 md:grid">
+
+        {/* ===== Desktop/Tablet Grid (unchanged) ===== */}
+        <div className="hidden grid-cols-1 sm:grid-cols-2 md:grid sm:grid md:grid-cols-3">
           {productsData.items.map((product) => (
             <Link
               key={product.id}
               href={product.href}
-              className="group border-brand-dark/10 relative flex h-[377px] w-full overflow-hidden border-r border-b"
+              className="group relative flex h-[377px] w-full overflow-hidden border-r border-b border-brand-dark/10"
             >
-              {/* Background Image */}
               <div className="absolute inset-0 z-0 transition-transform duration-700 ease-out group-hover:scale-105">
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
-                  sizes="(max-width: 1024px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover"
                   priority={product.id <= 3}
                 />
               </div>
 
-              {/* Gradient Overlay - Rectangle 2 */}
-              <div className="from-brand-dark/0 via-brand-dark/30 to-brand-dark/80 absolute inset-0 z-10 bg-gradient-to-b transition-opacity duration-300" />
+              <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/10 to-brand-dark/90 transition-opacity duration-300" />
 
-              {/* Card Content - Frame 43 */}
-              <div className="absolute bottom-[30px] left-[37px] z-20 flex w-[calc(100%-74px)] flex-col gap-[16px] transition-transform duration-300 ease-out group-hover:-translate-y-[20px]">
-                {/* Arrow Icon — 48x48 */}
-                <ArrowIcon
-                  size={48}
-                  strokeWidth={2}
-                  className="text-brand-bg shrink-0 transition-transform duration-300 group-hover:translate-x-1"
-                />
+              <div className="absolute inset-0 z-20 flex flex-col justify-end p-9 text-brand-bg">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-bg/20 backdrop-blur-xs transition-transform duration-300 group-hover:scale-110 group-hover:bg-brand-light-green group-hover:text-brand-active">
+                  <ArrowIcon size={24} className="text-brand-bg group-hover:text-brand-active transition-colors" />
+                </div>
 
-                <div className="flex flex-col gap-[16px]">
-                  <h3 className="text-h2-title text-brand-bg">
+                <div className="flex flex-col gap-1">
+                  <h3 className="font-sans text-[32px] font-medium leading-[38px] tracking-tight text-brand-bg">
                     {product.name}
                   </h3>
 
-                  {/* Description container - visible on hover */}
-                  <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-h-[120px] group-hover:opacity-100">
-                    <p className="text-h3-title text-brand-bg font-normal">
+                  <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[120px] group-hover:opacity-100">
+                    <p className="font-inter mt-2 text-[18px] leading-[27px] text-brand-bg/90">
                       {product.description}
                     </p>
                   </div>
@@ -58,46 +61,95 @@ export default function ProductsSection() {
         </div>
 
         {/* ===== Mobile Layout ===== */}
-        {/* Voice of Impact section — horizontal scrollable cards */}
-        <div className="bg-brand-bg w-full px-4 py-10 md:hidden">
-          <div className="flex scrollbar-none flex-row gap-4 overflow-x-auto scroll-smooth pb-2">
-            {productsData.items.map((product) => (
-              <Link
-                key={product.id}
-                href={product.href}
-                className="group relative flex h-[350px] w-[280px] shrink-0 overflow-hidden rounded-[24px]"
-              >
-                {/* Background Image */}
-                <div className="absolute inset-0 z-0">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    sizes="280px"
-                    className="object-cover"
-                  />
-                </div>
+        <div className="sm:hidden">
 
-                {/* Gradient Overlay - Rectangle 2 */}
-                <div className="from-brand-dark/0 via-brand-dark/40 to-brand-dark/80 absolute inset-0 z-10 bg-gradient-to-b" />
+          {/* VERTICAL: cards stacked full-width */}
+          {isVertical ? (
+            <div className="flex flex-col">
+              {productsData.items.map((product) => (
+                <Link
+                  key={product.id}
+                  href={product.href}
+                  className="group relative flex h-[377px] w-full overflow-hidden border-r border-b border-brand-dark/10"
+                >
+                  <div className="absolute inset-0 z-0 transition-transform duration-700 ease-out group-hover:scale-105">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      sizes="100vw"
+                      className="object-cover"
+                      priority={product.id <= 3}
+                    />
+                  </div>
 
-                {/* Card Content - Frame 43 */}
-                <div className="absolute bottom-[24px] left-[24px] z-20 flex w-[calc(100%-48px)] flex-col gap-[8px]">
-                  {/* Arrow Icon — 32x32 */}
-                  <ArrowIcon
-                    size={32}
-                    strokeWidth={2}
-                    className="text-brand-bg shrink-0"
-                  />
+                  <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/10 to-brand-dark/90 transition-opacity duration-300" />
 
-                  <h3 className="text-h3-title text-brand-bg">
-                    {product.name}
-                  </h3>
-                </div>
-              </Link>
-            ))}
-          </div>
+                  <div className="absolute inset-0 z-20 flex flex-col justify-end p-9 text-brand-bg">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-bg/20 backdrop-blur-xs transition-transform duration-300 group-hover:scale-110 group-hover:bg-brand-light-green group-hover:text-brand-active">
+                      <ArrowIcon size={24} className="text-brand-bg group-hover:text-brand-active transition-colors" />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <h3 className="font-sans text-[32px] font-medium leading-[38px] tracking-tight text-brand-bg">
+                        {product.name}
+                      </h3>
+
+                      <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[120px] group-hover:opacity-100">
+                        <p className="font-inter mt-2 text-[18px] leading-[27px] text-brand-bg/90">
+                          {product.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            /* HORIZONTAL: scrollable row of fixed-width cards */
+            <div className="flex flex-row gap-4 overflow-x-auto scroll-smooth scrollbar-none px-4 py-10 pb-2">
+              {productsData.items.map((product) => (
+                <Link
+                  key={product.id}
+                  href={product.href}
+                  className="group relative flex h-[377px] w-[280px] shrink-0 overflow-hidden rounded-[24px] border-r border-b border-brand-dark/10"
+                >
+                  <div className="absolute inset-0 z-0 transition-transform duration-700 ease-out group-hover:scale-105">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      sizes="280px"
+                      className="object-cover"
+                    />
+                  </div>
+
+                  <div className="absolute inset-0 z-10 bg-gradient-to-b from-brand-dark/10 to-brand-dark/90 transition-opacity duration-300" />
+
+                  <div className="absolute inset-0 z-20 flex flex-col justify-end p-9 text-brand-bg">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-bg/20 backdrop-blur-xs transition-transform duration-300 group-hover:scale-110 group-hover:bg-brand-light-green group-hover:text-brand-active">
+                      <ArrowIcon size={24} className="text-brand-bg group-hover:text-brand-active transition-colors" />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <h3 className="font-sans text-[32px] font-medium leading-[38px] tracking-tight text-brand-bg">
+                        {product.name}
+                      </h3>
+
+                      <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[120px] group-hover:opacity-100">
+                        <p className="font-inter mt-2 text-[18px] leading-[27px] text-brand-bg/90">
+                          {product.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+
         </div>
+
       </div>
     </section>
   );
