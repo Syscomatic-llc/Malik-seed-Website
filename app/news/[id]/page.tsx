@@ -1,116 +1,194 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Metadata } from "next";
-import { newsArticles } from "@/data/news-data";
+import type { Metadata } from "next";
+import { newsArticles, type NewsArticle } from "@/data/news-data";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import ShareButton from "@/components/ShareButton";
+import NewsTOC from "@/components/NewsTOC";
+import NewsCard from "@/components/NewsCard";
+import { SectionBadge } from "@/components/ui/SectionBadge";
+
+// ---------------------------------------------------------------------------
+// Route-level constants — single source of truth for every hardcoded value.
+// Changing a colour or dimension here propagates to all usages automatically.
+// ---------------------------------------------------------------------------
+const SITE_NAME = "Malik Seeds";
+const RELATED_ARTICLE_COUNT = 3;
+
+/** Fallback author shown when an article has no explicit author field. */
+const DEFAULT_AUTHOR: NonNullable<NewsArticle["author"]> = {
+  name: "Md. Rafiqul Islam",
+  role: "Supply Chain Manager",
+  avatar: "/images/news/rafiqul-islam.png",
+};
+
+// ---------------------------------------------------------------------------
+// Static asset paths — avoids duplicated string literals in JSX
+// ---------------------------------------------------------------------------
+const ASSETS = {
+  backArrow: "/images/news/arrow-right_up.svg",
+  shareIcons: "/images/news/share-icons.svg",
+  prevArrow: "/images/news/prev-arrow.svg",
+  nextArrow: "/images/news/next-arrow.svg",
+} as const;
+
+// ---------------------------------------------------------------------------
+// Heading regex — compiled once at module load, not on every render/request
+// ---------------------------------------------------------------------------
+const H3_REGEX = /<h3>(.*?)<\/h3>/g;
+const TAG_REGEX = /<[^>]*>/g;
+const SLUG_STRIP_REGEX = /[^a-z0-9]+/g;
+const SLUG_TRIM_REGEX = /(^-|-$)/g;
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+/** Returns the article matching `id`, or `undefined`. */
+function findArticle(id: string): NewsArticle | undefined {
+  const numericId = parseInt(id, 10);
+  return newsArticles.find((a) => a.id === numericId);
+}
+
+/**
+ * Parses all `<h3>` nodes from `html`, injects unique IDs for scroll-anchoring,
+ * and returns a heading manifest consumed by `NewsTOC`.
+ *
+ * The heading regex is a module-level constant so it is never re-compiled.
+ */
+function parseHeadings(html: string): {
+  headings: { text: string; id: string }[];
+  parsedHtml: string;
+} {
+  const headings: { text: string; id: string }[] = [];
+  let counter = 0;
+
+  // Reset lastIndex because we reuse the module-level regex with the `g` flag
+  H3_REGEX.lastIndex = 0;
+
+  const parsedHtml = html.replace(H3_REGEX, (_, innerHtml: string) => {
+    const cleanText = innerHtml.replace(TAG_REGEX, "").trim();
+    const id = `heading-${cleanText
+      .toLowerCase()
+      .replace(SLUG_STRIP_REGEX, "-")
+      .replace(SLUG_TRIM_REGEX, "")}-${counter++}`;
+    headings.push({ text: cleanText, id });
+    return `<h3 id="${id}" class="scroll-mt-[120px]">${innerHtml}</h3>`;
+  });
+
+  return { headings, parsedHtml };
+}
+
+// ---------------------------------------------------------------------------
+// Route exports
+// ---------------------------------------------------------------------------
 
 interface ArticlePageProps {
   params: Promise<{ id: string }>;
 }
 
-// Statically generate parameters for all articles at build time
+/** Statically generates params for every article at build time. */
 export async function generateStaticParams() {
-  return newsArticles.map((article) => ({
-    id: article.id.toString(),
-  }));
+  return newsArticles.map((article) => ({ id: article.id.toString() }));
 }
 
-// Generate dynamic SEO metadata based on the article
-export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+/** Dynamic per-article SEO metadata. */
+export async function generateMetadata({
+  params,
+}: ArticlePageProps): Promise<Metadata> {
   const { id } = await params;
-  const articleId = parseInt(id, 10);
-  const article = newsArticles.find((a) => a.id === articleId);
+  const article = findArticle(id);
 
   if (!article) {
-    return {
-      title: "Article Not Found — Malik Seeds",
-    };
+    return { title: `Article Not Found — ${SITE_NAME}` };
   }
 
   return {
-    title: `${article.title} — Malik Seeds`,
+    title: `${article.title} — ${SITE_NAME}`,
     description: article.description,
   };
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { id } = await params;
-  const articleId = parseInt(id, 10);
-  const article = newsArticles.find((a) => a.id === articleId);
+  const article = findArticle(id);
 
-  if (!article) {
-    notFound();
-  }
+  if (!article) notFound();
+
+  const { headings, parsedHtml } = parseHeadings(article.contentHtml);
+  const author = article.author ?? DEFAULT_AUTHOR;
+
+  // Circular prev/next navigation
+  const currentIndex = newsArticles.findIndex((a) => a.id === article.id);
+  const lastIndex = newsArticles.length - 1;
+  const prevArticle = newsArticles[currentIndex - 1] ?? newsArticles[lastIndex];
+  const nextArticle = newsArticles[currentIndex + 1] ?? newsArticles[0];
+
+  // Related articles: exclude current, cap at constant
+  const relatedArticles = newsArticles
+    .filter((a) => a.id !== article.id)
+    .slice(0, RELATED_ARTICLE_COUNT);
 
   return (
     <div className="bg-brand-bg min-h-screen">
-      {/* Article Detail Container */}
-      <article className="w-full px-4 pt-[100px] pb-10 md:px-[100px] md:pt-[180px] md:pb-[100px]">
+      {/* ── Article wrapper ─────────────────────────────────────────── */}
+      <article className="w-full px-4 pt-[100px] pb-10 md:px-12 md:pt-[130px] md:pb-20 lg:px-[100px] lg:pt-[180px] lg:pb-[100px]">
         <div className="mx-auto max-w-[1030px]">
-          
-          {/* Header Actions & Meta */}
+
+          {/* ── Header: back link + meta + share ──────────────────── */}
           <div className="flex flex-col gap-8">
-            {/* Back Button */}
+            {/* Back button */}
             <Link
               href="/news"
-              className="inline-flex items-center gap-[8px] text-[#195236] text-[16px] font-medium leading-[24px] group focus-visible:outline-none"
-              style={{ fontFamily: "var(--font-inter-tight)" }}
+              className="inline-flex items-center gap-2 font-heading text-base font-medium leading-6 text-[#0B3124] group focus-visible:outline-none"
             >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="transition-transform duration-300 group-hover:-translate-x-1"
-              >
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-              </svg>
+              <Image
+                src={ASSETS.backArrow}
+                alt=""
+                aria-hidden="true"
+                width={24}
+                height={24}
+                className="rotate-180 transition-transform duration-300 group-hover:-translate-x-1"
+              />
               <span>Back to News</span>
             </Link>
 
-            {/* Title & Metadata Block */}
+            {/* Meta block */}
             <div className="flex flex-col gap-6">
-              {/* Category & Date */}
+              {/* Category pill + date */}
               <div className="flex items-center gap-4">
-                {/* Category Pill */}
-                <div 
-                  className="inline-flex h-[41px] items-center justify-center rounded-[10px] border border-[#F2F4F7] bg-white px-6 text-[14px] font-medium leading-[21px] text-[#195236] md:h-[48px] md:text-[16px] md:leading-[24px]"
-                  style={{ fontFamily: "var(--font-inter-tight)" }}
-                >
+                <div className="inline-flex h-12 items-center justify-center rounded-[10px] border border-brand-border-light bg-white px-6 font-heading text-base font-medium leading-6 text-brand-active">
                   {article.category}
                 </div>
-                {/* Dot Separator */}
-                <span className="h-[4px] w-[4px] rounded-full bg-[#0D1A14]" />
-                {/* Date Text */}
-                <span 
-                  className="text-[14px] font-medium leading-[21px] text-[#0D1A14] md:text-[16px] md:leading-[24px]"
-                  style={{ fontFamily: "var(--font-inter-tight)" }}
-                >
+                <span className="h-1 w-1 rounded-full bg-brand-dark" aria-hidden="true" />
+                <span className="font-heading text-base font-medium leading-6 text-brand-dark">
                   {article.date}
                 </span>
               </div>
 
-              {/* Heading Title */}
-              <h1 
-                className="text-[32px] font-medium leading-[40px] text-[#0D1A14] md:text-[48px] md:leading-[58px]"
-                style={{ fontFamily: "var(--font-inter-tight)" }}
-              >
+              {/* Article title */}
+              <h1 className="font-heading text-[28px] font-medium leading-[34px] text-[#141C24] md:text-[48px] md:leading-[58px]">
                 {article.title}
               </h1>
 
-              {/* Share Trigger */}
-              <ShareButton />
+              {/* Share bar */}
+              <div className="flex items-center gap-4">
+                <ShareButton />
+                <div className="relative h-10 w-[184px]">
+                  <Image
+                    src={ASSETS.shareIcons}
+                    alt="Share options"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Large Main Banner Image */}
-          <div className="relative mt-8 h-[240px] w-full overflow-hidden rounded-[20px] bg-white md:mt-12 md:h-[598px] md:rounded-[32px] border border-[#E4E7EC]/30">
+          {/* ── Hero image ──────────────────────────────────────────── */}
+          <div className="relative mt-8 h-[230px] w-full overflow-hidden rounded-[20px] border border-brand-border/30 bg-white md:mt-12 md:h-[598px] md:rounded-[32px]">
             <Image
               src={article.detailImage}
               alt={article.title}
@@ -121,64 +199,120 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             />
           </div>
 
-          {/* Main Article Body Layout */}
-          <div className="mt-8 grid grid-cols-1 gap-12 md:mt-12 lg:grid-cols-3">
-            {/* Left Content column */}
-            <div className="lg:col-span-2">
-              <div 
-                className="max-w-none text-[#141C24]/90 [&_h3]:text-[24px] [&_h3]:font-medium [&_h3]:leading-[32px] [&_h3]:text-[#0D1A14] [&_h3]:mt-8 [&_h3]:mb-4 [&_p]:text-[16px] [&_p]:leading-[28px] [&_p]:text-[#0D1A14]/80 [&_p]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ul]:text-[16px] [&_ul]:leading-[28px] [&_ul]:text-[#0D1A14]/80 [&_li]:mb-2 [&_blockquote]:border-l-4 [&_blockquote]:border-[#195236] [&_blockquote]:pl-6 [&_blockquote]:py-2 [&_blockquote]:my-8 [&_blockquote]:italic [&_blockquote]:text-[#195236] [&_blockquote]:font-medium [&_blockquote]:text-[18px] [&_cite]:block [&_cite]:text-[14px] [&_cite]:text-[#0D1A14]/60 [&_cite]:mt-2 [&_cite]:font-normal [&_cite]:not-italic"
-                dangerouslySetInnerHTML={{ __html: article.contentHtml }}
-                style={{
-                  fontFamily: "var(--font-inter)",
-                  fontSize: "16px",
-                  lineHeight: "28px"
-                }}
+          {/* ── Two-column body: content + sidebar ──────────────────── */}
+          <div className="mt-12 flex flex-col lg:flex-row lg:justify-between lg:gap-[130px]">
+            {/* Left: article body — order-2 on mobile, order-1 on desktop */}
+            <div className="w-full shrink-0 order-2 lg:order-1 lg:w-[608px]">
+              {/*
+               * article-prose is a @utility defined in globals.css that captures
+               * all prose element overrides. Keeping them in CSS prevents this
+               * component from needing to know about prose internals.
+               */}
+              <div
+                className="article-prose"
+                dangerouslySetInnerHTML={{ __html: parsedHtml }}
               />
             </div>
 
-            {/* Right Sidebar column */}
-            <div className="flex flex-col gap-8 rounded-[20px] border border-[#E4E7EC]/50 bg-white p-6 h-fit">
-              <div className="flex flex-col gap-2">
-                <span className="text-[12px] font-semibold uppercase tracking-wider text-[#141C24]/50">
-                  Published In
-                </span>
-                <span 
-                  className="text-[16px] font-medium text-[#195236]"
-                  style={{ fontFamily: "var(--font-inter-tight)" }}
-                >
-                  {article.category}
-                </span>
-              </div>
-
-              <div className="border-t border-[#F2F4F7] w-full" />
-
-              <div className="flex flex-col gap-2">
-                <span className="text-[12px] font-semibold uppercase tracking-wider text-[#141C24]/50">
-                  Release Date
-                </span>
-                <span 
-                  className="text-[16px] font-medium text-[#0D1A14]"
-                  style={{ fontFamily: "var(--font-inter-tight)" }}
-                >
-                  {article.date}
-                </span>
-              </div>
-
-              <div className="border-t border-[#F2F4F7] w-full" />
-
-              <ShareButton
-                label="Share Article"
-                iconSize={18}
-                className="flex h-[46px] w-full items-center justify-center gap-2 rounded-[10px] bg-[#195236] text-[16px] font-medium text-white transition-colors hover:bg-[#15432c] focus-visible:outline-none"
-              />
+            {/* Right: sticky TOC + author — order-1 on mobile, order-2 on desktop */}
+            <div className="w-full shrink-0 order-1 lg:order-2 lg:w-[292px] mb-8 lg:mb-0 lg:sticky lg:top-[120px] lg:self-start lg:h-fit">
+              <NewsTOC headings={headings} author={author} />
             </div>
+          </div>
+
+          {/* ── Divider ─────────────────────────────────────────────── */}
+          <div className="my-12 h-px w-full bg-brand-partners-border" />
+
+          {/* ── Prev / Next navigation ───────────────────────────────── */}
+          <div className="flex justify-between items-center w-full gap-4 py-6">
+            {/* Previous */}
+            <Link
+              href={`/news/${prevArticle.id}`}
+              className="group flex items-center gap-3 text-right focus-visible:outline-none"
+            >
+              <NavArrow direction="prev" label="Previous article" />
+              <div className="flex flex-col text-right">
+                <span className="font-heading text-base font-medium leading-6 text-brand-dark">
+                  Previous
+                </span>
+                <span className="hidden md:line-clamp-2 md:max-w-[240px] font-heading text-sm text-brand-dark/70 transition-colors group-hover:text-brand-active">
+                  {prevArticle.title}
+                </span>
+              </div>
+            </Link>
+
+            {/* Next */}
+            <Link
+              href={`/news/${nextArticle.id}`}
+              className="group flex items-center gap-3 text-right justify-end focus-visible:outline-none"
+            >
+              <div className="flex flex-col text-left">
+                <span className="font-heading text-base font-medium leading-6 text-brand-dark">
+                  Next
+                </span>
+                <span className="hidden md:line-clamp-2 md:max-w-[240px] font-heading text-sm text-brand-dark/70 transition-colors group-hover:text-brand-active">
+                  {nextArticle.title}
+                </span>
+              </div>
+              <NavArrow direction="next" label="Next article" />
+            </Link>
           </div>
 
         </div>
       </article>
 
-      {/* Careers Section career CTA */}
+      {/* ── Related articles ─────────────────────────────────────────── */}
+      {relatedArticles.length > 0 && (
+        <section className="w-full bg-brand-bg py-10 md:py-[100px]">
+          <div className="mx-auto max-w-[1240px] px-4">
+            <div className="mb-12 flex flex-col items-center gap-4">
+              <SectionBadge variant="outline" showDot>
+                FROM OUR NEWSROOM
+              </SectionBadge>
+              <h2 className="text-center font-heading text-[32px] font-medium leading-[38px] text-brand-dark md:text-[48px] md:leading-[58px]">
+                Related News &amp; Updates
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {relatedArticles.map((art) => (
+                <NewsCard key={art.id} article={art} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Careers CTA ─────────────────────────────────────────────── */}
       <JoinTeamSection />
     </div>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Sub-components
+// ---------------------------------------------------------------------------
+
+/** Circular arrow button used in prev/next navigation. */
+function NavArrow({ direction, label }: { direction: "prev" | "next"; label: string }) {
+  return (
+    <div
+      aria-label={label}
+      className="bg-brand-active hover:bg-brand-primary-hover flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full shadow-sm transition-all duration-300 active:scale-95"
+    >
+      <Image
+        src="/arrow.svg"
+        alt=""
+        width={16}
+        height={16}
+        className={`md:w-5 md:h-5 ${direction === "prev" ? "rotate-180" : ""}`}
+      />
+    </div>
+  );
+}
+
+
+
+
+
+

@@ -7,36 +7,99 @@ export interface NewsArticle {
   image: string;
   detailImage: string;
   contentHtml: string;
+  author?: {
+    name: string;
+    role: string;
+    avatar: string;
+  };
 }
 
 export const newsArticles: NewsArticle[] = [
   {
     id: 1,
-    title: "Empowering Farmers Through Practical Field Training",
-    description: "Participants learned modern crop management techniques, pest monitoring, and safe pesticide usage to improve crop yields.",
-    category: "Farmer Stories",
+    title: "Achieving GLOBAL G.A.P. Certification: A Commitment to Safe, Sustainable, and High-Quality Agriculture",
+    description: "We are proud to announce that our company has successfully achieved the GLOBAL G.A.P. certification.",
+    category: "Research & Trials",
     date: "Mar 12, 2026",
-    image: "/images/news/news-card-1.png",
-    detailImage: "/images/news/article-detail-1.png",
+    image: "/images/news/news-card-3.png",
+    detailImage: "/images/news/article-detail-3.png",
+    author: {
+      name: "Md. Rafiqul Islam",
+      role: "Supply Chain Manager",
+      avatar: "/images/news/rafiqul-islam.png"
+    },
     contentHtml: `
-      <p>We are proud to share the success of our recent field training programs. Over the past month, we have conducted hands-on sessions for local growers, focusing on practical techniques that directly translate to higher profitability and healthier crops.</p>
-      
-      <h3>Hands-On Learning in the Field</h3>
-      <p>The core philosophy of our training sessions is "learning by doing." Farmers gathered in active trial plots to observe crop behaviors, identify early signs of nutrient deficiencies, and practice diagnostic methods under the guidance of our senior agronomists.</p>
-      
-      <blockquote>
-        "Seeing the differences in root structure and plant vigor firsthand helped me understand why proper soil prep and seed spacing make such a big impact on final yield."
-        <cite>— Local Grower, Bogura District</cite>
-      </blockquote>
+      <h3>Achievement Announcement: GLOBAL G.A.P. Certification</h3>
+      <p>We are proud to announce that our company has successfully achieved the GLOBAL G.A.P. (Good Agricultural Practices) certification. This internationally recognized standard reflects our strong commitment to producing safe, high-quality agricultural products while upholding environmentally responsible and socially sustainable farming practices.</p>
 
-      <h3>Key Training Modules Covered</h3>
+      <h3>Comprehensive Certification Process</h3>
+      <p>The certification process involved a thorough and detailed audit of our farming operations, including:</p>
       <ul>
-        <li><strong>Soil Preparation & pH Management:</strong> Understanding optimal soil conditions for vegetable cultivation.</li>
-        <li><strong>Integrated Pest Management (IPM):</strong> Employing biological and mechanical controls to minimize chemical interventions.</li>
-        <li><strong>Irrigation Efficiency:</strong> Scheduling water delivery to match specific growth phases and prevent root diseases.</li>
+        <li>Crop production practices</li>
+        <li>Worker health and safety</li>
+        <li>Environmental management systems</li>
+        <li>Traceability procedures</li>
+        <li>Quality control measures</li>
+      </ul>
+      <p>Meeting these rigorous requirements confirms that our products comply with global food safety standards and recognized best agricultural practices.</p>
+
+      <h3>Strengthening Market Credibility</h3>
+      <p>Achieving GLOBAL G.A.P. certification significantly enhances our credibility in both local and international markets. It provides strong assurance to our customers, partners, and stakeholders that our products are cultivated, handled, and delivered under strict safety and sustainability guidelines.</p>
+
+      <h3>Commitment to Quality and Responsibility</h3>
+      <p>This certification reinforces our dedication to:</p>
+      <ul>
+        <li>Ensuring food safety and product quality</li>
+        <li>Protecting the environment</li>
+        <li>Promoting responsible farming practices</li>
+        <li>Safeguarding worker welfare</li>
       </ul>
 
-      <p>Malik Seeds remains committed to empowering farming communities across the nation. By providing both elite genetics and the knowledge required to cultivate them successfully, we ensure a prosperous future for agricultural families.</p>
+      <h3>Looking Ahead: Continuous Improvement</h3>
+      <p>This achievement marks an important milestone in our ongoing journey toward excellence, innovation, and responsible agriculture. We remain committed to maintaining these high standards and continuously improving our processes to better serve our customers with integrity and quality.</p>
+
+      <h3>GLOBAL G.A.P. Certified Crops Portfolio</h3>
+      <p>As part of our GLOBALG.A.P. certified operations, we proudly cultivate a diverse range of vegetables and fruits under Malik’s Project Farmers and Malik’s Farm.</p>
+
+      <h3>GAP Certified Vegetables</h3>
+      <p>Our certified vegetable production includes:</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+        <ul>
+          <li>Potato</li>
+          <li>Tomato</li>
+          <li>Cabbage</li>
+          <li>Cauliflower</li>
+          <li>Cucumber</li>
+          <li>Pumpkin</li>
+          <li>Broccoli</li>
+          <li>Eggplant (Brinjal)</li>
+          <li>Capsicum (Pepper/Chilli)</li>
+          <li>Ivy Gourd (Pointed Gourd)</li>
+          <li>Asparagus (Yard Long Bean)</li>
+        </ul>
+        <ul>
+          <li>Taro (Taro Root)</li>
+          <li>Bottle Gourd</li>
+          <li>Ash Gourd</li>
+          <li>Ridge Gourd</li>
+          <li>Snake Gourd</li>
+          <li>Sponge Gourd</li>
+          <li>Bitter Melon</li>
+          <li>Okra</li>
+          <li>Arum Lobe</li>
+          <li>Papaya</li>
+        </ul>
+      </div>
+
+      <h3>GAP Certified Fruits</h3>
+      <p>Our certified fruit production includes:</p>
+      <ul>
+        <li>Mango</li>
+        <li>Watermelon</li>
+      </ul>
+
+      <h3>Commitment to Quality and Diversity</h3>
+      <p>This wide range of certified crops reflects our dedication to sustainable farming, food safety, and delivering fresh, high-quality produce to our customers. Each product is cultivated following strict GLOBAL G.A.P. standards, ensuring traceability, environmental care, and responsible agricultural practices.</p>
     `
   },
   {
@@ -65,7 +128,7 @@ export const newsArticles: NewsArticle[] = [
     description: "Malik Seeds continues its long-standing collaboration with international seed research organizations to introduce climate-resilient crop varieties.",
     category: "Partnerships",
     date: "Feb 28, 2026",
-    image: "/images/news/news-card-3-1.png",
+    image: "/images/news/news-card-3.png",
     detailImage: "/images/news/article-detail-3.png",
     contentHtml: `
       <p>In our ongoing effort to combat the challenges of climate change in agriculture, Malik Seeds has expanded its research partnerships with leading international seed science organizations. This collaboration aims to accelerate the breeding and distribution of climate-resilient vegetables.</p>
@@ -150,7 +213,7 @@ export const newsArticles: NewsArticle[] = [
     description: "Malik Seeds continues its long-standing collaboration with international seed research organizations to introduce climate-resilient crop varieties.",
     category: "Partnerships",
     date: "Feb 28, 2026",
-    image: "/images/news/news-card-3-1.png",
+    image: "/images/news/news-card-3.png",
     detailImage: "/images/news/article-detail-3.png",
     contentHtml: `
       <p>In our ongoing effort to combat the challenges of climate change in agriculture, Malik Seeds has expanded its research partnerships with leading international seed science organizations. This collaboration aims to accelerate the breeding and distribution of climate-resilient vegetables.</p>
@@ -227,6 +290,35 @@ export const newsArticles: NewsArticle[] = [
       <p>Our programs place a strong emphasis on training women farmers, who play an essential but often underrepresented role in crop management. Special workshops focus on seedling nursing, seed storage, and home gardening for nutrition and supplementary income.</p>
 
       <p>By investing in the social fabric of rural farming communities, we ensure that agricultural development is inclusive, equitable, and sustainable for generations to come.</p>
+    `
+  },
+  {
+    id: 11,
+    title: "Empowering Farmers Through Practical Field Training",
+    description: "Participants learned modern crop management techniques, pest monitoring, and safe pesticide usage to improve crop yields.",
+    category: "Farmer Stories",
+    date: "Mar 12, 2026",
+    image: "/images/news/news-card-1.png",
+    detailImage: "/images/news/article-detail-1.png",
+    contentHtml: `
+      <p>We are proud to share the success of our recent field training programs. Over the past month, we have conducted hands-on sessions for local growers, focusing on practical techniques that directly translate to higher profitability and healthier crops.</p>
+      
+      <h3>Hands-On Learning in the Field</h3>
+      <p>The core philosophy of our training sessions is "learning by doing." Farmers gathered in active trial plots to observe crop behaviors, identify early signs of nutrient deficiencies, and practice diagnostic methods under the guidance of our senior agronomists.</p>
+      
+      <blockquote>
+        "Seeing the differences in root structure and plant vigor firsthand helped me understand why proper soil prep and seed spacing make such a big impact on final yield."
+        <cite>— Local Grower, Bogura District</cite>
+      </blockquote>
+
+      <h3>Key Training Modules Covered</h3>
+      <ul>
+        <li><strong>Soil Preparation & pH Management:</strong> Understanding optimal soil conditions for vegetable cultivation.</li>
+        <li><strong>Integrated Pest Management (IPM):</strong> Employing biological and mechanical controls to minimize chemical interventions.</li>
+        <li><strong>Irrigation Efficiency:</strong> Scheduling water delivery to match specific growth phases and prevent root diseases.</li>
+      </ul>
+
+      <p>Malik Seeds remains committed to empowering farming communities across the nation. By providing both elite genetics and the knowledge required to cultivate them successfully, we ensure a prosperous future for agricultural families.</p>
     `
   }
 ];
