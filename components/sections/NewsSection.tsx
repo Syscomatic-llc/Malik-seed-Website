@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useCallback, memo } from "react";
+import { useState, useCallback, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { newsData, NewsArticle } from "@/data/sections-data";
+import Link from "next/link";
 
 // Production Constants
 const CARD_WIDTH = 361;
@@ -14,47 +15,49 @@ interface NewsCardProps {
   article: NewsArticle;
 }
 
-/**
- * Reusable, memoized NewsCard component to avoid unneeded re-renders during slide transitions
- */
 const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
   return (
-    <div className="border-brand-border-light bg-brand-neutral-light flex h-[434px] w-[330px] shrink-0 snap-center flex-col overflow-hidden rounded-[24px] border transition-opacity duration-300 xl:h-[488px] xl:w-[361px]">
-      {/* Card Image */}
-      <div className="relative h-[256px] w-full bg-neutral-100 xl:h-[264px]">
-        <Image
-          src={article.image}
-          alt={article.title}
-          loading="eager"
-          fill
-          sizes="(max-width: 1280px) 330px, 361px"
-          className="object-cover object-center"
-        />
-      </div>
-
-      {/* Card Content */}
-      <div className="flex flex-1 flex-col justify-between p-4 pb-8 xl:p-6 xl:pb-8">
-        {/* Category & Date Row */}
-        <div className="flex h-[26px] items-center gap-3 xl:h-[29px]">
-          <span className="font-inter text-brand-dark/60 text-[12px] leading-normal xl:text-[14px]">
-            {article.date}
-          </span>
-          {article.category ? (
-            <>
-              <span className="text-brand-dark/40 text-sm">•</span>
-              <div className="border-brand-border bg-brand-bg text-brand-active inline-flex h-[26px] items-center justify-center rounded-[8px] border px-3 text-[12px] font-medium xl:h-[29px] xl:px-4 xl:text-[14px]">
-                {article.category}
-              </div>
-            </>
-          ) : null}
+    <Link
+      href={`/news/${article.id}`}
+      className="group block shrink-0 snap-center"
+    >
+      <article className="border-brand-border-light bg-brand-neutral-light flex h-[434px] w-[330px] flex-col overflow-hidden rounded-[24px] border transition-all duration-300 hover:shadow-md xl:h-[488px] xl:w-[361px]">
+        {/* Card Image */}
+        <div className="relative h-[256px] w-full bg-neutral-100 xl:h-[264px]">
+          <Image
+            src={article.image}
+            alt={article.title}
+            loading="eager"
+            fill
+            sizes="(max-width: 1280px) 330px, 361px"
+            className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+          />
         </div>
 
-        {/* Card Title */}
-        <h3 className="text-brand-dark line-clamp-3 font-sans text-[20px] leading-[24px] font-medium xl:text-[24px] xl:leading-[29px]">
-          {article.title}
-        </h3>
-      </div>
-    </div>
+        {/* Card Content */}
+        <div className="flex flex-1 flex-col justify-between p-4 pb-8 xl:p-6 xl:pb-8">
+          <div className="flex h-[26px] items-center gap-3 xl:h-[29px]">
+            <span className="font-inter text-brand-dark/60 text-[12px] leading-normal xl:text-[14px]">
+              {article.date}
+            </span>
+
+            {article.category && (
+              <>
+                <span className="text-brand-dark/40 text-sm">•</span>
+
+                <div className="border-brand-border bg-brand-bg text-brand-active inline-flex h-[26px] items-center justify-center rounded-[8px] border px-3 text-[12px] font-medium xl:h-[29px] xl:px-4 xl:text-[14px]">
+                  {article.category}
+                </div>
+              </>
+            )}
+          </div>
+
+          <h3 className="text-brand-dark line-clamp-3 font-sans text-[20px] font-medium leading-[24px] xl:text-[24px] xl:leading-[29px]">
+            {article.title}
+          </h3>
+        </div>
+      </article>
+    </Link>
   );
 });
 
@@ -62,13 +65,38 @@ export default function NewsSection() {
   const [activeIdx, setActiveIdx] = useState(0);
   const maxIdx = newsData.items.length - 2; // On desktop, 2 cards are visible at a time
 
+  // Auto-scroll: advances every 4 s, loops, pauses on hover
+  const isPausedRef = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      if (!isPausedRef.current) {
+        setActiveIdx((prev) => (prev >= maxIdx ? 0 : prev + 1));
+      }
+    }, 4000);
+  }, [maxIdx]);
+
+  useEffect(() => {
+    startTimer();
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [startTimer]);
+
   const handlePrev = useCallback(() => {
     setActiveIdx((prev) => Math.max(0, prev - 1));
-  }, []);
+    startTimer(); // reset interval on manual interaction
+  }, [startTimer]);
 
   const handleNext = useCallback(() => {
     setActiveIdx((prev) => Math.min(maxIdx, prev + 1));
-  }, [maxIdx]);
+    startTimer(); // reset interval on manual interaction
+  }, [maxIdx, startTimer]);
+
+  const handleMouseEnter = useCallback(() => { isPausedRef.current = true; }, []);
+  const handleMouseLeave = useCallback(() => { isPausedRef.current = false; }, []);
 
   return (
     // Figma desktop section: height 688px, bg #F2F7F1 (bg-brand-bg), mobile padding py-10
@@ -154,10 +182,14 @@ export default function NewsSection() {
           {/* Right Column — Horizontal slider on desktop, native snap scroll on mobile/tablet */}
           <div className="relative h-auto w-full overflow-hidden xl:h-[488px] xl:w-[748px]">
             {/* Side Fade Mask — Smoothly fades cards out on the right edge */}
-            <div className="from-brand-bg pointer-events-none absolute top-0 right-0 z-20 hidden h-full w-[120px] bg-gradient-to-l to-transparent xl:block" />
+            <div className="from-brand-bg pointer-events-none absolute top-0  -right-1 z-20 h-full w-[70px] md:w-[120px] bg-gradient-to-l to-transparent xl:block" />
 
             {/* Desktop Sliding Container (>=1280px) */}
-            <div className="hidden h-full w-full overflow-hidden xl:block">
+            <div
+              className="hidden h-full w-full overflow-hidden xl:block"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               <div
                 className="flex gap-[25px] transition-transform duration-500 ease-out"
                 style={{

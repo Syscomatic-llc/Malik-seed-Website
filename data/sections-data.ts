@@ -368,6 +368,28 @@ export const newsData: NewsData = {
       title: "Expanding Farmer Training Programs Across Northern Regions",
       image: "/images/news/news-3.png",
     },
+    {
+      id: 4,
+      category: "Climate",
+      date: "SEP 12, 2024",
+      title:
+        "Strengthening Climate-Resilient Farming Through Hybrid Innovation",
+      image: "/images/news/news-1.png",
+    },
+    {
+      id: 5,
+      category: "Commercial Growers",
+      date: "JUN 18, 2024",
+      title: "Introducing High-Yield Pumpkin Variety for Commercial Growers",
+      image: "/images/news/news-2.png",
+    },
+    {
+      id: 6,
+      category: "",
+      date: "AUG 03, 2024",
+      title: "Expanding Farmer Training Programs Across Northern Regions",
+      image: "/images/news/news-3.png",
+    },
   ],
 };
 
