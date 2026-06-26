@@ -1,3 +1,224 @@
+// "use client";
+
+// import { useState, useCallback, useEffect, useRef, memo } from "react";
+// import Image from "next/image";
+// import { SectionBadge } from "@/components/ui/SectionBadge";
+// import { newsData, NewsArticle } from "@/data/sections-data";
+// import Link from "next/link";
+
+// // Production Constants
+// const CARD_WIDTH = 361;
+// const CARD_GAP = 25;
+// const CARD_SLOT_WIDTH = CARD_WIDTH + CARD_GAP; // 386px
+
+// interface NewsCardProps {
+//   article: NewsArticle;
+// }
+
+// const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
+//   return (
+//     <Link
+//       href={`/news/${article.id}`}
+//       className="group block shrink-0 snap-center"
+//     >
+//       <article className="border-brand-border-light bg-brand-neutral-light flex h-[434px] w-[330px] flex-col overflow-hidden rounded-[24px] border transition-all duration-300 hover:shadow-md xl:h-[488px] xl:w-[361px]">
+//         {/* Card Image */}
+//         <div className="relative h-[256px] w-full bg-neutral-100 xl:h-[264px]">
+//           <Image
+//             src={article.image}
+//             alt={article.title}
+//             loading="eager"
+//             fill
+//             sizes="(max-width: 1280px) 330px, 361px"
+//             className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+//           />
+//         </div>
+
+//         {/* Card Content */}
+//         <div className="flex flex-1 flex-col justify-between p-4 pb-8 xl:p-6 xl:pb-8">
+//           <div className="flex h-[26px] items-center gap-3 xl:h-[29px]">
+//             <span className="font-inter text-brand-dark/60 text-[12px] leading-normal xl:text-[14px]">
+//               {article.date}
+//             </span>
+
+//             {article.category && (
+//               <>
+//                 <span className="text-brand-dark/40 text-sm">•</span>
+
+//                 <div className="border-brand-border bg-brand-bg text-brand-active inline-flex h-[26px] items-center justify-center rounded-[8px] border px-3 text-[12px] font-medium xl:h-[29px] xl:px-4 xl:text-[14px]">
+//                   {article.category}
+//                 </div>
+//               </>
+//             )}
+//           </div>
+
+//           <h3 className="text-brand-dark line-clamp-3 font-sans text-[20px] font-medium leading-[24px] xl:text-[24px] xl:leading-[29px]">
+//             {article.title}
+//           </h3>
+//         </div>
+//       </article>
+//     </Link>
+//   );
+// });
+
+// export default function NewsSection() {
+//   const [activeIdx, setActiveIdx] = useState(0);
+//   const maxIdx = newsData.items.length - 2; // On desktop, 2 cards are visible at a time
+
+//   // Auto-scroll: advances every 4 s, loops, pauses on hover
+//   const isPausedRef = useRef(false);
+//   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+//   const startTimer = useCallback(() => {
+//     if (timerRef.current) clearInterval(timerRef.current);
+//     timerRef.current = setInterval(() => {
+//       if (!isPausedRef.current) {
+//         setActiveIdx((prev) => (prev >= maxIdx ? 0 : prev + 1));
+//       }
+//     }, 4000);
+//   }, [maxIdx]);
+
+//   useEffect(() => {
+//     startTimer();
+//     return () => {
+//       if (timerRef.current) clearInterval(timerRef.current);
+//     };
+//   }, [startTimer]);
+
+//   const handlePrev = useCallback(() => {
+//     setActiveIdx((prev) => Math.max(0, prev - 1));
+//     startTimer(); // reset interval on manual interaction
+//   }, [startTimer]);
+
+//   const handleNext = useCallback(() => {
+//     setActiveIdx((prev) => Math.min(maxIdx, prev + 1));
+//     startTimer(); // reset interval on manual interaction
+//   }, [maxIdx, startTimer]);
+
+//   const handleMouseEnter = useCallback(() => { isPausedRef.current = true; }, []);
+//   const handleMouseLeave = useCallback(() => { isPausedRef.current = false; }, []);
+
+//   return (
+//     // Figma desktop section: height 688px, bg #F2F7F1 (bg-brand-bg), mobile padding py-10
+//     <section className="bg-brand-bg w-full py-10 xl:py-[100px]" id="news">
+//       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
+//         {/* Responsive Grid System */}
+//         <div className="flex flex-col xl:flex-row xl:gap-[64px]">
+//           {/* Left Column — Sticky info on desktop, standard flow on mobile/tablet */}
+//           <div className="mb-8 flex w-full shrink-0 flex-col items-start justify-between gap-8 xl:mb-0 xl:h-[319px] xl:w-[429px]">
+//             <div className="flex w-full flex-col items-start gap-4">
+//               {/* Badge — Figma: bg #F9FAFB, border #E4E7EC, radius 30px */}
+//               <SectionBadge
+//                 variant="outline"
+//                 showDot
+//                 className="h-[30px] gap-[8px] px-4 text-[12px] leading-[18px] xl:h-[33px] xl:gap-[8px] xl:text-[14px] xl:leading-[21px]"
+//               >
+//                 {newsData.badge}
+//               </SectionBadge>
+
+//               {/* Title — Figma: "Insights from agricultural research & field experts" (48px / line-height 58px on desktop, 32px / 38px on mobile) */}
+//               <h2
+//                 className="text-brand-dark max-w-[466px] text-[32px] leading-[38px] font-medium xl:text-[48px] xl:leading-[58px]"
+//                 style={{
+//                   fontFamily: "var(--font-inter-tight)",
+//                   fontWeight: 500,
+//                 }}
+//               >
+//                 {newsData.title}
+//               </h2>
+//             </div>
+
+//             {/* Navigation buttons — Figma: 2x 48x48 circles with 16px gap (hidden on mobile/tablet) */}
+//             <div className="hidden gap-4 xl:flex">
+//               <button
+//                 onClick={handlePrev}
+//                 disabled={activeIdx === 0}
+//                 aria-label="Previous articles"
+//                 className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${
+//                   activeIdx === 0
+//                     ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent"
+//                     : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"
+//                 }`}
+//               >
+//                 <svg
+//                   width="20"
+//                   height="20"
+//                   viewBox="0 0 24 24"
+//                   fill="none"
+//                   stroke="currentColor"
+//                   strokeWidth="2.5"
+//                   strokeLinecap="round"
+//                   strokeLinejoin="round"
+//                 >
+//                   <path d="M19 12H5M12 19l-7-7 7-7" />
+//                 </svg>
+//               </button>
+//               <button
+//                 onClick={handleNext}
+//                 disabled={activeIdx === maxIdx}
+//                 aria-label="Next articles"
+//                 className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${
+//                   activeIdx === maxIdx
+//                     ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent"
+//                     : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"
+//                 }`}
+//               >
+//                 <svg
+//                   width="20"
+//                   height="20"
+//                   viewBox="0 0 24 24"
+//                   fill="none"
+//                   stroke="currentColor"
+//                   strokeWidth="2.5"
+//                   strokeLinecap="round"
+//                   strokeLinejoin="round"
+//                 >
+//                   <path d="M5 12h14M12 5l7 7-7 7" />
+//                 </svg>
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* Right Column — Horizontal slider on desktop, native snap scroll on mobile/tablet */}
+//           <div className="relative h-auto w-full overflow-hidden xl:h-[488px] xl:w-[748px]">
+//             {/* Side Fade Mask — Smoothly fades cards out on the right edge */}
+//             <div className="from-brand-bg pointer-events-none absolute top-0  -right-1 z-20 h-full w-[70px] md:w-[120px] bg-gradient-to-l to-transparent xl:block" />
+
+//             {/* Desktop Sliding Container (>=1280px) */}
+//             <div
+//               className="hidden h-full w-full overflow-hidden xl:block"
+//               onMouseEnter={handleMouseEnter}
+//               onMouseLeave={handleMouseLeave}
+//             >
+//               <div
+//                 className="flex gap-[25px] transition-transform duration-500 ease-out"
+//                 style={{
+//                   transform: `translateX(-${activeIdx * CARD_SLOT_WIDTH}px)`,
+//                 }}
+//               >
+//                 {newsData.items.map((article) => (
+//                   <NewsCard key={article.id} article={article} />
+//                 ))}
+//               </div>
+//             </div>
+
+//             {/* Mobile/Tablet Native Swipe Container (<1280px) */}
+//             <div className="block w-full snap-x snap-mandatory scrollbar-none overflow-x-auto pb-4 xl:hidden">
+//               <div className="flex gap-4 pr-8">
+//                 {newsData.items.map((article) => (
+//                   <NewsCard key={article.id} article={article} />
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+
+
 "use client";
 
 import { useState, useCallback, useEffect, useRef, memo } from "react";
@@ -6,24 +227,31 @@ import { SectionBadge } from "@/components/ui/SectionBadge";
 import { newsData, NewsArticle } from "@/data/sections-data";
 import Link from "next/link";
 
-// Production Constants
 const CARD_WIDTH = 361;
 const CARD_GAP = 25;
-const CARD_SLOT_WIDTH = CARD_WIDTH + CARD_GAP; // 386px
+const CARD_SLOT_WIDTH = CARD_WIDTH + CARD_GAP;
 
 interface NewsCardProps {
   article: NewsArticle;
 }
 
 const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
+  const startX = useRef(0);
+
   return (
     <Link
       href={`/news/${article.id}`}
       className="group block shrink-0 snap-center"
+      onMouseDown={(e) => { startX.current = e.clientX; }}
+      onClick={(e) => {
+        // Prevent navigation if the user was dragging/scrolling
+        if (Math.abs(e.clientX - startX.current) > 5) {
+          e.preventDefault();
+        }
+      }}
     >
-      <article className="border-brand-border-light bg-brand-neutral-light flex h-[434px] w-[330px] flex-col overflow-hidden rounded-[24px] border transition-all duration-300 hover:shadow-md xl:h-[488px] xl:w-[361px]">
-        {/* Card Image */}
-        <div className="relative h-[256px] w-full bg-neutral-100 xl:h-[264px]">
+      <article className="border-brand-border-light bg-brand-neutral-light flex h-[434px] w-[330px] flex-col overflow-hidden rounded-[24px] border transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 xl:h-[488px] xl:w-[361px]">
+        <div className="relative h-[256px] w-full overflow-hidden bg-neutral-100 xl:h-[264px]">
           <Image
             src={article.image}
             alt={article.title}
@@ -34,24 +262,20 @@ const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
           />
         </div>
 
-        {/* Card Content */}
         <div className="flex flex-1 flex-col justify-between p-4 pb-8 xl:p-6 xl:pb-8">
           <div className="flex h-[26px] items-center gap-3 xl:h-[29px]">
             <span className="font-inter text-brand-dark/60 text-[12px] leading-normal xl:text-[14px]">
               {article.date}
             </span>
-
             {article.category && (
               <>
                 <span className="text-brand-dark/40 text-sm">•</span>
-
                 <div className="border-brand-border bg-brand-bg text-brand-active inline-flex h-[26px] items-center justify-center rounded-[8px] border px-3 text-[12px] font-medium xl:h-[29px] xl:px-4 xl:text-[14px]">
                   {article.category}
                 </div>
               </>
             )}
           </div>
-
           <h3 className="text-brand-dark line-clamp-3 font-sans text-[20px] font-medium leading-[24px] xl:text-[24px] xl:leading-[29px]">
             {article.title}
           </h3>
@@ -63,138 +287,85 @@ const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
 
 export default function NewsSection() {
   const [activeIdx, setActiveIdx] = useState(0);
-  const maxIdx = newsData.items.length - 2; // On desktop, 2 cards are visible at a time
+  const maxIdx = newsData.items.length - 2;
 
-  // Auto-scroll: advances every 4 s, loops, pauses on hover
   const isPausedRef = useRef(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Use a timestamp-based approach for smooth, drift-free auto-scroll
+  const lastTickRef = useRef<number>(Date.now());
+  const rafRef = useRef<number | null>(null);
+  const activeIdxRef = useRef(0); // mirror of state for RAF closure
 
-  const startTimer = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      if (!isPausedRef.current) {
-        setActiveIdx((prev) => (prev >= maxIdx ? 0 : prev + 1));
-      }
-    }, 4000);
+  // Keep ref in sync with state
+  useEffect(() => { activeIdxRef.current = activeIdx; }, [activeIdx]);
+
+  const tick = useCallback(() => {
+    const now = Date.now();
+    if (!isPausedRef.current && now - lastTickRef.current >= 4000) {
+      lastTickRef.current = now;
+      setActiveIdx((prev) => (prev >= maxIdx ? 0 : prev + 1));
+    }
+    rafRef.current = requestAnimationFrame(tick);
   }, [maxIdx]);
 
   useEffect(() => {
-    startTimer();
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [startTimer]);
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [tick]);
+
+  const resetTimer = useCallback(() => {
+    lastTickRef.current = Date.now(); // restart the 4s countdown
+  }, []);
 
   const handlePrev = useCallback(() => {
     setActiveIdx((prev) => Math.max(0, prev - 1));
-    startTimer(); // reset interval on manual interaction
-  }, [startTimer]);
+    resetTimer();
+  }, [resetTimer]);
 
   const handleNext = useCallback(() => {
     setActiveIdx((prev) => Math.min(maxIdx, prev + 1));
-    startTimer(); // reset interval on manual interaction
-  }, [maxIdx, startTimer]);
+    resetTimer();
+  }, [maxIdx, resetTimer]);
 
   const handleMouseEnter = useCallback(() => { isPausedRef.current = true; }, []);
-  const handleMouseLeave = useCallback(() => { isPausedRef.current = false; }, []);
+  const handleMouseLeave = useCallback(() => {
+    isPausedRef.current = false;
+    resetTimer(); // give a fresh 4s after hover
+  }, [resetTimer]);
 
   return (
-    // Figma desktop section: height 688px, bg #F2F7F1 (bg-brand-bg), mobile padding py-10
     <section className="bg-brand-bg w-full py-10 xl:py-[100px]" id="news">
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
-        {/* Responsive Grid System */}
         <div className="flex flex-col xl:flex-row xl:gap-[64px]">
-          {/* Left Column — Sticky info on desktop, standard flow on mobile/tablet */}
           <div className="mb-8 flex w-full shrink-0 flex-col items-start justify-between gap-8 xl:mb-0 xl:h-[319px] xl:w-[429px]">
             <div className="flex w-full flex-col items-start gap-4">
-              {/* Badge — Figma: bg #F9FAFB, border #E4E7EC, radius 30px */}
-              <SectionBadge
-                variant="outline"
-                showDot
-                className="h-[30px] gap-[8px] px-4 text-[12px] leading-[18px] xl:h-[33px] xl:gap-[8px] xl:text-[14px] xl:leading-[21px]"
-              >
+              <SectionBadge variant="outline" showDot className="h-[30px] gap-[8px] px-4 text-[12px] leading-[18px] xl:h-[33px] xl:gap-[8px] xl:text-[14px] xl:leading-[21px]">
                 {newsData.badge}
               </SectionBadge>
-
-              {/* Title — Figma: "Insights from agricultural research & field experts" (48px / line-height 58px on desktop, 32px / 38px on mobile) */}
-              <h2
-                className="text-brand-dark max-w-[466px] text-[32px] leading-[38px] font-medium xl:text-[48px] xl:leading-[58px]"
-                style={{
-                  fontFamily: "var(--font-inter-tight)",
-                  fontWeight: 500,
-                }}
-              >
+              <h2 className="text-brand-dark max-w-[466px] text-[32px] leading-[38px] font-medium xl:text-[48px] xl:leading-[58px]" style={{ fontFamily: "var(--font-inter-tight)", fontWeight: 500 }}>
                 {newsData.title}
               </h2>
             </div>
 
-            {/* Navigation buttons — Figma: 2x 48x48 circles with 16px gap (hidden on mobile/tablet) */}
             <div className="hidden gap-4 xl:flex">
-              <button
-                onClick={handlePrev}
-                disabled={activeIdx === 0}
-                aria-label="Previous articles"
-                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${
-                  activeIdx === 0
-                    ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent"
-                    : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"
-                }`}
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M19 12H5M12 19l-7-7 7-7" />
-                </svg>
+              <button onClick={handlePrev} disabled={activeIdx === 0} aria-label="Previous articles"
+                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${activeIdx === 0 ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent" : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"}`}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
               </button>
-              <button
-                onClick={handleNext}
-                disabled={activeIdx === maxIdx}
-                aria-label="Next articles"
-                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${
-                  activeIdx === maxIdx
-                    ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent"
-                    : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"
-                }`}
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
+              <button onClick={handleNext} disabled={activeIdx === maxIdx} aria-label="Next articles"
+                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${activeIdx === maxIdx ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent" : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"}`}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
               </button>
             </div>
           </div>
 
-          {/* Right Column — Horizontal slider on desktop, native snap scroll on mobile/tablet */}
           <div className="relative h-auto w-full overflow-hidden xl:h-[488px] xl:w-[748px]">
-            {/* Side Fade Mask — Smoothly fades cards out on the right edge */}
-            <div className="from-brand-bg pointer-events-none absolute top-0  -right-1 z-20 h-full w-[70px] md:w-[120px] bg-gradient-to-l to-transparent xl:block" />
+            <div className="from-brand-bg pointer-events-none absolute top-0 -right-1 z-20 h-full w-[70px] md:w-[120px] bg-gradient-to-l to-transparent xl:block" />
 
-            {/* Desktop Sliding Container (>=1280px) */}
-            <div
-              className="hidden h-full w-full overflow-hidden xl:block"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
+            {/* Desktop slider */}
+            <div className="hidden h-full w-full overflow-hidden xl:block" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
               <div
-                className="flex gap-[25px] transition-transform duration-500 ease-out"
-                style={{
-                  transform: `translateX(-${activeIdx * CARD_SLOT_WIDTH}px)`,
-                }}
+                className="flex gap-[25px] transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+                style={{ transform: `translateX(-${activeIdx * CARD_SLOT_WIDTH}px)` }}
               >
                 {newsData.items.map((article) => (
                   <NewsCard key={article.id} article={article} />
@@ -202,7 +373,7 @@ export default function NewsSection() {
               </div>
             </div>
 
-            {/* Mobile/Tablet Native Swipe Container (<1280px) */}
+            {/* Mobile/Tablet swipe */}
             <div className="block w-full snap-x snap-mandatory scrollbar-none overflow-x-auto pb-4 xl:hidden">
               <div className="flex gap-4 pr-8">
                 {newsData.items.map((article) => (
