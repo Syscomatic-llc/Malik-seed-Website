@@ -1,5 +1,6 @@
 import Image from "next/image";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
+import ProductsSection from "@/components/sections/ProductsSection";
 
 export const metadata = {
   title: "Our Brands — Malik Seeds",
@@ -80,51 +81,8 @@ export default function BrandsPage() {
           </h2>
 
           {/* Brands Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
-            {BRANDS.map((brand, index) => (
-              <div
-                key={index}
-                className="relative overflow-hidden group h-[377px] w-full"
-              >
-                {/* Brand Background Image */}
-                <Image
-                  src={brand.image}
-                  alt={brand.name}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 480px"
-                />
+          <ProductsSection direction="vertical" />
 
-                {/* Vertical Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0D1A14]/95 via-[#0D1A14]/20 to-transparent" />
-
-                {/* Content Block */}
-                <div className="absolute bottom-8 left-8 flex flex-col gap-4">
-                  {/* Brand Logo/Icon */}
-                  <div className="relative h-12 w-12 shrink-0">
-                    <Image
-                      src={brand.logo}
-                      alt=""
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-
-                  {/* Brand Title */}
-                  <h3 className="font-heading text-2xl md:text-[32px] font-medium text-[#F2F7F1] leading-tight">
-                    {brand.name}
-                  </h3>
-
-                  {/* Description — revealed on hover */}
-                  <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[120px] group-hover:opacity-100">
-                    <p className="font-inter text-[18px] leading-[27px] text-[#F2F7F1]/90">
-                      {brand.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 

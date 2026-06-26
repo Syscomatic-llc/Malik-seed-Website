@@ -86,10 +86,6 @@ export default function ProductsSection({
       <div className="mx-auto max-w-[1440px]">
 
         {/* ===== Tablet / Desktop Grid (md and above) ===== */}
-        {/*
-          Figma desktop (1440px): 3 cols × 480px = fills full width, each row 377px tall.
-          Tablet bridge (md = 768px): 2-col grid, same card height and typography.
-        */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3">
           {productsData.items.map((product) => (
             <Link
@@ -152,7 +148,6 @@ export default function ProductsSection({
           )}
 
         </div>
-
       </div>
     </section>
   );
