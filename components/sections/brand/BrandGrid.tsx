@@ -35,6 +35,8 @@ export default function BrandGrid({
 
   const [activeIndex, setActiveIndex] = useState(LOOP_SET_START);
   const [isResetting, setIsResetting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const prev = useCallback(() => {
     if (isResetting || IMAGES_COUNT === 0) return;
@@ -66,10 +68,28 @@ export default function BrandGrid({
     return () => ro.disconnect();
   }, []);
 
+  // Auto-scroll: advance one card every 3 s, pause on user touch
+  useEffect(() => {
+    if (IMAGES_COUNT === 0) return;
+    if (isPaused) {
+      if (autoScrollRef.current) clearInterval(autoScrollRef.current);
+      return;
+    }
+    autoScrollRef.current = setInterval(() => {
+      if (!isResetting) {
+        setActiveIndex((prev) => prev + 1);
+      }
+    }, 3000);
+    return () => {
+      if (autoScrollRef.current) clearInterval(autoScrollRef.current);
+    };
+  }, [isPaused, isResetting, IMAGES_COUNT]);
+
   // Touch Swipe handlers
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
       if (isResetting) return;
+      setIsPaused(true);
       setTouchEnd(null);
       setTouchStart(e.targetTouches[0].clientX);
     },
@@ -94,6 +114,8 @@ export default function BrandGrid({
     } else if (isRightSwipe) {
       prev();
     }
+    // Resume auto-scroll after a short delay so the swipe animation settles
+    setTimeout(() => setIsPaused(false), 800);
   }, [touchStart, touchEnd, next, prev]);
 
   // Infinite wrap reset
