@@ -35,7 +35,7 @@ export function SectionBadge({
     <div
       className={cn(
         "inline-flex h-[33px] w-fit items-center justify-center gap-2 rounded-[30px] px-4",
-        "text-[14px] leading-[21px] font-medium",
+        "text-[12px] md:text-[14px] leading-[21px] font-medium",
         badgeVariants[variant],
         className
       )}

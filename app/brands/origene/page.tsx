@@ -1,19 +1,26 @@
-import { BRANDS_DATA } from "@/data/brands-data";
-import BrandDetailTemplate from "@/components/sections/brand/BrandDetailTemplate";
+import BrandHero from "@/components/sections/brand/BrandHero";
+import BrandIntro from "@/components/sections/brand/BrandIntro";
+import BrandGrid from "@/components/sections/brand/BrandGrid";
+import BrandSplit from "@/components/sections/brand/BrandSplit";
+import BrandProcess from "@/components/sections/brand/BrandProcess";
+import { origeneData } from "@/data/brands/origene";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
-
-const SLUG = "origene";
 
 export const metadata: Metadata = {
-  title: BRANDS_DATA[SLUG]?.meta.title || "Origene by Malik — Malik Seeds",
-  description: BRANDS_DATA[SLUG]?.meta.description,
+  title: origeneData.meta.title,
+  description: origeneData.meta.description,
 };
 
 export default function OrigenePage() {
-  const brand = BRANDS_DATA[SLUG];
-  if (!brand) {
-    notFound();
-  }
-  return <BrandDetailTemplate brand={brand} />;
+  return (
+    <div className="bg-[#F2F7F1] min-h-screen">
+      <BrandHero {...origeneData.hero} />
+      <BrandIntro {...origeneData.intro} />
+      <BrandGrid {...origeneData.grid} />
+      <BrandSplit {...origeneData.split1} />
+      <BrandProcess {...origeneData.process1} />
+      <BrandProcess {...origeneData.process2} />
+      <BrandSplit {...origeneData.split2} />
+    </div>
+  );
 }

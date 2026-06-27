@@ -32,19 +32,37 @@ export default function BrandYouTube({
           className="group relative block w-full rounded-[24px] overflow-hidden shadow-lg bg-neutral-900"
           aria-label="Watch on YouTube"
         >
-          {/* Grid of images */}
-          <div className={`grid grid-cols-1 ${gridCols}`}>
+          {/* Mobile View: Horizontal Scroll (below md) */}
+          <div className="flex md:hidden flex-row gap-4 overflow-x-auto scroll-smooth scrollbar-none snap-x snap-mandatory p-4">
             {images.map((img, i) => (
               <div
                 key={i}
-                className="relative h-[220px] sm:h-[300px] md:h-[380px] lg:h-[430px]"
+                className="relative w-[280px] h-[290px] shrink-0 snap-center rounded-[20px] overflow-hidden"
               >
                 <Image
                   src={img}
                   alt={`Video preview ${i + 1}`}
                   fill
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 413px"
+                  sizes="280px"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop/Tablet View: Grid (md and up) */}
+          <div className={`hidden md:grid ${gridCols}`}>
+            {images.map((img, i) => (
+              <div
+                key={i}
+                className="relative h-[300px] md:h-[380px] lg:h-[430px]"
+              >
+                <Image
+                  src={img}
+                  alt={`Video preview ${i + 1}`}
+                  fill
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  sizes="(max-width: 1024px) 50vw, 413px"
                 />
               </div>
             ))}

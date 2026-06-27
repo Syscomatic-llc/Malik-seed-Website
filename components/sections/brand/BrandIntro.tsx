@@ -2,9 +2,10 @@
 
 import { useInView } from "motion/react";
 import { useRef } from "react";
-import type { BrandIntroLayout } from "@/data/brands-data";
 
 /* ─── types ─────────────────────────────────────────────── */
+export type BrandIntroLayout = "text-only" | "text-tags" | "text-stats" | "text-tags-stats";
+
 interface StatItem {
   value: string;
   label: string;
@@ -100,7 +101,7 @@ function TagPill({ label }: { label: string }) {
         border border-white/[0.12]
         bg-[rgba(13,26,20,0.32)]
         font-[family-name:var(--font-inter-tight)]
-        text-[14px] leading-[21px] text-white text-center
+        text-[14px] leading-[21px] text-white/90 text-center
         whitespace-nowrap
       "
     >
@@ -257,6 +258,7 @@ function LayoutTextTags({
                 md:text-[16px] md:leading-[24px]
                 text-white/80 text-center
                 max-w-[636px] w-full
+                hidden md:block
               "
             >
               {description}

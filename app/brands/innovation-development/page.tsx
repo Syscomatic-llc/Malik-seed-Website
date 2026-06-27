@@ -1,19 +1,27 @@
-import { BRANDS_DATA } from "@/data/brands-data";
-import BrandDetailTemplate from "@/components/sections/brand/BrandDetailTemplate";
+import BrandHero from "@/components/sections/brand/BrandHero";
+import BrandIntro from "@/components/sections/brand/BrandIntro";
+import BrandSplit from "@/components/sections/brand/BrandSplit";
+import BrandGrid from "@/components/sections/brand/BrandGrid";
+import BrandCards from "@/components/sections/brand/BrandCards";
+import BrandProjectsTable from "@/components/sections/brand/BrandProjectsTable";
+import { innovationDevelopmentData } from "@/data/brands/innovation-development";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
-
-const SLUG = "innovation-development";
 
 export const metadata: Metadata = {
-  title: BRANDS_DATA[SLUG]?.meta.title || "Innovation & Development — Malik Seeds",
-  description: BRANDS_DATA[SLUG]?.meta.description,
+  title: innovationDevelopmentData.meta.title,
+  description: innovationDevelopmentData.meta.description,
 };
 
 export default function InnovationDevelopmentPage() {
-  const brand = BRANDS_DATA[SLUG];
-  if (!brand) {
-    notFound();
-  }
-  return <BrandDetailTemplate brand={brand} />;
+  return (
+    <div className="bg-[#F2F7F1] min-h-screen">
+      <BrandHero {...innovationDevelopmentData.hero} />
+      <BrandIntro {...innovationDevelopmentData.intro} />
+      <BrandSplit {...innovationDevelopmentData.split1} />
+      <BrandGrid {...innovationDevelopmentData.grid} />
+      <BrandCards {...innovationDevelopmentData.cards} />
+      <BrandProjectsTable />
+      <BrandSplit {...innovationDevelopmentData.split2} />
+    </div>
+  );
 }

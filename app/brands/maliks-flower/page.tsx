@@ -1,19 +1,26 @@
-import { BRANDS_DATA } from "@/data/brands-data";
-import BrandDetailTemplate from "@/components/sections/brand/BrandDetailTemplate";
+import BrandHero from "@/components/sections/brand/BrandHero";
+import BrandIntro from "@/components/sections/brand/BrandIntro";
+import BrandProcess from "@/components/sections/brand/BrandProcess";
+import BrandGrid from "@/components/sections/brand/BrandGrid";
+import BrandFlowerPortfolio from "@/components/sections/brand/BrandFlowerPortfolio";
+import BrandSplit from "@/components/sections/brand/BrandSplit";
+import { maliksFlowerData } from "@/data/brands/maliks-flower";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
-
-const SLUG = "maliks-flower";
 
 export const metadata: Metadata = {
-  title: BRANDS_DATA[SLUG]?.meta.title || "Malik's Flower — Malik Seeds",
-  description: BRANDS_DATA[SLUG]?.meta.description,
+  title: maliksFlowerData.meta.title,
+  description: maliksFlowerData.meta.description,
 };
 
 export default function MaliksFlowerPage() {
-  const brand = BRANDS_DATA[SLUG];
-  if (!brand) {
-    notFound();
-  }
-  return <BrandDetailTemplate brand={brand} />;
+  return (
+    <div className="bg-[#F2F7F1] min-h-screen">
+      <BrandHero {...maliksFlowerData.hero} />
+      <BrandIntro {...maliksFlowerData.intro} />
+      <BrandProcess {...maliksFlowerData.process} />
+      <BrandGrid {...maliksFlowerData.grid} />
+      <BrandFlowerPortfolio />
+      <BrandSplit {...maliksFlowerData.split} />
+    </div>
+  );
 }

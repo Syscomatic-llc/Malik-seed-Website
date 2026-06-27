@@ -1,19 +1,25 @@
-import { BRANDS_DATA } from "@/data/brands-data";
-import BrandDetailTemplate from "@/components/sections/brand/BrandDetailTemplate";
+import BrandHero from "@/components/sections/brand/BrandHero";
+import BrandIntro from "@/components/sections/brand/BrandIntro";
+import BrandSplit from "@/components/sections/brand/BrandSplit";
+import BrandProcess from "@/components/sections/brand/BrandProcess";
+import BrandTraining from "@/components/sections/brand/BrandTraining";
+import { maliksFarmData } from "@/data/brands/maliks-farm";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
-
-const SLUG = "maliks-farm";
 
 export const metadata: Metadata = {
-  title: BRANDS_DATA[SLUG]?.meta.title || "Malik's Farm — Malik Seeds",
-  description: BRANDS_DATA[SLUG]?.meta.description,
+  title: maliksFarmData.meta.title,
+  description: maliksFarmData.meta.description,
 };
 
 export default function MaliksFarmPage() {
-  const brand = BRANDS_DATA[SLUG];
-  if (!brand) {
-    notFound();
-  }
-  return <BrandDetailTemplate brand={brand} />;
+  return (
+    <div className="bg-[#F2F7F1] min-h-screen">
+      <BrandHero {...maliksFarmData.hero} />
+      <BrandIntro {...maliksFarmData.intro} />
+      <BrandSplit {...maliksFarmData.split1} />
+      <BrandProcess {...maliksFarmData.process} />
+      <BrandSplit {...maliksFarmData.split2} />
+      <BrandTraining />
+    </div>
+  );
 }

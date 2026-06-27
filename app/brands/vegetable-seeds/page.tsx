@@ -1,19 +1,26 @@
-import { BRANDS_DATA } from "@/data/brands-data";
-import BrandDetailTemplate from "@/components/sections/brand/BrandDetailTemplate";
+import BrandHero from "@/components/sections/brand/BrandHero";
+import BrandIntro from "@/components/sections/brand/BrandIntro";
+import BrandGrid from "@/components/sections/brand/BrandGrid";
+import BrandCards from "@/components/sections/brand/BrandCards";
+import BrandCropPortfolio from "@/components/sections/brand/BrandCropPortfolio";
+import BrandYouTube from "@/components/sections/brand/BrandYouTube";
+import { vegetableSeedsData } from "@/data/brands/vegetable-seeds";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
-
-const SLUG = "vegetable-seeds";
 
 export const metadata: Metadata = {
-  title: BRANDS_DATA[SLUG]?.meta.title || "Vegetable Seeds — Malik Seeds",
-  description: BRANDS_DATA[SLUG]?.meta.description,
+  title: vegetableSeedsData.meta.title,
+  description: vegetableSeedsData.meta.description,
 };
 
 export default function VegetableSeedsPage() {
-  const brand = BRANDS_DATA[SLUG];
-  if (!brand) {
-    notFound();
-  }
-  return <BrandDetailTemplate brand={brand} />;
+  return (
+    <div className="bg-[#F2F7F1] min-h-screen">
+      <BrandHero {...vegetableSeedsData.hero} />
+      <BrandIntro {...vegetableSeedsData.intro} />
+      <BrandGrid {...vegetableSeedsData.grid} />
+      <BrandCards {...vegetableSeedsData.cards} />
+      <BrandCropPortfolio />
+      <BrandYouTube {...vegetableSeedsData.youtube} />
+    </div>
+  );
 }
