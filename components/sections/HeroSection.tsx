@@ -239,13 +239,13 @@ const HeroContentMobile = memo(function HeroContentMobile() {
  * Desktop: Figma Frame 6 — 204×48 at left:618, top:815
  * Mobile:  Figma Frame 6 — 172×43 at left:109, top:613
  */
-const ScrollIndicator = memo(function ScrollIndicator() {
+export const ScrollIndicator = memo(function ScrollIndicator() {
   return (
     <>
       {/* Desktop */}
       <div
         aria-label={heroData.scrollText}
-        className="absolute right-0 bottom-[85px] left-0 z-30 mx-auto hidden w-fit items-center gap-[10px] md:flex"
+        className="absolute right-0 bottom-[85px] left-0 z-30 px-[24px] py-[13px] mx-auto hidden w-fit items-center gap-[10px] md:flex"
       >
         <span
           className="text-brand-bg text-[18px] leading-[22px] font-medium"
