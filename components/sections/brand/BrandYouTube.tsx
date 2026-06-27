@@ -78,6 +78,7 @@ export default function BrandYouTube({
             variant="dark"
             className="h-[48px] gap-3 px-[23px] text-lg"
             showArrow={true}
+            showYoutubeIcon
             iconSize={20}
             target="_blank"
             rel="noopener noreferrer"

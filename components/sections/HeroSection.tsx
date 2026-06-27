@@ -260,7 +260,7 @@ export const ScrollIndicator = memo(function ScrollIndicator() {
       <Link
         href="#about"
         aria-label={heroData.scrollText}
-        className="absolute right-0 bottom-[67px] left-0 z-30 mx-auto flex w-fit cursor-pointer items-center gap-[10px] md:hidden"
+        className="absolute right-0 bottom-[67px] left-0 px-[24px] py-[13px] z-30 mx-auto flex w-fit cursor-pointer items-center gap-[10px] md:hidden"
       >
         <span
           className="text-brand-bg text-[14px] leading-[17px] font-medium"
