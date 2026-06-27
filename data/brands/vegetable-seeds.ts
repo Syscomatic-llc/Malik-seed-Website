@@ -43,7 +43,8 @@ export const vegetableSeedsData = {
     ],
   },
   youtube: {
-    title: "OUR HERITAGE: Over half a century in the field",
+    badge:"Our Heritage",
+    title: "Over half a century in the field",
     youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     images: [
       "/images/brand/field_activities_9_1.png",

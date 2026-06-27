@@ -13,6 +13,8 @@ interface ActionButtonProps {
   onClick?: () => void;
   showArrow?: boolean;
   iconSize?: number;
+  target?: string;
+  rel?: string;
 }
 
 const variantStyles: Record<ActionButtonVariant, string> = {
@@ -35,11 +37,15 @@ export default function ActionButton({
   onClick,
   showArrow = true,
   iconSize = 20,
+  target,
+  rel
 }: ActionButtonProps) {
   return (
     <Link
       href={href}
       onClick={onClick}
+      target={target}
+      rel={rel}
       className={cn("inline-flex w-fit focus:outline-none", containerClassName)}
     >
       <span

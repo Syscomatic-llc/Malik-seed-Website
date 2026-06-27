@@ -8,45 +8,6 @@ export const metadata = {
     "We are committed to delivering high-performance hybrid seed varieties. Discover our six major brands and their missions.",
 };
 
-const BRANDS = [
-  {
-    name: "Vegetable Seeds",
-    description: "Premium hybrid vegetable seed varieties engineered for high yield, disease resistance, and consistent quality across diverse climates.",
-    image: "/images/brand/11_1.png",
-    logo: "/images/brand/brand_logo_1.svg",
-  },
-  {
-    name: "Potato Seeds",
-    description: "Certified potato seed varieties selected for superior tuber quality, adaptability, and outstanding field performance.",
-    image: "/images/brand/dscf7423.png",
-    logo: "/images/brand/brand_logo_2.svg",
-  },
-  {
-    name: "Malik's Farm",
-    description: "A showcase of sustainable farming practices that demonstrate the real-world performance of our seed varieties at scale.",
-    image: "/images/brand/malik_farm_rd.png",
-    logo: "/images/brand/brand_logo_3.svg",
-  },
-  {
-    name: "Origene by Malik",
-    description: "Specialty crop genetics focused on rare and high-value varieties, bringing innovation from field research to market.",
-    image: "/images/brand/planted_10_2.png",
-    logo: "/images/brand/brand_logo_4.svg",
-  },
-  {
-    name: "Malik's Flower",
-    description: "A curated collection of ornamental flower seeds crafted for vibrant colour, longevity, and market-ready appeal.",
-    image: "/images/brand/image_43.png",
-    logo: "/images/brand/brand_logo_5.svg",
-  },
-  {
-    name: "Innovation & Development",
-    description: "Our R&D powerhouse driving next-generation seed technology through cutting-edge breeding programs and agronomic trials.",
-    image: "/images/brand/dscf8693_1.png",
-    logo: "/images/brand/brand_logo_6.svg",
-  },
-];
-
 export default function BrandsPage() {
   return (
     <div className="bg-[#F2F7F1] min-h-screen">

@@ -1,69 +1,62 @@
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { Card } from "@/components/ui/card";
 
 const CROPS = [
-  "Cauliflower",
-  "Cabbage",
-  "Kohlrabi",
-  "Broccoli",
-  "Beet Root",
-  "Tomato",
-  "Chilli",
-  "Brinjal",
-  "Cucumber",
-  "Gourds",
-  "Pumpkin",
-  "Radish",
-  "Carrot",
-  "Okra",
-  "Yard Long Bean",
-  "Capsicum",
-  "Papaya",
-  "Watermelon",
-  "and more...",
+  ["Cauliflower", "Cabbage", "Kohlrabi"],
+  ["Broccoli", "Beet Root", "Tomato", "Chilli", "Brinjal", "Cucumber"],
+  ["Gourds", "Pumpkin", "Radish", "Carrot", "Okra", "Yard Long Bean"],
+  ["Capsicum", "Papaya", "Watermelon", "and more..."],
 ];
+
+function CropPill({ label }: { label: string }) {
+  return (
+    <Card className="w-fit shrink-0 flex items-center justify-center h-[37px] px-[18px] rounded-[30px] border border-white/[0.16] bg-transparent hover:border-[#A9E179]/60 hover:scale-105 hover:bg-white/[0.04] transition-all duration-300 cursor-default">
+      <span className="font-sans font-medium text-[14px] leading-[21px] text-[#A9E179] whitespace-nowrap">
+        {label}
+      </span>
+    </Card>
+  );
+}
 
 export default function BrandCropPortfolio() {
   return (
-    <section className="w-full bg-[#F2F7F1] py-16 md:py-24 px-4 md:px-8 lg:px-[100px]">
-      <div className="max-w-[1240px] mx-auto flex flex-col gap-10 md:gap-14">
-        
+    <section className="w-full bg-[#F2F7F1] pt-10 pb-10 md:pt-[60px] md:pb-[60px] px-4 md:px-8 lg:px-[100px]">
+      <div className="max-w-[1240px] mx-auto flex flex-col items-center gap-8 md:gap-12">
+
         {/* Header */}
-        <div className="flex flex-col gap-4 max-w-[800px]">
-          <SectionBadge>Seed Portfolio</SectionBadge>
-          <h2 className="font-sans text-[28px] md:text-[40px] font-medium leading-[34px] md:leading-[48px] text-[#0D1A14]">
-            Bangladesh’s Trusted Vegetable Seed Portfolio
-          </h2>
-          <p className="font-sans text-[15px] md:text-[17px] leading-[24px] text-[#0D1A14]/65">
-            A carefully curated range of high-value vegetable crops selected for what performs in Bangladesh's fields.
-          </p>
+        <div className="flex flex-col gap-8 items-center text-center max-w-[800px]">
+          <SectionBadge showDot variant="outline">Seed Portfolio</SectionBadge>
+          <div className="flex flex-col gap-4 items-center">
+            <h2 className="font-sans text-[32px] md:text-[48px] font-medium leading-[38px] md:leading-[58px] text-[#0D1A14]">
+              Bangladesh’s Trusted Vegetable Seed Portfolio
+            </h2>
+            <p className="font-sans text-[15px] md:text-[16px] leading-[24px] text-[#0D1A14]/75 max-w-[520px] mx-auto">
+              A carefully curated range of high-value vegetable crops selected for what performs in Bangladesh's fields.
+            </p>
+          </div>
         </div>
 
-        {/* Crops Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {CROPS.map((crop, index) => {
-            const isMore = crop === "and more...";
-            return (
+        {/* Crops Container */}
+        <div className="flex flex-col items-center gap-y-4 max-w-[1030px] w-full bg-[#0D1A14] rounded-[24px] md:rounded-[32px] py-8 px-6 md:py-16 md:px-[56px]">
+          {CROPS.map((row, rowIndex) => (
               <div
-                key={index}
-                className={`flex items-center gap-3 px-5 py-4 rounded-[20px] border transition-all duration-300 ${
-                  isMore
-                    ? "bg-[#195236] border-[#195236] text-white hover:bg-[#153e28]"
-                    : "bg-white border-[#0D1A14]/8 text-[#0D1A14] hover:border-[#195236]/30 hover:shadow-md hover:-translate-y-0.5"
-                }`}
+                key={rowIndex}
+                className="flex flex-wrap hidden md:flex justify-center  items-center gap-x-3 gap-y-4"
               >
-                {!isMore && (
-                  <span className="h-2 w-2 rounded-full bg-[#195236] shrink-0" />
-                )}
-                <span
-                  className={`font-sans font-semibold text-[15px] leading-tight ${
-                    isMore ? "text-white" : "text-[#0D1A14]"
-                  }`}
-                >
-                  {crop}
-                </span>
-              </div>
-            );
-          })}
+                {row.map((crop, idx) => (
+                  <CropPill key={`${rowIndex}-${crop}`} label={crop} />
+                ))}
+              </div>      
+          ))}
+
+          <div
+            key={"mobile"}
+            className="md:hidden flex flex-wrap justify-start  items-center gap-x-3 gap-y-4"
+          >
+            {CROPS.flat().map((crop) => (
+              <CropPill key={`mobile-${crop}`} label={crop} />
+            ))}
+          </div>
         </div>
 
       </div>
