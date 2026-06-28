@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter_Tight, Inter, Anton } from "next/font/google";
+import { Inter_Tight, Inter, Anton, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
@@ -20,6 +20,13 @@ const anton = Anton({
   subsets: ["latin"],
   variable: "--font-anton",
   weight: ["400"],
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 export const viewport: Viewport = {
@@ -64,7 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${interTight.variable} ${inter.variable} ${anton.variable} h-full antialiased`}
+      className={`${interTight.variable} ${inter.variable} ${anton.variable} ${playfair.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
