@@ -31,18 +31,17 @@ export default function BrandSplit({
 
   return (
     <section
-      className={`w-full py-16 md:py-24 px-4 md:px-8 lg:px-[100px] ${
+      className={`w-full py-12 lg:py-[100px] px-4 md:px-8 lg:px-[100px] ${
         isDark ? "bg-[#0D1A14]" : "bg-[#F2F7F1]"
       }`}
     >
-      <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+      <div className="max-w-[1240px] mx-auto flex flex-col lg:flex-row lg:justify-between items-center gap-10 lg:gap-[129px]">
         {/* Left: Text */}
-        <div className="lg:col-span-6 flex flex-col gap-6">
+        <div className="w-full lg:max-w-[608px] shrink-0 flex flex-col gap-6">
           <div className="flex flex-col gap-4">
-            <SectionBadge variant={isDark ? "dark" : "green"}>{badge}</SectionBadge>
             <h2
-              className={`font-sans text-[28px] md:text-[40px] font-medium leading-[34px] md:leading-[48px] ${
-                isDark ? "text-white" : "text-[#0D1A14]"
+              className={`font-sans text-[32px] md:text-[48px] font-medium leading-[38px] md:leading-[58px] whitespace-pre-line ${
+                isDark ? "text-[#A9E179]" : "text-[#0D1A14]"
               }`}
             >
               {title}
@@ -50,8 +49,8 @@ export default function BrandSplit({
           </div>
 
           <div
-            className={`font-sans text-[15px] md:text-[16px] leading-[26px] flex flex-col gap-4 ${
-              isDark ? "text-white/70" : "text-[#0D1A14]/65"
+            className={`font-sans text-[16px] leading-[24px] flex flex-col gap-4 ${
+              isDark ? "text-[#F2F7F1]" : "text-[#0D1A14]/70"
             }`}
           >
             {description.split("\n\n").map((para, i) => (
@@ -112,21 +111,19 @@ export default function BrandSplit({
         </div>
 
         {/* Right: Image */}
-        <div className="lg:col-span-6">
-          <div className="group relative w-full aspect-[4/3] md:aspect-[608/460] overflow-hidden rounded-[24px] bg-neutral-200">
-            <Image
-              src={image}
-              alt={title}
-              fill
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              sizes="(max-width: 1024px) 100vw, 608px"
-            />
-          </div>
+        <div className="w-full lg:max-w-[503px] aspect-[358/300] lg:aspect-[503/530] relative overflow-hidden rounded-[20px] lg:rounded-[24px] bg-neutral-200 shrink-0">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-700 ease-out hover:scale-105"
+            sizes="(max-width: 1024px) 100vw, 503px"
+          />
         </div>
 
         {/* Bottom Callout Highlight */}
         {bottomHighlight && (
-          <div className="lg:col-span-12 text-center mt-6 md:mt-10">
+          <div className="w-full text-center mt-6 md:mt-10">
             <p className="font-sans text-[28px] md:text-[40px] lg:text-[48px] font-medium leading-[36px] md:leading-[50px] lg:leading-[58px] text-[#A9E179] max-w-[900px] mx-auto">
               {bottomHighlight}
             </p>

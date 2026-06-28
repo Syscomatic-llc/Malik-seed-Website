@@ -10,7 +10,7 @@ const CROPS = [
 
 function CropPill({ label }: { label: string }) {
   return (
-    <Card className="w-fit shrink-0 flex items-center justify-center h-[37px] px-[18px] rounded-[30px] border border-white/[0.16] bg-transparent hover:border-[#A9E179]/60 hover:scale-105 hover:bg-white/[0.04] transition-all duration-300 cursor-default">
+    <Card className="w-fit shrink-0 flex items-center justify-center h-[37px] px-[18px] rounded-[30px] border border-[#E4E7EC]/16 bg-transparent hover:border-[#A9E179]/60 hover:scale-105 hover:bg-white/[0.04] transition-all duration-300 cursor-default">
       <span className="font-sans font-medium text-[14px] leading-[21px] text-[#A9E179] whitespace-nowrap">
         {label}
       </span>
@@ -51,7 +51,7 @@ export default function BrandCropPortfolio() {
 
           <div
             key={"mobile"}
-            className="md:hidden flex flex-wrap justify-start  items-center gap-x-3 gap-y-4"
+            className="md:hidden flex flex-wrap justify-center items-center gap-x-2 gap-y-4 max-w-[310px] mx-auto"
           >
             {CROPS.flat().map((crop) => (
               <CropPill key={`mobile-${crop}`} label={crop} />

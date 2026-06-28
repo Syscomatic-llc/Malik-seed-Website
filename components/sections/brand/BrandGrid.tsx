@@ -149,14 +149,24 @@ export default function BrandGrid({
     <section className="w-full bg-[#F2F7F1] py-[40px] px-[16px] md:py-[60px] md:px-[48px] lg:p-[100px] overflow-hidden">
       <div className="max-w-[1240px] mx-auto flex flex-col gap-[32px] md:gap-[48px]">
         {/* Header */}
-        <div className="flex flex-col text-center gap-[24px] md:gap-[32px] items-center mx-auto max-w-[700px]">
+        <div className="flex flex-col text-center gap-6 md:gap-8 items-center mx-auto max-w-[958px]">
           <SectionBadge showDot={true} className="bg-white">{badge}</SectionBadge>
-          <div>
-            <h2 className="font-sans text-[32px] md:text-[40px] font-medium leading-[120%] md:leading-[48px] text-[#0D1A14]">
-              {title}
+          <div className="flex flex-col items-center gap-4">
+            <h2 className="font-sans text-[32px] md:text-[48px] font-medium leading-[38px] md:leading-[58px] text-[#0D1A14] max-w-[958px] mx-auto">
+              {title.split("\n").map((part, i, arr) => (
+                <span key={i}>
+                  {part}
+                  {i < arr.length - 1 && <br className="md:hidden" />}
+                </span>
+              ))}
             </h2>
-            <p className="font-sans text-[15px] md:text-[17px] leading-[24px] text-[#0D1A14]/65">
-              {description}
+            <p className="font-sans text-[15px] md:text-[16px] leading-[24px] text-[#0D1A14]/65 max-w-[866px] mx-auto">
+              {description.split("\n").map((part, i, arr) => (
+                <span key={i}>
+                  {part}
+                  {i < arr.length - 1 && <br className="md:hidden" />}
+                </span>
+              ))}
             </p>
           </div>
         </div>
@@ -221,7 +231,7 @@ export default function BrandGrid({
           {images.map((image, idx) => (
             <div
               key={idx}
-              className="group relative overflow-hidden rounded-[20px] bg-neutral-200 aspect-[4/3]"
+              className="group relative overflow-hidden rounded-[24px] bg-neutral-200 aspect-[397/377]"
             >
               <Image
                 src={image}

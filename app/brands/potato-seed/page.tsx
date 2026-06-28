@@ -19,7 +19,7 @@ export default function PotatoSeedPage() {
       <BrandIntro {...potatoSeedData.intro} />
       <BrandGrid {...potatoSeedData.grid} />
       <BrandSplit {...potatoSeedData.split} />
-      <BrandCards {...potatoSeedData.cards} />
+      <BrandCards {...potatoSeedData.cards} showIndex={false} />
       <BrandYouTube {...potatoSeedData.youtube} />
     </div>
   );

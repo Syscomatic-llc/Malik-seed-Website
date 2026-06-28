@@ -6,17 +6,19 @@ export const vegetableSeedsData = {
   hero: {
     title: "vegetable\nseeds",
     bgImage: "/images/brand/image_27.png",
+    highlightColor: "none",
   },
   intro: {
     layout: "text-tags" as const,
     title: ["Bangladesh's farmers.\n", "Seeds built for"],
     description: "For over half a century, we've worked alongside farmers to bring better seeds to Bangladesh's fields—higher yields, stronger resistance, and varieties proven in local conditions.",
     highlights: ["Climate Resilient", "Disease Resistant", "High Yielding"],
+    titleClassName: "text-[#A9E179] md:text-[#F2F7F1]",
   },
   grid: {
     badge: "WITH OUR FARMERS",
-    title: "Built for the farmers who grow them.",
-    description: "Every variety we release is tested, proven, and trusted by the farmers who plant it.",
+    title: "Built for the farmers \nwho grow them",
+    description: "Every variety we release is tested, proven, \nand trusted by the farmers who plant it.",
     images: [
       "/images/brand/06_2.png",
       "/images/brand/frame45.png",
@@ -44,7 +46,7 @@ export const vegetableSeedsData = {
   },
   youtube: {
     badge:"Our Heritage",
-    title: "Over half a century in the field",
+    title: "Over half a century in \nthe field",
     youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     images: [
       "/images/brand/field_activities_9_1.png",

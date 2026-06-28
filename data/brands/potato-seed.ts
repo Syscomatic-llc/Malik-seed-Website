@@ -54,7 +54,8 @@ export const potatoSeedData = {
     images: [
       "/images/brand/dscf7469_1.png",
       "/images/brand/dscf7450_1.png",
-      "/images/brand/agrico_potato_1.png",
     ],
+    brandLogo: "/images/brand/agrico_potato_1.png",
+    brandLogoAlt: "Say potato, say Agrico.",
   },
 };
