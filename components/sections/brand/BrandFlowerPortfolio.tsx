@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import {SectionBadge} from "@/components/ui/SectionBadge";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
 
 interface FlowerSegment {
@@ -63,29 +63,29 @@ export default function BrandFlowerPortfolio() {
   const currentSegment = SEGMENTS.find((s) => s.id === activeTab) || SEGMENTS[0];
 
   return (
-    <section className="w-full bg-[#0D1A14] text-white py-16 md:py-24 px-4 md:px-8">
-      <div className="max-w-[1240px] mx-auto flex flex-col gap-10 md:gap-14">
-        
+    <section className="w-full bg-[#0D1A14] text-white py-12 md:py-[80px] lg:py-[100px] px-4 md:px-8 lg:px-[100px]">
+      <div className="max-w-[1240px] mx-auto flex flex-col gap-8 md:gap-12">
+
         {/* Header */}
         <div className="flex flex-col gap-4 text-center max-w-[700px] mx-auto">
-          <SectionBadge className="mx-auto">OUR FLOWER PORTFOLIO</SectionBadge>
-          <h2 className="font-sans text-[28px] md:text-[40px] font-medium leading-[34px] md:leading-[48px] text-white">
+          <SectionBadge className="mx-auto" showDot variant="dark">OUR FLOWER PORTFOLIO</SectionBadge>
+          <h2 className="font-sans text-[28px] md:text-[40px] font-medium leading-[34px] md:leading-[48px] text-[#F2F7F1]">
             Varieties across three segments
           </h2>
         </div>
 
         {/* Tabs Control - Pill Slider */}
         <div className="flex justify-center">
-          <div className="flex p-1.5 rounded-full bg-white/5 border border-white/10 max-w-full overflow-x-auto scrollbar-none">
+          <div className="flex p-[8px] rounded-[16px] bg-[#112019] max-w-full overflow-x-auto scrollbar-none gap-[8px]">
             {SEGMENTS.map((seg) => (
               <button
                 key={seg.id}
                 onClick={() => setActiveTab(seg.id)}
                 className={cn(
-                  "px-5 py-2.5 rounded-full font-sans font-semibold text-[14px] md:text-[16px] transition-all duration-300 whitespace-nowrap cursor-pointer",
+                  "h-[39px] md:h-[48px] px-4 py-[9px] md:py-3 md:px-4 rounded-[10px] font-sans font-medium text-[14px] md:text-[16px] leading-[21px] md:leading-[24px] transition-all duration-300 whitespace-nowrap cursor-pointer",
                   activeTab === seg.id
-                    ? "bg-[#A9E179] text-[#0D1A14] shadow-md"
-                    : "text-white/60 hover:text-white"
+                    ? "bg-[#A9E179] text-[#0D1A14]"
+                    : "bg-[#0D291C] text-[#F2F7F1] hover:bg-[#0f3424]"
                 )}
               >
                 {seg.name}
@@ -95,46 +95,16 @@ export default function BrandFlowerPortfolio() {
         </div>
 
         {/* Tab Content Display */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center mt-4">
-          
-          {/* Left Column: Segment Details */}
-          <div className="lg:col-span-6 flex flex-col gap-6 order-2 lg:order-1">
-            <div className="flex flex-col gap-3">
-              <h3 className="font-sans text-[24px] md:text-[32px] font-semibold text-white">
-                {currentSegment.name} Varieties
-              </h3>
-              <p className="font-inter text-[15px] md:text-[16px] leading-[24px] text-white/70">
-                {currentSegment.description}
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <h4 className="font-sans text-[13px] md:text-[14px] font-bold uppercase tracking-wider text-[#A9E179]">
-                Featured Varieties
-              </h4>
-              <ul className="flex flex-col gap-2.5">
-                {currentSegment.varieties.map((variety, i) => (
-                  <li key={i} className="flex gap-3 items-center">
-                    <div className="h-1.5 w-1.5 rounded-full bg-[#A9E179] shrink-0" />
-                    <span className="font-inter text-[14px] md:text-[15px] text-white/90">
-                      {variety}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Right Column: High Fidelity Image */}
-          <div className="lg:col-span-6 order-1 lg:order-2">
-            <div className="relative aspect-square sm:aspect-video lg:aspect-[608/500] w-full overflow-hidden rounded-[24px] border border-white/10 bg-neutral-900">
+        <div className="flex justify-center items-center mt-4">
+          <div className="w-full lg:w-[790px] shrink-0 ">
+            <div className="relative w-full h-[360px] lg:h-[475px] overflow-hidden rounded-[20px] lg:rounded-[24px] border border-white/10 bg-neutral-900">
               <Image
                 src={currentSegment.image}
                 alt={currentSegment.name}
                 fill
                 priority
                 className="object-cover transition-all duration-700 ease-out"
-                sizes="(max-width: 768px) 100vw, 608px"
+                sizes="(max-width: 1024px) 100vw, 790px"
               />
             </div>
           </div>

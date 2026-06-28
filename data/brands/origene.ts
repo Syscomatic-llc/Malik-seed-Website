@@ -24,7 +24,7 @@ export const origeneData = {
   },
   split1: {
     badge: "THE PROBLEM WE'RE SOLVING",
-    title: "Bangladesh has food safety laws. It doesn't have food safety in practice.",
+    title: ["Bangladesh has food safety laws.\n", "It doesn't have food safety in practice."],
     description: "Bangladesh has food safety laws. The Bangladesh Food Safety Authority has the mandate. But enforcement is limited, the supply chain lacks transparency, and the gap between what the law requires and what actually reaches your table is vast.\n\nPlanted by Malik exists to close that gap. Not with promises. With certification, lab testing, and a supply chain that has nothing to hide.",
     statCard: {
       value: "30 - 50%",
@@ -36,7 +36,7 @@ export const origeneData = {
   process1: {
     badge: "HOW WE'RE SOLVING IT",
     title: "A completely transparent supply chain missing in the market until now",
-    description: "Planted by Malik establishes traceability from certified farms to the final consumer pack, ensuring laboratory validation and complete cold chain security.",
+    description: "Bangladesh has food safety laws. The Bangladesh Food Safety Authority has the mandate. But enforcement is limited, the supply chain lacks transparency, and the gap between what the law requires and what actually reaches your table is vast.",
     steps: [
       {
         number: "1",

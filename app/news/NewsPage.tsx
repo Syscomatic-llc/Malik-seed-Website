@@ -135,7 +135,7 @@ export default function NewsPage() {
 
       {/* ── Hero / Header Section ── */}
       <section className="w-full px-4 pt-[100px] pb-10 md:px-[50px] md:pt-[180px] md:pb-[100px]">
-        <div className="mx-auto max-w-[1240px]">
+        <div className="mx-auto  ">
 
           {/* Header Block */}
           <div className="flex flex-col gap-6 md:gap-8">

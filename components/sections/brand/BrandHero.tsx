@@ -10,9 +10,6 @@ interface BrandHeroProps {
 const BrandHeroOverlays = memo(function HeroOverlays() {
   return (
     <>
-      {/* --- Desktop overlays --- */}
-
-      {/* Rectangle 1: blur overlay at very bottom */}
       <div
         aria-hidden="true"
         className="absolute right-0 bottom-0 left-0 z-20 w-full"
@@ -50,7 +47,7 @@ export default function BrandHero({ title, bgImage }: BrandHeroProps) {
 
       {/* Hero Content */}
       <div className="relative top-[22%] z-30 w-full px-4 md:px-8 lg:px-[100px] pb-10 md:pb-16 lg:pb-[88px]">
-        <div className="max-w-[1240px] mx-auto flex flex-col items-center md:items-start gap-6 md:gap-10 lg:gap-14">
+        <div className="mx-auto flex flex-col items-center md:items-start gap-6 md:gap-10 lg:gap-14">
           <h1 className="font-sans text-[48px] md:text-[72px] lg:text-[96px] font-bold text-center md:text-left leading-[48px] md:leading-[72px] lg:leading-[96px] text-white tracking-tight uppercase">
             {lines.map((line, i) => (
               <span key={i}

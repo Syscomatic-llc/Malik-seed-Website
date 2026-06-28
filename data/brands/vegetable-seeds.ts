@@ -6,14 +6,12 @@ export const vegetableSeedsData = {
   hero: {
     title: "vegetable\nseeds",
     bgImage: "/images/brand/image_27.png",
-    highlightColor: "none",
   },
   intro: {
     layout: "text-tags" as const,
     title: ["Bangladesh's farmers.\n", "Seeds built for"],
     description: "For over half a century, we've worked alongside farmers to bring better seeds to Bangladesh's fields—higher yields, stronger resistance, and varieties proven in local conditions.",
     highlights: ["Climate Resilient", "Disease Resistant", "High Yielding"],
-    titleClassName: "text-[#A9E179] md:text-[#F2F7F1]",
   },
   grid: {
     badge: "WITH OUR FARMERS",

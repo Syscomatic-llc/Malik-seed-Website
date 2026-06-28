@@ -29,7 +29,7 @@ export default function BrandCards({
 
   return (
     <section className="w-full bg-[#F2F7F1] py-10 lg:py-[100px] px-4 md:px-8 lg:px-[100px]">
-      <div className="max-w-[1240px] mx-auto flex flex-col items-center gap-10 lg:gap-[48px]">
+      <div className="  mx-auto flex flex-col items-center gap-10 lg:gap-[48px]">
         {/* Header */}
         <div className="flex flex-col gap-6 md:gap-8 items-center text-center max-w-[800px] mx-auto">
           <SectionBadge showDot variant="outline">{badge}</SectionBadge>

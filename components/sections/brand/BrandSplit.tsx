@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { cn } from "@/lib/utils";
 
 interface StatCard {
   value: string;
@@ -13,8 +14,9 @@ interface BrandSplitProps {
   bullets?: string[];
   statCard?: StatCard;
   bottomHighlight?: string;
-  image: string;
+  image?: string;
   bgTheme?: "dark" | "light";
+  layout?: "split" | "centered";
 }
 
 export default function BrandSplit({
@@ -26,32 +28,114 @@ export default function BrandSplit({
   bottomHighlight,
   image,
   bgTheme = "light",
+  layout = "split",
 }: BrandSplitProps) {
   const isDark = bgTheme === "dark";
 
+  if (layout === "centered") {
+    return (
+      <section
+        className={cn(
+          "w-full py-12 md:py-[100px] px-4 md:px-8 lg:px-[100px]",
+          isDark ? "bg-[#0D1A14]" : "bg-[#F2F7F1]"
+        )}
+      >
+        <div className="max-w-[1240px] mx-auto flex flex-col items-center gap-8 md:gap-[64px]">
+          {/* Top: Center Text Container */}
+          <div className="flex flex-col items-center text-center gap-6 md:gap-8 max-w-[792px] w-full">
+            {badge && (
+              <SectionBadge variant={isDark ? "dark" : "outline"} showDot>
+                {badge}
+              </SectionBadge>
+            )}
+            <div className="flex flex-col gap-4">
+              <h2
+                className={cn(
+                  "font-sans text-[32px] md:text-[48px] font-medium leading-[120%] md:leading-[58px] text-center",
+                  isDark ? "text-[#F2F7F1]" : "text-[#0D1A14]"
+                )}
+              >
+                {title.split("\n").map((part, i, arr) => (
+                  <span key={i}>
+                    {part}
+                    {i < arr.length - 1 && <br className="md:hidden" />}
+                  </span>
+                ))}
+              </h2>
+              <p
+                className={cn(
+                  "font-sans text-[16px] leading-[24px] text-center",
+                  isDark ? "text-[#F2F7F1]/80" : "text-[#0D1A14]/70"
+                )}
+              >
+                {description}
+              </p>
+            </div>
+          </div>
+
+          {/* Bottom: Full Width Image */}
+          {image && (
+            <div className="w-full h-[220px] md:h-[640px] relative overflow-hidden rounded-[20px] md:rounded-[24px] bg-neutral-200">
+              <Image
+                src={image}
+                alt={title}
+                fill
+                priority
+                className="object-cover transition-transform duration-700 ease-out hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 1240px"
+              />
+            </div>
+          )}
+
+          {/* Bottom Callout Highlight */}
+          {bottomHighlight && (
+            <div className="w-full text-center mt-6 md:mt-10">
+              <p className="font-sans text-[28px] md:text-[40px] lg:text-[48px] font-medium leading-[36px] md:leading-[50px] lg:leading-[58px] text-[#A9E179] max-w-[900px] mx-auto">
+                {bottomHighlight}
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
-      className={`w-full py-12 lg:py-[100px] px-4 md:px-8 lg:px-[100px] ${
+      className={cn(
+        "w-full py-12 md:py-16 lg:py-[100px] px-4 md:px-8 lg:px-[100px]",
         isDark ? "bg-[#0D1A14]" : "bg-[#F2F7F1]"
-      }`}
+      )}
     >
-      <div className="max-w-[1240px] mx-auto flex flex-col lg:flex-row lg:justify-between items-center gap-10 lg:gap-[129px]">
+      <div className="max-w-[1240px] mx-auto flex flex-col lg:flex-row lg:justify-between items-center gap-8 lg:gap-[129px]">
         {/* Left: Text */}
-        <div className="w-full lg:max-w-[608px] shrink-0 flex flex-col gap-6">
+        <div className="w-full lg:max-w-[608px] shrink-0 flex flex-col items-center lg:items-start gap-6">
+          {badge && (
+            <SectionBadge variant={isDark ? "dark" : "outline"} showDot className="mb-2">
+              {badge}
+            </SectionBadge>
+          )}
           <div className="flex flex-col gap-4">
             <h2
-              className={`font-sans text-[32px] md:text-[48px] font-medium leading-[38px] md:leading-[58px] whitespace-pre-line ${
+              className={cn(
+                "font-sans text-[32px] md:text-[48px] font-medium leading-[38px] md:leading-[58px] text-center lg:text-left",
                 isDark ? "text-[#A9E179]" : "text-[#0D1A14]"
-              }`}
+              )}
             >
-              {title}
+              {title.split("\n").map((part, i, arr) => (
+                <span key={i}>
+                  {part}
+                  {i < arr.length - 1 && <br className="md:hidden" />}
+                </span>
+              ))}
             </h2>
           </div>
 
           <div
-            className={`font-sans text-[16px] leading-[24px] flex flex-col gap-4 ${
+            className={cn(
+              "font-sans text-[16px] leading-[24px] flex flex-col gap-4 text-center lg:text-left",
               isDark ? "text-[#F2F7F1]" : "text-[#0D1A14]/70"
-            }`}
+            )}
           >
             {description.split("\n\n").map((para, i) => (
               <p key={i}>{para}</p>
@@ -73,33 +157,37 @@ export default function BrandSplit({
             </div>
           )}
 
+          {/* Bullets List */}
           {bullets && bullets.length > 0 && (
-            <ul className="flex flex-col gap-2.5 mt-1">
+            <ul className="flex flex-col gap-2.5 mt-1 w-full">
               {bullets.map((bullet, i) => {
                 const isHeader = bullet.endsWith(":");
                 if (isHeader) {
                   return (
                     <li
                       key={i}
-                      className={`font-sans font-bold text-[13px] uppercase tracking-wider mt-2 ${
+                      className={cn(
+                        "font-sans font-bold text-[13px] uppercase tracking-wider mt-2 text-center lg:text-left",
                         isDark ? "text-[#A9E179]" : "text-[#195236]"
-                      }`}
+                      )}
                     >
                       {bullet}
                     </li>
                   );
                 }
                 return (
-                  <li key={i} className="flex gap-3 items-start">
+                  <li key={i} className="flex gap-3 items-start justify-center lg:justify-start">
                     <span
-                      className={`h-1.5 w-1.5 rounded-full mt-2 shrink-0 ${
+                      className={cn(
+                        "h-1.5 w-1.5 rounded-full mt-2 shrink-0",
                         isDark ? "bg-[#A9E179]" : "bg-[#195236]"
-                      }`}
+                      )}
                     />
                     <span
-                      className={`font-sans text-[14px] md:text-[15px] leading-relaxed ${
+                      className={cn(
+                        "font-sans text-[14px] md:text-[15px] leading-relaxed text-center lg:text-left",
                         isDark ? "text-white/70" : "text-[#0D1A14]/70"
-                      }`}
+                      )}
                     >
                       {bullet}
                     </span>
@@ -111,15 +199,17 @@ export default function BrandSplit({
         </div>
 
         {/* Right: Image */}
-        <div className="w-full lg:max-w-[503px] aspect-[358/300] lg:aspect-[503/530] relative overflow-hidden rounded-[20px] lg:rounded-[24px] bg-neutral-200 shrink-0">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-700 ease-out hover:scale-105"
-            sizes="(max-width: 1024px) 100vw, 503px"
-          />
-        </div>
+        {image && (
+          <div className="w-full lg:max-w-[503px] h-[220px] lg:h-[530px] relative overflow-hidden rounded-[20px] lg:rounded-[24px] bg-neutral-200 shrink-0">
+            <Image
+              src={image}
+              alt={title}
+              fill
+              className="object-cover transition-transform duration-700 ease-out hover:scale-105"
+              sizes="(max-width: 1024px) 100vw, 503px"
+            />
+          </div>
+        )}
 
         {/* Bottom Callout Highlight */}
         {bottomHighlight && (

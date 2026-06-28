@@ -39,14 +39,14 @@ export default function BrandCropPortfolio() {
         {/* Crops Container */}
         <div className="flex flex-col items-center gap-y-4 max-w-[1030px] w-full bg-[#0D1A14] rounded-[24px] md:rounded-[32px] py-8 px-6 md:py-16 md:px-[56px]">
           {CROPS.map((row, rowIndex) => (
-              <div
-                key={rowIndex}
-                className="flex flex-wrap hidden md:flex justify-center  items-center gap-x-3 gap-y-4"
-              >
-                {row.map((crop, idx) => (
-                  <CropPill key={`${rowIndex}-${crop}`} label={crop} />
-                ))}
-              </div>      
+            <div
+              key={rowIndex}
+              className="flex flex-wrap hidden md:flex justify-center  items-center gap-x-3 gap-y-4"
+            >
+              {row.map((crop, idx) => (
+                <CropPill key={`${rowIndex}-${crop}`} label={crop} />
+              ))}
+            </div>
           ))}
 
           <div

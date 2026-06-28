@@ -49,7 +49,7 @@ export default function BrandTraining() {
   return (
     <section className="w-full bg-white py-16 md:py-24 px-4 md:px-8">
       <div className="max-w-[1240px] mx-auto flex flex-col gap-12 md:gap-20">
-        
+
         {/* Intro Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div className="lg:col-span-6 flex flex-col gap-4">

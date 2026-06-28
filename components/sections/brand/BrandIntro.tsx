@@ -25,11 +25,12 @@ function useTitleLines(title: string | string[]) {
   const shouldSwap = titleLines[0]?.endsWith("\n");
   const displayFirst = shouldSwap ? titleLines[1] : titleLines[0];
   const displaySecond = shouldSwap ? titleLines[0].trimEnd() : titleLines[1] ?? null;
-  return { displayFirst, displaySecond, isOriginalFirstOnTop: !shouldSwap };
+  const hasNewlineInFirst = titleLines[0]?.includes("\n");
+  return { displayFirst, displaySecond, isOriginalFirstOnTop: !shouldSwap, hasNewlineInFirst };
 }
 
 function TitleBlock({ title, className }: { title: string | string[]; className?: string }) {
-  const { displayFirst, displaySecond, isOriginalFirstOnTop } = useTitleLines(title);
+  const { displayFirst, displaySecond, isOriginalFirstOnTop, hasNewlineInFirst } = useTitleLines(title);
   return (
     <h2 className={className}>
       <span className={isOriginalFirstOnTop ? "text-[#A9E179]" : "text-white"}>
@@ -37,7 +38,7 @@ function TitleBlock({ title, className }: { title: string | string[]; className?
       </span>
       {displaySecond && (
         <>
-          <br />
+          {hasNewlineInFirst ? <br /> : " "}
           <span className={isOriginalFirstOnTop ? "text-white" : "text-[#A9E179]"}>
             {displaySecond}
           </span>

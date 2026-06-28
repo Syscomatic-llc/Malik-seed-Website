@@ -10,6 +10,7 @@ interface BrandGridProps {
   title: string;
   description: string;
   images: string[];
+  descriptionClassName?: string;
 }
 
 // Carousel Constants
@@ -23,6 +24,7 @@ export default function BrandGrid({
   title,
   description,
   images,
+  descriptionClassName,
 }: BrandGridProps) {
   const IMAGES_COUNT = images.length;
   const LOOP_SET_START = IMAGES_COUNT;
@@ -160,7 +162,7 @@ export default function BrandGrid({
                 </span>
               ))}
             </h2>
-            <p className="font-sans text-[15px] md:text-[16px] leading-[24px] text-[#0D1A14]/65 max-w-[866px] mx-auto">
+            <p className={cn("font-sans text-[15px] md:text-[16px] leading-[24px] text-[#0D1A14]/65 max-w-[866px] mx-auto", descriptionClassName)}>
               {description.split("\n").map((part, i, arr) => (
                 <span key={i}>
                   {part}
