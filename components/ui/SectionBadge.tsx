@@ -17,7 +17,13 @@ const badgeVariants: Record<SectionBadgeVariant, string> = {
   outline:
     "bg-brand-neutral-light border border-brand-border text-brand-active",
   // Dark translucent — Figma "Timeline" badge on dark bg
-  dark: "bg-brand-dark/32 border border-white/12 text-brand-bg",
+  dark: "bg-brand-dark/32 border border-white/12 text-[#F2F7F1]",
+};
+
+const dotVariants: Record<SectionBadgeVariant, string> = {
+  green: "bg-current",
+  outline: "bg-current",
+  dark: "bg-[#A9E179]",
 };
 
 /**
@@ -42,7 +48,7 @@ export function SectionBadge({
       style={{ fontFamily: "var(--font-inter)" }}
     >
       {showDot && (
-        <span className="h-[6px] w-[6px] shrink-0 rounded-[2px] bg-current" />
+        <span className={cn("h-[8px] w-[8px] shrink-0 rounded-[2px]", dotVariants[variant])} />
       )}
       {children}
     </div>
