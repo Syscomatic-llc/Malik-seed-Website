@@ -10,7 +10,7 @@ interface StatCard {
 interface BrandSplitProps {
   badge: string;
   title: string;
-  description: string;
+  description?: string;
   bullets?: string[];
   statCard?: StatCard;
   bottomHighlight?: string;
@@ -42,13 +42,13 @@ export default function BrandSplit({
       >
         <div className="max-w-[1240px] mx-auto flex flex-col items-center gap-8 md:gap-[64px]">
           {/* Top: Center Text Container */}
-          <div className="flex flex-col items-center text-center gap-6 md:gap-8 max-w-[792px] w-full">
+          <div className="flex flex-col items-center text-center gap-6 md:gap-8 max-w-[1013px] w-full">
             {badge && (
               <SectionBadge variant={isDark ? "dark" : "outline"} showDot>
                 {badge}
               </SectionBadge>
             )}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 items-center">
               <h2
                 className={cn(
                   "font-sans text-[32px] md:text-[48px] font-medium leading-[120%] md:leading-[58px] text-center",
@@ -58,24 +58,30 @@ export default function BrandSplit({
                 {title.split("\n").map((part, i, arr) => (
                   <span key={i}>
                     {part}
-                    {i < arr.length - 1 && <br className="md:hidden" />}
+                    {i < arr.length - 1 && <br />}
                   </span>
                 ))}
               </h2>
-              <p
-                className={cn(
-                  "font-sans text-[16px] leading-[24px] text-center",
-                  isDark ? "text-[#F2F7F1]/80" : "text-[#0D1A14]/70"
-                )}
-              >
-                {description}
-              </p>
+              {description && (
+                <div
+                  className={cn(
+                    "font-sans text-[16px] leading-[24px] text-center flex flex-col gap-4 items-center",
+                    isDark ? "text-[#F2F7F1]/80" : "text-[#0D1A14]/70"
+                  )}
+                >
+                  {description.split("\n\n").map((para, i) => (
+                    <p key={i} className="max-w-[714px]">
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
           {/* Bottom: Full Width Image */}
           {image && (
-            <div className="w-full h-[220px] md:h-[640px] relative overflow-hidden rounded-[20px] md:rounded-[24px] bg-neutral-200">
+            <div className="w-full h-[220px] md:h-[630px] relative overflow-hidden rounded-[20px] md:rounded-[24px] bg-neutral-200">
               <Image
                 src={image}
                 alt={title}
@@ -131,16 +137,18 @@ export default function BrandSplit({
             </h2>
           </div>
 
-          <div
-            className={cn(
-              "font-sans text-[16px] leading-[24px] flex flex-col gap-4 text-center lg:text-left",
-              isDark ? "text-[#F2F7F1]" : "text-[#0D1A14]/70"
-            )}
-          >
-            {description.split("\n\n").map((para, i) => (
-              <p key={i}>{para}</p>
-            ))}
-          </div>
+          {description && (
+            <div
+              className={cn(
+                "font-sans text-[16px] leading-[24px] flex flex-col gap-4 text-center lg:text-left",
+                isDark ? "text-[#F2F7F1]" : "text-[#0D1A14]/70"
+              )}
+            >
+              {description.split("\n\n").map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
+          )}
 
           {/* Stat Card Highlight */}
           {statCard && (

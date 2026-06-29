@@ -1,4 +1,9 @@
+"use client";
+
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { useState } from "react";
 
 interface Project {
   title: string;
@@ -103,107 +108,156 @@ const PROJECTS: Project[] = [
 ];
 
 export default function BrandProjectsTable() {
+  const [expandedIdx, setExpandedIdx] = useState<number | null>(0);
+
   return (
-    <section className="w-full bg-[#F2F7F1] py-16 md:py-24 px-4 md:px-8">
-      <div className="max-w-[1240px] mx-auto flex flex-col gap-10 md:gap-12">
+    <section className="w-full bg-[#F2F7F1] py-[48px] md:py-[100px] px-4 md:px-8 lg:px-[100px]">
+      <div className="max-w-[1240px] mx-auto flex flex-col gap-10 md:gap-16">
         {/* Header */}
-        <div className="flex flex-col gap-4 max-w-[800px]">
-          <SectionBadge>Projects</SectionBadge>
-          <h2 className="font-sans text-[28px] md:text-[40px] font-medium leading-[34px] md:leading-[48px] text-[#0D1A14]">
+        <div className="flex flex-col gap-6 md:gap-8 items-center text-center max-w-[800px] mx-auto">
+          <SectionBadge variant="outline" showDot>projects</SectionBadge>
+          <h2 className="font-sans text-[32px] md:text-[48px] font-medium leading-[120%] text-[#0D1A14] text-center">
             Implemented and ongoing projects
           </h2>
         </div>
 
         {/* Desktop Table View (lg and above) */}
-        <div className="hidden lg:block overflow-x-auto rounded-[24px] border border-[#0D1A14]/10 bg-white shadow-xs">
-          <table className="w-full border-collapse text-left text-sm text-neutral-500">
-            <thead className="bg-[#0D1A14] text-white font-sans text-[16px] font-semibold">
-              <tr>
-                <th scope="col" className="px-6 py-5 font-semibold">Projects</th>
-                <th scope="col" className="px-6 py-5 font-semibold">Focus Areas</th>
-                <th scope="col" className="px-6 py-5 font-semibold">Location</th>
-                <th scope="col" className="px-6 py-5 font-semibold">Donor</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#0D1A14]/10 font-inter text-[14px]">
-              {PROJECTS.map((project, idx) => (
-                <tr
+        <div className="hidden lg:flex flex-col w-full border border-[#F2F4F7] rounded-[20px] overflow-hidden bg-white shadow-xs">
+          {/* Header Row */}
+          <div className="flex w-full h-[64px] bg-[#0F3221] items-center text-[#F2F7F1] text-[16px] font-sans font-medium select-none">
+            <div className="w-[314px] shrink-0 pl-8">Projects</div>
+            <div className="w-[386px] shrink-0 pl-8">Focus Areas</div>
+            <div className="w-[270px] shrink-0 pl-8">Location</div>
+            <div className="w-[270px] shrink-0 pl-8">Donor</div>
+          </div>
+
+          {/* Body Rows */}
+          <div className="flex flex-col w-full">
+            {PROJECTS.map((project, idx) => (
+              <div
+                key={idx}
+                className={cn(
+                  "flex w-full min-h-[160px] items-center text-[16px] font-sans border-b border-[#F2F4F7] last:border-b-0 hover:bg-[#F2F7F1]/40 transition-colors duration-200 py-6",
+                  idx % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"
+                )}
+              >
+                <div className="w-[314px] shrink-0 pl-8 pr-6 flex flex-col gap-1 justify-center align-top">
+                  <span className="font-sans font-medium text-[#0D1A14] leading-[24px]">
+                    {project.title}
+                  </span>
+                  <span className="text-[16px] text-[#0D1A14]/70 font-sans leading-[24px]">
+                    {project.duration}
+                  </span>
+                </div>
+                <div className="w-[386px] shrink-0 pl-8 pr-6 text-[#0D1A14] leading-[24px] align-top">
+                  {project.focus}
+                </div>
+                <div className="w-[270px] shrink-0 pl-8 pr-6 text-[#0D1A14] leading-[24px] align-top">
+                  {project.location}
+                </div>
+                <div className="w-[270px] shrink-0 pl-8 pr-6 text-[#0D1A14] leading-[24px] align-top">
+                  {project.donor}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Accordion View (below lg) */}
+        <div className="lg:hidden w-full border border-[#F2F4F7] rounded-[20px] overflow-hidden bg-white flex flex-col">
+          {/* Header Row */}
+          <div className="w-full h-[55px] bg-[#0F3221] px-6 flex items-center text-[#F2F7F1] text-[16px] font-sans font-medium select-none">
+            Projects
+          </div>
+
+          {/* Body Rows */}
+          <div className="flex flex-col w-full">
+            {PROJECTS.map((project, idx) => {
+              const isExpanded = expandedIdx === idx;
+              return (
+                <div
                   key={idx}
-                  className="hover:bg-[#F2F7F1]/50 transition-colors duration-200"
+                  className="flex flex-col w-full border-b border-[#F2F4F7] last:border-b-0 bg-white"
                 >
-                  <td className="px-6 py-5 align-top font-sans font-semibold text-[#0D1A14]">
-                    <div className="flex flex-col gap-1">
-                      <span>{project.title}</span>
-                      <span className="text-[12px] font-medium text-neutral-400 font-inter">
+                  {/* Clickable Row Header */}
+                  <button
+                    onClick={() => setExpandedIdx(isExpanded ? null : idx)}
+                    className="w-full flex justify-between items-center py-4 px-6 text-left focus:outline-none hover:bg-neutral-50 transition-colors duration-150"
+                  >
+                    <div className="flex flex-col gap-1 pr-4">
+                      <span className="font-sans font-medium text-[16px] text-[#195236] leading-[24px]">
+                        {project.title}
+                      </span>
+                      <span className="font-sans text-[14px] text-[#0D1A14]/70 leading-[21px]">
                         {project.duration}
                       </span>
                     </div>
-                  </td>
-                  <td className="px-6 py-5 align-top text-neutral-600 leading-relaxed max-w-[400px]">
-                    {project.focus}
-                  </td>
-                  <td className="px-6 py-5 align-top text-neutral-700 font-medium whitespace-nowrap">
-                    {project.location}
-                  </td>
-                  <td className="px-6 py-5 align-top text-[#195236] font-semibold">
-                    {project.donor}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    {/* Arrow chevron */}
+                    <div className="w-[18px] h-[18px] flex items-center justify-center shrink-0">
+                      <svg
+                        className={cn(
+                          "w-[18px] h-[18px] text-[#0D1A14] transition-transform duration-300",
+                          isExpanded ? "rotate-180" : "rotate-0"
+                        )}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2.5"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </button>
 
-        {/* Mobile / Tablet Cards View (below lg) */}
-        <div className="lg:hidden flex flex-col gap-6">
-          {PROJECTS.map((project, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col gap-4 p-6 rounded-[24px] border border-[#0D1A14]/10 bg-white shadow-xs"
-            >
-              <div className="flex flex-col gap-1">
-                <span className="font-sans text-[18px] font-semibold text-[#0D1A14] leading-snug">
-                  {project.title}
-                </span>
-                <span className="font-inter text-[13px] text-neutral-400 font-medium">
-                  {project.duration}
-                </span>
-              </div>
+                  {/* Expanded Content */}
+                  <div
+                    className={cn(
+                      "overflow-hidden transition-all duration-300 ease-in-out",
+                      isExpanded ? "max-h-[500px] px-6 py-5" : "max-h-0"
+                    )}
+                  >
+                    <div className="flex flex-col gap-4">
+                      {/* Focus Areas */}
+                      <p className="text-[14px] text-[#0D1A14] leading-[21px] font-sans">
+                        {project.focus}
+                      </p>
 
-              <div className="h-[1px] w-full bg-[#0D1A14]/10" />
+                      {/* Location with Pin on right */}
+                      <div className="flex items-center gap-2">
+                        <Image
+                          src={"/location.svg"}
+                          alt="Location"
+                          width={14}
+                          height={14}
+                        />
+                        <span className="text-[14px] text-[#0D1A14] leading-[21px] font-sans font-[400]">
+                          {project.location}
+                        </span>
+                      </div>
 
-              <div className="flex flex-col gap-3 text-[14px]">
-                <div className="flex flex-col gap-1">
-                  <span className="font-sans font-semibold text-[12px] uppercase tracking-wider text-neutral-400">
-                    Focus Areas
-                  </span>
-                  <p className="font-inter text-neutral-600 leading-relaxed">
-                    {project.focus}
-                  </p>
-                </div>
+                      {/* Divider */}
+                      <div className="border-t border-[#E4E7EC] w-full" />
 
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                  <div className="flex flex-col gap-1">
-                    <span className="font-sans font-semibold text-[12px] uppercase tracking-wider text-neutral-400">
-                      Location
-                    </span>
-                    <span className="font-inter font-medium text-[#0D1A14]">
-                      {project.location}
-                    </span>
+                      {/* Donor */}
+                      <div className="flex flex-col gap-1 pb-1">
+                        <span className="text-[14px] text-[#0D1A14]/70 leading-[21px] font-medium font-sans">
+                          Donor
+                        </span>
+                        <span className="text-[14px] text-[#0D1A14] leading-[21px] font-sans">
+                          {project.donor}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-
-                  <div className="flex flex-col gap-1">
-                    <span className="font-sans font-semibold text-[12px] uppercase tracking-wider text-neutral-400">
-                      Donor
-                    </span>
-                    <span className="font-inter font-bold text-[#195236]">
-                      {project.donor}
-                    </span>
-                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

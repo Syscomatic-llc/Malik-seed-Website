@@ -19,7 +19,7 @@ export default function InnovationDevelopmentPage() {
       <BrandIntro {...innovationDevelopmentData.intro} />
       <BrandSplit {...innovationDevelopmentData.split1} />
       <BrandGrid {...innovationDevelopmentData.grid} />
-      <BrandCards {...innovationDevelopmentData.cards} />
+      <BrandCards {...innovationDevelopmentData.cards} showIndex={false} />
       <BrandProjectsTable />
       <BrandSplit {...innovationDevelopmentData.split2} />
     </div>

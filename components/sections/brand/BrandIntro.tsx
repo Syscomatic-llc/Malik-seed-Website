@@ -114,14 +114,12 @@ function TagPill({ label }: { label: string }) {
 /* ─── Stat Card (Desktop) ────────────────────────────────── */
 function StatCard({ value, label }: StatItem) {
   return (
-    <div className="flex-1 min-w-0 h-[202px] bg-[#0F3221] rounded-[24px] relative">
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-        <div className="font-[family-name:var(--font-anton)] text-[48px] leading-[58px] text-white text-center">
-          <StatNumber raw={value} />
-        </div>
-        <div className="font-[family-name:var(--font-inter)] text-[16px] capitalize leading-[24px] text-white text-center max-w-[220px]">
-          {label}
-        </div>
+    <div className="flex-1 min-w-0 h-[202px] bg-[#0F3221] rounded-[24px]  py-14 px-8 relative">
+      <div className="font-[family-name:var(--font-anton)] text-[48px] leading-[58px] text-white text-center">
+        <StatNumber raw={value} />
+      </div>
+      <div className="font-[family-name:var(--font-inter)] text-[16px] capitalize leading-[150%] text-white text-center">
+        {label}
       </div>
     </div>
   );
@@ -130,7 +128,7 @@ function StatCard({ value, label }: StatItem) {
 /* ─── Mobile Stat Row ────────────────────────────────────── */
 function MobileStatCard({ value, label }: StatItem) {
   return (
-    <div className="flex-1 bg-[#0F3221] rounded-[16px] flex flex-col items-center justify-center py-5 px-3 gap-1.5">
+    <div className="flex-1 bg-[#0F3221] rounded-[16px] flex flex-col items-center justify-center py-8 px-4 gap-1.5">
       <div className="font-[family-name:var(--font-anton)] text-[36px] leading-[43px] text-white text-center">
         <StatNumber raw={value} />
       </div>
