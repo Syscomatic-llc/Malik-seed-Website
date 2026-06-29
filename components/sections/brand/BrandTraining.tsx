@@ -133,10 +133,10 @@ export default function BrandTraining() {
     }
   }, [scanResetting]);
 
-  // Auto-advance scans every 3.5 s (paused on hover)
+  // Auto-advance scans every 3 s (paused on hover)
   useEffect(() => {
     if (scanPaused) return;
-    const interval = setInterval(() => scanNext(), 3500);
+    const interval = setInterval(() => scanNext(), 3000);
     return () => clearInterval(interval);
   }, [scanNext, scanPaused]);
 
@@ -275,30 +275,31 @@ export default function BrandTraining() {
             <div
               className={cn(
                 "flex items-center gap-6 overflow-visible",
-                scanResetting ? "transition-none" : "transition-transform duration-500 ease-out"
+                scanResetting ? "transition-none" : "transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
               )}
               style={{
                 transform: `translateX(calc(50vw - ${SCAN_HALF_DESKTOP}px - (${scanIndex} * ${SCAN_SLOT_DESKTOP}px)))`,
+                willChange: "transform",
               }}
-              onTransitionEnd={handleScanTransitionEnd}
+              onTransitionEnd={(e) => {
+                if (e.target !== e.currentTarget) return;
+                if (e.propertyName !== "transform") return;
+                handleScanTransitionEnd();
+              }}
             >
               {extendedScans.map((scan, idx) => {
-                const isActive = idx === scanIndex;
+                const isActive = idx % scansCount === scanIndex % scansCount;
                 return (
                   <div
                     key={idx}
                     onClick={() => {
                       if (scanResetting) return;
-                      // Map clicked card to its equivalent in the middle copy set
-                      const posInSet = idx % scansCount;
-                      setScanIndex(scansCount + posInSet);
+                      setScanIndex(idx);
                     }}
-                    className={cn(
-                      "relative shrink-0 w-[398px] h-[598px] rounded-[20px] bg-white overflow-hidden cursor-pointer transition-all duration-500 ease-out",
-                      scanResetting ? "transition-none" : "",
-                      isActive ? "shadow-[0_24px_60px_rgba(25,82,54,0.18)]" : "shadow-md"
-                    )}
-                    style={{ border: "1.5px solid rgba(25, 82, 54, 0.2)" }}
+                    className="relative shrink-0 w-[398px] h-[598px] rounded-[20px] bg-white overflow-hidden cursor-pointer"
+                    style={{
+                      border: "1.5px solid rgba(25, 82, 54, 0.2)",
+                    }}
                   >
                     <div className="absolute inset-0">
                       <Image
@@ -327,30 +328,31 @@ export default function BrandTraining() {
             <div
               className={cn(
                 "flex items-center gap-4 overflow-visible",
-                scanResetting ? "transition-none" : "transition-transform duration-500 ease-out"
+                scanResetting ? "transition-none" : "transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
               )}
               style={{
                 transform: `translateX(calc(50vw - ${SCAN_HALF_MOBILE}px - (${scanIndex} * ${SCAN_SLOT_MOBILE}px)))`,
+                willChange: "transform",
               }}
-              onTransitionEnd={handleScanTransitionEnd}
+              onTransitionEnd={(e) => {
+                if (e.target !== e.currentTarget) return;
+                if (e.propertyName !== "transform") return;
+                handleScanTransitionEnd();
+              }}
             >
               {extendedScans.map((scan, idx) => {
-                const isActive = idx === scanIndex;
+                const isActive = idx % scansCount === scanIndex % scansCount;
                 return (
                   <div
                     key={idx}
                     onClick={() => {
                       if (scanResetting) return;
-                      // Map clicked card to its equivalent in the middle copy set
-                      const posInSet = idx % scansCount;
-                      setScanIndex(scansCount + posInSet);
+                      setScanIndex(idx);
                     }}
-                    className={cn(
-                      "relative shrink-0 w-[280px] h-[420px] rounded-[20px] bg-white overflow-hidden cursor-pointer transition-all duration-500 ease-out",
-                      scanResetting ? "transition-none" : "",
-                      isActive ? "shadow-[0_24px_60px_rgba(25,82,54,0.18)]" : "shadow-md"
-                    )}
-                    style={{ border: "1.5px solid rgba(25, 82, 54, 0.2)" }}
+                    className="relative shrink-0 w-[280px] h-[420px] rounded-[20px] bg-white overflow-hidden cursor-pointer"
+                    style={{
+                      border: "1.5px solid rgba(25, 82, 54, 0.2)",
+                    }}
                   >
                     <div className="absolute inset-0">
                       <Image
