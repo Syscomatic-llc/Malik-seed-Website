@@ -28,8 +28,8 @@ export default function ComingSoonPage() {
         {/* Heading */}
         <div className="flex flex-col gap-4">
           <h1
-            className="text-[42px] sm:text-[60px] md:text-[76px] font-semibold italic leading-[1.1] text-white"
-            style={{ fontFamily: "var(--font-playfair)" }}
+            className="text-[42px] sm:text-[60px] md:text-[76px] font-semibold leading-[1.1] text-white"
+            style={{ fontFamily: "var(--font-stack-sans-notch)" }}
           >
             Cultivating<br />Something New
           </h1>
