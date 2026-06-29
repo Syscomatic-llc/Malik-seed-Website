@@ -14,7 +14,7 @@ interface StatItem {
 interface BrandIntroProps {
   layout: BrandIntroLayout;
   title: string[];
-  description: string;
+  description?: string;
   highlights?: string[];
   stats?: StatItem[];
 }
@@ -119,7 +119,7 @@ function StatCard({ value, label }: StatItem) {
         <div className="font-[family-name:var(--font-anton)] text-[48px] leading-[58px] text-white text-center">
           <StatNumber raw={value} />
         </div>
-        <div className="font-[family-name:var(--font-inter)] text-[16px] leading-[24px] text-white text-center max-w-[220px]">
+        <div className="font-[family-name:var(--font-inter)] text-[16px] capitalize leading-[24px] text-white text-center max-w-[220px]">
           {label}
         </div>
       </div>
@@ -134,7 +134,7 @@ function MobileStatCard({ value, label }: StatItem) {
       <div className="font-[family-name:var(--font-anton)] text-[36px] leading-[43px] text-white text-center">
         <StatNumber raw={value} />
       </div>
-      <div className="font-[family-name:var(--font-inter)] text-[13px] leading-[18px] text-white/80 text-center">
+      <div className="font-[family-name:var(--font-inter)] capitalize text-[13px] leading-[18px] text-white/80 text-center">
         {label}
       </div>
     </div>

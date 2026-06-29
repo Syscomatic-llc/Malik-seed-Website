@@ -8,6 +8,7 @@ interface SectionBadgeProps {
   className?: string;
   /** Optional leading dot (Figma "Rectangle 3" — used in outline badges) */
   showDot?: boolean;
+  dotSize?: string;
 }
 
 const badgeVariants: Record<SectionBadgeVariant, string> = {
@@ -36,11 +37,12 @@ export function SectionBadge({
   variant = "green",
   className,
   showDot = false,
+  dotSize="8px"
 }: SectionBadgeProps) {
   return (
     <div
       className={cn(
-        "inline-flex h-[33px] w-fit items-center justify-center gap-2 rounded-[30px] px-4",
+        "inline-flex h-[33px] w-fit items-center justify-center capitalize gap-2 rounded-[30px] px-4",
         "text-[12px] md:text-[14px] leading-[21px] font-medium",
         badgeVariants[variant],
         className
@@ -48,7 +50,7 @@ export function SectionBadge({
       style={{ fontFamily: "var(--font-inter)" }}
     >
       {showDot && (
-        <span className={cn("h-[8px] w-[8px] shrink-0 rounded-[2px]", dotVariants[variant])} />
+        <span className={cn("shrink-0 rounded-[2px]", dotVariants[variant])} style={{ height: dotSize, width: dotSize }} />
       )}
       {children}
     </div>

@@ -19,7 +19,7 @@ export default function VegetableSeedsPage() {
       <BrandIntro {...vegetableSeedsData.intro} />
       <BrandGrid {...vegetableSeedsData.grid} />
       <BrandCards {...vegetableSeedsData.cards} />
-      <BrandCropPortfolio />
+      <BrandCropPortfolio {...vegetableSeedsData.cropPortfolio} />
       <BrandYouTube {...vegetableSeedsData.youtube} />
     </div>
   );

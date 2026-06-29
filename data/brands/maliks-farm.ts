@@ -14,7 +14,7 @@ export const maliksFarmData = {
     stats: [
       { value: "40+", label: "acres total farm area" },
       { value: "21", label: "acres dedicated trial area" },
-      { value: "8+", label: "r&D personnel on site" },
+      { value: "8+", label: "R&D personnel on site" },
       { value: "3x", label: "Product Evaluation/year" },
     ],
   },
@@ -60,12 +60,110 @@ export const maliksFarmData = {
     badge: "COMMERCIAL FARMING",
     title: "Malik’s Farm is Bangladesh's first Global GAP Certified Farm",
     description: "Good Agricultural Practices (GAP) is a globally recognized certification that ensures vegetables are grown using responsible, science-backed farming methods reducing harmful chemical use and guaranteeing food safety from the farm all the way to your plate.\n\nMalik's Farm holds Global GAP certification across our full commercial farming operation.",
-    image: "/images/brand/dscf8753_1.png",
+    gapLogo: "/images/brand/frame_2147229857.png",
+    images: [
+      "/images/brand/dscf8753_1.png",
+      "/images/brand/dscf8717_1.png",
+    ],
     bullets: [
       "What we grow:",
       "Vegetables: Broccoli, Capsicum, Tomato, Cauliflower, Cabbage, Melon, Okra, Papaya, Eggplant, Yard Long Bean, Potato, Cucumber, Pumpkin, Beet Root, Carrot, and more...",
       "Fruits: Avocado, Mango",
     ],
+    gallery: [
+      "/images/brand/field_activities_62_2_1.png",
+      "/images/brand/dscf7322_1.png",
+      "/images/brand/dscf8728_1.png",
+    ],
     bgTheme: "light" as const,
+  },
+  training: {
+    badge: "TRAINING CENTRE",
+    title: "Malik's Farm is also a live training ground",
+    programs: [
+      { id: "global-gap", title: "Global GAP Training", image: "/images/brand/img_0921.png" },
+      { id: "post-harvest", title: "Post Harvest Technology", image: "/images/brand/dscf8655_1.png" },
+      { id: "agri-entrepreneur", title: "Agri Entrepreneur Training", image: "/images/brand/agri_entrepreneur_tab.png" },
+      { id: "corporate", title: "Corporate Training", image: "/images/brand/corporate_training_tab.png" },
+    ],
+    facilitiesHeader: "Our Top-Tier\nFacility",
+    facilities: [
+      {
+        title: "Conference Room",
+        description: "Capacity of 24 participants hosting executive level meetings",
+        image: "/images/brand/dscf7440_1.png",
+      },
+      {
+        title: "Training Room",
+        description: "Capacity of 60 participants hosting multi-disciplinary trainings",
+        image: "/images/brand/2g7a0508_1.png",
+      },
+      {
+        title: "Practical Field Space",
+        description: "Conducting field activities on our 20 acres of research plot",
+        image: "/images/brand/dscf7455_1.png",
+      },
+      {
+        title: "Catering",
+        description: "In house chefs preparing and serving meals for guests",
+        image: "/images/brand/img_2994_1.png",
+      },
+      {
+        title: "Field for Sports",
+        description: "Dedicated field for playing cricket, volleyball and badminton",
+        image: "/images/brand/dscf8763_1.png",
+      },
+      {
+        title: "Dormitory",
+        description: "53 beds hosting participants overnight for multi-day training",
+        image: "/images/brand/img_3118_1.png",
+      },
+    ],
+  },
+  testimonials: {
+    badge: "Farm guests",
+    title: "Testimonial from Malik's Farm guests",
+    visitorScans: [
+      { image: "/images/brand/camscanner_6.png", title: "Visitor Log Entry 1" },
+      { image: "/images/brand/camscanner_5.png", title: "Visitor Log Entry 2" },
+      { image: "/images/brand/camscanner_4.png", title: "Visitor Log Entry 3" },
+      { image: "/images/brand/camscanner_3.png", title: "Visitor Log Entry 4" },
+      { image: "/images/brand/camscanner_1.png", title: "Visitor Log Entry 5" },
+    ],
+  },
+  cropPortfolio: {
+    title: "WHAT WE GROW",
+    description: "A wide variety of Global GAP certified fruits and vegetables grown under scientific farming practices.",
+    groups: [
+      {
+        category: "Vegetables",
+        items: [
+          ["Broccoli",
+          "Capsicum",
+          "Tomato",
+          "Cauliflower",
+          "Cabbage"],
+          ["Melon",
+          "Okra",
+          "Papaya",
+          "Eggplant",
+          "Yard Long Bean"],
+          ["Potato",
+          "Cucumber",
+          "Pumpkin",
+          "BEET ROOT",
+          "carrot",
+          "and more..."]
+        ],
+      },
+      {
+        category: "Fruits",
+        items: [["Avocado", "Mango"]],
+      },
+    ],
+  },
+  contact: {
+    email: "support@armalikseeds.com",
+    hotline: "+44 01929 739037",
   },
 };

@@ -51,4 +51,15 @@ export const vegetableSeedsData = {
       "/images/brand/field_activities_5_1.png",
     ],
   },
+  cropPortfolio: {
+    badge: "Seed Portfolio",
+    title: "Bangladesh’s Trusted Vegetable Seed Portfolio",
+    description: "A carefully curated range of high-value vegetable crops selected for what performs in Bangladesh's fields.",
+    crops: [
+      ["Cauliflower", "Cabbage", "Kohlrabi"],
+      ["Broccoli", "Beet Root", "Tomato", "Chilli", "Brinjal", "Cucumber"],
+      ["Gourds", "Pumpkin", "Radish", "Carrot", "Okra", "Yard Long Bean"],
+      ["Capsicum", "Papaya", "Watermelon", "and more..."],
+    ],
+  },
 };
