@@ -287,7 +287,12 @@ export default function BrandTraining() {
                 return (
                   <div
                     key={idx}
-                    onClick={() => { if (!scanResetting) setScanIndex(idx); }}
+                    onClick={() => {
+                      if (scanResetting) return;
+                      // Map clicked card to its equivalent in the middle copy set
+                      const posInSet = idx % scansCount;
+                      setScanIndex(scansCount + posInSet);
+                    }}
                     className={cn(
                       "relative shrink-0 w-[398px] h-[598px] rounded-[20px] bg-white overflow-hidden cursor-pointer transition-all duration-500 ease-out",
                       scanResetting ? "transition-none" : "",
@@ -334,7 +339,12 @@ export default function BrandTraining() {
                 return (
                   <div
                     key={idx}
-                    onClick={() => { if (!scanResetting) setScanIndex(idx); }}
+                    onClick={() => {
+                      if (scanResetting) return;
+                      // Map clicked card to its equivalent in the middle copy set
+                      const posInSet = idx % scansCount;
+                      setScanIndex(scansCount + posInSet);
+                    }}
                     className={cn(
                       "relative shrink-0 w-[280px] h-[420px] rounded-[20px] bg-white overflow-hidden cursor-pointer transition-all duration-500 ease-out",
                       scanResetting ? "transition-none" : "",
