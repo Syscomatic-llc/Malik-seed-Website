@@ -3,12 +3,13 @@
 import { memo } from "react";
 import ActionButton from "@/components/ActionButton";
 import type { openPositionsData, JobPosition } from "@/data/career-data";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 // ── JobRow Component (handles both desktop row and mobile stack responsive layout) ──
 const JobRow = memo(function JobRow({ position }: { position: JobPosition }) {
   return (
     <article
-      className="flex w-full flex-col gap-6 border-b border-[#CED2DA] pb-8 pt-6 first:pt-0"
+      className="flex w-full flex-col gap-6 border-b border-[#CED2DA] md:pb-6 pb-8 pt-6 first:pt-0"
       aria-label={`Job opening: ${position.title}`}
     >
       {/* Upper part: Title and Tags */}
@@ -67,16 +68,15 @@ export default memo(function OpenPositionsSection({ data }: { data: typeof openP
       className="w-full bg-[#F2F7F1] pt-[120px] pb-12 lg:pt-[180px] lg:pb-16"
     >
       <div className="mx-auto w-full max-w-[1030px] px-4 lg:px-0">
-        
+
         {/* Header Block: Badge + Title */}
         <div className="flex flex-col items-start gap-8">
           {/* Badge */}
-          <div className="inline-flex h-[30px] items-center gap-2 rounded-[30px] border border-[#E4E7EC] bg-[#F9FAFB] px-4 lg:h-[33px]">
-            <span className="font-inter text-[12px] font-medium leading-[18px] text-[#195236] lg:text-[14px] lg:leading-[21px]">
-              {data.badge}
-            </span>
-            <span className="h-1.5 w-1.5 rounded-[2px] bg-[#195236]" />
-          </div>
+
+          <SectionBadge variant="outline" showDot>
+            {data.badge}
+          </SectionBadge>
+
 
           {/* Title */}
           <h2 className="max-w-[358px] font-inter-tight text-[34px] font-medium leading-[41px] text-[#0D1A14] md:max-w-[633px] lg:text-[64px] lg:leading-[77px]">
