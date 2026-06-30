@@ -20,7 +20,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "About us", href: "/about" },
   { label: "Our Brands", href: "/brands" },
-  { label: "Our Products", href: "/coming-soon" },
+  { label: "Our Products", href: "/our-products" },
   { label: "News", href: "/news" },
   { label: "Contact", href: "/contact" },
 ];

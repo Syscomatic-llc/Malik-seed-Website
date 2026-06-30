@@ -6,9 +6,10 @@ interface SectionBadgeProps {
   children: React.ReactNode;
   variant?: SectionBadgeVariant;
   className?: string;
-  /** Optional leading dot (Figma "Rectangle 3" — used in outline badges) */
+  /** Optional leading/trailing dot (Figma "Rectangle 3") */
   showDot?: boolean;
   dotSize?: string;
+  dotPosition?: "left" | "right";
 }
 
 const badgeVariants: Record<SectionBadgeVariant, string> = {
@@ -37,8 +38,16 @@ export function SectionBadge({
   variant = "green",
   className,
   showDot = false,
-  dotSize="8px"
+  dotSize = "8px",
+  dotPosition = "left"
 }: SectionBadgeProps) {
+  const dotEl = showDot && (
+    <span
+      className={cn("shrink-0 rounded-[2px]", dotVariants[variant])}
+      style={{ height: dotSize, width: dotSize }}
+    />
+  );
+
   return (
     <div
       className={cn(
@@ -49,10 +58,9 @@ export function SectionBadge({
       )}
       style={{ fontFamily: "var(--font-inter)" }}
     >
-      {showDot && (
-        <span className={cn("shrink-0 rounded-[2px]", dotVariants[variant])} style={{ height: dotSize, width: dotSize }} />
-      )}
+      {showDot && dotPosition === "left" && dotEl}
       {children}
+      {showDot && dotPosition === "right" && dotEl}
     </div>
   );
 }

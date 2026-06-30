@@ -1,0 +1,106 @@
+import { memo } from "react";
+import Image from "next/image";
+import { SectionBadge } from "@/components/ui/SectionBadge";
+import type { teamCultureData } from "@/data/career-data";
+
+export default memo(function TeamCultureSection({ data }: { data: typeof teamCultureData }) {
+  const { images } = data;
+  const [wide, narrow, ...thirds] = images;
+
+  return (
+    <section
+      id="team-culture"
+      aria-label="Building a Team of A-Players"
+      className="w-full bg-brand-bg py-[100px] overflow-hidden"
+    >
+      <div className="mx-auto w-full max-w-[1440px]">
+        {/* ── Header and Grid container ── */}
+        <div className="mx-auto max-w-[1240px] px-4 xl:px-0">
+          {/* ── Header ── */}
+          <div className="mb-12 flex flex-col items-center gap-4">
+            <SectionBadge variant="outline" showDot dotSize="6px">
+              {data.badge}
+            </SectionBadge>
+            <h2
+              className="font-inter-tight text-[32px] font-medium leading-[1.2] tracking-tight text-brand-dark text-center md:text-[48px] md:leading-[58px]"
+            >
+              {data.title}
+            </h2>
+          </div>
+
+          {/* ── Photo Grid (Desktop/Tablet: md and above) ── */}
+          <div className="hidden md:flex flex-col gap-6">
+            {/* Row 1: 768 + 448 */}
+            <div className="flex flex-col gap-6 md:flex-row">
+              {/* Wide image */}
+              <div
+                className="relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
+                style={{ height: 380, flex: "1 1 62%" }}
+              >
+                <Image
+                  src={wide.src}
+                  alt={wide.alt}
+                  fill
+                  sizes="(min-width: 1280px) 768px, 100vw"
+                  className="object-cover object-center"
+                />
+              </div>
+              {/* Narrow image */}
+              <div
+                className="relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
+                style={{ height: 380, flex: "1 1 36%" }}
+              >
+                <Image
+                  src={narrow.src}
+                  alt={narrow.alt}
+                  fill
+                  sizes="(min-width: 1280px) 448px, 100vw"
+                  className="object-cover object-center"
+                />
+              </div>
+            </div>
+
+            {/* Row 2: 3 × equal */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {thirds.map((img, i) => (
+                <div
+                  key={i}
+                  className="relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
+                  style={{ height: 380 }}
+                >
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    sizes="(min-width: 1280px) 398px, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Mobile: Infinite auto-scroll Marquee (mobile only: md:hidden) ── */}
+        <div className="relative w-full overflow-hidden md:hidden mt-8">
+          <div className="animate-marquee hover:[animation-play-state:paused] flex gap-4">
+            {[...images, ...images].map((img, i) => (
+              <div
+                key={i}
+                className="relative flex-shrink-0 overflow-hidden rounded-[20px] bg-[#F2F4F7] h-[290px] w-[280px]"
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  sizes="280px"
+                  className="object-cover object-center"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+});

@@ -166,7 +166,7 @@ export const heroData: HeroData = {
   subtitle: "Since 1969",
   ctaProducts: {
     label: "Our Products",
-    href: "/coming-soon",
+    href: "/our-products",
   },
   ctaAbout: {
     label: "Learn More",
@@ -415,7 +415,7 @@ export const footerData: FooterData = {
   links: {
     company: [
       { label: "About Us", href: "/about" },
-      { label: "Our Products", href: "/coming-soon" },
+      { label: "Our Products", href: "/our-products" },
       { label: "News & Stories", href: "/news" },
       { label: "Careers", href: "/careers" },
       { label: "Contact Us", href: "/contact" },
