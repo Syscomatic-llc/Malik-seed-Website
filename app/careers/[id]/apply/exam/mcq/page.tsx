@@ -7,6 +7,8 @@ import { mcqQuestionsData, assessmentConfigs, getAssessmentTypes } from "@/data/
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { cn } from "@/lib/utils";
 import { z } from "zod";
+import { McqDevAnswerKey, McqDevOptionHighlight } from "@/components/dev/McqDevHints";
+import { isDevEnvironment } from "@/lib/assessment-grading";
 
 export default function MCQAssessmentPage() {
   const router = useRouter();
@@ -62,6 +64,11 @@ export default function MCQAssessmentPage() {
 
   return (
     <div className="flex flex-col gap-12 relative w-full">
+      {isDevEnvironment() && (
+        <div className="rounded-xl border-2 border-dashed border-yellow-400 bg-yellow-50 px-4 py-3 font-mono text-[12px] text-yellow-900">
+          🛠 DEV mode — correct answers shown below each question. Tags mark selected vs correct options.
+        </div>
+      )}
       {/* Questions list */}
       <div className="flex flex-col gap-12">
         {questions.map((q, index) => {
@@ -71,16 +78,21 @@ export default function MCQAssessmentPage() {
               <h3 className="font-normal font-inter-tight text-[16px] text-[#0D1A14] leading-[24px]">
                 Q{index + 1}: {q.question} <span className="text-[#FF4242] ml-0.5 font-semibold">*</span>
               </h3>
+              <McqDevAnswerKey question={q} questionIndex={index} />
 
               <div className="flex flex-col gap-1 w-full">
                 {q.options.map((opt, optIdx) => {
                   const isSelected = selectedOption === optIdx;
+                  const isCorrectOption = optIdx === q.correctAnswer;
                   return (
                     <button
                       key={optIdx}
                       type="button"
                       onClick={() => setMCQAnswer(q.id, optIdx)}
-                      className="w-full flex items-center justify-start gap-4 py-2 text-left transition-all duration-200 cursor-pointer select-none border-b border-transparent"
+                      className={cn(
+                        "w-full flex items-center justify-start gap-4 py-2 text-left transition-all duration-200 cursor-pointer select-none border-b border-transparent",
+                        isDevEnvironment() && isCorrectOption && "rounded-lg bg-[#00BA00]/5 ring-1 ring-[#00BA00]/30"
+                      )}
                     >
                       {/* Circular radio indicator */}
                       <div className={cn(
@@ -94,6 +106,7 @@ export default function MCQAssessmentPage() {
                       <span className="font-normal font-inter text-[16px] leading-[24px] text-[#0D1A14]">
                         {optionPrefixes[optIdx]}{opt}
                       </span>
+                      <McqDevOptionHighlight question={q} optIdx={optIdx} isSelected={isSelected} />
                     </button>
                   );
                 })}

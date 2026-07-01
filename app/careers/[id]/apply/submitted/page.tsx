@@ -11,31 +11,34 @@ export default function ApplicationSubmittedPage() {
   const { id } = useParams();
   const { isOtpVerified, isCompleted, reset } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
   }, []);
 
   useEffect(() => {
-    if (hydrated) {
+    if (hydrated && !isLeaving) {
       if (!isOtpVerified) {
         router.replace(`/careers/${id}/apply/otp`);
       } else if (!isCompleted) {
         router.replace(`/careers/${id}/apply/start`);
       }
     }
-  }, [isOtpVerified, isCompleted, hydrated, id, router]);
+  }, [isOtpVerified, isCompleted, hydrated, id, router, isLeaving]);
 
-  if (!hydrated || !isCompleted) {
+  if (!hydrated || (!isCompleted && !isLeaving)) {
     return <div className="text-center py-10 font-inter text-[#0D1A14]/70">Loading confirmation...</div>;
   }
 
   const handleReturnHome = () => {
+    setIsLeaving(true);
     reset(); // Clear store state on completion
     router.push("/");
   };
 
   const handleExploreBrands = () => {
+    setIsLeaving(true);
     reset(); // Clear store state on completion
     router.push("/brands");
   };

@@ -122,7 +122,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "The type of transport used to deliver seeds",
         "The time of day the seeds are sown",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q2",
@@ -134,7 +134,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Powdery white coating on the upper surface of leaves",
         "Stunted root growth with small nodules",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q3",
@@ -146,7 +146,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Provide a thick booklet with scientific formulas",
         "Tell them to figure it out based on their experience",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q4",
@@ -182,7 +182,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To negotiate wholesale prices directly with consumers",
         "To perform laboratory tests on soil samples",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q7",
@@ -206,7 +206,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "8.0 to 9.0 (alkaline)",
         "9.5 to 10.5 (highly alkaline)",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q9",
@@ -218,7 +218,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Fruit borers",
         "Root-knot nematodes",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q10",
@@ -230,7 +230,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To change the color of the flowers",
         "To reduce the water requirement of the crop",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q11",
@@ -253,7 +253,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Potassium deficiency",
         "Zinc deficiency",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q13",
@@ -264,7 +264,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Deep plowing the soil before winter",
         "Adding organic compost to the seedbed",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q14",
@@ -276,7 +276,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Allowing unlimited product returns past expiry dates",
         "Focusing sales only on the largest dealers and ignoring smaller retailers",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q15",
@@ -288,7 +288,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Allows direct contact with groundwater",
         "Keeps the temperature of the soil warm",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q16",
@@ -312,7 +312,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Sprinkler irrigation",
         "Furrow irrigation",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q18",
@@ -324,7 +324,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "F1 seeds require no fertilizer or irrigation",
         "F1 seeds are much cheaper to produce",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q19",
@@ -336,7 +336,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Extreme freezing temperatures",
         "Heavy dry sandy winds",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q20",
@@ -348,7 +348,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Blame the farmer for incorrect agricultural practices over the phone",
         "File a report and ignore the case until the next season",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q21",
@@ -360,7 +360,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Growing chili followed by eggplant",
         "Flooding the field and leaving it dry",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q22",
@@ -371,7 +371,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Keeping the seedlings in a dark cold room for 3 days",
         "Squeezing the soil block around the roots to compact it",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q23",
@@ -382,7 +382,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Applying organic fertilizer",
         "Inoculating plants with beneficial bacteria",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q24",
@@ -394,7 +394,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To make the fruits ripen faster",
         "To reduce the number of leaves to zero",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "fdo_q25",
@@ -406,7 +406,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Managing the company's financial accounting systems",
         "Overseeing factory operations at the processing plant",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
   ],
 
@@ -422,7 +422,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "35-40°C alternating",
         "0°C for cold treatment",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q2",
@@ -445,7 +445,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To determine moisture content in under 5 minutes",
         "To measure physical purity by weight",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q4",
@@ -464,7 +464,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Seeds will absorb nitrogen from the air and improve quality",
         "Nothing, this is the ideal moisture content for storage",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q6",
@@ -475,7 +475,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Fungal pathogen infection rate on seed surface",
         "Seed moisture content during packaging",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q7",
@@ -487,7 +487,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "A vacuum suction pipe",
         "A mechanical divider",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q8",
@@ -511,7 +511,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Visual inspection of seed color",
         "Using a digital thermometer",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q10",
@@ -535,7 +535,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To crush seeds for chemical testing",
         "To count the exact number of seeds in a tray",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q12",
@@ -547,7 +547,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "It will require 50% less water",
         "It will mature 10 days earlier",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q13",
@@ -559,7 +559,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To produce crop yields in half the normal timeframe",
         "To test seed coat hardness using mechanical rollers",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q14",
@@ -595,7 +595,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Seeds that germinate and form abnormally hard roots",
         "Seeds that are chemically coated with polymers",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q17",
@@ -607,14 +607,14 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "It makes the seeds completely immune to insect attacks",
         "It eliminates the need for soil planting",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q18",
       question:
         "Under ISTA guidelines, what is the minimum weight of a submitted sample for physical purity of hybrid hot pepper?",
       options: ["10 grams", "150 grams", "1.5 kg", "10 kg"],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q19",
@@ -625,7 +625,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Whether the seeds can grow in any soil type",
         "Whether the seed packet contains the correct weight",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q20",
@@ -637,7 +637,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Oven drying test",
         "Tetrazolium stain test",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q21",
@@ -661,7 +661,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Until the crop is harvested by the first buyer",
         "Forever",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q23",
@@ -672,7 +672,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Potassium Chloride",
         "Boric Acid",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q24",
@@ -684,7 +684,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "High concentration of mineral fertilizers on the seeds",
         "High seed moisture content",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "qc_q25",
@@ -712,7 +712,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Carbon Dioxide levels",
         "Lighting intensity",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q2",
@@ -724,7 +724,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Relative humidity must always be equal to the storage temp in Fahrenheit",
         "Seeds should be stored at absolute zero temperature",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q3",
@@ -736,7 +736,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Weighted Average Cost only",
         "Random selection",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q4",
@@ -748,7 +748,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "It allows seeds to ripen inside the pouch",
         "It makes the packaging cheaper",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q5",
@@ -759,7 +759,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "The maximum capacity of the seed warehouse",
         "The price point where dealers refuse to buy more seeds",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q6",
@@ -771,7 +771,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Directly on the concrete floor without pallets",
         "Stacked up to the ceiling without gaps",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q7",
@@ -783,7 +783,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Warehouse floor plan",
         "Farming guide for consumers",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q8",
@@ -795,7 +795,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Lack of demand from dealers",
         "High packaging costs",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q9",
@@ -806,7 +806,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Damaged stock that is unsellable",
         "Stock that is reserved for promotional giveaways",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q10",
@@ -818,7 +818,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To package seeds into small foil packets",
         "To repair broken trucks in the yard",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q11",
@@ -830,7 +830,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To control the temperature of trucks during transit",
         "To design promotional materials for social media",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q12",
@@ -854,7 +854,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Number of social media likes on crop photos",
         "Genetic purity index",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q14",
@@ -865,7 +865,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "A warehouse cleaning event",
         "A discount sales campaign",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q15",
@@ -877,7 +877,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Glass jars",
         "Paper envelopes",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q16",
@@ -888,7 +888,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "The shelf life of seeds under ambient conditions",
         "The travel time of a delivery truck",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q17",
@@ -900,7 +900,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To predict the exact date of monsoon onset",
         "To set the retail price of seeds",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q18",
@@ -912,7 +912,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Leave them with dealers and charge them for next season",
         "Immediately mix them into new fresh packaging without testing",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q19",
@@ -924,7 +924,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To wash seeds with cold water",
         "To accelerate seed drying",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q20",
@@ -936,7 +936,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Fast driving on highways",
         "Delivering seeds 2 days early",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q21",
@@ -948,7 +948,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To design nicer bag graphics",
         "To track dealer credit limits",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q22",
@@ -959,7 +959,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "A letter of recommendation for a dealer",
         "A promotional voucher for farmers",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q23",
@@ -971,7 +971,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Using air transport for all deliveries",
         "Hiring separate trucks for every 5 bags of seeds",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q24",
@@ -982,7 +982,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Decreasing the warehouse floor area",
         "Reducing the weight of seed packets",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sc_q25",
@@ -994,7 +994,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Cancel the dealership contract immediately",
         "Tell them to dry the seeds in the sun and sell them anyway",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
   ],
   // Senior Agronomist (MCQ stage of combined assessment)
@@ -1009,7 +1009,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "A cross between two different species to create a hybrid",
         "Pollinating a plant with its own pollen",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sagr_q2",
@@ -1021,7 +1021,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "To save time during data collection",
         "To allow more varieties to be tested in a smaller area",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sagr_q3",
@@ -1032,7 +1032,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Pest and disease incidence rating system",
         "Biomass and carbon content of above-ground plant matter",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sagr_q4",
@@ -1044,14 +1044,14 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Furrow irrigation applied at fixed 3-day intervals",
         "Overhead sprinkler irrigation at dawn every day",
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
     {
       id: "sagr_q5",
       question:
         "Which nutrient deficiency in vegetable crops is most commonly indicated by interveinal chlorosis on younger leaves?",
       options: ["Nitrogen", "Iron", "Phosphorus", "Calcium"],
-      correctAnswer: 1,
+      correctAnswer: 0,
     },
   ],
 };
@@ -1275,8 +1275,7 @@ export type Step =
   | "review"
   | "result"
   | "submitted"
-  | "additional-info"
-  | "confirmation";
+  | "additional-info";
 
 export interface JobAssessmentConfig {
   hasMcq: boolean;
@@ -1292,7 +1291,7 @@ export function buildSteps(job: JobAssessmentConfig): Step[] {
   if (job.hasLongAnswers) steps.push("long-answers");
   steps.push("review");
   steps.push(job.autoGrade ? "result" : "submitted");
-  if (job.autoGrade) steps.push("additional-info", "confirmation");
+  if (job.autoGrade) steps.push("additional-info");
   return steps;
 }
 

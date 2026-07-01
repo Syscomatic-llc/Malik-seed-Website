@@ -58,10 +58,6 @@ export default function AdditionalInfoPage() {
 
   const hydrated = useHasHydrated();
 
-  // Sync state on hydration — mirrors persisted Zustand store into local
-  // editable state once the client has mounted. Legitimate external-system
-  // sync, not derivable via render.
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (hydrated) {
       /* eslint-disable react-hooks/set-state-in-effect */
@@ -115,7 +111,7 @@ export default function AdditionalInfoPage() {
   };
 
   const validateFile = (file: File) => {
-    const validTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+    const validTypes = ["application/pdf"];
     if (!validTypes.includes(file.type)) {
       setError("Only PDF or DOCX/DOC files are accepted");
       return false;

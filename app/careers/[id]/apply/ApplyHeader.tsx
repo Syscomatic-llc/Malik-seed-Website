@@ -36,7 +36,6 @@ export default function ApplyHeader({ id, position }: ApplyHeaderProps) {
     "/result",
     "/submitted",
     "/loading",
-    "/confirmation",
   ];
 
   const shouldHide = hiddenRoutes.some((route) => pathname.endsWith(route));

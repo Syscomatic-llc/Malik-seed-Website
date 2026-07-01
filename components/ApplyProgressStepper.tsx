@@ -9,7 +9,7 @@ const STEPS = [
   { id: "otp", label: "Verification", paths: ["/otp"] },
   { id: "start", label: "Instructions", paths: ["/start"] },
   { id: "assessment", label: "Assessment", paths: ["/mcq", "/written", "/short-answers", "/long-answers", "/loading"] },
-  { id: "result", label: "Results", paths: ["/result", "/confirmation", "/review"] },
+  { id: "result", label: "Results", paths: ["/result", "/review"] },
   { id: "additional", label: "Additional Info", paths: ["/additional-info"] },
   { id: "completed", label: "Completed", paths: ["/submitted"] },
 ];

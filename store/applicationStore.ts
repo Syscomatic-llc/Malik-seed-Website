@@ -1,10 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import {
-  mcqQuestionsData,
-  assessmentConfigs,
-  shouldAutoGradeAssessment,
-} from "@/data/questions-data";
+import { assessmentConfigs } from "@/data/questions-data";
 
 export interface ApplicationState {
   // Job context
@@ -55,8 +51,8 @@ export interface ApplicationState {
   setMCQAnswer: (questionId: string, optionIndex: number) => void;
   setShortAnswer: (questionId: string, answerText: string) => void;
   setLongAnswer: (questionId: string, answerText: string) => void;
-  gradeAssessment: () => void;
   completeAssessment: () => void;
+  setGradingResult: (score: number, isPassed: boolean) => void;
   setAdditionalInfo: (info: Partial<Omit<ApplicationState, "actions">>) => void;
   reset: () => void;
 }
@@ -140,11 +136,7 @@ export const useApplicationStore = create<ApplicationState>()(
             const nextStage = types[currentIndex + 1];
 
             if (!nextStage) {
-              if (shouldAutoGradeAssessment(posId)) {
-                get().gradeAssessment();
-              } else {
-                get().completeAssessment();
-              }
+              get().completeAssessment();
             }
           }
         } else {
@@ -186,49 +178,21 @@ export const useApplicationStore = create<ApplicationState>()(
         }));
       },
 
-      gradeAssessment: () => {
-        const state = get();
-        const posId = state.positionId;
-        if (!posId) return;
-
-        const config = assessmentConfigs[posId];
-        if (!config) return;
-
-        if (!shouldAutoGradeAssessment(posId)) {
-          return;
-        }
-
-        let score = 0;
-        let isPassed = false;
-
-        const questions = mcqQuestionsData[posId] || [];
-        if (questions.length > 0) {
-          let correctCount = 0;
-          questions.forEach((q) => {
-            const candidateAnswer = state.mcqAnswers[q.id];
-            if (candidateAnswer === q.correctAnswer) {
-              correctCount++;
-            }
-          });
-          score = Math.round((correctCount / questions.length) * 100);
-          isPassed = score >= config.passingScorePercent;
-        }
-
-        set({
-          score,
-          isPassed,
-          isGraded: true,
-          isCompleted: true,
-          isTimerRunning: false,
-        });
-      },
-
       completeAssessment: () => {
         set({
           isCompleted: true,
           isGraded: false,
           isPassed: false,
+          score: 0,
           isTimerRunning: false,
+        });
+      },
+
+      setGradingResult: (score, isPassed) => {
+        set({
+          score,
+          isPassed,
+          isGraded: true,
         });
       },
 

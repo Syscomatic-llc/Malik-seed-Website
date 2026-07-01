@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useApplicationStore } from "@/store/applicationStore";
-import { assessmentConfigs } from "@/data/questions-data";
+import { assessmentConfigs, mcqQuestionsData } from "@/data/questions-data";
+import { gradeMcqAssessment } from "@/lib/assessment-grading";
 
 const PAGES = [
   { label: "Info", path: "info" },
@@ -17,42 +18,59 @@ const PAGES = [
   { label: "Result", path: "result" },
   { label: "Additional Info", path: "additional-info" },
   { label: "Submitted", path: "submitted" },
-  { label: "Confirmation", path: "confirmation" },
 ];
 
 export default function DevNav({ positionId }: { positionId: string }) {
   const router = useRouter();
   const store = useApplicationStore();
   const [open, setOpen] = useState(false);
-  const [passMCQ, setPassMCQ] = useState(true);
+  const [seedPass, setSeedPass] = useState(true);
 
   if (process.env.NODE_ENV !== "development") return null;
+
+  const seedMcqAnswers = (numId: number, pass: boolean) => {
+    const questions = mcqQuestionsData[numId] || [];
+    questions.forEach((q) => {
+      if (pass) {
+        store.setMCQAnswer(q.id, q.correctAnswer);
+      } else {
+        const wrongIndex = q.correctAnswer === 0 ? 1 : 0;
+        store.setMCQAnswer(q.id, wrongIndex);
+      }
+    });
+  };
+
+  const applyGradingFromAnswers = (numId: number) => {
+    const result = gradeMcqAssessment(numId, store.mcqAnswers);
+    if (result) {
+      store.setGradingResult(result.score, result.isPassed);
+    }
+  };
 
   const seedStateAndNavigate = (path: string) => {
     const numId = parseInt(positionId);
     const config = assessmentConfigs[numId];
-    const isMCQ = config?.assessmentType === "mcq";
 
-    // Seed all required state so guards don't redirect
     store.setPersonalInfo("Dev User", "dev@test.com");
     store.setOtpVerified(true);
 
-    if (["start", "mcq", "short-answers", "long-answers", "review", "loading", "result", "additional-info", "submitted", "confirmation"].includes(path)) {
+    if (["start", "mcq", "short-answers", "long-answers", "review", "loading", "result", "additional-info", "submitted"].includes(path)) {
       store.startAssessment(numId, "Dev Position", config?.timeLimitMinutes ?? 30);
     }
 
-    if (["review", "loading", "result", "additional-info", "submitted", "confirmation"].includes(path)) {
-      // Mark as completed with seeded score
-      store.setAdditionalInfo({
-        isStarted: true,
-        isCompleted: true,
-        isGraded: true,
-        score: passMCQ ? 80 : 40,
-        isPassed: passMCQ,
-      });
+    if (["mcq", "review", "loading", "result", "additional-info", "submitted"].includes(path)) {
+      seedMcqAnswers(numId, seedPass);
     }
 
-    if (["additional-info", "submitted", "confirmation"].includes(path)) {
+    if (["review", "loading", "result", "additional-info", "submitted"].includes(path)) {
+      store.completeAssessment();
+    }
+
+    if (["result", "additional-info", "submitted"].includes(path)) {
+      applyGradingFromAnswers(numId);
+    }
+
+    if (["additional-info", "submitted"].includes(path)) {
       store.setAdditionalInfo({
         phoneNumber: "+8801700000000",
         location: "Dhaka, Bangladesh",
@@ -70,22 +88,29 @@ export default function DevNav({ positionId }: { positionId: string }) {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-[9999] flex flex-col items-end gap-2">
+    <div className="fixed bottom-5 right-5 z-9999 flex flex-col items-end gap-2">
       {open && (
-        <div className="bg-gray-900 text-white rounded-xl shadow-2xl p-4 w-[220px] flex flex-col gap-3 border border-gray-700">
+        <div className="bg-gray-900 text-white rounded-xl shadow-2xl p-4 w-[240px] flex flex-col gap-3 border border-gray-700">
           <div className="text-xs font-bold uppercase tracking-widest text-yellow-400 border-b border-gray-700 pb-2">
             🛠 Dev Navigation
           </div>
 
-          {/* Pass/Fail toggle for MCQ */}
-          <div className="flex items-center gap-2 text-xs text-gray-300">
-            <span>MCQ Result:</span>
-            <button
-              onClick={() => setPassMCQ(!passMCQ)}
-              className={`px-2 py-0.5 rounded-full text-xs font-bold transition-colors ${passMCQ ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}
-            >
-              {passMCQ ? "PASS" : "FAIL"}
-            </button>
+          <div className="flex flex-col gap-1 text-xs text-gray-300">
+            <span>Seed MCQ answers:</span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setSeedPass(true)}
+                className={`flex-1 px-2 py-1 rounded-full font-bold transition-colors ${seedPass ? "bg-green-500 text-white" : "bg-gray-700 text-gray-300"}`}
+              >
+                All correct
+              </button>
+              <button
+                onClick={() => setSeedPass(false)}
+                className={`flex-1 px-2 py-1 rounded-full font-bold transition-colors ${!seedPass ? "bg-red-500 text-white" : "bg-gray-700 text-gray-300"}`}
+              >
+                All wrong
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-col gap-1">

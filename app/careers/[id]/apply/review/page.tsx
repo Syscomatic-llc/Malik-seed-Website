@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getAssessmentTypes, hasWrittenAssessment, hasShortAnswersAssessment, hasLongAnswersAssessment } from "@/data/questions-data";
+import { McqDevAnswerKey, McqDevReviewBadge } from "@/components/dev/McqDevHints";
+import { isDevEnvironment } from "@/lib/assessment-grading";
 
 export default function ReviewPage() {
   const router = useRouter();
@@ -115,7 +117,12 @@ export default function ReviewPage() {
         {/* MCQ review */}
         {showMcqReview && mcqQuestions.length > 0 && (
           <div className="flex flex-col gap-12">
-            <h2 
+            {isDevEnvironment() && (
+              <div className="rounded-xl border-2 border-dashed border-yellow-400 bg-yellow-50 px-4 py-3 font-mono text-[12px] text-yellow-900">
+                🛠 DEV mode — review shows ✓/✗ vs correct answer key per MCQ.
+              </div>
+            )}
+            <h2
               className="text-[20px] font-bold text-[#0D1A14]"
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
@@ -126,9 +133,13 @@ export default function ReviewPage() {
 
               return (
                 <div key={q.id} className="flex flex-col gap-4 w-full">
-                  <h3 className="font-normal font-inter-tight text-[16px] text-[#0D1A14] leading-[24px]">
-                    Q{index + 1}: {q.question}
-                  </h3>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-normal font-inter-tight text-[16px] text-[#0D1A14] leading-[24px]">
+                      Q{index + 1}: {q.question}
+                    </h3>
+                    <McqDevReviewBadge question={q} questionIndex={index} selectedOption={selectedOption} />
+                  </div>
+                  <McqDevAnswerKey question={q} questionIndex={index} />
 
                   <div className="flex flex-col gap-1 w-full">
                     {q.options.map((opt, optIdx) => {
