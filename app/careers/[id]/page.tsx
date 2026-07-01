@@ -152,7 +152,7 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
 
             {/* Apply Now Button (Hero) */}
             <ActionButton
-              href="#apply-now"
+              href={`/careers/${id}/apply`}
               label="Apply Now"
               variant="dark"
               className="h-[41px] lg:h-[46px] px-6 text-[14px] lg:text-[16px]"
@@ -286,7 +286,7 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
 
               {/* Scroll back to CV Drop form at bottom */}
               <ActionButton
-                href="#apply-now"
+                href={`/careers/${id}/apply`}
                 label="Apply Now"
                 variant="dark"
                 className="h-[41px] lg:h-[46px] px-6 text-[14px] lg:text-[16px]"
