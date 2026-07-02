@@ -212,11 +212,11 @@
   }
 }
 
-.animate-marquee {
+.animate-partner-marquee {
   animation: marquee 50s linear infinite;
 }
 
-.animate-marquee-reverse {
+.animate-partner-marquee-reverse {
   animation: marquee-reverse 50s linear infinite;
 }
 

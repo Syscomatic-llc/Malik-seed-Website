@@ -63,7 +63,7 @@ export default memo(function PartnersSection({
 
           {/* Row 1 — Scrolling Left */}
           <div className="relative w-full overflow-hidden">
-            <div className="animate-marquee flex w-max gap-2">
+            <div className="animate-partner-marquee flex w-max gap-2">
               {row1Items.map((item, idx) => (
                 <Image
                   key={`r1-${item.id}-${idx}`}
@@ -80,7 +80,7 @@ export default memo(function PartnersSection({
 
           {/* Row 2 — Scrolling Right */}
           <div className="relative w-full overflow-hidden">
-            <div className="animate-marquee-reverse flex w-max gap-2">
+            <div className="animate-partner-marquee-reverse flex w-max gap-2">
               {row2Items.map((item, idx) => (
                 <Image
                   key={`r2-${item.id}-${idx}`}
