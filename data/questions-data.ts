@@ -434,7 +434,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Percentage of weed seeds and other crop seeds",
         "Percentage of genetically modified traits (GMO)",
       ],
-      correctAnswer: 3,
+      correctAnswer: 0,
     },
     {
       id: "qc_q3",
@@ -696,7 +696,7 @@ export const mcqQuestionsData: Record<number, MCQQuestion[]> = {
         "Re-sample and perform a duplicate test alongside a validation sample to confirm results",
         "Mix with a high-germinating lot to average it out",
       ],
-      correctAnswer: 2,
+      correctAnswer: 0,
     },
   ],
 
