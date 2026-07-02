@@ -41,26 +41,26 @@ export default function ApplicationSubmittedPage() {
         <div className="w-full max-w-[736px] flex flex-col gap-12 items-start py-4">
           {/* Header Block (Spinner & Texts) */}
           <div className="w-full flex flex-col gap-8 items-start">
-            <img 
-              src="/images/careers/uiw_loading.svg" 
-              className="w-12 h-12 text-[#75BC43]" 
-              alt="Loading" 
+            <img
+              src="/images/careers/uiw_loading.svg"
+              className="w-12 h-12 text-brand-accent"
+              alt="Loading"
             />
-            
+
             <div className="w-full flex flex-col gap-4 items-start">
-              <h1 
+              <h1
                 className="w-full text-[#0D1A14] font-medium text-[24px] leading-[29px] tracking-tight"
                 style={{ fontFamily: "var(--font-inter-tight)" }}
               >
                 Your Assessment has been successfully submitted!
               </h1>
-              <p 
+              <p
                 className="w-full text-[#0D1A14]/70 text-[16px] leading-[24px]"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
                 Thank you for completing the Malik Seeds technical assessment. Your responses have been recorded and our team is reviewing it now.
               </p>
-              <p 
+              <p
                 className="w-full text-[#0D1A14] font-medium text-[14px] leading-[21px]"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
@@ -115,19 +115,19 @@ export default function ApplicationSubmittedPage() {
 
             {/* Headline and Description Paragraphs */}
             <div className="w-full flex flex-col gap-[16px] items-start">
-              <h1 
+              <h1
                 className="w-full text-[#0D1A14] font-medium text-[24px] leading-[24px] tracking-tight"
                 style={{ fontFamily: "var(--font-inter-tight)" }}
               >
                 Your Application Has Been Successfully Submitted
               </h1>
-              <p 
+              <p
                 className="w-full text-[#0D1A14]/70 text-[16px] leading-[24px]"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
                 Thank you for applying to Malik Seeds. Your application, including your assessment responses and submitted documents, has been received successfully.
               </p>
-              <p 
+              <p
                 className="w-full text-[#0D1A14]/70 text-[16px] leading-[24px]"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
@@ -141,7 +141,7 @@ export default function ApplicationSubmittedPage() {
 
           {/* What Happens Next Section */}
           <div className="w-full flex flex-col gap-[8px] items-start">
-            <h2 
+            <h2
               className="text-[#0D1A14] font-medium text-[16px] leading-[24px]"
               style={{ fontFamily: "var(--font-inter)" }}
             >
@@ -155,7 +155,7 @@ export default function ApplicationSubmittedPage() {
               ].map((text, idx) => (
                 <div key={idx} className="flex gap-[12px] items-start w-full">
                   <div className="w-[6px] h-[6px] rounded-full bg-[#195236] shrink-0 mt-[9px]" />
-                  <p 
+                  <p
                     className="text-[#0D1A14]/70 text-[16px] leading-[24px]"
                     style={{ fontFamily: "var(--font-inter)" }}
                   >

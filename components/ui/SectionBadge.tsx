@@ -43,9 +43,22 @@ export function SectionBadge({
 }: SectionBadgeProps) {
   const dotEl = showDot && (
     <span
-      className={cn("shrink-0 rounded-[2px]", dotVariants[variant])}
+      className="relative inline-flex shrink-0 items-center justify-center"
       style={{ height: dotSize, width: dotSize }}
-    />
+    >
+      {/* ping ring — same shape/color as the icon, just animated + behind it */}
+      <span
+        className={cn(
+          "absolute inline-flex h-full w-full animate-badge-glow rounded-[2px]",
+          dotVariants[variant]
+        )}
+      />
+      {/* the actual icon — static, always visible */}
+      <span
+        className={cn("relative inline-flex h-full w-full rounded-[2px]", dotVariants[variant])}
+        style={{ height: dotSize, width: dotSize }}
+      />
+    </span>
   );
 
   return (

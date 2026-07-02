@@ -53,7 +53,7 @@ function NavLink({
         compact
           ? "h-[30px] rounded-full px-2.5 text-[13px] leading-[17px] hover:bg-neutral-50"
           : "h-[35px] rounded-full px-3 text-[16px] leading-[19px] hover:bg-neutral-50",
-        isActive ? "text-[#75BC43]" : "text-[#0D1A14]"
+        isActive ? "text-brand-accent" : "text-[#0D1A14]"
       )}
       style={{ fontFamily: "var(--font-inter-tight)" }}
     >
@@ -228,7 +228,7 @@ function MobileNav() {
                     className={cn(
                       "flex h-[35px] items-center text-[16px] leading-[19px] font-medium transition-colors",
                       "focus-visible:ring-2 focus-visible:ring-[#A9E179] focus-visible:outline-none",
-                      isActive ? "text-[#75BC43]" : "text-[#0D1A14]"
+                      isActive ? "text-brand-accent" : "text-[#0D1A14]"
                     )}
                     style={{ fontFamily: "var(--font-inter-tight)" }}
                   >

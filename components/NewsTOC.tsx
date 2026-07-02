@@ -137,7 +137,7 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
                 >
                   {/* Active indicator pill, positioned exactly over the vertical guide line track */}
                   {isActive && (
-                    <span className="absolute -left-[23px] top-[2px] bottom-[2px] w-[2px] rounded-[2px] bg-[#75BC43]" />
+                    <span className="absolute -left-[23px] top-[2px] bottom-[2px] w-[2px] rounded-[2px] bg-brand-accent" />
                   )}
                   {text}
                 </a>
