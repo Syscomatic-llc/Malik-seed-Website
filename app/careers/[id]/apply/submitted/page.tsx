@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
 import { Home, Compass } from "lucide-react";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
+import { hasWrittenAssessment } from "@/data/questions-data";
 
 export default function ApplicationSubmittedPage() {
   const router = useRouter();
@@ -12,6 +13,9 @@ export default function ApplicationSubmittedPage() {
   const { isOtpVerified, isCompleted, reset } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
+
+  const positionId = parseInt(id as string);
+  const hasWritten = hasWrittenAssessment(positionId);
 
   useEffect(() => {
     setHydrated(true);
@@ -29,6 +33,59 @@ export default function ApplicationSubmittedPage() {
 
   if (!hydrated || (!isCompleted && !isLeaving)) {
     return <div className="text-center py-10 font-inter text-[#0D1A14]/70">Loading confirmation...</div>;
+  }
+
+  if (hasWritten) {
+    return (
+      <div className="w-full max-w-[816px] mx-auto bg-white border border-[#E4E7EC] rounded-[24px] p-6 md:p-10 shadow-sm min-h-[432px] flex items-center justify-center">
+        <div className="w-full max-w-[736px] flex flex-col gap-12 items-start py-4">
+          {/* Header Block (Spinner & Texts) */}
+          <div className="w-full flex flex-col gap-8 items-start">
+            <img 
+              src="/images/careers/uiw_loading.svg" 
+              className="w-12 h-12 text-[#75BC43]" 
+              alt="Loading" 
+            />
+            
+            <div className="w-full flex flex-col gap-4 items-start">
+              <h1 
+                className="w-full text-[#0D1A14] font-medium text-[24px] leading-[29px] tracking-tight"
+                style={{ fontFamily: "var(--font-inter-tight)" }}
+              >
+                Your Assessment has been successfully submitted!
+              </h1>
+              <p 
+                className="w-full text-[#0D1A14]/70 text-[16px] leading-[24px]"
+                style={{ fontFamily: "var(--font-inter)" }}
+              >
+                Thank you for completing the Malik Seeds technical assessment. Your responses have been recorded and our team is reviewing it now.
+              </p>
+              <p 
+                className="w-full text-[#0D1A14] font-medium text-[14px] leading-[21px]"
+                style={{ fontFamily: "var(--font-inter)" }}
+              >
+                Please wait while we review your assessment. Keep this browser open.
+              </p>
+            </div>
+          </div>
+
+          {/* Divider Line */}
+          <div className="w-full h-[1px] bg-[#E4E7EC]" />
+
+          {/* Action Row */}
+          <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">
+            <button
+              onClick={() => router.push(`/careers/${id}/apply/review`)}
+              className="w-full sm:w-auto flex justify-center items-center cursor-pointer gap-[10px] rounded-[60px] h-[46px] px-6 font-medium text-[16px] leading-[19px] border border-[#E4E7EC] bg-[#F2F4F7] text-[#414E62] transition-all hover:bg-[#e4e7ec]"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
+              <ArrowIcon direction="left" size={20} className="text-[#414E62]" />
+              <span>Review Your Responses</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const handleReturnHome = () => {

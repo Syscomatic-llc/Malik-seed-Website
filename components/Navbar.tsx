@@ -139,7 +139,7 @@ function DesktopNav({ compact = false }: { compact?: boolean }) {
 
       {/* "Join us" CTA — Figma: 132×44 */}
       <ActionButton
-        href="/join"
+        href="/careers"
         label="Join us"
         variant="dark"
         className="h-[44px]"
@@ -240,7 +240,7 @@ function MobileNav() {
 
             {/* ── Join Us button ── Figma: 310×48, bg #195236, radius 60px */}
             <ActionButton
-              href="/join"
+              href="/careers"
               label="Join us"
               variant="dark"
               onClick={close}

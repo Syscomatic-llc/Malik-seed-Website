@@ -94,7 +94,11 @@ export default function ReviewPage() {
         <div className="flex flex-col gap-3">
           <button
             onClick={() => {
-              router.push(backRoute);
+              if (isCompleted) {
+                router.push(`/careers/${id}/apply/submitted`);
+              } else {
+                router.push(backRoute);
+              }
             }}
             className="flex items-center gap-2 text-[#195236] hover:underline font-semibold text-[15px] self-start"
           >
@@ -108,7 +112,9 @@ export default function ReviewPage() {
             Review Your Responses
           </h1>
           <p className="font-inter text-[15px] leading-[24px] text-[#0D1A14]/70">
-            Please take a moment to review your answers. You can go back to make changes if needed. Once submitted, your responses are final and cannot be modified.
+            {isCompleted 
+              ? "Your responses have been successfully submitted and are now in read-only mode. You cannot make any further changes."
+              : "Please take a moment to review your answers. You can go back to make changes if needed. Once submitted, your responses are final and cannot be modified."}
           </p>
         </div>
 
@@ -260,14 +266,25 @@ export default function ReviewPage() {
         )}
 
         <div className="flex justify-end border-t border-[#E4E7EC] pt-6 mt-6">
-          <Button
-            onClick={() => {
-              setShowConfirmPopup(true);
-            }}
-            className="bg-[#195236] hover:bg-[#153e28] text-white rounded-[60px] h-[46px] px-8 font-semibold font-inter-tight cursor-pointer"
-          >
-            Submit Assessment
-          </Button>
+          {isCompleted ? (
+            <Button
+              onClick={() => {
+                router.push(`/careers/${id}/apply/submitted`);
+              }}
+              className="bg-[#F2F4F7] hover:bg-[#e4e7ec] border border-[#E4E7EC] text-[#414E62] rounded-[60px] h-[46px] px-8 font-semibold font-inter-tight cursor-pointer"
+            >
+              Back to Status
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                setShowConfirmPopup(true);
+              }}
+              className="bg-[#195236] hover:bg-[#153e28] text-white rounded-[60px] h-[46px] px-8 font-semibold font-inter-tight cursor-pointer"
+            >
+              Submit Assessment
+            </Button>
+          )}
         </div>
       </div>
 
