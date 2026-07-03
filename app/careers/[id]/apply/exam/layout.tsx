@@ -15,7 +15,6 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   const { id } = useParams();
   const pathname = usePathname();
   const positionId = parseInt(id as string);
-  const config = assessmentConfigs[positionId];
   const {
     isOtpVerified,
     isStarted,
@@ -27,7 +26,12 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     longAnswers,
     tickTimer,
     completeAssessment,
+    completedStages,
+    completeStage,
+    assessmentConfig,
   } = useApplicationStore();
+
+  const config = assessmentConfig ?? assessmentConfigs[positionId];
 
   const [hydrated, setHydrated] = useState(false);
 
@@ -98,33 +102,38 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   // Timer loop
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (isTimerRunning && hydrated) {
+    const activeStage = types.find((type: string) => !completedStages[type]);
+    if (isTimerRunning && hydrated && activeStage) {
       interval = setInterval(() => {
-        tickTimer(currentStage);
+        tickTimer(activeStage);
       }, 1000);
     }
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, hydrated, tickTimer, currentStage]);
+  }, [isTimerRunning, hydrated, tickTimer, completedStages, types]);
 
   // Auto-advance if stage timer reaches 0
   useEffect(() => {
     if (hydrated && isTimerRunning) {
-      const remaining = stageTimeRemaining[currentStage] ?? 0;
-      if (remaining === 0) {
-        const currentIndex = types.indexOf(currentStage);
-        const nextType = types[currentIndex + 1];
-        if (nextType === "short_answers") {
-          router.replace(`/careers/${id}/apply/exam/short-answers`);
-        } else if (nextType === "long_answers") {
-          router.replace(`/careers/${id}/apply/exam/long-answers`);
-        } else {
-          completeAssessment();
+      const activeStage = types.find((type: string) => !completedStages[type]);
+      if (activeStage) {
+        const remaining = stageTimeRemaining[activeStage] ?? 0;
+        if (remaining === 0) {
+          completeStage(activeStage);
+          const currentIndex = types.indexOf(activeStage);
+          const nextType = types[currentIndex + 1];
+          if (nextType === "short_answers") {
+            router.replace(`/careers/${id}/apply/exam/short-answers`);
+          } else if (nextType === "long_answers") {
+            router.replace(`/careers/${id}/apply/exam/long-answers`);
+          } else {
+            completeAssessment();
+          }
         }
       }
     }
-  }, [stageTimeRemaining, currentStage, hydrated, isTimerRunning, types, id, router, completeAssessment]);
+  }, [stageTimeRemaining, completedStages, hydrated, isTimerRunning, types, id, router, completeAssessment, completeStage]);
 
   // Redirect on finish
   useEffect(() => {
@@ -169,7 +178,7 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
       {/* Category Stepper Header */}
       {hasMultipleExamTypesState && (
         <div className="w-full p-4 sm:p-6 flex items-start justify-between gap-1">
-          {types.map((type, idx) => {
+          {types.map((type: string, idx: number) => {
             const isStepActive = (type === "mcq" && isMCQPage) ||
               (type === "short_answers" && isShortAnswersPage) ||
               (type === "long_answers" && isLongAnswersPage);

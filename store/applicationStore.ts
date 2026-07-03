@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { assessmentConfigs } from "@/data/questions-data";
+import { assessmentConfigs, type PositionAssessmentConfig } from "@/data/questions-data";
 
 export interface ApplicationState {
   // Job context
@@ -24,6 +24,8 @@ export interface ApplicationState {
   score: number; // percentage
   isPassed: boolean;
   isGraded: boolean;
+  assessmentConfig: PositionAssessmentConfig | null;
+  completedStages: Record<string, boolean>; // stage -> completed flag
 
   // Additional Info
   phoneNumber: string;
@@ -44,10 +46,11 @@ export interface ApplicationState {
   startAssessment: (
     positionId: number,
     positionTitle: string,
-    timeLimitMinutes: number
+    config: PositionAssessmentConfig
   ) => void;
   tickTimer: (currentStage: string) => void;
   stopTimer: () => void;
+  completeStage: (stage: string) => void;
   setMCQAnswer: (questionId: string, optionIndex: number) => void;
   setShortAnswer: (questionId: string, answerText: string) => void;
   setLongAnswer: (questionId: string, answerText: string) => void;
@@ -77,6 +80,8 @@ export const useApplicationStore = create<ApplicationState>()(
       score: 0,
       isPassed: false,
       isGraded: false,
+      assessmentConfig: null,
+      completedStages: {},
       phoneNumber: "",
       location: "",
       linkedin: "",
@@ -94,12 +99,11 @@ export const useApplicationStore = create<ApplicationState>()(
 
       setOtpVerified: (isOtpVerified) => set({ isOtpVerified }),
 
-      startAssessment: (positionId, positionTitle, timeLimitMinutes) => {
-        const config = assessmentConfigs[positionId];
+      startAssessment: (positionId, positionTitle, config) => {
         const types = config?.assessmentTypes ?? (config ? [config.assessmentType] : []);
         const stageTimeRemaining: Record<string, number> = {};
 
-        types.forEach((type) => {
+        types.forEach((type: string) => {
           const limit = config?.stageTimeLimits?.[type] ?? config?.timeLimitMinutes ?? 30;
           stageTimeRemaining[type] = limit * 60;
         });
@@ -107,10 +111,12 @@ export const useApplicationStore = create<ApplicationState>()(
         set({
           positionId,
           positionTitle,
+          assessmentConfig: config,
           isStarted: true,
           isCompleted: false,
           startedAt: Date.now(),
           stageTimeRemaining,
+          completedStages: {},
           isTimerRunning: true,
           mcqAnswers: {},
           shortAnswers: {},
@@ -127,18 +133,28 @@ export const useApplicationStore = create<ApplicationState>()(
         if (currentRemaining <= 1) {
           // Timer finished! Stop timer and finalize based on the active flow.
           const updatedTimes = { ...stageTimes, [currentStage]: 0 };
-          set({ stageTimeRemaining: updatedTimes, isTimerRunning: false });
+          const updatedCompletedStages = {
+            ...get().completedStages,
+            [currentStage]: true,
+          };
           const posId = get().positionId;
+          let nextStageExists = false;
           if (posId) {
-            const config = assessmentConfigs[posId];
+            const config = get().assessmentConfig ?? assessmentConfigs[posId];
             const types = config?.assessmentTypes ?? (config ? [config.assessmentType] : []);
             const currentIndex = types.indexOf(currentStage as any);
             const nextStage = types[currentIndex + 1];
+            nextStageExists = !!nextStage;
 
             if (!nextStage) {
               get().completeAssessment();
             }
           }
+          set({
+            stageTimeRemaining: updatedTimes,
+            completedStages: updatedCompletedStages,
+            isTimerRunning: nextStageExists,
+          });
         } else {
           set({
             stageTimeRemaining: {
@@ -150,6 +166,15 @@ export const useApplicationStore = create<ApplicationState>()(
       },
 
       stopTimer: () => set({ isTimerRunning: false }),
+
+      completeStage: (stage) => {
+        set((state) => ({
+          completedStages: {
+            ...state.completedStages,
+            [stage]: true,
+          },
+        }));
+      },
 
       setMCQAnswer: (questionId, optionIndex) => {
         set((state) => ({
@@ -216,6 +241,8 @@ export const useApplicationStore = create<ApplicationState>()(
           score: 0,
           isPassed: false,
           isGraded: false,
+          assessmentConfig: null,
+          completedStages: {},
           phoneNumber: "",
           location: "",
           linkedin: "",

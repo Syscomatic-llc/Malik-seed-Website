@@ -55,7 +55,7 @@ export default function DevNav({ positionId }: { positionId: string }) {
     store.setOtpVerified(true);
 
     if (["start", "mcq", "short-answers", "long-answers", "review", "loading", "result", "additional-info", "submitted"].includes(path)) {
-      store.startAssessment(numId, "Dev Position", config?.timeLimitMinutes ?? 30);
+      store.startAssessment(numId, "Dev Position", config ?? { timeLimitMinutes: 30, assessmentType: "mcq" });
     }
 
     if (["mcq", "review", "loading", "result", "additional-info", "submitted"].includes(path)) {

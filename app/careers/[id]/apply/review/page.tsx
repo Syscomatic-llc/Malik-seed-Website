@@ -14,13 +14,13 @@ import { isDevEnvironment } from "@/lib/assessment-grading";
 export default function ReviewPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { isOtpVerified, isStarted, isCompleted, mcqAnswers, shortAnswers, longAnswers, completeAssessment } = useApplicationStore();
+  const { isOtpVerified, isStarted, isCompleted, mcqAnswers, shortAnswers, longAnswers, completeAssessment, assessmentConfig } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
   const positionId = parseInt(id as string);
-  const config = assessmentConfigs[positionId];
-  const types = getAssessmentTypes(positionId);
+  const config = assessmentConfig ?? assessmentConfigs[positionId];
+  const types = config?.assessmentTypes ?? (config ? [config.assessmentType] : []);
 
   useEffect(() => {
     setHydrated(true);

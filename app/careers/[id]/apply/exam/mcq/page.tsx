@@ -13,20 +13,37 @@ import { isDevEnvironment } from "@/lib/assessment-grading";
 export default function MCQAssessmentPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { mcqAnswers, setMCQAnswer } = useApplicationStore();
+  const { mcqAnswers, setMCQAnswer, completedStages, completeStage, assessmentConfig } = useApplicationStore();
 
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const positionId = parseInt(id as string);
   const questions = mcqQuestionsData[positionId] || [];
-  const config = assessmentConfigs[positionId];
+  const config = assessmentConfig ?? assessmentConfigs[positionId];
 
   if (!config || questions.length === 0) {
     return <div className="text-center py-10 text-[#FF4242]">MCQ assessment not found.</div>;
   }
 
   const handleNext = () => {
+    const types = getAssessmentTypes(positionId);
+    const currentIndex = types.indexOf("mcq");
+    const nextType = types[currentIndex + 1];
+
+    // If MCQ stage is completed, skip validation and navigate
+    const isCompletedStage = completedStages["mcq"];
+    if (isCompletedStage) {
+      if (nextType === "short_answers") {
+        router.push(`/careers/${id}/apply/exam/short-answers`);
+      } else if (nextType === "long_answers") {
+        router.push(`/careers/${id}/apply/exam/long-answers`);
+      } else {
+        router.push(`/careers/${id}/apply/review`);
+      }
+      return;
+    }
+
     // Generate validation schema shape for all active questions
     const schemaShape = questions.reduce((acc, q) => {
       acc[q.id] = z.number();
@@ -43,9 +60,7 @@ export default function MCQAssessmentPage() {
       return;
     }
 
-    const types = getAssessmentTypes(positionId);
-    const currentIndex = types.indexOf("mcq");
-    const nextType = types[currentIndex + 1];
+    completeStage("mcq");
 
     if (nextType === "short_answers") {
       router.push(`/careers/${id}/apply/exam/short-answers`);
@@ -84,13 +99,16 @@ export default function MCQAssessmentPage() {
                 {q.options.map((opt, optIdx) => {
                   const isSelected = selectedOption === optIdx;
                   const isCorrectOption = optIdx === q.correctAnswer;
+                  const isCompletedStage = completedStages["mcq"];
                   return (
                     <button
                       key={optIdx}
                       type="button"
+                      disabled={isCompletedStage}
                       onClick={() => setMCQAnswer(q.id, optIdx)}
                       className={cn(
-                        "w-full flex items-center justify-start gap-4 py-2 text-left transition-all duration-200 cursor-pointer select-none border-b border-transparent",
+                        "w-full flex items-center justify-start gap-4 py-2 text-left transition-all duration-200 select-none border-b border-transparent",
+                        isCompletedStage ? "cursor-not-allowed opacity-80" : "cursor-pointer",
                         isDevEnvironment() && isCorrectOption && "rounded-lg bg-[#00BA00]/5 ring-1 ring-[#00BA00]/30"
                       )}
                     >

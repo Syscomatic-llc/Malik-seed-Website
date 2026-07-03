@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
-import { assessmentConfigs } from "@/data/questions-data";
+import { assessmentConfigs, type PositionAssessmentConfig } from "@/data/questions-data";
 import { getInitialExamRoute } from "@/data/questions-data";
 import { openPositionsData } from "@/data/career-data";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -15,6 +15,10 @@ export default function StartPage() {
   const { name, email, isOtpVerified, startAssessment } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const [backendConfig, setBackendConfig] = useState<PositionAssessmentConfig | null>(null);
+  const [loadingConfig, setLoadingConfig] = useState(true);
+
+  const positionId = parseInt(id as string);
 
   useEffect(() => {
     setHydrated(true);
@@ -27,7 +31,24 @@ export default function StartPage() {
     }
   }, [email, isOtpVerified, hydrated, id, router]);
 
-  if (!hydrated || !isOtpVerified) {
+  useEffect(() => {
+    if (positionId) {
+      setLoadingConfig(true);
+      fetch(`/api/assessment-config/${positionId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.error) {
+            setBackendConfig(data);
+          }
+          setLoadingConfig(false);
+        })
+        .catch(() => {
+          setLoadingConfig(false);
+        });
+    }
+  }, [positionId]);
+
+  if (!hydrated || !isOtpVerified || loadingConfig) {
     return (
       <div className="animate-pulse space-y-4 py-4">
         <div className="h-6 bg-gray-200 rounded w-1/3"></div>
@@ -37,9 +58,8 @@ export default function StartPage() {
     );
   }
 
-  const positionId = parseInt(id as string);
   const position = openPositionsData.positions.find((pos) => pos.id === positionId);
-  const config = assessmentConfigs[positionId];
+  const config = backendConfig ?? assessmentConfigs[positionId];
 
   if (!position || !config) {
     return (
@@ -53,7 +73,7 @@ export default function StartPage() {
     if (!agreed) return;
 
     // Start timer and configure state in Zustand
-    startAssessment(positionId, position.title, config.timeLimitMinutes);
+    startAssessment(positionId, position.title, config);
 
     // Redirect to the first configured stage for this position
     router.push(`/careers/${id}/apply${getInitialExamRoute(positionId)}`);

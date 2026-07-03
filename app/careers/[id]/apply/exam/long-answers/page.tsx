@@ -6,18 +6,19 @@ import { useApplicationStore } from "@/store/applicationStore";
 import { longAnswerQuestionsData, assessmentConfigs } from "@/data/questions-data";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { z } from "zod";
+import { cn } from "@/lib/utils";
 
 export default function LongAnswersPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { longAnswers, setLongAnswer } = useApplicationStore();
+  const { longAnswers, setLongAnswer, completedStages, completeStage, assessmentConfig } = useApplicationStore();
 
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const positionId = parseInt(id as string);
   const questions = longAnswerQuestionsData[positionId] || [];
-  const config = assessmentConfigs[positionId];
+  const config = assessmentConfig ?? assessmentConfigs[positionId];
 
   if (!config || questions.length === 0) {
     return <div className="text-center py-10 text-[#FF4242]">Long answer assessment not found.</div>;
@@ -26,6 +27,20 @@ export default function LongAnswersPage() {
   const types = config.assessmentTypes ?? [config.assessmentType];
 
   const handleNext = () => {
+    const currentIndex = types.indexOf("long_answers");
+    const nextType = types[currentIndex + 1];
+
+    // If long answers stage is completed, skip validation and navigate
+    const isCompletedStage = completedStages["long_answers"];
+    if (isCompletedStage) {
+      if (nextType === "short_answers") {
+        router.push(`/careers/${id}/apply/exam/short-answers`);
+      } else {
+        router.push(`/careers/${id}/apply/review`);
+      }
+      return;
+    }
+
     // Generate Zod validation schema for all active questions
     const schemaShape = questions.reduce((acc, q) => {
       acc[q.id] = z.string().trim().min(1, {
@@ -44,8 +59,7 @@ export default function LongAnswersPage() {
       return;
     }
 
-    const currentIndex = types.indexOf("long_answers");
-    const nextType = types[currentIndex + 1];
+    completeStage("long_answers");
 
     if (nextType === "short_answers") {
       router.push(`/careers/${id}/apply/exam/short-answers`);
@@ -123,8 +137,12 @@ export default function LongAnswersPage() {
                 <textarea
                   placeholder="Type your response here..."
                   value={answerText}
+                  disabled={completedStages["long_answers"]}
                   onChange={(e) => setLongAnswer(q.id, e.target.value.slice(0, 2000))}
-                  className="w-full min-h-[300px] p-6 focus:outline-none resize-none bg-white text-[#414E62] font-inter text-[14px] leading-[21px] placeholder:text-[#414E62]/40"
+                  className={cn(
+                    "w-full min-h-[300px] p-6 focus:outline-none resize-none bg-white text-[#414E62] font-inter text-[14px] leading-[21px] placeholder:text-[#414E62]/40",
+                    completedStages["long_answers"] && "bg-gray-50 text-gray-500 cursor-not-allowed"
+                  )}
                 />
               </div>
 
