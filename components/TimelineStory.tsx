@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { TimelineItem } from "@/data/sections-data";
 import { SectionBadge } from "./ui/SectionBadge";
 
@@ -70,22 +74,107 @@ function TimelineLineLast() {
   );
 }
 
-function TimelineSpine({ isLast = false }: { isLast?: boolean }) {
+function AnimatedSpineLine({
+  isLast = false,
+  isFirst = false,
+  height,
+  overallProgress,
+  index,
+  totalItems,
+}: {
+  isLast?: boolean;
+  isFirst?: boolean;
+  height: number;
+  overallProgress: any;
+  index: number;
+  totalItems: number;
+}) {
+  const start = index / totalItems;
+  const end = (index + 1) / totalItems;
+  const heightVal = useTransform(overallProgress, [start, end], ["0%", "100%"]);
+
+  const lineTop = isFirst ? 18 : 0;
+  const lineHeight = height - lineTop;
+
+  return (
+    <div
+      className="absolute left-[35.5px] w-[1px] overflow-hidden"
+      style={{
+        top: lineTop,
+        height: lineHeight,
+      }}
+    >
+      {/* Faint background line placeholder */}
+      <div className="absolute inset-0 opacity-30">
+        {!isFirst && (
+          <div className="absolute top-0 left-0 h-[18px] w-[1px]">
+            <svg className="h-full w-[1px]" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="0.5" y1="0" x2="0.5" y2="100%" stroke="var(--brand-bg)" strokeLinecap="round" strokeDasharray="3 3" />
+            </svg>
+          </div>
+        )}
+        <div style={{ position: "absolute", top: isFirst ? 0 : 18 }}>
+          {isLast ? <TimelineLineLast /> : <TimelineLine />}
+        </div>
+      </div>
+
+      {/* Animated line reveal */}
+      <motion.div
+        style={{ height: heightVal }}
+        className="absolute top-0 left-0 w-full overflow-hidden origin-top"
+      >
+        <div style={{ height: lineHeight, width: 1, overflow: "hidden", position: "relative" }}>
+          {!isFirst && (
+            <div className="absolute top-0 left-0 h-[18px] w-[1px]">
+              <svg className="h-full w-[1px]" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="0.5" y1="0" x2="0.5" y2="100%" stroke="var(--brand-bg)" strokeLinecap="round" strokeDasharray="3 3" />
+              </svg>
+            </div>
+          )}
+          <div style={{ position: "absolute", top: isFirst ? 0 : 18 }}>
+            {isLast ? <TimelineLineLast /> : <TimelineLine />}
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function TimelineSpine({
+  isLast = false,
+  isFirst = false,
+  overallProgress,
+  index,
+  totalItems,
+}: {
+  isLast?: boolean;
+  isFirst?: boolean;
+  overallProgress: any;
+  index: number;
+  totalItems: number;
+}) {
   const height = isLast ? 518 : 456;
   return (
     <div className="relative shrink-0" style={{ width: 72, height }}>
       {/* Dot */}
-      <Image
-        src="/images/timeline/Ellipse.svg"
-        alt="Dot"
-        width={18}
-        height={18}
-        className="absolute top-0 left-[27px]"
-      />
+      {isFirst && (
+        <Image
+          src="/images/timeline/Ellipse.svg"
+          alt="Dot"
+          width={18}
+          height={18}
+          className="absolute top-0 left-[27px]"
+        />
+      )}
       {/* Dotted line — starts just below the dot */}
-      <div className="absolute top-[18px] left-[35.5px]">
-        {isLast ? <TimelineLineLast /> : <TimelineLine />}
-      </div>
+      <AnimatedSpineLine
+        isLast={isLast}
+        isFirst={isFirst}
+        height={height}
+        overallProgress={overallProgress}
+        index={index}
+        totalItems={totalItems}
+      />
     </div>
   );
 }
@@ -182,11 +271,27 @@ function ContentCard({
 function TimelineRow({
   item,
   isLast,
+  isFirst = false,
+  overallProgress,
+  index,
+  totalItems,
 }: {
   item: TimelineItem;
   isLast: boolean;
+  isFirst?: boolean;
+  overallProgress: any;
+  index: number;
+  totalItems: number;
 }) {
-  const spine = <TimelineSpine isLast={isLast} />;
+  const spine = (
+    <TimelineSpine
+      isLast={isLast}
+      isFirst={isFirst}
+      overallProgress={overallProgress}
+      index={index}
+      totalItems={totalItems}
+    />
+  );
 
   if (item.side === "left") {
     return (
@@ -236,76 +341,154 @@ function TimelineRow({
 
 /* ────────────────── Tablet row layout (md → lg) ────────────────── */
 
+function AnimatedTabletSpineLine({
+  isLast = false,
+  isFirst = false,
+  overallProgress,
+  index,
+  totalItems,
+}: {
+  isLast?: boolean;
+  isFirst?: boolean;
+  overallProgress: any;
+  index: number;
+  totalItems: number;
+}) {
+  const start = index / totalItems;
+  const end = (index + 1) / totalItems;
+  const heightVal = useTransform(overallProgress, [start, end], ["0%", "100%"]);
+
+  const top = isFirst ? "14px" : "0px";
+  const bottom = isLast ? "auto" : "64px"; // bottom-16 is 64px
+  const height = isLast ? "200px" : "auto";
+
+  return (
+    <div
+      className="absolute left-[19px] w-[1px] overflow-hidden"
+      style={{
+        top,
+        bottom: isLast ? "auto" : bottom,
+        height: isLast ? height : "auto",
+      }}
+    >
+      {/* Faint background line */}
+      <div className="absolute inset-0 opacity-30 h-[1000px] w-full">
+        <svg className="h-full w-[1px]" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line
+            x1="0.5"
+            y1="0"
+            x2="0.5"
+            y2="100%"
+            stroke="var(--brand-bg)"
+            strokeLinecap="round"
+            strokeDasharray="3 3"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+      </div>
+
+      {/* Animated line */}
+      <motion.div
+        style={{ height: heightVal }}
+        className="absolute top-0 left-0 w-full overflow-hidden origin-top"
+      >
+        <div className="w-full h-[1000px]">
+          <svg className="h-full w-[1px]" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line
+              x1="0.5"
+              y1="0"
+              x2="0.5"
+              y2="100%"
+              stroke="var(--brand-bg)"
+              strokeLinecap="round"
+              strokeDasharray="3 3"
+              vectorEffect="non-scaling-stroke"
+            />
+          </svg>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function AnimatedMobileLine({
+  idx,
+  totalItems,
+  overallProgress,
+  isLast,
+}: {
+  idx: number;
+  totalItems: number;
+  overallProgress: any;
+  isLast: boolean;
+}) {
+  const start = idx / totalItems;
+  const end = (idx + 1) / totalItems;
+  const widthVal = useTransform(overallProgress, [start, end], ["0%", "100%"]);
+
+  const width = isLast ? "200px" : "405px";
+
+  return (
+    <div
+      className="absolute left-[50%] z-0 h-[1px] overflow-hidden"
+      style={{ width }}
+    >
+      {/* Faint background line */}
+      <div className="absolute inset-0 border-t border-dashed border-brand-bg opacity-30" />
+
+      {/* Animated line */}
+      <motion.div
+        style={{ width: widthVal }}
+        className="absolute top-0 left-0 h-full overflow-hidden origin-left"
+      >
+        <div
+          className="border-t border-dashed border-brand-bg h-full"
+          style={{ width }}
+        />
+      </motion.div>
+    </div>
+  );
+}
+
 /**
  * Single-column layout with a left-aligned spine.
  * Each item: year + dot, then image, then text card — all stacked.
  */
-
 function TabletTimelineRow({
   item,
   isLast,
+  isFirst = false,
+  overallProgress,
+  index,
+  totalItems,
 }: {
   item: TimelineItem;
   isLast: boolean;
+  isFirst?: boolean;
+  overallProgress: any;
+  index: number;
+  totalItems: number;
 }) {
   return (
     <div className="grid w-full grid-cols-[40px_1fr] items-stretch">
       {/* Left: spine */}
       <div className="relative w-10 shrink-0">
-        <Image
-          src="/images/timeline/Ellipse.svg"
-          alt="Dot"
-          width={14}
-          height={14}
-          className="absolute top-0 left-[13px] z-10"
-        />
-        {isLast ? (
-          <div
-            className="absolute top-[14px] left-[19px] h-[200px] w-[1px]"
-            style={{
-              maskImage:
-                "linear-gradient(to bottom, black 0%, transparent 100%)",
-              WebkitMaskImage:
-                "linear-gradient(to bottom, black 0%, transparent 100%)",
-            }}
-          >
-            <svg
-              className="h-full w-[1px]"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line
-                x1="0.5"
-                y1="0"
-                x2="0.5"
-                y2="100%"
-                stroke="var(--brand-bg)"
-                strokeLinecap="round"
-                strokeDasharray="3 3"
-                vectorEffect="non-scaling-stroke"
-              />
-            </svg>
-          </div>
-        ) : (
-          <div className="absolute top-[14px] bottom-16 left-[19px] w-[1px]">
-            <svg
-              className="h-full w-[1px]"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line
-                x1="0.5"
-                y1="0"
-                x2="0.5"
-                y2="100%"
-                stroke="var(--brand-bg)"
-                strokeLinecap="round"
-                strokeDasharray="3 3"
-                vectorEffect="non-scaling-stroke"
-              />
-            </svg>
-          </div>
+        {isFirst && (
+          <Image
+            src="/images/timeline/Ellipse.svg"
+            alt="Dot"
+            width={14}
+            height={14}
+            className="absolute top-0 left-[13px] z-10"
+          />
         )}
+        <AnimatedTabletSpineLine
+          isLast={isLast}
+          isFirst={isFirst}
+          overallProgress={overallProgress}
+          index={index}
+          totalItems={totalItems}
+        />
       </div>
       {/* Right: content */}
       <div className="flex flex-col gap-5 pb-16">
@@ -366,10 +549,39 @@ export default function TimelineStory({
 }: {
   items?: TimelineItem[];
 }) {
+  const desktopRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: desktopScroll } = useScroll({
+    target: desktopRef,
+    offset: ["start 80%", "end 20%"],
+  });
+  const desktopScrollSpring = useSpring(desktopScroll, {
+    stiffness: 30,
+    damping: 15,
+  });
+
+  const tabletRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: tabletScroll } = useScroll({
+    target: tabletRef,
+    offset: ["start 80%", "end 20%"],
+  });
+  const tabletScrollSpring = useSpring(tabletScroll, {
+    stiffness: 30,
+    damping: 15,
+  });
+
+  const mobileRef = useRef<HTMLDivElement>(null);
+  const { scrollXProgress: mobileScroll } = useScroll({
+    container: mobileRef,
+  });
+  const mobileScrollSpring = useSpring(mobileScroll, {
+    stiffness: 30,
+    damping: 15,
+  });
+
   return (
     <section className="bg-brand-dark w-full overflow-hidden" id="timeline">
       {/* ===== Desktop View (lg+) — two-column alternating with per-item spine ===== */}
-      <div className="hidden flex-col justify-end bg-white lg:flex">
+      <div ref={desktopRef} className="hidden flex-col justify-end bg-white lg:flex">
         <div className="bg-brand-dark self-stretch px-[99px] pt-[100px]">
           <div className="mx-auto flex max-w-[1242px] flex-col items-center self-stretch">
             {/* ── Header ── */}
@@ -401,7 +613,14 @@ export default function TimelineStory({
                       <div />
                     </div>
                     {/* Content row with spine */}
-                    <TimelineRow item={item} isLast={isLast} />
+                    <TimelineRow
+                      item={item}
+                      isLast={isLast}
+                      isFirst={idx === 0}
+                      overallProgress={desktopScrollSpring}
+                      index={idx}
+                      totalItems={items.length}
+                    />
                   </div>
                 );
               })}
@@ -411,7 +630,7 @@ export default function TimelineStory({
       </div>
 
       {/* ===== Tablet View (md → lg) — single-column with left spine ===== */}
-      <div className="hidden flex-col bg-white md:flex lg:hidden">
+      <div ref={tabletRef} className="hidden flex-col bg-white md:flex lg:hidden">
         <div className="bg-brand-dark self-stretch px-6 pt-[80px] sm:px-10">
           <div className="mx-auto flex max-w-[700px] flex-col items-start">
             {/* ── Header ── */}
@@ -436,6 +655,10 @@ export default function TimelineStory({
                     key={item.year}
                     item={item}
                     isLast={isLast}
+                    isFirst={idx === 0}
+                    overallProgress={tabletScrollSpring}
+                    index={idx}
+                    totalItems={items.length}
                   />
                 );
               })}
@@ -461,7 +684,7 @@ export default function TimelineStory({
           </div>
 
           {/* Horizontal Scroll Track */}
-          <div className="flex w-full snap-x snap-mandatory scrollbar-none flex-row gap-[95px] overflow-x-auto px-6 pb-8">
+          <div ref={mobileRef} className="flex w-full snap-x snap-mandatory scrollbar-none flex-row gap-[95px] overflow-x-auto px-6 pb-8">
             {items.map((item, idx) => {
               const isEven = idx % 2 === 0;
 
@@ -517,13 +740,12 @@ export default function TimelineStory({
 
                   {/* Year & Connecting Line (Middle) */}
                   <div className="relative mt-[54px] mb-[70px] flex h-[48px] w-full items-center justify-center">
-                    {/* Connecting Line (only render if not the last item) */}
-                    {idx < items.length - 1 && (
-                      <div className="border-brand-bg absolute left-[50%] z-0 h-[1px] w-[405px] border-t border-dashed" />
-                    )}
-                    {idx == items.length - 1 && (
-                      <div className="border-brand-bg absolute left-[50%] z-0 h-[1px] w-[200px] border-t border-dashed" />
-                    )}
+                    <AnimatedMobileLine
+                      idx={idx}
+                      totalItems={items.length}
+                      overallProgress={mobileScrollSpring}
+                      isLast={idx === items.length - 1}
+                    />
                     {/* Year & Dot centered, Year masks the line while Dot sits on it */}
                     <div className="relative z-10 flex items-center select-none">
                       <span
@@ -532,7 +754,7 @@ export default function TimelineStory({
                       >
                         {item.year}
                       </span>
-                      {idx < items.length && (
+                      {idx === 0 && (
                         <Image
                           src="/images/timeline/Ellipse.svg"
                           alt="Dot"
