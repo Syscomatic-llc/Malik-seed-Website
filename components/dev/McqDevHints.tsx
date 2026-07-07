@@ -66,7 +66,7 @@ export function McqDevReviewBadge({
         isCorrect ? "bg-[#00BA00]/15 text-[#007A00]" : "bg-[#FF4242]/10 text-[#FF4242]"
       )}
     >
-      {isCorrect ? "✓ correct" : "✗ wrong"} — key: {OPTION_LABELS[question.correctAnswer]}
+      {isCorrect ? "✓ correct" : "✗ wrong"} - key: {OPTION_LABELS[question.correctAnswer]}
     </span>
   );
 }

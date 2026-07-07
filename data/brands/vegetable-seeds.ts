@@ -1,6 +1,6 @@
 export const vegetableSeedsData = {
   meta: {
-    title: "Vegetable Seeds — Malik Seeds",
+    title: "Vegetable Seeds - Malik Seeds",
     description: "Seeds built for Bangladesh's farmers. Over half a century of delivering high-yielding, disease-resistant hybrid vegetable varieties.",
   },
   hero: {
@@ -10,7 +10,7 @@ export const vegetableSeedsData = {
   intro: {
     layout: "text-tags" as const,
     title: ["Bangladesh's farmers.\n", "Seeds built for"],
-    description: "For over half a century, we've worked alongside farmers to bring better seeds to Bangladesh's fields—higher yields, stronger resistance, and varieties proven in local conditions.",
+    description: "For over half a century, we've worked alongside farmers to bring better seeds to Bangladesh's fields-higher yields, stronger resistance, and varieties proven in local conditions.",
     highlights: ["Climate Resilient", "Disease Resistant", "High Yielding"],
   },
   grid: {
@@ -38,7 +38,7 @@ export const vegetableSeedsData = {
       },
       {
         title: "High Yielding",
-        description: "Our varieties produce more—more fruits per plant, more harvests per season. Every hybrid is trialled specifically for superior yield output.",
+        description: "Our varieties produce more-more fruits per plant, more harvests per season. Every hybrid is trialled specifically for superior yield output.",
       },
     ],
   },

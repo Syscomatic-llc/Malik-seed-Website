@@ -1,6 +1,6 @@
 export const maliksFlowerData = {
   meta: {
-    title: "Malik's Flower — Malik Seeds",
+    title: "Malik's Flower - Malik Seeds",
     description: "Premium global flower genetics selected for vibrant color, longevity, and adaptability to Bangladesh's climate.",
   },
   hero: {

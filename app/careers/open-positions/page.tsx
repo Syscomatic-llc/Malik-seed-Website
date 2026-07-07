@@ -4,7 +4,7 @@ import CVDropSection from "@/components/sections/careers/CVDropSection";
 import { openPositionsData } from "@/data/career-data";
 
 export const metadata: Metadata = {
-  title: "Open Positions — Malik Seeds",
+  title: "Open Positions - Malik Seeds",
   description:
     "Explore open roles and career opportunities at Malik Seeds. Join our team and shape the future of agriculture.",
 };

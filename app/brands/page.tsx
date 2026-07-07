@@ -3,7 +3,7 @@ import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import ProductsSection from "@/components/sections/ProductsSection";
 
 export const metadata = {
-  title: "Our Brands — Malik Seeds",
+  title: "Our Brands - Malik Seeds",
   description:
     "We are committed to delivering high-performance hybrid seed varieties. Discover our six major brands and their missions.",
 };

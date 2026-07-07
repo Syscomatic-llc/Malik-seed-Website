@@ -69,7 +69,7 @@ export const careerManifestoData = {
   subtitle: "It's Your Turn",
   paragraphs: [
     `At Malik Seeds, we are assembling a team of builders, people with "High Agency". If you don't know what a High-Agency person is, Google it.`,
-    `High Agency people don't wait for a map, they build the road. They don't accept default processes — they create smarter systems, and take on every challenge with Ownership.`,
+    `High Agency people don't wait for a map, they build the road. They don't accept default processes - they create smarter systems, and take on every challenge with Ownership.`,
     `We are recruiting self-motivated individuals who view their work not as a job description, but as a vehicle for Delivering Results and Collaborate in High-Performance Teams.`,
     `If you are the type of person who has a Growth Mindset, and has the Honesty & Integrity to lead from the front, then we want you on this team.`,
     `People with these qualities have the freedom to shape how we operate. It's your turn.`,

@@ -1,6 +1,6 @@
 export const innovationDevelopmentData = {
   meta: {
-    title: "Innovation & Development — Malik Seeds",
+    title: "Innovation & Development - Malik Seeds",
     description: "Developing the horticulture sector and strengthening farmers' economic empowerment through climate-smart agriculture and value chain projects.",
   },
   hero: {

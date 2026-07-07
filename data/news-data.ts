@@ -161,7 +161,7 @@ export const newsArticles: NewsArticle[] = [
 
       <blockquote>
         "The support from the Malik Seeds team was invaluable. They didn't just sell me seeds; they taught me how to grow them for maximum success."
-        <cite>— Md. Abdur Rahman, Bogura</cite>
+        <cite>- Md. Abdur Rahman, Bogura</cite>
       </blockquote>
 
       <p>Abdur's success has inspired neighboring farmers to adopt hybrid seeds and modern management practices, starting a positive wave of agricultural modernization in his village.</p>
@@ -246,7 +246,7 @@ export const newsArticles: NewsArticle[] = [
 
       <blockquote>
         "The support from the Malik Seeds team was invaluable. They didn't just sell me seeds; they taught me how to grow them for maximum success."
-        <cite>— Md. Abdur Rahman, Bogura</cite>
+        <cite>- Md. Abdur Rahman, Bogura</cite>
       </blockquote>
 
       <p>Abdur's success has inspired neighboring farmers to adopt hybrid seeds and modern management practices, starting a positive wave of agricultural modernization in his village.</p>
@@ -308,7 +308,7 @@ export const newsArticles: NewsArticle[] = [
       
       <blockquote>
         "Seeing the differences in root structure and plant vigor firsthand helped me understand why proper soil prep and seed spacing make such a big impact on final yield."
-        <cite>— Local Grower, Bogura District</cite>
+        <cite>- Local Grower, Bogura District</cite>
       </blockquote>
 
       <h3>Key Training Modules Covered</h3>

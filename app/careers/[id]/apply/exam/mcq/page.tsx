@@ -81,7 +81,7 @@ export default function MCQAssessmentPage() {
     <div className="flex flex-col gap-12 relative w-full">
       {isDevEnvironment() && (
         <div className="rounded-xl border-2 border-dashed border-yellow-400 bg-yellow-50 px-4 py-3 font-mono text-[12px] text-yellow-900">
-          🛠 DEV mode — correct answers shown below each question. Tags mark selected vs correct options.
+          🛠 DEV mode - correct answers shown below each question. Tags mark selected vs correct options.
         </div>
       )}
       {/* Questions list */}

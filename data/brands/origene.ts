@@ -1,6 +1,6 @@
 export const origeneData = {
   meta: {
-    title: "Origene by Malik — Malik Seeds",
+    title: "Origene by Malik - Malik Seeds",
     description: "Safe, nutritious vegetables with full field-to-fork traceability and Global GAP certified farm sourcing.",
   },
   hero: {

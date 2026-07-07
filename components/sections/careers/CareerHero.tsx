@@ -63,7 +63,7 @@ export default memo(function CareerHero({ data }: { data: typeof careerHeroData 
   return (
     <section
       id="career-hero"
-      aria-label="Career Hero — Come build the future of agriculture with us"
+      aria-label="Career Hero - Come build the future of agriculture with us"
       className="relative w-full overflow-hidden bg-brand-dark"
     >
       {/* Inner wrapper: max-w-[1240px] centered, 100px horizontal gutters at xl */}

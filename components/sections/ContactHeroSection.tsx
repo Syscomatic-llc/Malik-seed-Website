@@ -4,6 +4,7 @@ import React, { useState, useId, FormEvent, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { OFFICE_DETAILS, SUBJECT_OPTIONS } from "@/data/pages-data";
+import { SectionBadge } from "@/components/ui/SectionBadge";
 
 // ---------------------------------------------------------------------------
 // Constants & Static Configurations (Architectural Cleanliness)
@@ -183,13 +184,9 @@ export default function ContactHeroSection() {
           <div className="flex w-full flex-col gap-8 lg:flex-1 lg:gap-12 xl:w-152 xl:flex-none">
             {/* Pill & Title container */}
             <div className="flex w-full flex-col items-start gap-6 lg:gap-8">
-              {/* Badge Pill — Figma: 134x33 (desktop) / 122x30 (mobile) */}
-              <div className="border-overlay-white-border bg-overlay-dark-tag inline-flex h-[30px] items-center justify-center gap-2 overflow-hidden rounded-[40px] border border-solid px-4 py-1.5 lg:h-[33px]">
-                <span className="bg-brand-light-green h-2 w-2 shrink-0 rounded-[2px]" />
-                <span className="text-tag leading-[150%] font-medium tracking-[0.05em] text-white uppercase">
-                  {OFFICE_DETAILS.badgeText}
-                </span>
-              </div>
+              <SectionBadge variant="dark" showDot>
+                {OFFICE_DETAILS.badgeText}
+              </SectionBadge>
 
               {/* H1 Heading — Figma: 64px (desktop) / 38px (mobile) */}
               <h1 className="contact-page-hero-title white-space w-full leading-[120%] font-medium tracking-tight text-white lg:max-w-md xl:max-w-none">

@@ -12,9 +12,9 @@ interface ApplyLayoutProps {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const position = openPositionsData.positions.find((pos) => pos.id.toString() === id);
-  if (!position) return { title: "Apply — Malik Seeds" };
+  if (!position) return { title: "Apply - Malik Seeds" };
   return {
-    title: `Apply for ${position.title} — Malik Seeds`,
+    title: `Apply for ${position.title} - Malik Seeds`,
     description: `Application form for ${position.title} position at A R Malik Seeds.`,
   };
 }

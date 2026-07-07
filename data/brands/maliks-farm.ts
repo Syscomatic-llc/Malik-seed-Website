@@ -1,6 +1,6 @@
 export const maliksFarmData = {
   meta: {
-    title: "Malik's Farm — Malik Seeds",
+    title: "Malik's Farm - Malik Seeds",
     description: "Research & Development Farm in northern Bangladesh. The scientific hub evaluating seed varieties and providing Global GAP certified agricultural training.",
   },
   hero: {

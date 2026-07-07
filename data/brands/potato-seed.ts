@@ -1,6 +1,6 @@
 export const potatoSeedData = {
   meta: {
-    title: "Potato Seeds — Malik Seeds",
+    title: "Potato Seeds - Malik Seeds",
     description: "Certified potato seed varieties selected for superior adaptability, disease resistance, and outstanding field performance.",
   },
   hero: {

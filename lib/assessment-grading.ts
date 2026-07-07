@@ -27,7 +27,7 @@ const OPTION_LABELS = ["A", "B", "C", "D"];
 
 function formatOptionLabel(index: number, options: string[]): string {
   const letter = OPTION_LABELS[index] ?? "?";
-  const text = options[index] ?? "—";
+  const text = options[index] ?? "-";
   return `${letter}. ${text}`;
 }
 

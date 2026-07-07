@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { TimelineItem } from "@/data/sections-data";
+import { SectionBadge } from "./ui/SectionBadge";
 
 /* ────────────────── sub‑components ────────────────── */
 
@@ -373,15 +374,9 @@ export default function TimelineStory({
           <div className="mx-auto flex max-w-[1242px] flex-col items-center self-stretch">
             {/* ── Header ── */}
             <div className="mb-[63px] ml-[1px] flex flex-col items-start gap-8 self-start">
-              <div className="bg-brand-dark/30 flex items-center gap-2 rounded-[40px] border border-solid border-white/10 px-4 py-1.5">
-                <div className="bg-brand-light-green h-2 w-2 rounded-[2px]" />
-                <span
-                  className="text-sm font-medium text-white"
-                  style={{ fontFamily: "var(--font-inter-tight)" }}
-                >
-                  Timeline
-                </span>
-              </div>
+              <SectionBadge variant="dark" showDot>
+                Timeline
+              </SectionBadge>
               <span
                 className="text-brand-bg text-5xl leading-[58px] font-medium"
                 style={{ fontFamily: "var(--font-inter-tight)" }}
@@ -421,15 +416,9 @@ export default function TimelineStory({
           <div className="mx-auto flex max-w-[700px] flex-col items-start">
             {/* ── Header ── */}
             <div className="mb-12 flex flex-col items-start gap-6">
-              <div className="bg-brand-dark/30 flex items-center gap-2 rounded-[40px] border border-solid border-white/10 px-4 py-1.5">
-                <div className="bg-brand-light-green h-2 w-2 rounded-[2px]" />
-                <span
-                  className="text-sm font-medium text-white"
-                  style={{ fontFamily: "var(--font-inter-tight)" }}
-                >
-                  Timeline
-                </span>
-              </div>
+              <SectionBadge variant="dark" showDot>
+                Timeline
+              </SectionBadge>
               <h2
                 className="text-brand-bg text-4xl leading-[44px] font-medium"
                 style={{ fontFamily: "var(--font-inter-tight)" }}
@@ -460,15 +449,9 @@ export default function TimelineStory({
         <div className="flex flex-col items-center gap-[48px] px-4">
           {/* Header */}
           <div className="flex max-w-[358px] flex-col items-center gap-6 text-center">
-            <div className="bg-brand-dark/32 flex items-center gap-2 rounded-[40px] border border-solid border-white/12 px-4 py-1.5">
-              <div className="bg-brand-light-green h-1.5 w-1.5 rounded-[2px]" />
-              <span
-                className="text-xs leading-[18px] font-medium text-white"
-                style={{ fontFamily: "var(--font-inter-tight)" }}
-              >
-                Timeline
-              </span>
-            </div>
+            <SectionBadge variant="dark" showDot>
+              Timeline
+            </SectionBadge>
             <h2
               className="text-brand-bg text-[32px] leading-[38px] font-medium"
               style={{ fontFamily: "var(--font-inter-tight)" }}

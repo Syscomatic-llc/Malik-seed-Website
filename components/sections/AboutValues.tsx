@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SectionBadge } from "../ui/SectionBadge";
 
 // ---------------------------------------------------------------------------
 // Static data
@@ -8,25 +9,25 @@ const BRAND_VALUES = [
     id: 1,
     title: "Farmer First",
     src: "/images/about/value-farmer-first.png",
-    alt: "Farmer first — smiling worker in seed production fields",
+    alt: "Farmer first - smiling worker in seed production fields",
   },
   {
     id: 2,
     title: "Innovation",
     src: "/images/about/value-innovation.png",
-    alt: "Innovation — agricultural research inside a greenhouse",
+    alt: "Innovation - agricultural research inside a greenhouse",
   },
   {
     id: 3,
     title: "Uncompromising Quality",
     src: "/images/about/value-quality.png",
-    alt: "Uncompromising quality — seed selection and quality control",
+    alt: "Uncompromising quality - seed selection and quality control",
   },
   {
     id: 4,
     title: "Research Backed",
     src: "/images/about/value-research.png",
-    alt: "Research backed — lab environment for seed testing",
+    alt: "Research backed - lab environment for seed testing",
   },
 ] as const;
 
@@ -39,12 +40,9 @@ export default function AboutValues() {
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
         {/* Section header */}
         <div className="mb-8 flex flex-col items-center gap-6 md:mb-12">
-          <div className="border-brand-border bg-brand-neutral-light flex w-max items-center gap-2 rounded-[30px] border px-4 py-1.5 select-none">
-            <div className="bg-brand-active h-1.5 w-1.5 shrink-0 rounded-[2px]" />
-            <span className="text-brand-active font-sans text-[12px] font-medium md:text-[14px]">
-              The Principles That Guide Our Work
-            </span>
-          </div>
+          <SectionBadge variant="outline" showDot>
+            The Principles That Guide Our Work
+          </SectionBadge>
 
           <h2 className="text-brand-dark text-center font-sans text-[32px] leading-[38px] font-medium md:text-[48px] md:leading-[58px]">
             Brand Values

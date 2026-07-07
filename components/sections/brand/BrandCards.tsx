@@ -78,9 +78,9 @@ export default function BrandCards({
               )}
             >
               {card.category && (
-                <div className="h-[33px] px-4 rounded-[30px] bg-[#EAF3DE] border border-[#E4E7EC] inline-flex items-center justify-center w-fit text-[#0F3221] font-sans text-[14px] font-medium leading-[21px] shrink-0">
+                <SectionBadge variant="green" showDot={false}>
                   {card.category}
-                </div>
+                </SectionBadge>
               )}
               {showIndex && (
                 <div

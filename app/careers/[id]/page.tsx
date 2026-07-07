@@ -35,11 +35,11 @@ export async function generateMetadata({
   const position = openPositionsData.positions.find((pos) => pos.id.toString() === id);
 
   if (!position) {
-    return { title: `Position Not Found — ${SITE_NAME}` };
+    return { title: `Position Not Found - ${SITE_NAME}` };
   }
 
   return {
-    title: `${position.title} — ${SITE_NAME}`,
+    title: `${position.title} - ${SITE_NAME}`,
     description: position.description,
     openGraph: {
       title: `${position.title} at ${SITE_NAME}`,

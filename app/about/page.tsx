@@ -9,7 +9,7 @@ import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import { timelineItems } from "@/data/sections-data";
 
 export const metadata = {
-  title: "Our Story — Malik Seeds",
+  title: "Our Story - Malik Seeds",
   description:
     "Discover the historical journey of A.R. Malik, our mission, core brand values, and agricultural milestones from 1962 to today.",
 };

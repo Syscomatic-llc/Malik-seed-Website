@@ -204,7 +204,7 @@ export default memo(function EmployeeTestimonialsSection({ data }: { data: typeo
   return (
     <section
       id="employee-testimonials"
-      aria-label="Employee Testimonials — Our Team's Stories"
+      aria-label="Employee Testimonials - Our Team's Stories"
       className="w-full bg-[#F2F7F1] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

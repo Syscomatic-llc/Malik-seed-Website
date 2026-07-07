@@ -2,7 +2,7 @@ import ActionButton from "@/components/ActionButton";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Page Not Found — Malik Seeds",
+  title: "Page Not Found - Malik Seeds",
   description: "The page you are looking for does not exist or has been moved.",
 };
 

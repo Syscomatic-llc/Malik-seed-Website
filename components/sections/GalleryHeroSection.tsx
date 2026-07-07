@@ -171,11 +171,10 @@ const GalleryHeroSection = ({
           >
             <SectionBadge
               variant="outline"
-              showDot={false}
+              showDot
               className="font-heading h-[30px] gap-2 border-[#E4E7EC] px-4 text-[12px] leading-[18px] xl:h-[33px] xl:text-[14px] xl:leading-[21px]"
             >
-              <span className="h-[6px] w-[6px] shrink-0 rounded-[2px] bg-[#195236]" />
-              <span className="font-medium text-[#195236]">Gallery</span>
+              Gallery
             </SectionBadge>
 
             <h2 className="font-heading text-[34px] leading-[41px] font-semibold tracking-tight text-[#0D1A14] xl:text-[48px] xl:leading-[58px]">
@@ -238,11 +237,10 @@ const GalleryHeroSection = ({
         <div className="flex w-full flex-col items-center gap-4 xl:gap-8">
           <SectionBadge
             variant="outline"
-            showDot={false}
+            showDot
             className="font-heading h-[30px] gap-2 border-[#E4E7EC] px-4 text-[12px] leading-[18px] xl:h-[33px] xl:text-[14px] xl:leading-[21px]"
           >
-            <span className="h-[6px] w-[6px] shrink-0 rounded-[2px] bg-[#195236]" />
-            <span className="font-medium text-[#195236]">Gallery</span>
+            Gallery
           </SectionBadge>
 
           <h1 className="font-heading text-center text-[34px] leading-[41px] font-semibold tracking-tight text-[#0D1A14] xl:text-[48px] xl:leading-[58px]">

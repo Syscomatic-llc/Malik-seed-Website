@@ -3,7 +3,7 @@ import { SectionBadge } from "@/components/ui/SectionBadge";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Coming Soon — Malik Seeds",
+  title: "Coming Soon - Malik Seeds",
   description: "We are cultivating a new digital experience. This page is currently under development.",
 };
 

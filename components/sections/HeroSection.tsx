@@ -6,7 +6,7 @@ import { useAutoSlide } from "@/hooks/useAutoSlide";
 import ActionButton from "@/components/ActionButton";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import Link from "next/link";
-import { heroData, HeroSlide } from "@/data/sections-data";
+import { heroData, HeroSlide, HeroData } from "@/data/sections-data";
 
 // ---------------------------------------------------------------------------
 // Sub-components
@@ -139,7 +139,7 @@ const HeroOverlays = memo(function HeroOverlays() {
  * Figma: Frame 2147229467 — 786×289 at left:327, top:426
  * Children: title frame (786×197, gap:16) + button row (311×44, gap:16)
  */
-const HeroContentDesktop = memo(function HeroContentDesktop() {
+const HeroContentDesktop = memo(function HeroContentDesktop({ data }: { data: HeroData }) {
   return (
     <div
       className="absolute right-0 left-0 z-30 mx-auto hidden w-full max-w-[786px] flex-col items-center px-6 md:flex"
@@ -151,7 +151,7 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
       {/* Frame 2147229465 — text stack */}
       <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
         <h1 className="text-display text-brand-bg w-full text-center">
-          {heroData.titleDesktop.split("\n").map((line, idx) => (
+          {data.titleDesktop.split("\n").map((line, idx) => (
             <Fragment key={idx}>
               {idx > 0 && <br />}
               {line}
@@ -162,22 +162,22 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
           className="text-brand-bg text-center text-[16px] leading-[24px] font-semibold lg:text-[18px] lg:leading-[27px]"
           style={{ fontFamily: "var(--font-inter)" }}
         >
-          {heroData.subtitle}
+          {data.subtitle}
         </p>
       </div>
 
       {/* Frame 2147229466 — CTA row */}
       <div className="flex items-center gap-4">
         <ActionButton
-          href={heroData.ctaProducts.href}
-          label={heroData.ctaProducts.label}
+          href={data.ctaProducts.href}
+          label={data.ctaProducts.label}
           variant="primary"
           className="h-[44px] w-[152px] text-[14px] leading-[17px]"
           iconSize={20}
         />
         <ActionButton
-          href={heroData.ctaAbout.href}
-          label={heroData.ctaAbout.label}
+          href={data.ctaAbout.href}
+          label={data.ctaAbout.label}
           variant="secondary"
           className="h-[44px] w-[143px] text-[14px] leading-[17px]"
           iconSize={20}
@@ -191,7 +191,7 @@ const HeroContentDesktop = memo(function HeroContentDesktop() {
  * Mobile hero content.
  * Figma: Frame left:16, top:313, width:358, height:249, col, gap:32
  */
-const HeroContentMobile = memo(function HeroContentMobile() {
+const HeroContentMobile = memo(function HeroContentMobile({ data }: { data: HeroData }) {
   return (
     <div
       className="absolute right-0 left-0 z-30 mx-auto flex w-full max-w-[358px] flex-col px-4 md:hidden"
@@ -203,28 +203,28 @@ const HeroContentMobile = memo(function HeroContentMobile() {
       {/* Text block: col, gap:8, items-center */}
       <div className="flex flex-col items-center gap-2">
         <h1 className="text-h2-title text-brand-bg w-full text-center font-semibold">
-          {heroData.titleMobile}
+          {data.titleMobile}
         </h1>
         <p
           className="text-brand-bg text-center text-[14px] leading-[20px] font-semibold sm:text-[16px] sm:leading-[24px]"
           style={{ fontFamily: "var(--font-inter)" }}
         >
-          {heroData.subtitle}
+          {data.subtitle}
         </p>
       </div>
 
       {/* CTA row: 358×41, gap:8 */}
       <div className="flex w-full items-center justify-center gap-3 sm:gap-4">
         <ActionButton
-          href={heroData.ctaProducts.href}
-          label={heroData.ctaProducts.label}
+          href={data.ctaProducts.href}
+          label={data.ctaProducts.label}
           variant="primary"
           className="h-[41px] w-[132px] text-[14px] leading-[17px]"
           iconSize={16}
         />
         <ActionButton
-          href={heroData.ctaAbout.href}
-          label={heroData.ctaAbout.label}
+          href={data.ctaAbout.href}
+          label={data.ctaAbout.label}
           variant="secondary"
           className="h-[41px] w-[121px] text-[14px] leading-[17px]"
           iconSize={16}
@@ -239,19 +239,19 @@ const HeroContentMobile = memo(function HeroContentMobile() {
  * Desktop: Figma Frame 6 — 204×48 at left:618, top:815
  * Mobile:  Figma Frame 6 — 172×43 at left:109, top:613
  */
-export const ScrollIndicator = memo(function ScrollIndicator() {
+export const ScrollIndicator = memo(function ScrollIndicator({ scrollText = heroData.scrollText }: { scrollText?: string }) {
   return (
     <>
       {/* Desktop */}
       <div
-        aria-label={heroData.scrollText}
+        aria-label={scrollText}
         className="absolute right-0 bottom-[85px] left-0 z-30 px-[24px] py-[13px] mx-auto hidden w-fit items-center gap-[10px] md:flex"
       >
         <span
           className="text-brand-bg text-[18px] leading-[22px] font-medium"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
-          {heroData.scrollText}
+          {scrollText}
         </span>
         <ArrowIcon direction="down" size={20} className="text-brand-bg" />
       </div>
@@ -259,14 +259,14 @@ export const ScrollIndicator = memo(function ScrollIndicator() {
       {/* Mobile */}
       <Link
         href="#about"
-        aria-label={heroData.scrollText}
+        aria-label={scrollText}
         className="absolute right-0 bottom-[67px] left-0 px-[24px] py-[13px] z-30 mx-auto flex w-fit cursor-pointer items-center gap-[10px] md:hidden"
       >
         <span
           className="text-brand-bg text-[14px] leading-[17px] font-medium"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
-          {heroData.scrollText}
+          {scrollText}
         </span>
         <ArrowIcon direction="down" size={16} className="text-brand-bg" />
       </Link>
@@ -274,23 +274,27 @@ export const ScrollIndicator = memo(function ScrollIndicator() {
   );
 });
 
-export default function HeroSection() {
+export interface HeroSectionProps {
+  data?: HeroData;
+}
+
+export default function HeroSection({ data = heroData }: HeroSectionProps) {
   const { currentIndex } = useAutoSlide({
-    count: heroData.slides.length,
-    interval: heroData.intervalMs,
+    count: data.slides.length,
+    interval: data.intervalMs,
   });
 
   return (
     <section
       id="hero"
-      aria-label={`Hero section — ${heroData.titleMobile}`}
+      aria-label={`Hero section - ${data.titleMobile}`}
       className="bg-brand-hero-dark relative h-screen w-full overflow-hidden"
     >
-      <HeroSlideshow slides={heroData.slides} currentIndex={currentIndex} />
+      <HeroSlideshow slides={data.slides} currentIndex={currentIndex} />
       <HeroOverlays />
-      <HeroContentDesktop />
-      <HeroContentMobile />
-      <ScrollIndicator />
+      <HeroContentDesktop data={data} />
+      <HeroContentMobile data={data} />
+      <ScrollIndicator scrollText={data.scrollText} />
     </section>
   );
 }

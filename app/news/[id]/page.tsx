@@ -101,11 +101,11 @@ export async function generateMetadata({
   const article = findArticle(id);
 
   if (!article) {
-    return { title: `Article Not Found — ${SITE_NAME}` };
+    return { title: `Article Not Found - ${SITE_NAME}` };
   }
 
   return {
-    title: `${article.title} — ${SITE_NAME}`,
+    title: `${article.title} - ${SITE_NAME}`,
     description: article.description,
   };
 }

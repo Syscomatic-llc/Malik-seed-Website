@@ -125,7 +125,7 @@ export default function ReviewPage() {
           <div className="flex flex-col gap-12">
             {isDevEnvironment() && (
               <div className="rounded-xl border-2 border-dashed border-yellow-400 bg-yellow-50 px-4 py-3 font-mono text-[12px] text-yellow-900">
-                🛠 DEV mode — review shows ✓/✗ vs correct answer key per MCQ.
+                🛠 DEV mode - review shows ✓/✗ vs correct answer key per MCQ.
               </div>
             )}
             <h2

@@ -87,7 +87,7 @@ export default memo(function FutureProgramSection({ data }: { data: typeof futur
           >
             <Image
               src={data.image}
-              alt="Future Leader Program — Malik Seeds"
+              alt="Future Leader Program - Malik Seeds"
               fill
               sizes="(max-width: 1024px) 100vw, 503px"
               className="object-cover object-center"

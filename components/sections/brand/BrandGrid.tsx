@@ -215,7 +215,7 @@ export default function BrandGrid({
                     >
                       <Image
                         src={image}
-                        alt={`${title} — image ${(idx % IMAGES_COUNT) + 1}`}
+                        alt={`${title} - image ${(idx % IMAGES_COUNT) + 1}`}
                         fill
                         className="object-cover"
                         sizes="280px"
@@ -240,7 +240,7 @@ export default function BrandGrid({
             >
               <Image
                 src={image}
-                alt={`${title} — image ${idx + 1}`}
+                alt={`${title} - image ${idx + 1}`}
                 fill
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 sizes={images.length === 2 ? "(max-width: 1024px) 50vw, 608px" : "(max-width: 1024px) 50vw, 387px"}

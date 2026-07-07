@@ -18,7 +18,7 @@ import {
 } from "@/data/career-data";
 
 export const metadata: Metadata = {
-  title: "Careers — Malik Seeds",
+  title: "Careers - Malik Seeds",
   description:
     "Join Malik Seeds and help build the future of agriculture in Bangladesh. Explore open positions and apply to join our team.",
   openGraph: {

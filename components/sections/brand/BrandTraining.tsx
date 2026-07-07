@@ -253,11 +253,9 @@ export default function BrandTraining() {
       <section className="w-full bg-[#DCF3C7] py-[80px] md:py-[130px] text-[#0D1A14] overflow-hidden">
         {/* Constrained Header */}
         <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-[100px] flex flex-col items-center text-center gap-8 mb-16 md:mb-20">
-          {/* Badge — light variant: #F9FAFB bg, #E4E7EC border, #195236 text */}
-          <div className="inline-flex h-[33px] items-center justify-center gap-2 rounded-[30px] px-4 font-sans text-[14px] font-medium leading-[21px] capitalize shrink-0 bg-[#F9FAFB] border border-[#E4E7EC] text-[#195236]">
-            <span className="h-[6px] w-[6px] rounded-[2px] bg-[#195236] shrink-0" />
+          <SectionBadge variant="outline" showDot>
             {maliksFarmData.testimonials.badge}
-          </div>
+          </SectionBadge>
           <h2 className="font-sans text-[32px] md:text-[48px] font-medium leading-[38px] md:leading-[58px] text-black tracking-tight">
             {maliksFarmData.testimonials.title}
           </h2>

@@ -20,7 +20,7 @@ import type { careerManifestoData } from "@/data/career-data";
 const MANIFESTO_IMAGES = [
   {
     src: "/images/team/malik_farm_grid.png",
-    alt: "Malik Seeds farm — aerial view grid",
+    alt: "Malik Seeds farm - aerial view grid",
     hasLeftFade: true,
     widthClass: "w-[310px] lg:w-[608px]",
   },
@@ -51,7 +51,7 @@ export default memo(function CareerManifestoSection({ data }: { data: typeof car
   return (
     <section
       id="career-manifesto"
-      aria-label="It's Your Turn — Career Manifesto"
+      aria-label="It's Your Turn - Career Manifesto"
       className="w-full overflow-hidden bg-brand-dark"
       style={{ borderRadius: "40px 40px 0 0" }}
     >
