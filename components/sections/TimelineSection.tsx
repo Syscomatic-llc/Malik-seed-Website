@@ -1,9 +1,9 @@
-import { timelineItems } from "@/data/sections-data";
+import { timelineItems, TimelineItem } from "@/data/sections-data";
 import TimelineStory from "../TimelineStory";
 import ActionButton from "../ActionButton";
 
-export default function TimelineSection() {
-  const items = timelineItems.slice(0, 3);
+export default function TimelineSection({ items: propItems }: { items?: TimelineItem[] }) {
+  const items = (propItems ?? timelineItems).slice(0, 3);
   return (
     <section className="bg-brand-dark relative overflow-hidden text-white">
       <div className="relative z-10 container mx-auto">
