@@ -29,7 +29,7 @@ export default function BrandHero({ title, bgImage }: BrandHeroProps) {
   const lines = title.split("\n");
 
   return (
-    <section className="relative w-full h-screen flex items-center">
+    <section className="relative flex h-screen w-full items-center">
       {/* Background Image */}
       <div className="absolute inset-0 z-0 bg-[#0d1a14]">
         <Image
@@ -37,7 +37,7 @@ export default function BrandHero({ title, bgImage }: BrandHeroProps) {
           alt={title.replace(/\n/g, " ")}
           fill
           priority
-          className="object-cover object-[55%] md:object-center opacity-90 transition-transform duration-[1200ms] ease-out hover:scale-105"
+          className="object-cover object-[55%] opacity-90 transition-transform duration-[1200ms] ease-out hover:scale-105 md:object-center"
           sizes="100vw"
         />
       </div>
@@ -46,19 +46,16 @@ export default function BrandHero({ title, bgImage }: BrandHeroProps) {
       <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/40 via-transparent to-black/75" />
 
       {/* Hero Content */}
-      <div className="relative top-[22%] z-30 w-full px-4 md:px-8 lg:px-[100px] pb-10 md:pb-16 lg:pb-[88px]">
-        <div className="mx-auto flex flex-col items-center md:items-start gap-6 md:gap-10 lg:gap-14">
-          <h1 className="font-sans text-[48px] md:text-[72px] lg:text-[96px] font-bold text-center md:text-left leading-[48px] md:leading-[72px] lg:leading-[96px] text-white tracking-tight uppercase">
+      <div className="relative top-[22%] z-30 w-full px-4 pb-10 md:px-8 md:pb-16 lg:px-[100px] lg:pb-[88px]">
+        <div className="mx-auto flex flex-col items-center gap-6 md:items-start md:gap-10 lg:gap-14">
+          <h1 className="text-center font-sans text-[48px] leading-[48px] font-bold tracking-tight text-white uppercase md:text-left md:text-[72px] md:leading-[72px] lg:text-[96px] lg:leading-[96px]">
             {lines.map((line, i) => (
-              <span key={i}
-                className={`${i === 1 ? "text-[#A9E179]" : ""}`}
-              >
+              <span key={i} className={`${i === 1 ? "text-[#A9E179]" : ""}`}>
                 {line}
                 {i < lines.length - 1 && <br />}
               </span>
             ))}
           </h1>
-
         </div>
       </div>
       {/* Scroll Indicator */}

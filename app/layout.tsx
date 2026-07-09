@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter_Tight, Inter, Anton, Stack_Sans_Notch } from "next/font/google";
+import { Inter_Tight, Inter, Anton } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
@@ -22,11 +22,7 @@ const anton = Anton({
   weight: ["400"],
 });
 
-const stackSansNotch = Stack_Sans_Notch({
-  subsets: ["latin"],
-  variable: "--font-stack-sans-notch",
-  weight: ["400", "500", "600", "700"],
-});
+
 
 export const viewport: Viewport = {
   themeColor: "#1b4d32",
@@ -70,7 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${interTight.variable} ${inter.variable} ${anton.variable} ${stackSansNotch.variable} h-full antialiased`}
+      className={`${interTight.variable} ${inter.variable} ${anton.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">

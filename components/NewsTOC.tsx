@@ -97,9 +97,9 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
 
   // ── Render ───────────────────────────────────────────────────────────────
   return (
-    <div className="flex w-full md:max-w-[400px] lg:max-w-[292px] md:mx-auto lg:mx-0 flex-col gap-6 lg:gap-10 rounded-[16px] border border-brand-border/50 bg-white py-6 px-0 shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
+    <div className="border-brand-border/50 flex w-full flex-col gap-6 rounded-[16px] border bg-white px-0 py-6 shadow-[0_4px_30px_rgba(0,0,0,0.03)] md:mx-auto md:max-w-[400px] lg:mx-0 lg:max-w-[292px] lg:gap-10">
       {/* TOC header */}
-      <div className="flex flex-col gap-4 lg:gap-5 px-6">
+      <div className="flex flex-col gap-4 px-6 lg:gap-5">
         <div className="flex items-center gap-2">
           <Image
             src="/images/news/menu-02.svg"
@@ -109,7 +109,7 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
             height={20}
             className="h-5 w-5"
           />
-          <span className="font-heading text-base lg:text-lg font-medium leading-[18px] text-brand-dark">
+          <span className="font-heading text-brand-dark text-base leading-[18px] font-medium lg:text-lg">
             On this page
           </span>
         </div>
@@ -120,9 +120,9 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
       {headings.length > 0 && (
         <div className="relative flex gap-6 py-1">
           {/* Vertical guide line (Track) */}
-          <div className="absolute bottom-1 top-1 w-[2px] rounded-full bg-[#0B3124]/10" />
+          <div className="absolute top-1 bottom-1 w-[2px] rounded-full bg-[#0B3124]/10" />
 
-          <div className="flex min-w-0 break-words flex-1 flex-col gap-2 lg:gap-4 pl-6">
+          <div className="flex min-w-0 flex-1 flex-col gap-2 pl-6 break-words lg:gap-4">
             {headings.map(({ id, text }) => {
               const isActive = activeId === id;
               return (
@@ -130,14 +130,15 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
                   key={id}
                   href={`#${id}`}
                   onClick={(e) => handleClick(e, id)}
-                  className={`relative block break-words font-heading text-sm lg:text-base leading-[21px] lg:leading-6 transition-colors duration-200 hover:text-brand-active ${isActive
-                    ? "font-medium text-[#0D1A14]"
-                    : "text-[#0D1A14]/70"
-                    }`}
+                  className={`font-heading hover:text-brand-active relative block text-sm leading-[21px] break-words transition-colors duration-200 lg:text-base lg:leading-6 ${
+                    isActive
+                      ? "font-medium text-[#0D1A14]"
+                      : "text-[#0D1A14]/70"
+                  }`}
                 >
                   {/* Active indicator pill, positioned exactly over the vertical guide line track */}
                   {isActive && (
-                    <span className="absolute -left-[23px] top-[2px] bottom-[2px] w-[2px] rounded-[2px] bg-brand-accent" />
+                    <span className="bg-brand-accent absolute top-[2px] bottom-[2px] -left-[23px] w-[2px] rounded-[2px]" />
                   )}
                   {text}
                 </a>
@@ -153,7 +154,7 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
           Written by:
         </span>
         <div className="flex items-center gap-3">
-          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-brand-border bg-brand-neutral-light">
+          <div className="border-brand-border bg-brand-neutral-light relative h-12 w-12 shrink-0 overflow-hidden rounded-full border">
             <Image
               src={author.avatar}
               alt={author.name}
@@ -163,7 +164,7 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
             />
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="font-heading text-base font-medium leading-6 text-[#0D1A14]">
+            <span className="font-heading text-base leading-6 font-medium text-[#0D1A14]">
               {author.name}
             </span>
             <span className="font-heading text-sm leading-[21px] text-[#0D1A14]/70">

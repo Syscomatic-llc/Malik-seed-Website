@@ -6,33 +6,40 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import PartnersSection from "@/components/sections/PartnersSection";
 import NewsSection from "@/components/sections/NewsSection";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
+import { homepageApi } from "@/lib/api";
 
-export default function Home() {
+export default async function Home() {
+  let apiData = null;
+  try {
+    apiData = await homepageApi.getAll({ revalidate: 60 });
+  } catch (err) {
+    console.error("Failed to fetch homepage data from API:", err);
+  }
   return (
     <>
       {/* Hero Section */}
-      <HeroSection />
+      <HeroSection apiData={apiData?.hero} />
 
       {/* About Malik Seeds */}
-      <AboutSection />
+      <AboutSection apiData={apiData?.about} />
 
       {/* Our Brands & Products */}
-      <ProductsSection />
+      <ProductsSection apiData={apiData?.services} />
 
       {/* Historical Timeline */}
-      <TimelineSection />
+      <TimelineSection apiData={apiData?.timeline} />
 
       {/* Success Stories / Voice of Impact */}
-      <TestimonialsSection />
+      <TestimonialsSection apiData={apiData?.testimonials} />
 
       {/* Partners Marquee */}
-      <PartnersSection />
+      <PartnersSection apiData={apiData?.partners} />
 
       {/* News & Stories Insights */}
-      <NewsSection />
+      <NewsSection apiData={apiData?.news} />
 
       {/* Join our Team Career CTA */}
-      <JoinTeamSection />
+      <JoinTeamSection apiData={apiData?.cta_banners} />
     </>
   );
 }

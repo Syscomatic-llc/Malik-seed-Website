@@ -31,9 +31,7 @@ export default function BrandGrid({
   const LOOP_RESET_LIMIT = IMAGES_COUNT * 2;
 
   const extendedImages =
-    IMAGES_COUNT > 0
-      ? [...images, ...images, ...images]
-      : [];
+    IMAGES_COUNT > 0 ? [...images, ...images, ...images] : [];
 
   const [activeIndex, setActiveIndex] = useState(LOOP_SET_START);
   const [isResetting, setIsResetting] = useState(false);
@@ -141,20 +139,20 @@ export default function BrandGrid({
   }, [isResetting]);
 
   const gridCols =
-    images.length === 2
-      ? "md:grid-cols-2"
-      : "md:grid-cols-2 lg:grid-cols-3";
+    images.length === 2 ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3";
 
   if (!images || images.length === 0) return null;
 
   return (
-    <section className="w-full bg-[#F2F7F1] pt-[40px] pb-[40px] px-[16px] md:pt-[60px] md:pb-[60px] md:px-[48px] lg:pt-[60px] lg:pb-[100px] lg:px-[100px] overflow-hidden">
-      <div className="max-w-[1240px] mx-auto flex flex-col gap-[32px] md:gap-[48px] lg:gap-[64px]">
+    <section className="w-full overflow-hidden bg-[#F2F7F1] px-[16px] pt-[40px] pb-[40px] md:px-[48px] md:pt-[60px] md:pb-[60px] lg:px-[100px] lg:pt-[60px] lg:pb-[100px]">
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-[32px] md:gap-[48px] lg:gap-[64px]">
         {/* Header */}
-        <div className="flex flex-col text-center gap-6 md:gap-8 items-center mx-auto max-w-[958px]">
-          <SectionBadge variant="outline" showDot={true} className="bg-white">{badge}</SectionBadge>
+        <div className="mx-auto flex max-w-[958px] flex-col items-center gap-6 text-center md:gap-8">
+          <SectionBadge variant="outline" showDot={true} className="bg-white">
+            {badge}
+          </SectionBadge>
           <div className="flex flex-col items-center gap-4">
-            <h2 className="font-sans text-[32px] md:text-[48px] font-medium leading-[38px] md:leading-[58px] text-[#0D1A14] max-w-[958px] mx-auto">
+            <h2 className="mx-auto max-w-[958px] font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
               {title.split("\n").map((part, i, arr) => (
                 <span key={i}>
                   {part}
@@ -162,7 +160,12 @@ export default function BrandGrid({
                 </span>
               ))}
             </h2>
-            <p className={cn("font-sans text-[15px] md:text-[16px] leading-[24px] text-[#0D1A14]/65 max-w-[866px] mx-auto", descriptionClassName)}>
+            <p
+              className={cn(
+                "mx-auto max-w-[866px] font-sans text-[15px] leading-[24px] text-[#0D1A14]/65 md:text-[16px]",
+                descriptionClassName
+              )}
+            >
               {description.split("\n").map((part, i, arr) => (
                 <span key={i}>
                   {part}
@@ -177,7 +180,7 @@ export default function BrandGrid({
         <div className="block w-full overflow-visible md:hidden">
           <div
             ref={trackRef}
-            className="relative h-[290px] w-full touch-pan-y overflow-visible flex items-center"
+            className="relative flex h-[290px] w-full touch-pan-y items-center overflow-visible"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -203,7 +206,7 @@ export default function BrandGrid({
                       if (!isResetting) setActiveIndex(idx);
                     }}
                     className={cn(
-                      "group relative shrink-0 cursor-pointer overflow-hidden rounded-[24px] bg-neutral-200 w-[280px] h-[290px] transition-all duration-500 ease-out",
+                      "group relative h-[290px] w-[280px] shrink-0 cursor-pointer overflow-hidden rounded-[24px] bg-neutral-200 transition-all duration-500 ease-out",
                       isResetting ? "transition-none" : ""
                     )}
                   >
@@ -234,7 +237,7 @@ export default function BrandGrid({
             <div
               key={idx}
               className={cn(
-                "group relative overflow-hidden rounded-[24px] bg-neutral-200 w-full",
+                "group relative w-full overflow-hidden rounded-[24px] bg-neutral-200",
                 images.length === 2 ? "aspect-[608/377]" : "aspect-[397/377]"
               )}
             >
@@ -243,7 +246,11 @@ export default function BrandGrid({
                 alt={`${title} - image ${idx + 1}`}
                 fill
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                sizes={images.length === 2 ? "(max-width: 1024px) 50vw, 608px" : "(max-width: 1024px) 50vw, 387px"}
+                sizes={
+                  images.length === 2
+                    ? "(max-width: 1024px) 50vw, 608px"
+                    : "(max-width: 1024px) 50vw, 387px"
+                }
               />
             </div>
           ))}

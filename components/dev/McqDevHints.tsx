@@ -11,7 +11,13 @@ interface McqDevHintsProps {
   variant?: "inline" | "compact";
 }
 
-export function McqDevAnswerKey({ question, questionIndex }: { question: MCQQuestion; questionIndex: number }) {
+export function McqDevAnswerKey({
+  question,
+  questionIndex,
+}: {
+  question: MCQQuestion;
+  questionIndex: number;
+}) {
   if (!isDevEnvironment()) return null;
 
   const letter = OPTION_LABELS[question.correctAnswer] ?? "?";
@@ -41,7 +47,7 @@ export function McqDevOptionHighlight({
   return (
     <span
       className={cn(
-        "ml-2 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide",
+        "ml-2 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wide uppercase",
         isCorrect && "bg-[#00BA00]/15 text-[#007A00]",
         isSelected && !isCorrect && "bg-[#FF4242]/10 text-[#FF4242]"
       )}
@@ -63,10 +69,13 @@ export function McqDevReviewBadge({
     <span
       className={cn(
         "rounded-full px-2 py-0.5 text-[11px] font-semibold",
-        isCorrect ? "bg-[#00BA00]/15 text-[#007A00]" : "bg-[#FF4242]/10 text-[#FF4242]"
+        isCorrect
+          ? "bg-[#00BA00]/15 text-[#007A00]"
+          : "bg-[#FF4242]/10 text-[#FF4242]"
       )}
     >
-      {isCorrect ? "✓ correct" : "✗ wrong"} - key: {OPTION_LABELS[question.correctAnswer]}
+      {isCorrect ? "✓ correct" : "✗ wrong"} - key:{" "}
+      {OPTION_LABELS[question.correctAnswer]}
     </span>
   );
 }

@@ -258,8 +258,8 @@ const GalleryHeroSection = ({
                 MOBILE_SPAN_CLASSES[index % MOBILE_SPAN_CLASSES.length];
               const mobileHideClass =
                 !hasExpanded &&
-                  index >= MOBILE_INITIAL_VISIBLE &&
-                  index < INITIAL_VISIBLE
+                index >= MOBILE_INITIAL_VISIBLE &&
+                index < INITIAL_VISIBLE
                   ? "hidden xl:flex"
                   : "";
 

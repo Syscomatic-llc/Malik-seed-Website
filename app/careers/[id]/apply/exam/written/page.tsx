@@ -16,6 +16,8 @@ export default function WrittenAssessmentPage() {
   }, [id, positionId, router]);
 
   return (
-    <div className="py-10 text-center text-[#0D1A14]/70">Redirecting to the configured assessment stage...</div>
+    <div className="py-10 text-center text-[#0D1A14]/70">
+      Redirecting to the configured assessment stage...
+    </div>
   );
 }

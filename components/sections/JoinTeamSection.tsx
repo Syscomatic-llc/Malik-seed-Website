@@ -1,10 +1,33 @@
 import { Fragment } from "react";
 import ActionButton from "@/components/ActionButton";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { joinTeamData } from "@/data/sections-data";
+import { joinTeamData as staticJoinTeamData } from "@/data/sections-data";
+import { ApiCtaBanner } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/utils";
 
-export default function JoinTeamSection() {
+export interface JoinTeamSectionProps {
+  apiData?: ApiCtaBanner[];
+}
+
+export default function JoinTeamSection({ apiData }: JoinTeamSectionProps) {
+  const activeJoinTeamData =
+    apiData && apiData.length > 0
+      ? {
+          badge: apiData[0].title || "Join our Team",
+          title: apiData[0].subtitle || "",
+          cta: {
+            label: apiData[0].cta_text || "Join Today",
+            href: apiData[0].cta_link || "/careers",
+          },
+          images: {
+            desktop: resolveImageUrl(apiData[0].background_image),
+            mobile: resolveImageUrl(apiData[0].background_image),
+          },
+        }
+      : staticJoinTeamData;
+
+  const joinTeamData = activeJoinTeamData;
   return (
     // Desktop: 1440x690, bg #F2F7F1 (Figma: Frame 2147229633)
     <section className="w-full bg-[#F2F7F1] py-10 md:py-[100px]" id="careers">
@@ -57,8 +80,8 @@ export default function JoinTeamSection() {
                 src={joinTeamData.images.desktop}
                 alt="Join the Malik Seeds Team"
                 fill
-                loading="eager"
                 sizes="726px"
+                quality={50}
                 className="object-cover"
               />
             </div>
@@ -69,9 +92,9 @@ export default function JoinTeamSection() {
             <Image
               src={joinTeamData.images.mobile}
               alt="Join the Malik Seeds Team"
-              loading="eager"
               fill
               sizes="100vw"
+              quality={50}
               className="object-cover"
             />
           </div>

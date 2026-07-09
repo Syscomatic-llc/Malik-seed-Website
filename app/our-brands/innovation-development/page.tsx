@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function InnovationDevelopmentPage() {
   return (
-    <div className="bg-[#F2F7F1] min-h-screen">
+    <div className="min-h-screen bg-[#F2F7F1]">
       <BrandHero {...innovationDevelopmentData.hero} />
       <BrandIntro {...innovationDevelopmentData.intro} />
       <BrandSplit {...innovationDevelopmentData.split1} />

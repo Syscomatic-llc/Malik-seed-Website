@@ -1315,7 +1315,10 @@ export function hasLongAnswersAssessment(positionId: number): boolean {
 }
 
 export function hasWrittenAssessment(positionId: number): boolean {
-  return hasShortAnswersAssessment(positionId) || hasLongAnswersAssessment(positionId);
+  return (
+    hasShortAnswersAssessment(positionId) ||
+    hasLongAnswersAssessment(positionId)
+  );
 }
 
 export function shouldAutoGradeAssessment(positionId: number): boolean {

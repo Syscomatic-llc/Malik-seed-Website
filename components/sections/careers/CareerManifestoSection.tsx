@@ -40,39 +40,45 @@ const MANIFESTO_IMAGES = [
 
 // Static style objects for the slider side fades (using #0D1A14 / rgb(13,26,20) to blend with bg-brand-dark)
 const LEFT_FADE_STYLE = {
-  background: "linear-gradient(270deg, rgba(13, 26, 20, 0.00) 0%, rgba(13, 26, 20, 0.75) 65.43%, #0D1A14 100%)",
+  background:
+    "linear-gradient(270deg, rgba(13, 26, 20, 0.00) 0%, rgba(13, 26, 20, 0.75) 65.43%, #0D1A14 100%)",
 } as const;
 
 const RIGHT_FADE_STYLE = {
-  background: "linear-gradient(90deg, rgba(13, 26, 20, 0.00) 0%, rgba(13, 26, 20, 0.75) 65.43%, #0D1A14 100%)",
+  background:
+    "linear-gradient(90deg, rgba(13, 26, 20, 0.00) 0%, rgba(13, 26, 20, 0.75) 65.43%, #0D1A14 100%)",
 } as const;
 
-export default memo(function CareerManifestoSection({ data }: { data: typeof careerManifestoData }) {
+export default memo(function CareerManifestoSection({
+  data,
+}: {
+  data: typeof careerManifestoData;
+}) {
   return (
     <section
       id="career-manifesto"
       aria-label="It's Your Turn - Career Manifesto"
-      className="w-full overflow-hidden bg-brand-dark"
+      className="bg-brand-dark w-full overflow-hidden"
       style={{ borderRadius: "40px 40px 0 0" }}
     >
       <div className="mx-auto w-full max-w-[1440px]">
-
         {/* ── Top content block ── */}
         <div className="mx-auto max-w-[1240px] px-4 xl:px-0">
-          <div
-            className="flex flex-col items-center gap-8 pt-[100px] pb-0"
-          >
+          <div className="flex flex-col items-center gap-8 pt-[100px] pb-0">
             {/* Section label badge — dark variant */}
-            <SectionBadge variant="dark" showDot dotSize="8px" className="uppercase tracking-wider">
+            <SectionBadge
+              variant="dark"
+              showDot
+              dotSize="8px"
+              className="tracking-wider uppercase"
+            >
               {data.badge}
             </SectionBadge>
 
             {/* Main text block */}
             <div className="flex flex-col items-center gap-4 text-center">
               {/* Accent subtitle — brand-light-green 48px */}
-              <h2
-                className="font-inter-tight text-[32px] font-medium leading-[150%] text-brand-light-green md:text-[48px] md:leading-[58px]"
-              >
+              <h2 className="font-inter-tight text-brand-light-green text-[32px] leading-[150%] font-medium md:text-[48px] md:leading-[58px]">
                 {data.subtitle}
               </h2>
 
@@ -81,7 +87,7 @@ export default memo(function CareerManifestoSection({ data }: { data: typeof car
                 {data.paragraphs.map((para, i) => (
                   <p
                     key={i}
-                    className="font-inter text-[16px] leading-[24px] text-brand-bg text-center mb-0"
+                    className="font-inter text-brand-bg mb-0 text-center text-[16px] leading-[24px]"
                   >
                     {para}
                   </p>
@@ -94,28 +100,28 @@ export default memo(function CareerManifestoSection({ data }: { data: typeof car
               href={data.cta.href}
               label={data.cta.label}
               variant="primary"
-              className="h-[46px] px-6 text-[16px] !text-brand-dark"
+              className="!text-brand-dark h-[46px] px-6 text-[16px]"
             />
           </div>
         </div>
 
         {/* ── Bottom image strip: Infinite auto-scroll Marquee ── */}
-        <div className="relative w-full overflow-hidden mt-[60px] pb-[100px] lg:pb-[104px]">
+        <div className="relative mt-[60px] w-full overflow-hidden pb-[100px] lg:pb-[104px]">
           {/* Side Fades — gradient overlays to smoothly transition images in/out */}
           <div
-            className="pointer-events-none absolute top-0 left-0 z-20 h-[280px] lg:h-[360px] w-24 lg:w-[214px]"
+            className="pointer-events-none absolute top-0 left-0 z-20 h-[280px] w-24 lg:h-[360px] lg:w-[214px]"
             style={LEFT_FADE_STYLE}
           />
           <div
-            className="pointer-events-none absolute top-0 -right-1 z-20 h-[280px] lg:h-[360px] w-24  lg:w-[214px]"
+            className="pointer-events-none absolute top-0 -right-1 z-20 h-[280px] w-24 lg:h-[360px] lg:w-[214px]"
             style={RIGHT_FADE_STYLE}
           />
 
-          <div className="animate-marquee hover:[animation-play-state:paused] flex gap-4 lg:gap-6">
+          <div className="animate-marquee flex gap-4 hover:[animation-play-state:paused] lg:gap-6">
             {[...MANIFESTO_IMAGES, ...MANIFESTO_IMAGES].map((img, i) => (
               <div
                 key={i}
-                className={`relative flex-shrink-0 overflow-hidden rounded-[20px] lg:rounded-[24px] bg-white h-[280px] lg:h-[360px] ${img.widthClass}`}
+                className={`relative h-[280px] flex-shrink-0 overflow-hidden rounded-[20px] bg-white lg:h-[360px] lg:rounded-[24px] ${img.widthClass}`}
               >
                 <Image
                   src={img.src}

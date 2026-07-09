@@ -14,19 +14,28 @@ export function ArrowIcon({
 
   if (direction === "left") {
     return (
-      <svg width={size} height={size} viewBox="0 0 20 20" fill="none"
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 20 20"
+        fill="none"
         aria-hidden="true"
-        {...props}>
-        <path d="M5 6.66406L1.66667 9.9974L5 13.3307" 
+        {...props}
+      >
+        <path
+          d="M5 6.66406L1.66667 9.9974L5 13.3307"
           strokeWidth={strokeWidth}
           stroke="currentColor"
           strokeLinecap="round"
-          strokeLinejoin="round" />
-        <path d="M18.332 10H1.66536" 
+          strokeLinejoin="round"
+        />
+        <path
+          d="M18.332 10H1.66536"
           strokeWidth={strokeWidth}
           stroke="currentColor"
           strokeLinecap="round"
-          strokeLinejoin="round" />
+          strokeLinejoin="round"
+        />
       </svg>
     );
   }
@@ -57,8 +66,7 @@ export function ArrowIcon({
       </svg>
     );
   }
-   
-  
+
   return (
     <svg
       width={size}

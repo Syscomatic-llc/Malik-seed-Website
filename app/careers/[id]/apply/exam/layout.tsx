@@ -3,7 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams, usePathname } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
-import { mcqQuestionsData, shortAnswerQuestionsData, longAnswerQuestionsData, assessmentConfigs, hasMultipleExamTypes, shouldAutoGradeAssessment } from "@/data/questions-data";
+import {
+  mcqQuestionsData,
+  shortAnswerQuestionsData,
+  longAnswerQuestionsData,
+  assessmentConfigs,
+  hasMultipleExamTypes,
+  shouldAutoGradeAssessment,
+} from "@/data/questions-data";
 import { cn } from "@/lib/utils";
 
 interface ExamLayoutProps {
@@ -72,32 +79,44 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
       // Check if trying to access short-answers without completing mcq
       if (isShortAnswersPage && types.includes("mcq")) {
         const mcqs = mcqQuestionsData[positionId] || [];
-        const unansweredMcq = mcqs.some(q => mcqAnswers[q.id] === undefined);
+        const unansweredMcq = mcqs.some((q) => mcqAnswers[q.id] === undefined);
         if (unansweredMcq) {
           router.replace(`/careers/${id}/apply/exam/mcq`);
           return;
         }
       }
-      
+
       // Check if trying to access long-answers without completing mcq or short-answers
       if (isLongAnswersPage) {
         if (types.includes("mcq")) {
           const mcqs = mcqQuestionsData[positionId] || [];
-          if (mcqs.some(q => mcqAnswers[q.id] === undefined)) {
+          if (mcqs.some((q) => mcqAnswers[q.id] === undefined)) {
             router.replace(`/careers/${id}/apply/exam/mcq`);
             return;
           }
         }
         if (types.includes("short_answers")) {
           const shortQs = shortAnswerQuestionsData[positionId] || [];
-          if (shortQs.some(q => !shortAnswers[q.id]?.trim())) {
+          if (shortQs.some((q) => !shortAnswers[q.id]?.trim())) {
             router.replace(`/careers/${id}/apply/exam/short-answers`);
             return;
           }
         }
       }
     }
-  }, [hydrated, isStarted, isCompleted, isShortAnswersPage, isLongAnswersPage, types, mcqAnswers, shortAnswers, positionId, id, router]);
+  }, [
+    hydrated,
+    isStarted,
+    isCompleted,
+    isShortAnswersPage,
+    isLongAnswersPage,
+    types,
+    mcqAnswers,
+    shortAnswers,
+    positionId,
+    id,
+    router,
+  ]);
 
   // Timer loop
   useEffect(() => {
@@ -133,22 +152,42 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
         }
       }
     }
-  }, [stageTimeRemaining, completedStages, hydrated, isTimerRunning, types, id, router, completeAssessment, completeStage]);
+  }, [
+    stageTimeRemaining,
+    completedStages,
+    hydrated,
+    isTimerRunning,
+    types,
+    id,
+    router,
+    completeAssessment,
+    completeStage,
+  ]);
 
   // Redirect on finish
   useEffect(() => {
     if (isCompleted && hydrated) {
-      const nextRoute = shouldAutoGradeAssessment(positionId) ? "/loading" : "/submitted";
+      const nextRoute = shouldAutoGradeAssessment(positionId)
+        ? "/loading"
+        : "/submitted";
       router.replace(`/careers/${id}/apply${nextRoute}`);
     }
   }, [isCompleted, hydrated, id, router, positionId]);
 
   if (!hydrated || !isStarted || isCompleted) {
-    return <div className="text-center py-10 font-inter text-[#0D1A14]/70">Loading assessment...</div>;
+    return (
+      <div className="font-inter py-10 text-center text-[#0D1A14]/70">
+        Loading assessment...
+      </div>
+    );
   }
 
   if (!config) {
-    return <div className="text-center py-10 text-[#FF4242]">Assessment config not found.</div>;
+    return (
+      <div className="py-10 text-center text-[#FF4242]">
+        Assessment config not found.
+      </div>
+    );
   }
 
   let questions = [];
@@ -159,10 +198,10 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     answeredCount = Object.keys(mcqAnswers).length;
   } else if (isShortAnswersPage) {
     questions = shortQuestions;
-    answeredCount = questions.filter(q => !!shortAnswers[q.id]).length;
+    answeredCount = questions.filter((q) => !!shortAnswers[q.id]).length;
   } else if (isLongAnswersPage) {
     questions = longQuestions;
-    answeredCount = questions.filter(q => !!longAnswers[q.id]).length;
+    answeredCount = questions.filter((q) => !!longAnswers[q.id]).length;
   }
 
   // Format time remaining MM:SS
@@ -174,12 +213,13 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   const hasMultipleExamTypesState = hasMultipleExamTypes(positionId);
 
   return (
-    <div className="w-full flex flex-col gap-6">
+    <div className="flex w-full flex-col gap-6">
       {/* Category Stepper Header */}
       {hasMultipleExamTypesState && (
-        <div className="w-full p-4 sm:p-6 flex items-start justify-between gap-1">
+        <div className="flex w-full items-start justify-between gap-1 p-4 sm:p-6">
           {types.map((type: string, idx: number) => {
-            const isStepActive = (type === "mcq" && isMCQPage) ||
+            const isStepActive =
+              (type === "mcq" && isMCQPage) ||
               (type === "short_answers" && isShortAnswersPage) ||
               (type === "long_answers" && isLongAnswersPage);
 
@@ -190,26 +230,27 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
 
             const isActiveOrCompleted = isStepActive || isStepCompleted;
 
-            const label = type === "mcq"
-              ? "Technical Knowledge (MCQ)"
-              : type === "short_answers"
-                ? "Short Answers"
-                : "Long Answers";
+            const label =
+              type === "mcq"
+                ? "Technical Knowledge (MCQ)"
+                : type === "short_answers"
+                  ? "Short Answers"
+                  : "Long Answers";
 
             return (
               <div
                 key={type}
                 className={cn(
-                  "flex flex-col gap-2 sm:gap-4 relative",
+                  "relative flex flex-col gap-2 sm:gap-4",
                   idx === types.length - 1 ? "flex-initial" : "flex-1"
                 )}
               >
                 {/* Step Label (Top) */}
                 {/* Step Label (Top) */}
-                <div className="h-7 sm:h-11 flex items-start">
+                <div className="flex h-7 items-start sm:h-11">
                   <span
                     className={cn(
-                      "text-[11px] sm:text-[16px] lg:text-[18px] leading-[14px] sm:leading-[22px] text-left line-clamp-2 sm:line-clamp-none pr-1",
+                      "line-clamp-2 pr-1 text-left text-[11px] leading-[14px] sm:line-clamp-none sm:text-[16px] sm:leading-[22px] lg:text-[18px]",
                       isStepActive
                         ? "font-medium text-[#195236]"
                         : isStepCompleted
@@ -223,21 +264,23 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
                 </div>
 
                 {/* Circle + Line (Bottom) */}
-                <div className="relative w-full h-8 sm:h-[56px] flex items-center">
+                <div className="relative flex h-8 w-full items-center sm:h-[56px]">
                   {/* Step Circle */}
-                  <div className={cn(
-                    "w-6 h-6 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-medium text-[11px] sm:text-[18px] z-10 shrink-0",
-                    isActiveOrCompleted
-                      ? "bg-[#195236] text-[#F2F7F1]"
-                      : "bg-[#F2F7F1] text-[#195236]/30 border border-[#E4E7EC]"
-                  )}>
+                  <div
+                    className={cn(
+                      "z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-medium sm:h-10 sm:w-10 sm:text-[18px]",
+                      isActiveOrCompleted
+                        ? "bg-[#195236] text-[#F2F7F1]"
+                        : "border border-[#E4E7EC] bg-[#F2F7F1] text-[#195236]/30"
+                    )}
+                  >
                     {idx + 1}
                   </div>
 
                   {/* Connecting Line (only if not the last step) */}
                   {idx < types.length - 1 && (
                     <div
-                      className="flex-1 h-[2px] ml-1 sm:ml-2"
+                      className="ml-1 h-[2px] flex-1 sm:ml-2"
                       style={{
                         backgroundImage:
                           "repeating-linear-gradient(to right, #195236 0, #195236 4px, transparent 4px, transparent 8px)",
@@ -252,25 +295,26 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
       )}
 
       {/* Details Header */}
-      <div className="w-full flex items-center justify-between text-[#0D1A14] font-inter text-[16px] leading-6 px-1">
+      <div className="font-inter flex w-full items-center justify-between px-1 text-[16px] leading-6 text-[#0D1A14]">
         <span>Total questions: {questions.length}</span>
         <div className="flex items-center gap-2">
           <span className="font-normal">Time remaining:</span>
-          <span className={cn(
-            "font-mono font-medium",
-            remainingTime < 180 ? "text-[#FF4242] animate-pulse" : "text-[#0D1A14]"
-          )}>
+          <span
+            className={cn(
+              "font-mono font-medium",
+              remainingTime < 180
+                ? "animate-pulse text-[#FF4242]"
+                : "text-[#0D1A14]"
+            )}
+          >
             {timeString}
           </span>
         </div>
       </div>
 
       {/* Main Card Content */}
-      <div className="w-full bg-white border border-[#E4E7EC] rounded-[24px] p-6 md:p-10 shadow-sm">
-        <div className="flex flex-col gap-12 relative">
-
-          {children}
-        </div>
+      <div className="w-full rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
+        <div className="relative flex flex-col gap-12">{children}</div>
       </div>
     </div>
   );

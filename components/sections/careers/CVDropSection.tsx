@@ -37,17 +37,14 @@ export default memo(function CVDropSection() {
   };
 
   return (
-    <section className="w-full bg-[#F2F7F1] pb-[100px] pt-12 lg:pb-[100px] lg:pt-0">
+    <section className="w-full bg-[#F2F7F1] pt-12 pb-[100px] lg:pt-0 lg:pb-[100px]">
       <div className="mx-auto w-full max-w-[1030px] px-4 lg:px-0">
-        <div
-          className="relative w-full border border-[#E4E7EC] bg-[#0D1A14] py-8 px-4 md:py-16 md:px-15 rounded-[24px] lg:rounded-[32px]"
-        >
+        <div className="relative w-full rounded-[24px] border border-[#E4E7EC] bg-[#0D1A14] px-4 py-8 md:px-15 md:py-16 lg:rounded-[32px]">
           <div className="mx-auto flex max-w-[910px] flex-col items-center gap-[32px] md:gap-[64px]">
             {/* Title */}
-            <h2
-              className="text-center font-inter-tight text-[24px] leading-[28.8px] font-medium text-[#F2F7F1] md:text-[32px] md:leading-[38px] max-w-[650px]"
-            >
-              Don&apos;t see a role suitable for you but interested in working at Malik Seeds?
+            <h2 className="font-inter-tight max-w-[650px] text-center text-[24px] leading-[28.8px] font-medium text-[#F2F7F1] md:text-[32px] md:leading-[38px]">
+              Don&apos;t see a role suitable for you but interested in working
+              at Malik Seeds?
             </h2>
 
             {/* Drag & Drop Area */}
@@ -78,7 +75,7 @@ export default memo(function CVDropSection() {
                   height={24}
                   className="h-6 w-6"
                 />
-                <span className="font-inter text-[16px] font-medium leading-6 text-[#A9E179] md:text-[18px] md:leading-[27px]">
+                <span className="font-inter text-[16px] leading-6 font-medium text-[#A9E179] md:text-[18px] md:leading-[27px]">
                   {file ? `Selected: ${file.name}` : "Click to drop your CV"}
                 </span>
               </div>

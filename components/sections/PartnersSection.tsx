@@ -1,6 +1,8 @@
 import { memo, useMemo } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { partnersData } from "@/data/sections-data";
+import { ApiPartner } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/utils";
 
 export interface Partner {
   id: number;
@@ -19,23 +21,36 @@ const RIGHT_FADE_STYLE = {
 
 interface PartnersSectionProps {
   partners?: Partner[];
+  apiData?: ApiPartner[];
 }
 
 export default memo(function PartnersSection({
-  partners = partnersData.items,
+  partners,
+  apiData,
 }: PartnersSectionProps) {
+  const activePartners = useMemo(() => {
+    if (apiData && apiData.length > 0) {
+      return apiData.map((item) => ({
+        id: item.id,
+        name: item.name,
+        src: resolveImageUrl(item.logo_url),
+      }));
+    }
+    return partners || partnersData.items;
+  }, [partners, apiData]);
+
   // Dynamically split unique partners down the middle and duplicate the list for infinite loops
   const { row1Items, row2Items } = useMemo(() => {
-    const half = Math.ceil(partners.length / 2);
-    const r1 = partners.slice(0, half);
-    const r2 = partners.slice(half);
+    const half = Math.ceil(activePartners.length / 2);
+    const r1 = activePartners.slice(0, half);
+    const r2 = activePartners.slice(half);
 
     // Duplicate 4 times to ensure it covers screen widths (e.g. ultra-wide) without gaps during loop transition
     return {
       row1Items: [...r1, ...r1, ...r1, ...r1],
       row2Items: [...r2, ...r2, ...r2, ...r2],
     };
-  }, [partners]);
+  }, [activePartners]);
 
   return (
     // Figma: 1440x430, bg #F2F7F1, border-bottom 1px solid #CED2DA
@@ -72,6 +87,7 @@ export default memo(function PartnersSection({
                   width={161}
                   height={60}
                   priority={idx < 10}
+                  quality={50}
                   className="shrink-0 object-contain"
                 />
               ))}
@@ -89,6 +105,7 @@ export default memo(function PartnersSection({
                   width={161}
                   height={60}
                   priority={idx < 10}
+                  quality={50}
                   className="shrink-0 object-contain"
                 />
               ))}

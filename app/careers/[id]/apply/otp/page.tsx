@@ -52,9 +52,9 @@ export default function OtpPage() {
   if (!hydrated || !email) {
     return (
       <div className="animate-pulse space-y-4 py-4">
-        <div className="h-6 bg-gray-200 rounded w-1/4"></div>
-        <div className="h-20 bg-gray-200 rounded w-full"></div>
-        <div className="h-10 bg-gray-200 rounded w-full"></div>
+        <div className="h-6 w-1/4 rounded bg-gray-200"></div>
+        <div className="h-20 w-full rounded bg-gray-200"></div>
+        <div className="h-10 w-full rounded bg-gray-200"></div>
       </div>
     );
   }
@@ -62,18 +62,21 @@ export default function OtpPage() {
   const isOtpValid = otp.length === 6;
 
   return (
-    <div className="w-full bg-white border border-[#E4E7EC] rounded-[24px] p-6 md:p-10 shadow-sm min-h-[400px]">
-      <div className="w-full flex flex-col gap-6 py-2">
+    <div className="min-h-[400px] w-full rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
+      <div className="flex w-full flex-col gap-6 py-2">
         {/* Title & Description */}
         <div className="flex flex-col gap-2">
-          <h2 
-            className="font-medium text-[20px] text-[#0D1A14] leading-[20px]"
+          <h2
+            className="text-[20px] leading-[20px] font-medium text-[#0D1A14]"
             style={{ fontFamily: "var(--font-inter-tight)" }}
           >
             Email verification
           </h2>
-          <p className="font-inter text-[16px] text-[#0D1A14]/70 leading-[24px] mt-2">
-            We&apos;ve sent a verification code to the email address you provided. Please check your inbox and enter the code below to continue. If you don&apos;t see the email, check your Spam/Junk folder.
+          <p className="font-inter mt-2 text-[16px] leading-[24px] text-[#0D1A14]/70">
+            We&apos;ve sent a verification code to the email address you
+            provided. Please check your inbox and enter the code below to
+            continue. If you don&apos;t see the email, check your Spam/Junk
+            folder.
           </p>
         </div>
 
@@ -82,9 +85,9 @@ export default function OtpPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-12">
           {/* Verification Code Input */}
           <div className="flex flex-col gap-2">
-            <Label 
-              htmlFor="otp" 
-              className="text-[#0D1A14] text-[16px] leading-[24px] font-normal"
+            <Label
+              htmlFor="otp"
+              className="text-[16px] leading-[24px] font-normal text-[#0D1A14]"
               style={{ fontFamily: "var(--font-inter)" }}
             >
               Verification code
@@ -93,23 +96,25 @@ export default function OtpPage() {
               id="otp"
               placeholder="Enter verification code"
               value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              onChange={(e) =>
+                setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+              }
               disabled={loading}
               maxLength={6}
-              className="w-full h-[48px] bg-[#F9FAFB] border border-[#E4E7EC] rounded-[10px] px-[18px] py-[12px] font-inter text-[16px] text-[#0D1A14] focus-visible:ring-[#195236] placeholder:text-[#414E62]/60"
+              className="font-inter h-[48px] w-full rounded-[10px] border border-[#E4E7EC] bg-[#F9FAFB] px-[18px] py-[12px] text-[16px] text-[#0D1A14] placeholder:text-[#414E62]/60 focus-visible:ring-[#195236]"
             />
           </div>
 
           {error && (
-            <div className="text-[14px] text-[#FF4242] bg-[#FF4242]/5 border border-[#FF4242]/20 rounded-[8px] p-3 font-inter">
+            <div className="font-inter rounded-[8px] border border-[#FF4242]/20 bg-[#FF4242]/5 p-3 text-[14px] text-[#FF4242]">
               {error}
             </div>
           )}
 
           {/* Action Row */}
-          <div className="flex items-center justify-between pt-4 w-full">
+          <div className="flex w-full items-center justify-between pt-4">
             {/* Subtle testing code text on the bottom left */}
-            <span className="text-[13px] font-inter text-[#0D1A14]/40">
+            <span className="font-inter text-[13px] text-[#0D1A14]/40">
               * Demo code: 123456
             </span>
 
@@ -118,15 +123,15 @@ export default function OtpPage() {
               type="submit"
               disabled={loading || !isOtpValid}
               className={cn(
-                "flex items-center justify-center gap-[10px] rounded-[60px] h-[46px] w-[112px] font-medium text-[16px] border transition-all duration-200 select-none active:scale-95 cursor-pointer",
+                "flex h-[46px] w-[112px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border text-[16px] font-medium transition-all duration-200 select-none active:scale-95",
                 !isOtpValid
-                  ? "bg-[#F2F4F7] border-[#E4E7EC] text-[#97A1AF] cursor-not-allowed"
-                  : "bg-[#195236] border-transparent text-[#F2F7F1] hover:bg-[#153e28]"
+                  ? "cursor-not-allowed border-[#E4E7EC] bg-[#F2F4F7] text-[#97A1AF]"
+                  : "border-transparent bg-[#195236] text-[#F2F7F1] hover:bg-[#153e28]"
               )}
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
               <span>Next</span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="h-5 w-5" />
             </button>
           </div>
         </form>

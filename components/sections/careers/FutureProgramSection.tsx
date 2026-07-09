@@ -18,7 +18,11 @@ const cvSchema = z.object({
     }),
 });
 
-export default memo(function FutureProgramSection({ data }: { data: typeof futureProgramData }) {
+export default memo(function FutureProgramSection({
+  data,
+}: {
+  data: typeof futureProgramData;
+}) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -45,12 +49,11 @@ export default memo(function FutureProgramSection({ data }: { data: typeof futur
     <section
       id="future-leader-program"
       aria-label="Future Leader Program"
-      className="relative w-full overflow-hidden bg-brand-dark py-[100px]"
+      className="bg-brand-dark relative w-full overflow-hidden py-[100px]"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 xl:px-[100px] flex flex-col gap-12">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-12 px-4 sm:px-8 xl:px-[100px]">
         {/* Main layout container (text left, image right on desktop) */}
         <div className="flex flex-col items-start gap-10 lg:flex-row lg:items-stretch lg:gap-[137px]">
-
           {/* ── Left column: text ── */}
           <div
             className="flex w-full flex-col gap-12 lg:flex-1"
@@ -61,9 +64,7 @@ export default memo(function FutureProgramSection({ data }: { data: typeof futur
               <SectionBadge variant="dark" showDot dotSize="8px">
                 {data.badge}
               </SectionBadge>
-              <h2
-                className="font-inter-tight text-[32px] font-medium leading-[1.2] tracking-tight text-brand-light-green md:text-[48px] md:leading-[58px]"
-              >
+              <h2 className="font-inter-tight text-brand-light-green text-[32px] leading-[1.2] font-medium tracking-tight md:text-[48px] md:leading-[58px]">
                 {data.title}
               </h2>
             </div>
@@ -73,7 +74,7 @@ export default memo(function FutureProgramSection({ data }: { data: typeof futur
               {data.paragraphs.map((para, i) => (
                 <p
                   key={i}
-                  className="font-inter text-[16px] leading-[24px] text-brand-bg"
+                  className="font-inter text-brand-bg text-[16px] leading-[24px]"
                 >
                   {para}
                 </p>
@@ -82,9 +83,7 @@ export default memo(function FutureProgramSection({ data }: { data: typeof futur
           </div>
 
           {/* ── Right column: photo card (visible on mobile lower side, right on desktop) ── */}
-          <div
-            className="relative overflow-hidden rounded-[20px] bg-white w-full max-w-[503px] h-[280px] sm:h-[380px] lg:h-[435px] lg:w-[503px] lg:shrink-0 self-center lg:self-auto"
-          >
+          <div className="relative h-[280px] w-full max-w-[503px] self-center overflow-hidden rounded-[20px] bg-white sm:h-[380px] lg:h-[435px] lg:w-[503px] lg:shrink-0 lg:self-auto">
             <Image
               src={data.image}
               alt="Future Leader Program - Malik Seeds"
@@ -93,11 +92,10 @@ export default memo(function FutureProgramSection({ data }: { data: typeof futur
               className="object-cover object-center"
             />
           </div>
-
         </div>
 
         {/* ── Center-aligned button block (centered on the page in width) ── */}
-        <div className="flex flex-col gap-2 items-center justify-center w-full mt-4 lg:mt-8">
+        <div className="mt-4 flex w-full flex-col items-center justify-center gap-2 lg:mt-8">
           <input
             type="file"
             ref={fileInputRef}
@@ -109,7 +107,7 @@ export default memo(function FutureProgramSection({ data }: { data: typeof futur
           <button
             type="button"
             onClick={handleButtonClick}
-            className="inline-flex h-[46px] items-center justify-center gap-2 rounded-full bg-[#A9E179] px-6 font-inter text-[16px] font-medium text-[#0D1A14] transition-all hover:bg-[#A9E179]/90 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#A9E179] cursor-pointer"
+            className="font-inter inline-flex h-[46px] cursor-pointer items-center justify-center gap-2 rounded-full bg-[#A9E179] px-6 text-[16px] font-medium text-[#0D1A14] transition-all hover:bg-[#A9E179]/90 focus:ring-2 focus:ring-[#A9E179] focus:outline-none active:scale-95"
           >
             <svg
               width="20"
@@ -131,12 +129,18 @@ export default memo(function FutureProgramSection({ data }: { data: typeof futur
 
           {/* Validation Messages */}
           {error && (
-            <p className="font-inter text-[14px] text-red-400 mt-1" role="alert">
+            <p
+              className="font-inter mt-1 text-[14px] text-red-400"
+              role="alert"
+            >
               {error}
             </p>
           )}
           {success && (
-            <p className="font-inter text-[14px] text-green-400 mt-1" role="status">
+            <p
+              className="font-inter mt-1 text-[14px] text-green-400"
+              role="status"
+            >
               {success}
             </p>
           )}

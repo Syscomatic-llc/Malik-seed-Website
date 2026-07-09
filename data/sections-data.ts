@@ -213,7 +213,7 @@ export const productsData: ProductsData = {
       name: "Vegetable Seeds",
       description: "Research-Backed Vegetable Seeds Farmers rely on",
       image: "/images/products/product-1.png",
-      href: "/brands/vegetable-seeds",
+      href: "/our-brands/vegetable-seeds",
     },
     {
       id: 2,
@@ -221,7 +221,7 @@ export const productsData: ProductsData = {
       name: "Potato Seed",
       description: "Bringing Next-Generation Potato Seeds to Farmers",
       image: "/images/products/product-2.png",
-      href: "/brands/potato-seed",
+      href: "/our-brands/potato-seed",
     },
     {
       id: 3,
@@ -229,7 +229,7 @@ export const productsData: ProductsData = {
       name: "Malik’s Farm",
       description: "Research and Innovation Hub Behind Malik Seeds",
       image: "/images/products/product-3.png",
-      href: "/brands/maliks-farm",
+      href: "/our-brands/maliks-farm",
     },
     {
       id: 4,
@@ -238,7 +238,7 @@ export const productsData: ProductsData = {
       description:
         "Safe Fruits and Vegetables for Health Conscious Urban Consumers",
       image: "/images/products/product-4.png",
-      href: "/brands/origene",
+      href: "/our-brands/origene",
     },
     {
       id: 5,
@@ -247,7 +247,7 @@ export const productsData: ProductsData = {
       description:
         "Premium Flower Varieties Bringing Global Genetics to Local Growers",
       image: "/images/products/product-5.png",
-      href: "/brands/maliks-flower",
+      href: "/our-brands/maliks-flower",
     },
     {
       id: 6,
@@ -256,7 +256,7 @@ export const productsData: ProductsData = {
       description:
         "Empowering Farmers Through Knowledge, Technology, and Market Access",
       image: "/images/products/product-6.png",
-      href: "/brands/innovation-development",
+      href: "/our-brands/innovation-development",
     },
   ],
 };
@@ -421,14 +421,14 @@ export const footerData: FooterData = {
       { label: "Contact Us", href: "/contact" },
     ],
     brands: [
-      { label: "Vegetable Seeds", href: "/brands/vegetable-seeds" },
-      { label: "Potato Seeds", href: "/brands/potato-seed" },
-      { label: "Malik's Farm", href: "/brands/maliks-farm" },
-      { label: "Origene by Malik", href: "/brands/origene" },
-      { label: "Malik's Flower", href: "/brands/maliks-flower" },
+      { label: "Vegetable Seeds", href: "/our-brands/vegetable-seeds" },
+      { label: "Potato Seeds", href: "/our-brands/potato-seed" },
+      { label: "Malik's Farm", href: "/our-brands/maliks-farm" },
+      { label: "Origene by Malik", href: "/our-brands/origene" },
+      { label: "Malik's Flower", href: "/our-brands/maliks-flower" },
       {
         label: "Innovation & Development",
-        href: "/brands/innovation-development",
+        href: "/our-brands/innovation-development",
       },
     ],
   },

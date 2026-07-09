@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
+import NextImage from "next/image";
 import { cn } from "@/lib/utils";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { testimonialsData, TestimonialItem } from "@/data/sections-data";
+import { ApiTestimonial } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/utils";
 
 // Redesign Constants (Desktop & Mobile sizing configurations)
 const CARD_WIDTH_DESKTOP = 398;
@@ -16,17 +19,6 @@ const CARD_WIDTH_MOBILE = 310;
 const GAP_MOBILE = 16;
 const SLOT_WIDTH_MOBILE = CARD_WIDTH_MOBILE + GAP_MOBILE; // 326px
 const HALF_CARD_MOBILE = CARD_WIDTH_MOBILE / 2; // 155px
-
-const TESTIMONIALS_COUNT = testimonialsData.items.length;
-const LOOP_SET_START = TESTIMONIALS_COUNT; // Index 5 (start of middle main set)
-const LOOP_RESET_LIMIT = TESTIMONIALS_COUNT * 2; // Index 10 (start of duplicate set)
-
-// Tripled extended array for loop sliding
-const extendedTestimonials = [
-  ...testimonialsData.items,
-  ...testimonialsData.items,
-  ...testimonialsData.items,
-];
 
 interface TestimonialCardProps {
   testimonial: TestimonialItem;
@@ -95,6 +87,7 @@ function TestimonialCard({
           fill
           className="object-cover object-center"
           sizes={imageSizes}
+          quality={50}
           priority={priority}
         />
       </div>
@@ -138,7 +131,39 @@ function TestimonialCard({
   );
 }
 
-export default function TestimonialsSection() {
+export interface TestimonialsSectionProps {
+  apiData?: ApiTestimonial[];
+}
+
+/**
+ * Convert API testimonials to the shape the carousel expects.
+ * Uses only API data — no mixing with static images.
+ */
+function buildTestimonials(apiData?: ApiTestimonial[]): TestimonialItem[] {
+  if (!apiData || apiData.length === 0) return testimonialsData.items;
+
+  return apiData.map((t) => ({
+    id: t.id,
+    name: t.name,
+    location: t.company
+      ? `${t.designation}, ${t.company}`
+      : t.designation || "Farmer",
+    quote: t.content,
+    images: [resolveImageUrl(t.avatar_url)],
+  }));
+}
+
+export default function TestimonialsSection({
+  apiData,
+}: TestimonialsSectionProps) {
+  const items = buildTestimonials(apiData);
+
+  const TESTIMONIALS_COUNT = items.length;
+  const LOOP_SET_START = TESTIMONIALS_COUNT;
+  const LOOP_RESET_LIMIT = TESTIMONIALS_COUNT * 2;
+
+  const extendedTestimonials = [...items, ...items, ...items];
+
   const [activeIndex, setActiveIndex] = useState(LOOP_SET_START);
   const [isResetting, setIsResetting] = useState(false);
 
@@ -309,7 +334,7 @@ export default function TestimonialsSection() {
             aria-label="Previous testimonial"
             className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
           >
-            <Image
+            <NextImage
               src="/arrow.svg"
               alt="Previous"
               width={24}
@@ -322,7 +347,7 @@ export default function TestimonialsSection() {
             aria-label="Next testimonial"
             className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
           >
-            <Image src="/arrow.svg" alt="Next" width={24} height={24} />
+            <NextImage src="/arrow.svg" alt="Next" width={24} height={24} />
           </button>
         </div>
       </div>

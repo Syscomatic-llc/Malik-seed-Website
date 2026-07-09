@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function MaliksFlowerPage() {
   return (
-    <div className="bg-[#F2F7F1] min-h-screen">
+    <div className="min-h-screen bg-[#F2F7F1]">
       <BrandHero {...maliksFlowerData.hero} />
       <BrandIntro {...maliksFlowerData.intro} />
       <BrandProcess {...maliksFlowerData.process} />

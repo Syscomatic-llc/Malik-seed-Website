@@ -29,7 +29,10 @@ export default function ShareButton({
     <div className="relative w-fit">
       <button
         onClick={handleShare}
-        className={className || "inline-flex items-center gap-2 text-[#0D1A14] text-[16px] font-medium leading-[24px] md:text-[18px] md:leading-[27px] hover:text-[#195236] transition-colors focus-visible:outline-none"}
+        className={
+          className ||
+          "inline-flex items-center gap-2 text-[16px] leading-[24px] font-medium text-[#0D1A14] transition-colors hover:text-[#195236] focus-visible:outline-none md:text-[18px] md:leading-[27px]"
+        }
         style={{ fontFamily: "var(--font-inter-tight)" }}
       >
         {showIcon && (
@@ -55,7 +58,9 @@ export default function ShareButton({
       {/* Copied Toast Notification */}
       <div
         className={`absolute -top-12 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-[#0F3221] px-4 py-2 text-xs text-white shadow-lg transition-all duration-300 ${
-          copied ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"
+          copied
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-2 opacity-0"
         }`}
         style={{ fontFamily: "var(--font-inter-tight)" }}
       >

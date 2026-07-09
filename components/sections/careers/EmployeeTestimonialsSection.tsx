@@ -3,7 +3,10 @@
 import { useState, useCallback, useEffect, memo } from "react";
 import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import type { employeeTestimonialsData, EmployeeTestimonial } from "@/data/career-data";
+import type {
+  employeeTestimonialsData,
+  EmployeeTestimonial,
+} from "@/data/career-data";
 import { cn } from "@/lib/utils";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 
@@ -13,7 +16,11 @@ import { ArrowIcon } from "@/components/ui/ArrowIcon";
 // Seamless Infinite Carousel implementation
 // ────────────────────────────────────────────────────────────────────────────
 
-const AvatarInitials = memo(function AvatarInitials({ name }: { name: string }) {
+const AvatarInitials = memo(function AvatarInitials({
+  name,
+}: {
+  name: string;
+}) {
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -21,7 +28,7 @@ const AvatarInitials = memo(function AvatarInitials({ name }: { name: string }) 
     .slice(0, 2)
     .toUpperCase();
   return (
-    <div className="flex h-full w-full items-center justify-center bg-brand-active text-white font-inter-tight text-[24px] lg:text-[32px] font-semibold">
+    <div className="bg-brand-active font-inter-tight flex h-full w-full items-center justify-center text-[24px] font-semibold text-white lg:text-[32px]">
       {initials}
     </div>
   );
@@ -38,8 +45,8 @@ const TestimonialCard = memo(function TestimonialCard({
     <article
       className={cn(
         "flex flex-shrink-0 flex-col gap-6 rounded-[20px] border border-[#F2F4F7] bg-white p-6 transition-all duration-300",
-        "w-[310px] h-[451px]", // Mobile size
-        "lg:w-[608px] lg:h-[335px] lg:flex-row lg:gap-8 lg:rounded-[28px]", // Desktop size
+        "h-[451px] w-[310px]", // Mobile size
+        "lg:h-[335px] lg:w-[608px] lg:flex-row lg:gap-8 lg:rounded-[28px]", // Desktop size
         isActive ? "shadow-md" : "opacity-90"
       )}
       aria-label={`Testimonial from ${testimonial.name}`}
@@ -62,16 +69,16 @@ const TestimonialCard = memo(function TestimonialCard({
       {/* Quote + Attribution */}
       <div className="flex flex-1 flex-col justify-between gap-6 lg:gap-10">
         <blockquote className="flex-1">
-          <p className="font-inter-tight md:text-[16px] text-[14px] leading-[24px] text-[#0D1A14]">
+          <p className="font-inter-tight text-[14px] leading-[24px] text-[#0D1A14] md:text-[16px]">
             {testimonial.quote}
           </p>
         </blockquote>
 
         <footer className="flex flex-col gap-1">
-          <cite className="font-inter-tight text-[16px] md:text-[18px] font-medium leading-[27px] text-[#0D1A14] not-italic">
+          <cite className="font-inter-tight text-[16px] leading-[27px] font-medium text-[#0D1A14] not-italic md:text-[18px]">
             {testimonial.name}
           </cite>
-          <span className="font-inter-tight text-[14px] md:text-[16px] leading-[24px] text-[#0D1A14]/70">
+          <span className="font-inter-tight text-[14px] leading-[24px] text-[#0D1A14]/70 md:text-[16px]">
             {testimonial.role}
           </span>
         </footer>
@@ -80,11 +87,19 @@ const TestimonialCard = memo(function TestimonialCard({
   );
 });
 
-export default memo(function EmployeeTestimonialsSection({ data }: { data: typeof employeeTestimonialsData }) {
+export default memo(function EmployeeTestimonialsSection({
+  data,
+}: {
+  data: typeof employeeTestimonialsData;
+}) {
   const { testimonials } = data;
 
   // Triplicate the testimonials list for seamless infinite looping scroll behavior
-  const extendedTestimonials = [...testimonials, ...testimonials, ...testimonials];
+  const extendedTestimonials = [
+    ...testimonials,
+    ...testimonials,
+    ...testimonials,
+  ];
 
   const [activeIndex, setActiveIndex] = useState(testimonials.length); // Start at the first element of middle set
   const [isTransitionEnabled, setIsTransitionEnabled] = useState(true);
@@ -168,16 +183,22 @@ export default memo(function EmployeeTestimonialsSection({ data }: { data: typeo
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (isTransitioning) return;
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  }, [isTransitioning]);
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      if (isTransitioning) return;
+      setTouchEnd(null);
+      setTouchStart(e.targetTouches[0].clientX);
+    },
+    [isTransitioning]
+  );
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (isTransitioning) return;
-    setTouchEnd(e.targetTouches[0].clientX);
-  }, [isTransitioning]);
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (isTransitioning) return;
+      setTouchEnd(e.targetTouches[0].clientX);
+    },
+    [isTransitioning]
+  );
 
   const handleTouchEnd = useCallback(() => {
     if (!touchStart || !touchEnd || isTransitioning) return;
@@ -191,12 +212,15 @@ export default memo(function EmployeeTestimonialsSection({ data }: { data: typeo
     }
   }, [touchStart, touchEnd, handleNext, handlePrev, isTransitioning]);
 
-  const handleDotClick = useCallback((index: number) => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setIsTransitionEnabled(true);
-    setActiveIndex(index + testimonials.length);
-  }, [isTransitioning, testimonials.length]);
+  const handleDotClick = useCallback(
+    (index: number) => {
+      if (isTransitioning) return;
+      setIsTransitioning(true);
+      setIsTransitionEnabled(true);
+      setActiveIndex(index + testimonials.length);
+    },
+    [isTransitioning, testimonials.length]
+  );
 
   // Active dot page index
   const activeDotIndex = activeIndex % testimonials.length;
@@ -205,37 +229,40 @@ export default memo(function EmployeeTestimonialsSection({ data }: { data: typeo
     <section
       id="employee-testimonials"
       aria-label="Employee Testimonials - Our Team's Stories"
-      className="w-full bg-[#F2F7F1] overflow-hidden"
+      className="w-full overflow-hidden bg-[#F2F7F1]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="mx-auto w-full md:p-[100px] px-4 py-12">
-
+      <div className="mx-auto w-full px-4 py-12 md:p-[100px]">
         {/* ── Header row ── */}
-        <div className="mb-8 lg:mb-16 flex flex-col lg:flex-row items-center lg:items-end justify-between gap-6">
+        <div className="mb-8 flex flex-col items-center justify-between gap-6 lg:mb-16 lg:flex-row lg:items-end">
           {/* Left: badge + title */}
-          <div className="flex flex-col items-center lg:items-start gap-6 text-center lg:text-left">
+          <div className="flex flex-col items-center gap-6 text-center lg:items-start lg:text-left">
             <SectionBadge variant="outline" showDot dotSize="6px">
               {data.badge}
             </SectionBadge>
-            <h2 className="font-inter-tight text-[32px] font-medium leading-[1.2] tracking-tight text-brand-dark lg:text-[48px] lg:leading-[58px]">
+            <h2 className="font-inter-tight text-brand-dark text-[32px] leading-[1.2] font-medium tracking-tight lg:text-[48px] lg:leading-[58px]">
               {data.navLabel}
             </h2>
           </div>
 
           {/* Right: navigation arrows (visible on desktop only) */}
-          <div className="hidden lg:flex items-center gap-2" role="group" aria-label="Testimonial navigation">
+          <div
+            className="hidden items-center gap-2 lg:flex"
+            role="group"
+            aria-label="Testimonial navigation"
+          >
             <button
               onClick={handlePrev}
               aria-label="Previous testimonial"
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-brand-border bg-[#195236] text-white transition-all hover:bg-[#195236] hover:border-brand-active focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-active active:scale-95 cursor-pointer"
+              className="border-brand-border hover:border-brand-active focus-visible:ring-brand-active flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border bg-[#195236] text-white transition-all hover:bg-[#195236] focus:outline-none focus-visible:ring-2 active:scale-95"
             >
-              <ArrowIcon direction="left"/>
+              <ArrowIcon direction="left" />
             </button>
             <button
               onClick={handleNext}
               aria-label="Next testimonial"
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-brand-border bg-[#195236] text-white transition-all hover:bg-[#195236] hover:border-brand-active focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-active active:scale-95 cursor-pointer"
+              className="border-brand-border hover:border-brand-active focus-visible:ring-brand-active flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border bg-[#195236] text-white transition-all hover:bg-[#195236] focus:outline-none focus-visible:ring-2 active:scale-95"
             >
               <ArrowIcon direction="right" />
             </button>
@@ -243,8 +270,8 @@ export default memo(function EmployeeTestimonialsSection({ data }: { data: typeo
         </div>
 
         {/* ── Cards scroll area ── */}
-        <div 
-          className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-visible lg:w-full lg:static lg:m-0 touch-pan-y"
+        <div
+          className="relative right-1/2 left-1/2 -mr-[50vw] -ml-[50vw] w-screen touch-pan-y overflow-visible lg:static lg:m-0 lg:w-full"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -255,7 +282,9 @@ export default memo(function EmployeeTestimonialsSection({ data }: { data: typeo
               transform: isDesktop
                 ? `translateX(-${activeIndex * cardWidthWithGap}px)`
                 : `translateX(calc(50vw - 155px - ${activeIndex * cardWidthWithGap}px))`,
-              transition: isTransitionEnabled ? "transform 500ms ease-in-out" : "none",
+              transition: isTransitionEnabled
+                ? "transform 500ms ease-in-out"
+                : "none",
             }}
             role="list"
             aria-live="polite"
@@ -271,12 +300,11 @@ export default memo(function EmployeeTestimonialsSection({ data }: { data: typeo
                     setActiveIndex(i);
                   }
                 }}
-                className={cn(!isDesktop && i !== activeIndex ? "cursor-pointer" : "")}
+                className={cn(
+                  !isDesktop && i !== activeIndex ? "cursor-pointer" : ""
+                )}
               >
-                <TestimonialCard
-                  testimonial={t}
-                  isActive={i === activeIndex}
-                />
+                <TestimonialCard testimonial={t} isActive={i === activeIndex} />
               </div>
             ))}
           </div>

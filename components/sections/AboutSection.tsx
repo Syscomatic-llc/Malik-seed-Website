@@ -1,11 +1,116 @@
 import { Fragment } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import ActionButton from "@/components/ActionButton";
 import CountUp from "@/components/ui/CountUp";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { aboutData } from "@/data/sections-data";
+import { aboutData as staticAboutData } from "@/data/sections-data";
+import { ApiAbout, ApiAboutStat } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/utils";
 
-export default function AboutSection() {
+export interface AboutSectionProps {
+  apiData?: ApiAbout;
+}
+
+/**
+ * Parse the `stats` field which may arrive as an array or a JSON string.
+ */
+function parseStats(raw?: ApiAboutStat[] | string): ApiAboutStat[] {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw === "string") {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+/**
+ * Convert API stat objects into the shape the CountUp component expects.
+ */
+function buildStats(apiStats: ApiAboutStat[]) {
+  return apiStats.map((s) => {
+    const match = s.value.match(/^([^\d]*)([\d.]+)([^\d]*)$/);
+    if (match) {
+      return {
+        prefix: match[1] || "",
+        toValue: parseFloat(match[2]) || 0,
+        suffix: match[3] || "",
+        label: s.label,
+      };
+    }
+    return {
+      prefix: "",
+      toValue: parseFloat(s.value) || 0,
+      suffix: "",
+      label: s.label,
+    };
+  });
+}
+
+/**
+ * Build the merged about data from the API response, falling back to static
+ * data for any missing fields.
+ */
+function buildAboutData(apiData?: ApiAbout) {
+  if (!apiData) return staticAboutData;
+
+  const statsArray = parseStats(apiData.stats);
+  const parsedStats = buildStats(statsArray);
+
+  // Split description at "in Japan." for the highlight/muted desktop display
+  const desc = apiData.description || "";
+  const splitWord = "in Japan.";
+  const splitIdx = desc.indexOf(splitWord);
+  const introDesktop =
+    splitIdx !== -1
+      ? {
+          highlight: desc.substring(0, splitIdx),
+          muted: desc.substring(splitIdx),
+        }
+      : { highlight: desc, muted: "" };
+
+  // Resolve the main image from API
+  const teamBanner = resolveImageUrl(apiData.image_url);
+
+  // Use gallery_images from API for the two smaller about images,
+  // falling back to static assets if not provided.
+  const gallery = apiData.gallery_images ?? [];
+  const about1 = gallery[0]
+    ? resolveImageUrl(gallery[0])
+    : staticAboutData.images.about1;
+  const about2 = gallery[1]
+    ? resolveImageUrl(gallery[1])
+    : staticAboutData.images.about2;
+
+  return {
+    badge: apiData.title || "About Malik Seeds",
+    introDesktop,
+    introMobile: apiData.description || "",
+    cta: {
+      label: apiData.cta_text || "Learn More",
+      href: apiData.cta_link || "/our-story",
+    },
+    stats: parsedStats.length > 0 ? parsedStats : staticAboutData.stats,
+    images: {
+      teamBanner,
+      about1,
+      about2,
+      // Mobile images: use gallery if available, else static
+      about1Mobile: gallery[0]
+        ? resolveImageUrl(gallery[0])
+        : staticAboutData.images.about1Mobile,
+      about2Mobile: gallery[1]
+        ? resolveImageUrl(gallery[1])
+        : staticAboutData.images.about2Mobile,
+    },
+  };
+}
+
+export default function AboutSection({ apiData }: AboutSectionProps) {
+  const aboutData = buildAboutData(apiData);
   return (
     <section className="bg-brand-bg w-full" id="about">
       <div className="mx-auto max-w-[1440px]">
@@ -47,6 +152,7 @@ export default function AboutSection() {
                 alt="Malik Seeds Team"
                 fill
                 sizes="(max-width: 768px) 358px, (max-width: 1200px) 440px, 503px"
+                quality={50}
                 priority
                 className="object-cover"
               />
@@ -61,6 +167,7 @@ export default function AboutSection() {
                   alt="Years of Experience"
                   fill
                   sizes="(max-width: 1200px) 200px, 243px"
+                  quality={50}
                   className="object-cover"
                 />
               </div>
@@ -71,6 +178,7 @@ export default function AboutSection() {
                   alt="Farmer Partners"
                   fill
                   sizes="(max-width: 1200px) 200px, 243px"
+                  quality={50}
                   className="object-cover"
                 />
               </div>
@@ -138,6 +246,7 @@ export default function AboutSection() {
                   alt="Malik Seeds Team"
                   fill
                   sizes="358px"
+                  quality={50}
                   className="object-cover"
                 />
               </div>
@@ -151,6 +260,7 @@ export default function AboutSection() {
                     alt="Years of Experience"
                     fill
                     sizes="171px"
+                    quality={50}
                     className="object-contain"
                   />
                 </div>
@@ -161,6 +271,7 @@ export default function AboutSection() {
                     alt="Farmer Partners"
                     fill
                     sizes="171px"
+                    quality={50}
                     className="object-contain"
                   />
                 </div>

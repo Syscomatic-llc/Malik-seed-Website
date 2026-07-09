@@ -1,9 +1,7 @@
-import ComingSoonPage from "@/components/Coming-soon"
+import ComingSoonPage from "@/components/Coming-soon";
 
 const Page = () => {
-    return (
-        <ComingSoonPage />
-    )
-}
+  return <ComingSoonPage />;
+};
 
-export default Page
+export default Page;

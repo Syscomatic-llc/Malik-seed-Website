@@ -11,7 +11,11 @@ import { cn } from "@/lib/utils";
 export default function PersonalInfoPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { name: storeName, email: storeEmail, setPersonalInfo } = useApplicationStore();
+  const {
+    name: storeName,
+    email: storeEmail,
+    setPersonalInfo,
+  } = useApplicationStore();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -48,23 +52,26 @@ export default function PersonalInfoPage() {
   if (!hydrated) {
     return (
       <div className="animate-pulse space-y-4 py-4">
-        <div className="h-6 bg-gray-200 rounded w-1/4"></div>
-        <div className="h-10 bg-gray-200 rounded w-full"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-        <div className="h-10 bg-gray-200 rounded w-full"></div>
+        <div className="h-6 w-1/4 rounded bg-gray-200"></div>
+        <div className="h-10 w-full rounded bg-gray-200"></div>
+        <div className="h-4 w-1/4 rounded bg-gray-200"></div>
+        <div className="h-10 w-full rounded bg-gray-200"></div>
       </div>
     );
   }
 
-  const isFormValid = name.trim().length > 0 && email.trim().length > 0 && /\S+@\S+\.\S+/.test(email);
+  const isFormValid =
+    name.trim().length > 0 &&
+    email.trim().length > 0 &&
+    /\S+@\S+\.\S+/.test(email);
 
   return (
-    <div className="w-full bg-white border border-[#E4E7EC] rounded-[24px] p-6 md:p-10 shadow-sm min-h-[400px]">
-      <div className="w-full flex flex-col gap-6 py-2">
+    <div className="min-h-[400px] w-full rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
+      <div className="flex w-full flex-col gap-6 py-2">
         {/* Title & Divider Section */}
         <div className="flex flex-col gap-6">
-          <h2 
-            className="text-[18px] md:text-[20px] font-medium text-[#0D1A14] leading-[18px] md:leading-[20px]"
+          <h2
+            className="text-[18px] leading-[18px] font-medium text-[#0D1A14] md:text-[20px] md:leading-[20px]"
             style={{ fontFamily: "var(--font-inter-tight)" }}
           >
             Tell us about yourself
@@ -74,15 +81,18 @@ export default function PersonalInfoPage() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-12">
           {/* Form Inputs container */}
-          <div className="flex flex-col gap-6 w-full">
+          <div className="flex w-full flex-col gap-6">
             {/* Name Field */}
-            <div className="flex flex-col gap-2 w-full">
-              <Label 
-                htmlFor="name" 
-                className="text-[#0D1A14] text-[16px] leading-[24px] font-normal flex items-start gap-0.5"
+            <div className="flex w-full flex-col gap-2">
+              <Label
+                htmlFor="name"
+                className="flex items-start gap-0.5 text-[16px] leading-[24px] font-normal text-[#0D1A14]"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
-                Name <span className="text-[#FF4242] text-[14px] leading-[21px]">*</span>
+                Name{" "}
+                <span className="text-[14px] leading-[21px] text-[#FF4242]">
+                  *
+                </span>
               </Label>
               <Input
                 id="name"
@@ -90,18 +100,21 @@ export default function PersonalInfoPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={loading}
-                className="w-full h-[48px] bg-[#F9FAFB] border border-[#E4E7EC] rounded-[10px] px-[18px] py-[12px] font-inter text-[16px] text-[#0D1A14] focus-visible:ring-[#195236] placeholder:text-[#414E62]/60"
+                className="font-inter h-[48px] w-full rounded-[10px] border border-[#E4E7EC] bg-[#F9FAFB] px-[18px] py-[12px] text-[16px] text-[#0D1A14] placeholder:text-[#414E62]/60 focus-visible:ring-[#195236]"
               />
             </div>
 
             {/* Email Field */}
-            <div className="flex flex-col gap-2 w-full">
-              <Label 
-                htmlFor="email" 
-                className="text-[#0D1A14] text-[16px] leading-[24px] font-normal flex items-start gap-0.5"
+            <div className="flex w-full flex-col gap-2">
+              <Label
+                htmlFor="email"
+                className="flex items-start gap-0.5 text-[16px] leading-[24px] font-normal text-[#0D1A14]"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
-                Email Address <span className="text-[#FF4242] text-[14px] leading-[21px]">*</span>
+                Email Address{" "}
+                <span className="text-[14px] leading-[21px] text-[#FF4242]">
+                  *
+                </span>
               </Label>
               <Input
                 id="email"
@@ -110,33 +123,33 @@ export default function PersonalInfoPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
-                className="w-full h-[48px] bg-[#F9FAFB] border border-[#E4E7EC] rounded-[10px] px-[18px] py-[12px] font-inter text-[16px] text-[#0D1A14] focus-visible:ring-[#195236] placeholder:text-[#414E62]/60"
+                className="font-inter h-[48px] w-full rounded-[10px] border border-[#E4E7EC] bg-[#F9FAFB] px-[18px] py-[12px] text-[16px] text-[#0D1A14] placeholder:text-[#414E62]/60 focus-visible:ring-[#195236]"
               />
             </div>
           </div>
 
           {error && (
-            <div className="text-[14px] text-[#FF4242] bg-[#FF4242]/5 border border-[#FF4242]/20 rounded-[8px] p-3 font-inter">
+            <div className="font-inter rounded-[8px] border border-[#FF4242]/20 bg-[#FF4242]/5 p-3 text-[14px] text-[#FF4242]">
               {error}
             </div>
           )}
 
           {/* Action Row */}
-          <div className="flex justify-end pt-4 border-t border-[#E4E7EC] w-full">
+          <div className="flex w-full justify-end border-t border-[#E4E7EC] pt-4">
             <button
               type="submit"
               disabled={loading || !isFormValid}
               className={cn(
-                "flex items-center justify-center gap-[10px] rounded-[60px] transition-all duration-200 select-none active:scale-95 cursor-pointer font-medium",
-                "w-[140px] h-[41px] text-[14px] md:w-[178px] md:h-[46px] md:text-[16px] border",
+                "flex cursor-pointer items-center justify-center gap-[10px] rounded-[60px] font-medium transition-all duration-200 select-none active:scale-95",
+                "h-[41px] w-[140px] border text-[14px] md:h-[46px] md:w-[178px] md:text-[16px]",
                 !isFormValid
-                  ? "bg-[#F2F4F7] border-[#E4E7EC] text-[#97A1AF] cursor-not-allowed"
-                  : "bg-[#195236] border-transparent text-[#F2F7F1] hover:bg-[#153e28]"
+                  ? "cursor-not-allowed border-[#E4E7EC] bg-[#F2F4F7] text-[#97A1AF]"
+                  : "border-transparent bg-[#195236] text-[#F2F7F1] hover:bg-[#153e28]"
               )}
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
               <span>{loading ? "Submitting..." : "Submit & Next"}</span>
-              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
+              <ArrowRight className="h-4 w-4 shrink-0 md:h-5 md:w-5" />
             </button>
           </div>
         </form>

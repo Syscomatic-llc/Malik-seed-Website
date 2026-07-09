@@ -15,16 +15,16 @@ export const metadata: Metadata = {
 
 export default function OrigenePage() {
   return (
-    <div className="bg-[#F2F7F1] min-h-screen">
+    <div className="min-h-screen bg-[#F2F7F1]">
       <BrandHero {...origeneData.hero} />
       <BrandIntro {...origeneData.intro} />
       <BrandGrid {...origeneData.grid} />
-      
+
       {/* THE PROBLEM WE'RE SOLVING */}
-      <section className="w-full py-12 md:py-16 lg:py-[100px] px-4 md:px-8 lg:px-[100px] bg-[#0D1A14]">
-        <div className="max-w-[1240px] mx-auto flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8 lg:gap-[56px]">
+      <section className="w-full bg-[#0D1A14] px-4 py-12 md:px-8 md:py-16 lg:px-[100px] lg:py-[100px]">
+        <div className="mx-auto flex max-w-[1240px] flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-[56px]">
           {/* Left Column: Text + Stat Card */}
-          <div className="w-full lg:max-w-[576px] lg:h-[714px] shrink-0 flex flex-col justify-between items-start gap-8 lg:gap-0">
+          <div className="flex w-full shrink-0 flex-col items-start justify-between gap-8 lg:h-[714px] lg:max-w-[576px] lg:gap-0">
             {/* Badge */}
             <SectionBadge variant="dark" showDot className="mb-2">
               {origeneData.split1.badge}
@@ -32,7 +32,7 @@ export default function OrigenePage() {
 
             {/* Title */}
             <div className="flex flex-col gap-4">
-              <h2 className="font-sans text-[32px] md:text-[48px] font-medium leading-[38px] md:leading-[58px] text-left whitespace-pre-line text-white">
+              <h2 className="text-left font-sans text-[32px] leading-[38px] font-medium whitespace-pre-line text-white md:text-[48px] md:leading-[58px]">
                 {origeneData.split1.title.map((part, i) => {
                   if (part.includes("\n")) {
                     return (
@@ -47,20 +47,20 @@ export default function OrigenePage() {
             </div>
 
             {/* Stat Card Highlight */}
-            <div className="w-full p-8 md:p-12 bg-[#0F3221] rounded-[24px] border border-white/5 flex flex-col gap-2 mt-2">
+            <div className="mt-2 flex w-full flex-col gap-2 rounded-[24px] border border-white/5 bg-[#0F3221] p-8 md:p-12">
               <div
-                className="text-[48px] md:text-[56px] leading-[120%] tracking-[4px] font-bold text-[#A9E179] font-sans"
+                className="font-sans text-[48px] leading-[120%] font-bold tracking-[4px] text-[#A9E179] md:text-[56px]"
                 style={{ fontFamily: "var(--font-anton)" }}
               >
                 {origeneData.split1.statCard.value}
               </div>
-              <div className="text-[14px] md:text-[16px] leading-[22px] md:leading-[24px] text-[#F2F7F1]/90 font-sans">
+              <div className="font-sans text-[14px] leading-[22px] text-[#F2F7F1]/90 md:text-[16px] md:leading-[24px]">
                 {origeneData.split1.statCard.label}
               </div>
             </div>
 
             {/* Description */}
-            <div className="font-sans text-[16px] leading-[24px] flex flex-col gap-4 text-left text-[#F2F7F1]/70">
+            <div className="flex flex-col gap-4 text-left font-sans text-[16px] leading-[24px] text-[#F2F7F1]/70">
               {origeneData.split1.description.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
@@ -68,7 +68,7 @@ export default function OrigenePage() {
           </div>
 
           {/* Right Column: Image */}
-          <div className="w-full lg:max-w-[608px] lg:h-[714px] h-[220px] relative overflow-hidden rounded-[20px] lg:rounded-[24px] bg-neutral-200 shrink-0">
+          <div className="relative h-[220px] w-full shrink-0 overflow-hidden rounded-[20px] bg-neutral-200 lg:h-[714px] lg:max-w-[608px] lg:rounded-[24px]">
             <Image
               src={origeneData.split1.image}
               alt={origeneData.split1.title.join(" ").replace(/\n/g, "")}
@@ -81,14 +81,8 @@ export default function OrigenePage() {
         </div>
       </section>
 
-      <BrandProcess
-        {...origeneData.process1}
-        variant="dark"
-      />
-      <BrandProcess
-        {...origeneData.process2}
-        variant="default"
-      />
+      <BrandProcess {...origeneData.process1} variant="dark" />
+      <BrandProcess {...origeneData.process2} variant="default" />
       <BrandSplit
         {...origeneData.split2}
         bgTheme="dark"

@@ -3,7 +3,11 @@ import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import type { teamCultureData } from "@/data/career-data";
 
-export default memo(function TeamCultureSection({ data }: { data: typeof teamCultureData }) {
+export default memo(function TeamCultureSection({
+  data,
+}: {
+  data: typeof teamCultureData;
+}) {
   const { images } = data;
   const [wide, narrow, ...thirds] = images;
 
@@ -11,7 +15,7 @@ export default memo(function TeamCultureSection({ data }: { data: typeof teamCul
     <section
       id="team-culture"
       aria-label="Building a Team of A-Players"
-      className="w-full bg-brand-bg py-[100px] overflow-hidden"
+      className="bg-brand-bg w-full overflow-hidden py-[100px]"
     >
       <div className="mx-auto w-full max-w-[1440px]">
         {/* ── Header and Grid container ── */}
@@ -21,15 +25,13 @@ export default memo(function TeamCultureSection({ data }: { data: typeof teamCul
             <SectionBadge variant="outline" showDot dotSize="6px">
               {data.badge}
             </SectionBadge>
-            <h2
-              className="font-inter-tight text-[32px] font-medium leading-[1.2] tracking-tight text-brand-dark text-center md:text-[48px] md:leading-[58px]"
-            >
+            <h2 className="font-inter-tight text-brand-dark text-center text-[32px] leading-[1.2] font-medium tracking-tight md:text-[48px] md:leading-[58px]">
               {data.title}
             </h2>
           </div>
 
           {/* ── Photo Grid (Desktop/Tablet: md and above) ── */}
-          <div className="hidden md:flex flex-col gap-6">
+          <div className="hidden flex-col gap-6 md:flex">
             {/* Row 1: 768 + 448 */}
             <div className="flex flex-col gap-6 md:flex-row">
               {/* Wide image */}
@@ -82,12 +84,12 @@ export default memo(function TeamCultureSection({ data }: { data: typeof teamCul
         </div>
 
         {/* ── Mobile: Infinite auto-scroll Marquee (mobile only: md:hidden) ── */}
-        <div className="relative w-full overflow-hidden md:hidden mt-8">
-          <div className="animate-marquee hover:[animation-play-state:paused] flex gap-4">
+        <div className="relative mt-8 w-full overflow-hidden md:hidden">
+          <div className="animate-marquee flex gap-4 hover:[animation-play-state:paused]">
             {[...images, ...images].map((img, i) => (
               <div
                 key={i}
-                className="relative flex-shrink-0 overflow-hidden rounded-[20px] bg-[#F2F4F7] h-[290px] w-[280px]"
+                className="relative h-[290px] w-[280px] flex-shrink-0 overflow-hidden rounded-[20px] bg-[#F2F4F7]"
               >
                 <Image
                   src={img.src}

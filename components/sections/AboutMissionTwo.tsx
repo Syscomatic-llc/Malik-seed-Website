@@ -1,8 +1,6 @@
 import Image from "next/image";
 import { SectionBadge } from "../ui/SectionBadge";
 
-
-
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -14,7 +12,9 @@ export default function AboutMissionTwo() {
     >
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
         <div className="bg-brand-dark flex w-full flex-col items-start gap-8 overflow-hidden rounded-[24px] p-6 md:gap-16 md:rounded-[32px] md:p-[56px]">
-          <SectionBadge variant="dark" showDot>OUR MISSION</SectionBadge>
+          <SectionBadge variant="dark" showDot>
+            OUR MISSION
+          </SectionBadge>
 
           {/* Highlighted mission statement — second half fades to 50% opacity */}
           <h2 className="text-brand-light-green max-w-[1128px] font-sans text-[24px] leading-[29px] font-medium tracking-tight md:text-[40px] md:leading-[50px] xl:text-[48px] xl:leading-[58px]">

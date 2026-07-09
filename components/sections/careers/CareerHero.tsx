@@ -19,7 +19,9 @@ interface TypewriterTextProps {
   words: string[];
 }
 
-const TypewriterText = memo(function TypewriterText({ words }: TypewriterTextProps) {
+const TypewriterText = memo(function TypewriterText({
+  words,
+}: TypewriterTextProps) {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [reverse, setReverse] = useState(false);
@@ -39,9 +41,12 @@ const TypewriterText = memo(function TypewriterText({ words }: TypewriterTextPro
       return;
     }
 
-    const timeout = setTimeout(() => {
-      setSubIndex((prev) => prev + (reverse ? -1 : 1));
-    }, reverse ? 40 : 80);
+    const timeout = setTimeout(
+      () => {
+        setSubIndex((prev) => prev + (reverse ? -1 : 1));
+      },
+      reverse ? 40 : 80
+    );
 
     return () => clearTimeout(timeout);
   }, [subIndex, reverse, index, words]);
@@ -52,35 +57,36 @@ const TypewriterText = memo(function TypewriterText({ words }: TypewriterTextPro
   }, [subIndex, index, words]);
 
   return (
-    <span className="relative inline-block text-brand-light-green min-h-[46px] md:min-h-[58px] lg:min-h-[62px] xl:min-h-[77px] pr-[4px]">
+    <span className="text-brand-light-green relative inline-block min-h-[46px] pr-[4px] md:min-h-[58px] lg:min-h-[62px] xl:min-h-[77px]">
       {text}
-      <span className="inline-block ml-1 w-[3px] h-[0.8em] bg-brand-light-green align-middle animate-cursor-blink" />
+      <span className="bg-brand-light-green animate-cursor-blink ml-1 inline-block h-[0.8em] w-[3px] align-middle" />
     </span>
   );
 });
 
-export default memo(function CareerHero({ data }: { data: typeof careerHeroData }) {
+export default memo(function CareerHero({
+  data,
+}: {
+  data: typeof careerHeroData;
+}) {
   return (
     <section
       id="career-hero"
       aria-label="Career Hero - Come build the future of agriculture with us"
-      className="relative w-full overflow-hidden bg-brand-dark"
+      className="bg-brand-dark relative w-full overflow-hidden"
     >
       {/* Inner wrapper: max-w-[1240px] centered, 100px horizontal gutters at xl */}
       <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 xl:px-[100px]">
-        <div className="flex w-full flex-col items-center lg:items-end justify-between gap-10 pt-[120px] pb-16 lg:flex-row lg:gap-8 lg:pt-[180px] lg:pb-[100px]">
-
+        <div className="flex w-full flex-col items-center justify-between gap-10 pt-[120px] pb-16 lg:flex-row lg:items-end lg:gap-8 lg:pt-[180px] lg:pb-[100px]">
           {/* ── Left column ── */}
-          <div
-            className="flex w-full flex-col items-center lg:items-start gap-8 lg:flex-1 lg:gap-12 max-w-[358px] md:max-w-[540px] lg:max-w-none lg:w-auto"
-          >
+          <div className="flex w-full max-w-[358px] flex-col items-center gap-8 md:max-w-[540px] lg:w-auto lg:max-w-none lg:flex-1 lg:items-start lg:gap-12">
             {/* Breadcrumb — Home / Hiring */}
-            <Breadcrumb className="text-[#F2F7F1] hidden md:block">
+            <Breadcrumb className="hidden text-[#F2F7F1] md:block">
               <BreadcrumbList className="gap-2">
                 <BreadcrumbItem>
                   <BreadcrumbLink
                     render={<Link href="/" />}
-                    className="font-inter-tight text-[16px] leading-[24px] text-white/70 hover:text-white transition-colors"
+                    className="font-inter-tight text-[16px] leading-[24px] text-white/70 transition-colors hover:text-white"
                   >
                     Home
                   </BreadcrumbLink>
@@ -100,9 +106,7 @@ export default memo(function CareerHero({ data }: { data: typeof careerHeroData 
             </SectionBadge>
 
             {/* 3-line headline — responsively scaling font-size */}
-            <h1
-              className="font-inter-tight text-[38px] md:text-[48px] lg:text-[52px] xl:text-[64px] font-medium leading-[46px] md:leading-[58px] lg:leading-[62px] xl:leading-[77px] tracking-tight text-white/70 text-center lg:text-left"
-            >
+            <h1 className="font-inter-tight text-center text-[38px] leading-[46px] font-medium tracking-tight text-white/70 md:text-[48px] md:leading-[58px] lg:text-left lg:text-[52px] lg:leading-[62px] xl:text-[64px] xl:leading-[77px]">
               {data.titleLine1}
               <br />
               <TypewriterText words={data.titleLine2 || []} />
@@ -111,14 +115,14 @@ export default memo(function CareerHero({ data }: { data: typeof careerHeroData 
             </h1>
 
             {/* CTA row — CSS Grid layout on mobile (resolves to exactly 175px button width), flex-row on desktop */}
-            <div className=" flex flex-row items-stretch lg:items-center gap-2 lg:gap-4 justify-center lg:justify-start w-full lg:w-auto max-w-[358px] lg:max-w-none">
+            <div className="flex w-full max-w-[358px] flex-row items-stretch justify-center gap-2 lg:w-auto lg:max-w-none lg:items-center lg:justify-start lg:gap-4">
               <ActionButton
                 href={data.ctaPrimary.href}
                 label={data.ctaPrimary.label}
                 variant="dark"
                 iconSize={16}
                 containerClassName="w-full lg:w-auto"
-                className="w-full lg:w-auto py-[13px] px-[13px] lg:py-[16px] lg:px-6 leading-[120%] gap-[6px] lg:gap-[10px] justify-center text-[14px] lg:text-[16px]"
+                className="w-full justify-center gap-[6px] px-[13px] py-[13px] text-[14px] leading-[120%] lg:w-auto lg:gap-[10px] lg:px-6 lg:py-[16px] lg:text-[16px]"
               />
               <ActionButton
                 href={data.ctaSecondary.href}
@@ -126,18 +130,16 @@ export default memo(function CareerHero({ data }: { data: typeof careerHeroData 
                 variant="secondary"
                 iconSize={16}
                 containerClassName="w-full lg:w-auto"
-                className="w-full lg:w-auto py-[13px] px-[13px] lg:py-[16px] lg:px-6 leading-[120%] gap-[6px] lg:gap-[10px] justify-center text-[14px] lg:text-[16px] !bg-[rgba(255,255,255,0.06)] !border !border-[rgba(255,255,255,0.1)] !text-[#F2F7F1] hover:!bg-[rgba(255,255,255,0.12)]"
+                className="w-full justify-center gap-[6px] !border !border-[rgba(255,255,255,0.1)] !bg-[rgba(255,255,255,0.06)] px-[13px] py-[13px] text-[14px] leading-[120%] !text-[#F2F7F1] hover:!bg-[rgba(255,255,255,0.12)] lg:w-auto lg:gap-[10px] lg:px-6 lg:py-[16px] lg:text-[16px]"
               />
             </div>
           </div>
 
           {/* ── Right column: team photo card ── */}
           {/* Figma: 503×520 (Desktop) / 358x260 (Mobile), bg white, radius 24/20 */}
-          <div
-            className="relative overflow-hidden rounded-[20px] lg:rounded-[24px] bg-white w-full max-w-[358px] md:max-w-[540px] lg:max-w-none lg:w-[400px] xl:w-[503px] h-[260px] md:h-[360px] lg:h-[420px] xl:h-[520px] flex-shrink-0"
-          >
+          <div className="relative h-[260px] w-full max-w-[358px] flex-shrink-0 overflow-hidden rounded-[20px] bg-white md:h-[360px] md:max-w-[540px] lg:h-[420px] lg:w-[400px] lg:max-w-none lg:rounded-[24px] xl:h-[520px] xl:w-[503px]">
             {/* Mobile view image */}
-            <div className="relative w-full h-full lg:hidden">
+            <div className="relative h-full w-full lg:hidden">
               <Image
                 src={data.teamImage}
                 alt="Malik Seeds team"
@@ -148,7 +150,7 @@ export default memo(function CareerHero({ data }: { data: typeof careerHeroData 
               />
             </div>
             {/* Desktop view image */}
-            <div className="relative w-full h-full hidden lg:block">
+            <div className="relative hidden h-full w-full lg:block">
               <Image
                 src={data.teamImage}
                 alt="Malik Seeds team"
@@ -159,7 +161,6 @@ export default memo(function CareerHero({ data }: { data: typeof careerHeroData 
               />
             </div>
           </div>
-
         </div>
       </div>
     </section>

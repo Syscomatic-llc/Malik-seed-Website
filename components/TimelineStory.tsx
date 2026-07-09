@@ -1,6 +1,7 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
+import NextImage from "next/image";
 import { useMemo, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { TimelineItem } from "@/data/sections-data";
@@ -81,7 +82,9 @@ function TimelineLineLast() {
  * Pixel height of each desktop row, matching TimelineSpine's own sizing.
  */
 function getRowHeights(items: TimelineItem[]) {
-  return items.map((_, idx) => (idx === items.length - 1 ? 518 : 456) + YEAR_GAP);
+  return items.map(
+    (_, idx) => (idx === items.length - 1 ? 518 : 456) + YEAR_GAP
+  );
 }
 
 /**
@@ -151,14 +154,14 @@ function SegmentSpineLine({
       style={{ top: LINE_TOP, height: lineHeight }}
     >
       {/* Faint background dashes, continuous for the whole segment */}
-      <div className="absolute inset-0 opacity-20 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden opacity-20">
         {isLast ? <TimelineLineLast /> : <TimelineLine />}
       </div>
 
       {/* Animated dashed reveal */}
       <motion.div
         style={{ height: heightVal }}
-        className="absolute top-0 left-0 w-full overflow-hidden origin-top"
+        className="absolute top-0 left-0 w-full origin-top overflow-hidden"
       >
         <div style={{ height: lineHeight, width: 1, overflow: "hidden" }}>
           {isLast ? <TimelineLineLast /> : <TimelineLine />}
@@ -168,15 +171,6 @@ function SegmentSpineLine({
   );
 }
 
-/**
- * Single dot traveling the full desktop spine, positioned as a plain
- * percentage of the shared progress over the whole container. Because
- * every segment's line range above was derived from the exact same
- * cumulative pixel math, the dot's physical position always lines up with
- * whichever segment's line-tip it's currently passing — same speed, same
- * pixel, by construction. It sits below each year's z-30 backdrop, so it
- * simply ducks out of view behind each year and re-emerges after it.
- */
 function GlobalTimelineDot({
   smoothProgress,
   rowRanges,
@@ -185,7 +179,8 @@ function GlobalTimelineDot({
   rowRanges: [number, number][];
 }) {
   const startRange = rowRanges.length > 0 ? rowRanges[0][0] : 0;
-  const lastRange = rowRanges.length > 0 ? rowRanges[rowRanges.length - 1] : [0, 1];
+  const lastRange =
+    rowRanges.length > 0 ? rowRanges[rowRanges.length - 1] : [0, 1];
   const lastStart = lastRange[0];
   const lastEnd = lastRange[1];
 
@@ -224,9 +219,14 @@ function GlobalTimelineDot({
   return (
     <motion.div
       style={{ top: dotTop, opacity: dotOpacity }}
-      className="absolute left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-[18px] h-[18px]"
+      className="pointer-events-none absolute left-1/2 z-10 h-[18px] w-[18px] -translate-x-1/2 -translate-y-1/2"
     >
-      <Image src="/images/timeline/Ellipse.svg" alt="Dot" width={18} height={18} />
+      <NextImage
+        src="/images/timeline/Ellipse.svg"
+        alt="Dot"
+        width={18}
+        height={18}
+      />
     </motion.div>
   );
 }
@@ -257,7 +257,7 @@ function TimelineSpine({
           so from a distance the line reads as unbroken and the year looks
           like it's resting on it (same trick as the mobile scroller). */}
       <div
-        className="absolute left-1/2 z-30 -translate-x-1/2 bg-brand-dark px-2"
+        className="bg-brand-dark absolute left-1/2 z-30 -translate-x-1/2 px-2"
         style={{ top: 0 }}
       >
         <span
@@ -306,13 +306,13 @@ function ContentCard({
     >
       {/* Glow overlay */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[24px]">
-        <Image
+        <NextImage
           src={glow}
           alt=""
           width={252}
           height={186}
           style={{ width: "252px", height: "186px" }}
-          className="absolute top-0 right-0 opacity-70 mix-blend-screen"
+          className="absolute top-0 right-0 opacity-70 mix-blend-screen blur-[2px]"
           aria-hidden="true"
         />
       </div>
@@ -397,13 +397,13 @@ function TimelineRow({
   return (
     <div className="grid w-full grid-cols-[1fr_72px_1fr] items-start">
       {/* Left: image */}
-      <div className="flex justify-start pl-[15px] pt-[130px]">
+      <div className="flex justify-start pt-[130px] pl-[15px]">
         <ImagePanel src={item.image} alt={item.title} />
       </div>
       {/* Centre: spine (line + year) */}
       {spine}
       {/* Right: card */}
-      <div className="flex justify-end pr-[15px] pt-[130px]">
+      <div className="flex justify-end pt-[130px] pr-[15px]">
         <ContentCard
           title={item.title}
           description={item.description}
@@ -428,9 +428,14 @@ function GlobalTabletDot({
   return (
     <motion.div
       style={{ top: dotTop }}
-      className="absolute mt-2 left-[19px] z-20 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-[14px] h-[14px]"
+      className="pointer-events-none absolute left-[19px] z-20 mt-2 h-[14px] w-[14px] -translate-x-1/2 -translate-y-1/2"
     >
-      <Image src="/images/timeline/Ellipse.svg" alt="Dot" width={14} height={14} />
+      <NextImage
+        src="/images/timeline/Ellipse.svg"
+        alt="Dot"
+        width={14}
+        height={14}
+      />
     </motion.div>
   );
 }
@@ -444,15 +449,21 @@ function GlobalTabletLine({
 
   return (
     <div
-      className="absolute left-0 top-[14px] bottom-[64px] w-10 pointer-events-none"
+      className="pointer-events-none absolute top-[14px] bottom-[64px] left-0 w-10"
       style={{
-        maskImage: "linear-gradient(to bottom, black calc(100% - 150px), transparent)",
-        WebkitMaskImage: "linear-gradient(to bottom, black calc(100% - 150px), transparent)",
+        maskImage:
+          "linear-gradient(to bottom, black calc(100% - 150px), transparent)",
+        WebkitMaskImage:
+          "linear-gradient(to bottom, black calc(100% - 150px), transparent)",
       }}
     >
       {/* Background dashed line */}
-      <div className="absolute left-[19px] top-0 bottom-0 w-[1px] opacity-20 overflow-hidden">
-        <svg className="w-[1px] h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div className="absolute top-0 bottom-0 left-[19px] w-[1px] overflow-hidden opacity-20">
+        <svg
+          className="h-full w-[1px]"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <line
             x1="0.5"
             y1="0"
@@ -470,10 +481,14 @@ function GlobalTabletLine({
       {/* Active (animated) dashed line */}
       <motion.div
         style={{ height: heightVal }}
-        className="absolute left-[19px] top-0 w-[1px] overflow-hidden origin-top"
+        className="absolute top-0 left-[19px] w-[1px] origin-top overflow-hidden"
       >
-        <div className="w-[1px] h-[10000px]">
-          <svg className="w-[1px] h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="h-[10000px] w-[1px]">
+          <svg
+            className="h-full w-[1px]"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <line
               x1="0.5"
               y1="0"
@@ -534,18 +549,18 @@ function GlobalMobileLine({
 
   return (
     <div
-      className="absolute z-0 h-[1px] pointer-events-none"
+      className="pointer-events-none absolute z-0 h-[1px]"
       style={{ top: 318, left: 235, right: 155 }}
     >
       {/* Faint background dashes, continuous across the whole track */}
-      <div className="absolute inset-0 border-t border-dashed border-brand-bg opacity-20 overflow-hidden" />
+      <div className="border-brand-bg absolute inset-0 overflow-hidden border-t border-dashed opacity-20" />
 
       {/* Animated dashed reveal */}
       <motion.div
         style={{ width: widthVal }}
-        className="absolute top-0 left-0 h-full overflow-hidden origin-left"
+        className="absolute top-0 left-0 h-full origin-left overflow-hidden"
       >
-        <div className="border-t border-dashed border-brand-bg h-full w-full" />
+        <div className="border-brand-bg h-full w-full border-t border-dashed" />
       </motion.div>
 
       {/* Traveling dot — no z-index set (implicitly below the year badge's
@@ -553,9 +568,14 @@ function GlobalMobileLine({
           exactly like the desktop and tablet spines. */}
       <motion.div
         style={{ left: widthVal }}
-        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-[16px] h-[16px]"
+        className="absolute top-1/2 h-[16px] w-[16px] -translate-x-1/2 -translate-y-1/2"
       >
-        <Image src="/images/timeline/Ellipse.svg" alt="Dot" width={16} height={16} />
+        <Image
+          src="/images/timeline/Ellipse.svg"
+          alt="Dot"
+          width={16}
+          height={16}
+        />
       </motion.div>
     </div>
   );
@@ -632,7 +652,11 @@ function TabletTimelineRow({
 
 /* ────────────────── main section ────────────────── */
 
-export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }) {
+export default function TimelineStory({
+  items = [],
+}: {
+  items?: TimelineItem[];
+}) {
   const mobileRef = useRef<HTMLDivElement>(null);
   const desktopTimelineRef = useRef<HTMLDivElement>(null);
   const tabletTimelineRef = useRef<HTMLDivElement>(null);
@@ -645,7 +669,6 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
 
   const tabletSmoothProgress = useGlobalSpineProgress(tabletTimelineRef);
   const mobileSmoothProgress = useGlobalMobileProgress(mobileRef);
-
 
   return (
     <section className="bg-brand-dark w-full overflow-hidden" id="timeline">
@@ -672,11 +695,17 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
               ref={desktopTimelineRef}
               className="relative flex flex-col items-center gap-0 self-stretch"
             >
-              <GlobalTimelineDot smoothProgress={smoothProgress} rowRanges={rowRanges} />
+              <GlobalTimelineDot
+                smoothProgress={smoothProgress}
+                rowRanges={rowRanges}
+              />
               {items.map((item, idx) => {
                 const isLast = idx === items.length - 1;
                 return (
-                  <div key={item.year} className="flex flex-col items-center self-stretch">
+                  <div
+                    key={item.year}
+                    className="flex flex-col items-center self-stretch"
+                  >
                     <TimelineRow
                       item={item}
                       isLast={isLast}
@@ -709,7 +738,10 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
             </div>
 
             {/* ── Timeline items ── */}
-            <div ref={tabletTimelineRef} className="relative flex flex-col self-stretch">
+            <div
+              ref={tabletTimelineRef}
+              className="relative flex flex-col self-stretch"
+            >
               <GlobalTabletLine smoothProgress={tabletSmoothProgress} />
               {items.map((item, idx) => {
                 const isLast = idx === items.length - 1;
@@ -776,8 +808,9 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
                       width={140}
                       height={100}
                       style={{ width: "140px", height: "100px" }}
-                      className={`pointer-events-none absolute z-0 opacity-70 mix-blend-screen ${isEven ? "bottom-0 left-0" : "top-0 right-0"
-                        }`}
+                      className={`pointer-events-none absolute z-0 opacity-70 mix-blend-screen ${
+                        isEven ? "bottom-0 left-0" : "top-0 right-0"
+                      }`}
                       aria-hidden="true"
                     />
                     <h3
@@ -796,14 +829,17 @@ export default function TimelineStory({ items = [] }: { items?: TimelineItem[] }
                 );
 
                 return (
-                  <div key={item.year} className="flex max-w-[310px] w-auto shrink-0 snap-center flex-col items-center">
+                  <div
+                    key={item.year}
+                    className="flex w-auto max-w-[310px] shrink-0 snap-center flex-col items-center"
+                  >
                     {isEven ? imageEl : textEl}
 
                     <div className="relative mt-[54px] mb-[70px] flex h-[48px] w-full items-center justify-center">
                       {/* Year badge — z-30 masks the line/dot passing directly behind it */}
                       <div className="relative z-30 flex items-center select-none">
                         <span
-                          className="font-anton text-center text-brand-light-green bg-brand-dark px-[2rem] text-[40px] leading-[48px]"
+                          className="font-anton text-brand-light-green bg-brand-dark px-[2rem] text-center text-[40px] leading-[48px]"
                           style={{ fontFamily: "var(--font-anton)" }}
                         >
                           {item.year}

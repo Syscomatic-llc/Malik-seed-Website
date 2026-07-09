@@ -217,15 +217,15 @@
 //   );
 // }
 
-
-
 "use client";
 
 import { useState, useCallback, useEffect, useRef, memo } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { newsData, NewsArticle } from "@/data/sections-data";
+import { newsData as staticNewsData, NewsArticle } from "@/data/sections-data";
 import Link from "next/link";
+import { ApiNewsArticle } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/utils";
 
 const CARD_WIDTH = 361;
 const CARD_GAP = 25;
@@ -242,7 +242,9 @@ const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
     <Link
       href={`/news/${article.id}`}
       className="group block shrink-0 snap-center"
-      onMouseDown={(e) => { startX.current = e.clientX; }}
+      onMouseDown={(e) => {
+        startX.current = e.clientX;
+      }}
       onClick={(e) => {
         // Prevent navigation if the user was dragging/scrolling
         if (Math.abs(e.clientX - startX.current) > 5) {
@@ -250,14 +252,14 @@ const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
         }
       }}
     >
-      <article className="border-brand-border-light bg-brand-neutral-light flex h-[434px] w-[330px] flex-col overflow-hidden rounded-[24px] border transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 xl:h-[488px] xl:w-[361px]">
+      <article className="border-brand-border-light bg-brand-neutral-light flex h-[434px] w-[330px] flex-col overflow-hidden rounded-[24px] border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md xl:h-[488px] xl:w-[361px]">
         <div className="relative h-[256px] w-full overflow-hidden bg-neutral-100 xl:h-[264px]">
           <Image
             src={article.image}
             alt={article.title}
-            loading="eager"
             fill
             sizes="(max-width: 1280px) 330px, 361px"
+            quality={50}
             className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
           />
         </div>
@@ -276,7 +278,7 @@ const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
               </>
             )}
           </div>
-          <h3 className="text-brand-dark line-clamp-3 font-sans text-[20px] font-medium leading-[24px] xl:text-[24px] xl:leading-[29px]">
+          <h3 className="text-brand-dark line-clamp-3 font-sans text-[20px] leading-[24px] font-medium xl:text-[24px] xl:leading-[29px]">
             {article.title}
           </h3>
         </div>
@@ -285,9 +287,27 @@ const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
   );
 });
 
-export default function NewsSection() {
+export interface NewsSectionProps {
+  apiData?: ApiNewsArticle[];
+}
+
+export default function NewsSection({ apiData }: NewsSectionProps) {
+  const newsData =
+    apiData && apiData.length > 0
+      ? {
+          badge: staticNewsData.badge,
+          title: staticNewsData.title,
+          items: apiData.map((a) => ({
+            id: a.id,
+            category: a.category,
+            date: a.display_date,
+            title: a.title,
+            image: resolveImageUrl(a.image_url),
+          })),
+        }
+      : staticNewsData;
   const [activeIdx, setActiveIdx] = useState(0);
-  const maxIdx = newsData.items.length - 2;
+  const maxIdx = Math.max(0, newsData.items.length - 2);
 
   const isPausedRef = useRef(false);
   // Use a timestamp-based approach for smooth, drift-free auto-scroll
@@ -296,7 +316,9 @@ export default function NewsSection() {
   const activeIdxRef = useRef(0); // mirror of state for RAF closure
 
   // Keep ref in sync with state
-  useEffect(() => { activeIdxRef.current = activeIdx; }, [activeIdx]);
+  useEffect(() => {
+    activeIdxRef.current = activeIdx;
+  }, [activeIdx]);
 
   const tick = useCallback(() => {
     const now = Date.now();
@@ -309,7 +331,9 @@ export default function NewsSection() {
 
   useEffect(() => {
     rafRef.current = requestAnimationFrame(tick);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, [tick]);
 
   const resetTimer = useCallback(() => {
@@ -326,7 +350,9 @@ export default function NewsSection() {
     resetTimer();
   }, [maxIdx, resetTimer]);
 
-  const handleMouseEnter = useCallback(() => { isPausedRef.current = true; }, []);
+  const handleMouseEnter = useCallback(() => {
+    isPausedRef.current = true;
+  }, []);
   const handleMouseLeave = useCallback(() => {
     isPausedRef.current = false;
     resetTimer(); // give a fresh 4s after hover
@@ -338,34 +364,80 @@ export default function NewsSection() {
         <div className="flex flex-col xl:flex-row xl:gap-[64px]">
           <div className="mb-8 flex w-full shrink-0 flex-col items-start justify-between gap-8 xl:mb-0 xl:h-[319px] xl:w-[429px]">
             <div className="flex w-full flex-col items-start gap-4">
-              <SectionBadge variant="outline" showDot className="h-[30px] gap-[8px] px-4 text-[12px] leading-[18px] xl:h-[33px] xl:gap-[8px] xl:text-[14px] xl:leading-[21px]">
+              <SectionBadge
+                variant="outline"
+                showDot
+                className="h-[30px] gap-[8px] px-4 text-[12px] leading-[18px] xl:h-[33px] xl:gap-[8px] xl:text-[14px] xl:leading-[21px]"
+              >
                 {newsData.badge}
               </SectionBadge>
-              <h2 className="text-brand-dark max-w-[466px] text-[32px] leading-[38px] font-medium xl:text-[48px] xl:leading-[58px]" style={{ fontFamily: "var(--font-inter-tight)", fontWeight: 500 }}>
+              <h2
+                className="text-brand-dark max-w-[466px] text-[32px] leading-[38px] font-medium xl:text-[48px] xl:leading-[58px]"
+                style={{
+                  fontFamily: "var(--font-inter-tight)",
+                  fontWeight: 500,
+                }}
+              >
                 {newsData.title}
               </h2>
             </div>
 
             <div className="hidden gap-4 xl:flex">
-              <button onClick={handlePrev} disabled={activeIdx === 0} aria-label="Previous articles"
-                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${activeIdx === 0 ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent" : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"}`}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+              <button
+                onClick={handlePrev}
+                disabled={activeIdx === 0}
+                aria-label="Previous articles"
+                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${activeIdx === 0 ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent" : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"}`}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
               </button>
-              <button onClick={handleNext} disabled={activeIdx === maxIdx} aria-label="Next articles"
-                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${activeIdx === maxIdx ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent" : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"}`}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+              <button
+                onClick={handleNext}
+                disabled={activeIdx === maxIdx}
+                aria-label="Next articles"
+                className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300 ${activeIdx === maxIdx ? "border-brand-border text-brand-dark/30 cursor-not-allowed bg-transparent" : "border-brand-border text-brand-dark hover:bg-brand-active hover:border-brand-active hover:text-white"}`}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
               </button>
             </div>
           </div>
 
           <div className="relative h-auto w-full overflow-hidden xl:h-[488px] xl:w-[748px]">
-            <div className="from-brand-bg pointer-events-none absolute top-0 -right-1 z-20 h-full w-[70px] md:w-[120px] bg-gradient-to-l to-transparent xl:block" />
+            <div className="from-brand-bg pointer-events-none absolute top-0 -right-1 z-20 h-full w-[70px] bg-gradient-to-l to-transparent md:w-[120px] xl:block" />
 
             {/* Desktop slider */}
-            <div className="hidden h-full w-full overflow-hidden xl:block" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            <div
+              className="hidden h-full w-full overflow-hidden xl:block"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               <div
                 className="flex gap-[25px] transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
-                style={{ transform: `translateX(-${activeIdx * CARD_SLOT_WIDTH}px)` }}
+                style={{
+                  transform: `translateX(-${activeIdx * CARD_SLOT_WIDTH}px)`,
+                }}
               >
                 {newsData.items.map((article) => (
                   <NewsCard key={article.id} article={article} />

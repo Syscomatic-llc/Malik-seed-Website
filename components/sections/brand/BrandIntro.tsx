@@ -4,7 +4,11 @@ import { useInView } from "motion/react";
 import { useRef } from "react";
 
 /* ─── types ─────────────────────────────────────────────── */
-export type BrandIntroLayout = "text-only" | "text-tags" | "text-stats" | "text-tags-stats";
+export type BrandIntroLayout =
+  | "text-only"
+  | "text-tags"
+  | "text-stats"
+  | "text-tags-stats";
 
 interface StatItem {
   value: string;
@@ -24,13 +28,31 @@ function useTitleLines(title: string | string[]) {
   const titleLines = Array.isArray(title) ? title : [title];
   const shouldSwap = titleLines[0]?.endsWith("\n");
   const displayFirst = shouldSwap ? titleLines[1] : titleLines[0];
-  const displaySecond = shouldSwap ? titleLines[0].trimEnd() : titleLines[1] ?? null;
+  const displaySecond = shouldSwap
+    ? titleLines[0].trimEnd()
+    : (titleLines[1] ?? null);
   const hasNewlineInFirst = titleLines[0]?.includes("\n");
-  return { displayFirst, displaySecond, isOriginalFirstOnTop: !shouldSwap, hasNewlineInFirst };
+  return {
+    displayFirst,
+    displaySecond,
+    isOriginalFirstOnTop: !shouldSwap,
+    hasNewlineInFirst,
+  };
 }
 
-function TitleBlock({ title, className }: { title: string | string[]; className?: string }) {
-  const { displayFirst, displaySecond, isOriginalFirstOnTop, hasNewlineInFirst } = useTitleLines(title);
+function TitleBlock({
+  title,
+  className,
+}: {
+  title: string | string[];
+  className?: string;
+}) {
+  const {
+    displayFirst,
+    displaySecond,
+    isOriginalFirstOnTop,
+    hasNewlineInFirst,
+  } = useTitleLines(title);
   return (
     <h2 className={className}>
       <span className={isOriginalFirstOnTop ? "text-[#A9E179]" : "text-white"}>
@@ -39,7 +61,9 @@ function TitleBlock({ title, className }: { title: string | string[]; className?
       {displaySecond && (
         <>
           {hasNewlineInFirst ? <br /> : " "}
-          <span className={isOriginalFirstOnTop ? "text-white" : "text-[#A9E179]"}>
+          <span
+            className={isOriginalFirstOnTop ? "text-white" : "text-[#A9E179]"}
+          >
             {displaySecond}
           </span>
         </>
@@ -60,7 +84,12 @@ function StatNumber({ raw }: { raw: string }) {
   const startRef = useRef<number | null>(null);
   const frameRef = useRef<number | null>(null);
 
-  if (typeof window !== "undefined" && isInView && numeric !== null && ref.current) {
+  if (
+    typeof window !== "undefined" &&
+    isInView &&
+    numeric !== null &&
+    ref.current
+  ) {
     if (startRef.current === null) {
       startRef.current = performance.now();
       const duration = 1400;
@@ -94,18 +123,7 @@ function StatNumber({ raw }: { raw: string }) {
 /* ─── Tag Pill ───────────────────────────────────────────── */
 function TagPill({ label }: { label: string }) {
   return (
-    <span
-      className="
-        inline-flex items-center justify-center
-        h-[37px] px-6
-        rounded-[40px]
-        border border-white/[0.12]
-        bg-[rgba(13,26,20,0.32)]
-        font-[family-name:var(--font-inter-tight)]
-        text-[14px] leading-[21px] text-white/90 text-center
-        whitespace-nowrap
-      "
-    >
+    <span className="inline-flex h-[37px] items-center justify-center rounded-[40px] border border-white/[0.12] bg-[rgba(13,26,20,0.32)] px-6 text-center font-[family-name:var(--font-inter-tight)] text-[14px] leading-[21px] whitespace-nowrap text-white/90">
       {label}
     </span>
   );
@@ -114,11 +132,11 @@ function TagPill({ label }: { label: string }) {
 /* ─── Stat Card (Desktop) ────────────────────────────────── */
 function StatCard({ value, label }: StatItem) {
   return (
-    <div className="flex-1 min-w-0 h-[202px] bg-[#0F3221] rounded-[24px]  py-14 px-8 relative">
-      <div className="font-[family-name:var(--font-anton)] text-[48px] leading-[58px] text-white text-center">
+    <div className="relative h-[202px] min-w-0 flex-1 rounded-[24px] bg-[#0F3221] px-8 py-14">
+      <div className="text-center font-[family-name:var(--font-anton)] text-[48px] leading-[58px] text-white">
         <StatNumber raw={value} />
       </div>
-      <div className="font-[family-name:var(--font-inter)] text-[16px] capitalize leading-[150%] text-white text-center">
+      <div className="text-center font-[family-name:var(--font-inter)] text-[16px] leading-[150%] text-white capitalize">
         {label}
       </div>
     </div>
@@ -128,11 +146,11 @@ function StatCard({ value, label }: StatItem) {
 /* ─── Mobile Stat Row ────────────────────────────────────── */
 function MobileStatCard({ value, label }: StatItem) {
   return (
-    <div className="flex-1 bg-[#0F3221] rounded-[16px] flex flex-col items-center justify-center py-8 px-4 gap-1.5">
-      <div className="font-[family-name:var(--font-anton)] text-[36px] leading-[43px] text-white text-center">
+    <div className="flex flex-1 flex-col items-center justify-center gap-1.5 rounded-[16px] bg-[#0F3221] px-4 py-8">
+      <div className="text-center font-[family-name:var(--font-anton)] text-[36px] leading-[43px] text-white">
         <StatNumber raw={value} />
       </div>
-      <div className="font-[family-name:var(--font-inter)] capitalize text-[13px] leading-[18px] text-white/80 text-center">
+      <div className="text-center font-[family-name:var(--font-inter)] text-[13px] leading-[18px] text-white/80 capitalize">
         {label}
       </div>
     </div>
@@ -143,14 +161,14 @@ function MobileStatCard({ value, label }: StatItem) {
 function StatsGrid({ stats }: { stats: StatItem[] }) {
   return (
     <>
-      <div className="hidden lg:flex gap-4 w-full justify-between">
+      <div className="hidden w-full justify-between gap-4 lg:flex">
         {stats.map((s, i) => (
           <div key={i} className="flex-1">
             <StatCard value={s.value} label={s.label} />
           </div>
         ))}
       </div>
-      <div className="hidden md:flex lg:hidden flex-col gap-4 w-full">
+      <div className="hidden w-full flex-col gap-4 md:flex lg:hidden">
         <div className="flex gap-4">
           {stats.slice(0, 2).map((s, i) => (
             <div key={i} className="flex-1">
@@ -166,7 +184,7 @@ function StatsGrid({ stats }: { stats: StatItem[] }) {
           ))}
         </div>
       </div>
-      <div className="flex md:hidden flex-col gap-3 w-full">
+      <div className="flex w-full flex-col gap-3 md:hidden">
         {[stats.slice(0, 2), stats.slice(2, 4)].map((pair, rowIdx) => (
           <div key={rowIdx} className="flex gap-3">
             {pair.map((s, i) => (
@@ -200,28 +218,13 @@ function LayoutTextOnly({
 }: Pick<BrandIntroProps, "title" | "description">) {
   return (
     <section className="w-full bg-[#0D1A14]">
-      <div className="w-full px-4 md:px-[100px] py-[48px] md:py-[140px]">
-        <div className="max-w-[1240px] mx-auto flex flex-col items-center gap-4">
+      <div className="w-full px-4 py-[48px] md:px-[100px] md:py-[140px]">
+        <div className="mx-auto flex max-w-[1240px] flex-col items-center gap-4">
           <TitleBlock
             title={title}
-            className="
-              font-[family-name:var(--font-inter-tight)]
-              text-[32px] leading-[38px]
-              md:text-[40px] md:leading-[48px]
-              lg:text-[48px] lg:leading-[58px]
-              font-medium text-center
-              max-w-[730px] w-full
-            "
+            className="w-full max-w-[730px] text-center font-[family-name:var(--font-inter-tight)] text-[32px] leading-[38px] font-medium md:text-[40px] md:leading-[48px] lg:text-[48px] lg:leading-[58px]"
           />
-          <p
-            className="
-              font-[family-name:var(--font-inter)]
-              text-[14px] leading-[22px]
-              md:text-[16px] md:leading-[24px]
-              text-white/80 text-center
-              max-w-[662px] w-full
-            "
-          >
+          <p className="w-full max-w-[662px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:text-[16px] md:leading-[24px]">
             {description}
           </p>
         </div>
@@ -237,29 +240,14 @@ function LayoutTextTags({
 }: Pick<BrandIntroProps, "title" | "description" | "highlights">) {
   return (
     <section className="w-full bg-[#0D1A14]">
-      <div className="w-full px-4 md:px-[100px] py-[48px] md:py-[140px]">
-        <div className="max-w-[1240px] mx-auto flex flex-col items-center gap-8">
-          <div className="flex flex-col items-center gap-4 w-full max-w-[886px]">
+      <div className="w-full px-4 py-[48px] md:px-[100px] md:py-[140px]">
+        <div className="mx-auto flex max-w-[1240px] flex-col items-center gap-8">
+          <div className="flex w-full max-w-[886px] flex-col items-center gap-4">
             <TitleBlock
               title={title}
-              className="
-                font-[family-name:var(--font-inter-tight)]
-                text-[32px] leading-[38px]
-                md:text-[40px] md:leading-[48px]
-                lg:text-[48px] lg:leading-[58px]
-                font-medium text-center w-full
-              "
+              className="w-full text-center font-[family-name:var(--font-inter-tight)] text-[32px] leading-[38px] font-medium md:text-[40px] md:leading-[48px] lg:text-[48px] lg:leading-[58px]"
             />
-            <p
-              className="
-                font-[family-name:var(--font-inter)]
-                text-[14px] leading-[22px]
-                md:text-[16px] md:leading-[24px]
-                text-white/80 text-center
-                max-w-[636px] w-full
-                hidden md:block
-              "
-            >
+            <p className="hidden w-full max-w-[636px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:block md:text-[16px] md:leading-[24px]">
               {description}
             </p>
           </div>
@@ -279,28 +267,14 @@ function LayoutTextStats({
 }: Pick<BrandIntroProps, "title" | "description" | "stats">) {
   return (
     <section className="w-full bg-[#0D1A14]">
-      <div className="w-full px-4 md:px-[100px] py-[48px] md:pt-[140px] md:pb-[140px]">
-        <div className="max-w-[1240px] mx-auto flex flex-col items-center gap-8 md:gap-[64px]">
-          <div className="flex flex-col items-center gap-4 w-full">
+      <div className="w-full px-4 py-[48px] md:px-[100px] md:pt-[140px] md:pb-[140px]">
+        <div className="mx-auto flex max-w-[1240px] flex-col items-center gap-8 md:gap-[64px]">
+          <div className="flex w-full flex-col items-center gap-4">
             <TitleBlock
               title={title}
-              className="
-                font-[family-name:var(--font-inter-tight)]
-                text-[32px] leading-[38px]
-                md:text-[40px] md:leading-[48px]
-                lg:text-[48px] lg:leading-[58px]
-                font-medium text-center w-full
-              "
+              className="w-full text-center font-[family-name:var(--font-inter-tight)] text-[32px] leading-[38px] font-medium md:text-[40px] md:leading-[48px] lg:text-[48px] lg:leading-[58px]"
             />
-            <p
-              className="
-                font-[family-name:var(--font-inter)]
-                text-[14px] leading-[22px]
-                md:text-[16px] md:leading-[24px]
-                text-white/80 text-center
-                max-w-[636px] w-full
-              "
-            >
+            <p className="w-full max-w-[636px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:text-[16px] md:leading-[24px]">
               {description}
             </p>
           </div>
@@ -319,29 +293,15 @@ function LayoutTextTagsStats({
 }: Pick<BrandIntroProps, "title" | "description" | "highlights" | "stats">) {
   return (
     <section className="w-full bg-[#0D1A14]">
-      <div className="w-full px-4 md:px-[100px] py-[48px] md:pt-[140px] md:pb-[140px]">
-        <div className="max-w-[1240px] mx-auto flex flex-col items-center gap-8 md:gap-[64px]">
-          <div className="flex flex-col items-center gap-8 w-full max-w-[886px]">
-            <div className="flex flex-col items-center gap-4 w-full">
+      <div className="w-full px-4 py-[48px] md:px-[100px] md:pt-[140px] md:pb-[140px]">
+        <div className="mx-auto flex max-w-[1240px] flex-col items-center gap-8 md:gap-[64px]">
+          <div className="flex w-full max-w-[886px] flex-col items-center gap-8">
+            <div className="flex w-full flex-col items-center gap-4">
               <TitleBlock
                 title={title}
-                className="
-                  font-[family-name:var(--font-inter-tight)]
-                  text-[32px] leading-[38px]
-                  md:text-[40px] md:leading-[48px]
-                  lg:text-[48px] lg:leading-[58px]
-                  font-medium text-center w-full
-                "
+                className="w-full text-center font-[family-name:var(--font-inter-tight)] text-[32px] leading-[38px] font-medium md:text-[40px] md:leading-[48px] lg:text-[48px] lg:leading-[58px]"
               />
-              <p
-                className="
-                  font-[family-name:var(--font-inter)]
-                  text-[14px] leading-[22px]
-                  md:text-[16px] md:leading-[24px]
-                  text-white/80 text-center
-                  max-w-[676px] w-full
-                "
-              >
+              <p className="w-full max-w-[676px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:text-[16px] md:leading-[24px]">
                 {description}
               </p>
             </div>

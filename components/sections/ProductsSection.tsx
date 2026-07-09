@@ -1,18 +1,31 @@
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
-import { productsData } from "@/data/sections-data";
+import { productsData as staticProductsData } from "@/data/sections-data";
+import { ApiService } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/utils";
 
 type Direction = "horizontal" | "vertical";
 
+/** Shape used internally by the cards. */
+interface ProductItem {
+  id: number;
+  category: string;
+  name: string;
+  description: string;
+  image: string;
+  href: string;
+}
+
 interface ProductsSectionProps {
   direction?: Direction;
+  apiData?: ApiService[];
 }
 
 // ─── Shared card inner content ────────────────────────────────────────────────
 
 interface CardContentProps {
-  product: (typeof productsData.items)[0];
+  product: ProductItem;
   iconSize: number;
   titleClass: string;
   paddingClass: string;
@@ -36,6 +49,7 @@ function CardContent({
           fill
           className="object-cover"
           sizes="(max-width: 767px) 280px, (max-width: 1279px) 50vw, 480px"
+          quality={50}
           priority={product.id <= 3}
         />
       </div>
@@ -45,28 +59,28 @@ function CardContent({
 
       {/* Content block */}
       <div
-        className={`absolute bottom-0 left-0 right-0 z-20 flex flex-col ${gapClass} ${paddingClass}`}
+        className={`absolute right-0 bottom-0 left-0 z-20 flex flex-col ${gapClass} ${paddingClass}`}
       >
         {/* Arrow icon circle */}
         <div
           style={{ width: iconSize, height: iconSize }}
-          className="flex shrink-0 items-center justify-center rounded-full bg-brand-bg/20 backdrop-blur-xs transition-transform duration-300 group-hover:scale-110 group-hover:bg-brand-light-green"
+          className="bg-brand-bg/20 group-hover:bg-brand-light-green flex shrink-0 items-center justify-center rounded-full backdrop-blur-xs transition-transform duration-300 group-hover:scale-110"
         >
           <ArrowIcon
             size={iconSize * 0.5}
-            className="text-brand-bg transition-colors group-hover:text-brand-active"
+            className="text-brand-bg group-hover:text-brand-active transition-colors"
           />
         </div>
 
         {/* Title + hover description */}
         <div className="flex flex-col gap-1">
-          <h3 className={`font-sans text-brand-bg ${titleClass}`}>
+          <h3 className={`text-brand-bg font-sans ${titleClass}`}>
             {product.name}
           </h3>
 
           {/* Description — revealed on hover */}
           <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[120px] group-hover:opacity-100">
-            <p className="font-inter mt-1 text-[14px] leading-[22px] text-brand-bg/80 md:text-[16px] md:leading-[24px]">
+            <p className="font-inter text-brand-bg/80 mt-1 text-[14px] leading-[22px] md:text-[16px] md:leading-[24px]">
               {product.description}
             </p>
           </div>
@@ -76,22 +90,41 @@ function CardContent({
   );
 }
 
+/**
+ * Map API services to the internal ProductItem shape.
+ * If API data is missing, falls back to static data.
+ */
+function buildProducts(apiData?: ApiService[]): ProductItem[] {
+  if (apiData && apiData.length > 0) {
+    return apiData.map((s) => ({
+      id: s.id,
+      category: s.title,
+      name: s.title,
+      description: s.description,
+      image: resolveImageUrl(s.image_url),
+      href: s.link,
+    }));
+  }
+  return staticProductsData.items;
+}
+
 export default function ProductsSection({
   direction = "horizontal",
+  apiData,
 }: ProductsSectionProps) {
   const isVertical = direction === "vertical";
+  const products = buildProducts(apiData);
 
   return (
-    <section className="w-full bg-brand-bg" id="products">
+    <section className="bg-brand-bg w-full" id="products">
       <div className="mx-auto max-w-[1440px]">
-
         {/* ===== Tablet / Desktop Grid (md and above) ===== */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3">
-          {productsData.items.map((product) => (
+          {products.map((product) => (
             <Link
               key={product.id}
               href={product.href}
-              className="group relative flex h-[377px] w-full overflow-hidden border-r border-b border-brand-dark/10 last:border-r-0"
+              className="group border-brand-dark/10 relative flex h-[377px] w-full overflow-hidden border-r border-b last:border-r-0"
             >
               <CardContent
                 product={product}
@@ -106,15 +139,14 @@ export default function ProductsSection({
 
         {/* ===== Mobile Layout (below md) ===== */}
         <div className="md:hidden">
-
           {/* VERTICAL: full-width stacked cards */}
           {isVertical ? (
             <div className="flex flex-col">
-              {productsData.items.map((product) => (
+              {products.map((product) => (
                 <Link
                   key={product.id}
                   href={product.href}
-                  className="group relative flex h-[350px] w-full overflow-hidden border-b border-brand-dark/10"
+                  className="group border-brand-dark/10 relative flex h-[350px] w-full overflow-hidden border-b"
                 >
                   <CardContent
                     product={product}
@@ -128,8 +160,8 @@ export default function ProductsSection({
             </div>
           ) : (
             /* HORIZONTAL: snap-scrollable row of 280×350 cards */
-            <div className="flex flex-row gap-4 overflow-x-auto scroll-smooth scrollbar-none px-4 py-10 pb-4 snap-x snap-mandatory">
-              {productsData.items.map((product) => (
+            <div className="flex snap-x snap-mandatory scrollbar-none flex-row gap-4 overflow-x-auto scroll-smooth px-4 py-10 pb-4">
+              {products.map((product) => (
                 <Link
                   key={product.id}
                   href={product.href}
@@ -146,7 +178,6 @@ export default function ProductsSection({
               ))}
             </div>
           )}
-
         </div>
       </div>
     </section>

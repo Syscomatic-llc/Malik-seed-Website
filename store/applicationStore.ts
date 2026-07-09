@@ -1,6 +1,9 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { assessmentConfigs, type PositionAssessmentConfig } from "@/data/questions-data";
+import {
+  assessmentConfigs,
+  type PositionAssessmentConfig,
+} from "@/data/questions-data";
 
 export interface ApplicationState {
   // Job context
@@ -100,11 +103,13 @@ export const useApplicationStore = create<ApplicationState>()(
       setOtpVerified: (isOtpVerified) => set({ isOtpVerified }),
 
       startAssessment: (positionId, positionTitle, config) => {
-        const types = config?.assessmentTypes ?? (config ? [config.assessmentType] : []);
+        const types =
+          config?.assessmentTypes ?? (config ? [config.assessmentType] : []);
         const stageTimeRemaining: Record<string, number> = {};
 
         types.forEach((type: string) => {
-          const limit = config?.stageTimeLimits?.[type] ?? config?.timeLimitMinutes ?? 30;
+          const limit =
+            config?.stageTimeLimits?.[type] ?? config?.timeLimitMinutes ?? 30;
           stageTimeRemaining[type] = limit * 60;
         });
 
@@ -141,7 +146,9 @@ export const useApplicationStore = create<ApplicationState>()(
           let nextStageExists = false;
           if (posId) {
             const config = get().assessmentConfig ?? assessmentConfigs[posId];
-            const types = config?.assessmentTypes ?? (config ? [config.assessmentType] : []);
+            const types =
+              config?.assessmentTypes ??
+              (config ? [config.assessmentType] : []);
             const currentIndex = types.indexOf(currentStage as any);
             const nextStage = types[currentIndex + 1];
             nextStageExists = !!nextStage;

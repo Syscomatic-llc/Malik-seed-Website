@@ -48,11 +48,11 @@ export default function ApplyHeader({ id, position }: ApplyHeaderProps) {
     <div className="flex flex-col gap-8 lg:gap-10">
       {/* Breadcrumbs */}
       <Breadcrumb className="text-[#0D1A14]">
-        <BreadcrumbList className="flex-wrap gap-1.5 font-inter-tight text-[14px] lg:text-[16px] leading-[24px] text-[#0D1A14]">
+        <BreadcrumbList className="font-inter-tight flex-wrap gap-1.5 text-[14px] leading-[24px] text-[#0D1A14] lg:text-[16px]">
           <BreadcrumbItem>
             <BreadcrumbLink
               render={<Link href="/careers" />}
-              className="text-[#0D1A14]/70 hover:text-[#0D1A14] transition-colors"
+              className="text-[#0D1A14]/70 transition-colors hover:text-[#0D1A14]"
             >
               Hiring
             </BreadcrumbLink>
@@ -61,7 +61,7 @@ export default function ApplyHeader({ id, position }: ApplyHeaderProps) {
           <BreadcrumbItem>
             <BreadcrumbLink
               render={<Link href="/careers/open-positions" />}
-              className="text-[#0D1A14]/70 hover:text-[#0D1A14] transition-colors"
+              className="text-[#0D1A14]/70 transition-colors hover:text-[#0D1A14]"
             >
               Open Positions
             </BreadcrumbLink>
@@ -80,10 +80,10 @@ export default function ApplyHeader({ id, position }: ApplyHeaderProps) {
 
       {/* Header (Job info) */}
       <div className="flex flex-col gap-4">
-        <h1 className="font-inter-tight text-[38px] lg:text-[48px] font-medium leading-[46px] lg:leading-[58px] text-[#141C24] tracking-tight">
+        <h1 className="font-inter-tight text-[38px] leading-[46px] font-medium tracking-tight text-[#141C24] lg:text-[48px] lg:leading-[58px]">
           {position.title}
         </h1>
-        <div className="flex gap-6 flex-col">
+        <div className="flex flex-col gap-6">
           <div className="flex flex-wrap gap-x-12 gap-y-6">
             {position.location && (
               <div className="flex flex-col gap-2">

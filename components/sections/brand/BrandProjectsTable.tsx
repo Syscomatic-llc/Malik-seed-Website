@@ -17,70 +17,84 @@ const PROJECTS: Project[] = [
   {
     title: "Agro-logistic Impact Cluster",
     duration: "(Jan 2026 – Dec 2029)",
-    focus: "Reducing post-harvest loss · Capacity development on advanced post-harvest management · CA storage · MAP line · Traceability · Mini-labs for MRL testing",
+    focus:
+      "Reducing post-harvest loss · Capacity development on advanced post-harvest management · CA storage · MAP line · Traceability · Mini-labs for MRL testing",
     location: "Rajshahi & Rangpur Division",
     donor: "Netherlands Enterprise Agency (RVO)",
   },
   {
     title: "Climate-Adaptive Cold Storage Initiative",
     duration: "(May 2026 - Oct 2027)",
-    focus: "Strengthening value chain of vegetables, onion & potato · Renewable energy · Cool chain management · Traceability",
+    focus:
+      "Strengthening value chain of vegetables, onion & potato · Renewable energy · Cool chain management · Traceability",
     location: "Rajshahi & Rangpur Division",
     donor: "DFCD-SNV Netherlands",
   },
   {
-    title: "Building an Inclusive & Sustainable Supply Chain for Responsibly Produced, High-Quality Vegetables (ISCHV)",
+    title:
+      "Building an Inclusive & Sustainable Supply Chain for Responsibly Produced, High-Quality Vegetables (ISCHV)",
     duration: "(Jan 2023 – Dec 2026)",
-    focus: "Capacity building of farmers & stakeholders on GAP · GAP certification · Vegetable processing plant · HACCP certification · Cool chain · Traceability · Sales & marketing",
+    focus:
+      "Capacity building of farmers & stakeholders on GAP · GAP certification · Vegetable processing plant · HACCP certification · Cool chain · Traceability · Sales & marketing",
     location: "Bogura & Gaibandha",
     donor: "KFW-DEG Impulse, Germany",
   },
   {
-    title: "Technical Service for GAP Certification Framework (SD/Partner-DAE/06)",
+    title:
+      "Technical Service for GAP Certification Framework (SD/Partner-DAE/06)",
     duration: "(Nov 2024 – Dec 2027)",
-    focus: "Policy / regulatory framework & strategic action plan development · SOP for certification · BACB capacity building & auditor training · PFS piloting · Marketing & media message preparation",
+    focus:
+      "Policy / regulatory framework & strategic action plan development · SOP for certification · BACB capacity building & auditor training · PFS piloting · Marketing & media message preparation",
     location: "National level",
     donor: "PARTNER – Department of Agriculture Extension (DAE)",
   },
   {
     title: "On-the-job training for youth & women entrepreneurs",
     duration: "(Jul 2024 – Jun 2028)",
-    focus: "Training rural agro-entrepreneurs on post-harvest management · GAP handling · Business planning · Incubation support on agro-input business & vegetable production",
+    focus:
+      "Training rural agro-entrepreneurs on post-harvest management · GAP handling · Business planning · Incubation support on agro-input business & vegetable production",
     location: "Rangpur Division",
     donor: "PARTNER Programme – Department of Marketing (DAM)",
   },
   {
     title: "Onion Impact Cluster Project",
     duration: "(Jan 2022 – Dec 2025)",
-    focus: "Post-harvest management of onion · Grading, sorting & packaging · Cool storage system",
+    focus:
+      "Post-harvest management of onion · Grading, sorting & packaging · Cool storage system",
     location: "Pabna District",
     donor: "Netherlands Enterprise Agency (RVO)",
   },
   {
     title: "Smallholder Horticulture Empowerment Project (Bangla-SHEP)",
     duration: "(2019 – 2026)",
-    focus: "Capacity building of farmers on market-oriented horticulture production",
+    focus:
+      "Capacity building of farmers on market-oriented horticulture production",
     location: "Dinajpur, Rangpur, Bogura, Pabna & Rajshahi",
     donor: "JICA and DAE",
   },
   {
-    title: "Raising Economic & Social Security for Child Labour Eradication (RESOURCE)",
+    title:
+      "Raising Economic & Social Security for Child Labour Eradication (RESOURCE)",
     duration: "(Mar 2024 – May 2026)",
-    focus: "Homestead food production & livelihoods improvement in saline-prone areas of Bagerhat district",
+    focus:
+      "Homestead food production & livelihoods improvement in saline-prone areas of Bagerhat district",
     location: "Bagerhat, Khulna Division",
     donor: "Cordaid – Netherlands",
   },
   {
-    title: "Sustained Fresh Vegetable Supply Chain for Healthy & Prosperous Citizens (SVC4HPC)",
+    title:
+      "Sustained Fresh Vegetable Supply Chain for Healthy & Prosperous Citizens (SVC4HPC)",
     duration: "(Jul 2023 – Jun 2024)",
-    focus: "GAP cluster formation · Facilitation to obtain Global GAP certification",
+    focus:
+      "GAP cluster formation · Facilitation to obtain Global GAP certification",
     location: "Northern Bangladesh",
     donor: "BAEN (Bangladesh Agriculture Extension Network)",
   },
   {
     title: "Making Market Work for Char (M4C)",
     duration: "(Feb 2021 – Jun 2024)",
-    focus: "Make next-generation seed available in remote Char areas of Teesta and Jamuna",
+    focus:
+      "Make next-generation seed available in remote Char areas of Teesta and Jamuna",
     location: "Northern Bangladesh",
     donor: "Swisscontact",
   },
@@ -92,14 +106,16 @@ const PROJECTS: Project[] = [
     donor: "Cordaid under SONGO project",
   },
   {
-    title: "Collective Responsibility, Action & Accountability for Improved Nutrition (CRAAIN)",
+    title:
+      "Collective Responsibility, Action & Accountability for Improved Nutrition (CRAAIN)",
     duration: "(Aug 2021 – Jan 2023)",
     focus: "Technical support, training, and saline-tolerant vegetable seeds",
     location: "Bagerhat District",
     donor: "European Union – Concern Worldwide",
   },
   {
-    title: "High-value quality vegetable seeds & technical support grant to marginal farmers of northern char areas",
+    title:
+      "High-value quality vegetable seeds & technical support grant to marginal farmers of northern char areas",
     duration: "(Ongoing)",
     focus: "Next-generation seed as input grant with technical support",
     location: "Northern Bangladesh",
@@ -111,20 +127,22 @@ export default function BrandProjectsTable() {
   const [expandedIdx, setExpandedIdx] = useState<number | null>(0);
 
   return (
-    <section className="w-full bg-[#F2F7F1] py-[48px] md:py-[100px] px-4 md:px-8 lg:px-[100px]">
-      <div className="max-w-[1240px] mx-auto flex flex-col gap-10 md:gap-16">
+    <section className="w-full bg-[#F2F7F1] px-4 py-[48px] md:px-8 md:py-[100px] lg:px-[100px]">
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-10 md:gap-16">
         {/* Header */}
-        <div className="flex flex-col gap-6 md:gap-8 items-center text-center max-w-[800px] mx-auto">
-          <SectionBadge variant="outline" showDot>projects</SectionBadge>
-          <h2 className="font-sans text-[32px] md:text-[48px] font-medium leading-[120%] text-[#0D1A14] text-center">
+        <div className="mx-auto flex max-w-[800px] flex-col items-center gap-6 text-center md:gap-8">
+          <SectionBadge variant="outline" showDot>
+            projects
+          </SectionBadge>
+          <h2 className="text-center font-sans text-[32px] leading-[120%] font-medium text-[#0D1A14] md:text-[48px]">
             Implemented and ongoing projects
           </h2>
         </div>
 
         {/* Desktop Table View (lg and above) */}
-        <div className="hidden lg:flex flex-col w-full border border-[#F2F4F7] rounded-[20px] overflow-hidden bg-white shadow-xs">
+        <div className="hidden w-full flex-col overflow-hidden rounded-[20px] border border-[#F2F4F7] bg-white shadow-xs lg:flex">
           {/* Header Row */}
-          <div className="flex w-full h-[64px] bg-[#0F3221] items-center text-[#F2F7F1] text-[16px] font-sans font-medium select-none">
+          <div className="flex h-[64px] w-full items-center bg-[#0F3221] font-sans text-[16px] font-medium text-[#F2F7F1] select-none">
             <div className="w-[314px] shrink-0 pl-8">Projects</div>
             <div className="w-[386px] shrink-0 pl-8">Focus Areas</div>
             <div className="w-[270px] shrink-0 pl-8">Location</div>
@@ -132,30 +150,30 @@ export default function BrandProjectsTable() {
           </div>
 
           {/* Body Rows */}
-          <div className="flex flex-col w-full">
+          <div className="flex w-full flex-col">
             {PROJECTS.map((project, idx) => (
               <div
                 key={idx}
                 className={cn(
-                  "flex w-full min-h-[160px] items-center text-[16px] font-sans border-b border-[#F2F4F7] last:border-b-0 hover:bg-[#F2F7F1]/40 transition-colors duration-200 py-6",
+                  "flex min-h-[160px] w-full items-center border-b border-[#F2F4F7] py-6 font-sans text-[16px] transition-colors duration-200 last:border-b-0 hover:bg-[#F2F7F1]/40",
                   idx % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"
                 )}
               >
-                <div className="w-[314px] shrink-0 pl-8 pr-6 flex flex-col gap-1 justify-center align-top">
-                  <span className="font-sans font-medium text-[#0D1A14] leading-[24px]">
+                <div className="flex w-[314px] shrink-0 flex-col justify-center gap-1 pr-6 pl-8 align-top">
+                  <span className="font-sans leading-[24px] font-medium text-[#0D1A14]">
                     {project.title}
                   </span>
-                  <span className="text-[16px] text-[#0D1A14]/70 font-sans leading-[24px]">
+                  <span className="font-sans text-[16px] leading-[24px] text-[#0D1A14]/70">
                     {project.duration}
                   </span>
                 </div>
-                <div className="w-[386px] shrink-0 pl-8 pr-6 text-[#0D1A14] leading-[24px] align-top">
+                <div className="w-[386px] shrink-0 pr-6 pl-8 align-top leading-[24px] text-[#0D1A14]">
                   {project.focus}
                 </div>
-                <div className="w-[270px] shrink-0 pl-8 pr-6 text-[#0D1A14] leading-[24px] align-top">
+                <div className="w-[270px] shrink-0 pr-6 pl-8 align-top leading-[24px] text-[#0D1A14]">
                   {project.location}
                 </div>
-                <div className="w-[270px] shrink-0 pl-8 pr-6 text-[#0D1A14] leading-[24px] align-top">
+                <div className="w-[270px] shrink-0 pr-6 pl-8 align-top leading-[24px] text-[#0D1A14]">
                   {project.donor}
                 </div>
               </div>
@@ -164,39 +182,39 @@ export default function BrandProjectsTable() {
         </div>
 
         {/* Mobile Accordion View (below lg) */}
-        <div className="lg:hidden w-full border border-[#F2F4F7] rounded-[20px] overflow-hidden bg-white flex flex-col">
+        <div className="flex w-full flex-col overflow-hidden rounded-[20px] border border-[#F2F4F7] bg-white lg:hidden">
           {/* Header Row */}
-          <div className="w-full h-[55px] bg-[#0F3221] px-6 flex items-center text-[#F2F7F1] text-[16px] font-sans font-medium select-none">
+          <div className="flex h-[55px] w-full items-center bg-[#0F3221] px-6 font-sans text-[16px] font-medium text-[#F2F7F1] select-none">
             Projects
           </div>
 
           {/* Body Rows */}
-          <div className="flex flex-col w-full">
+          <div className="flex w-full flex-col">
             {PROJECTS.map((project, idx) => {
               const isExpanded = expandedIdx === idx;
               return (
                 <div
                   key={idx}
-                  className="flex flex-col w-full border-b border-[#F2F4F7] last:border-b-0 bg-white"
+                  className="flex w-full flex-col border-b border-[#F2F4F7] bg-white last:border-b-0"
                 >
                   {/* Clickable Row Header */}
                   <button
                     onClick={() => setExpandedIdx(isExpanded ? null : idx)}
-                    className="w-full flex justify-between items-center py-4 px-6 text-left focus:outline-none hover:bg-neutral-50 transition-colors duration-150"
+                    className="flex w-full items-center justify-between px-6 py-4 text-left transition-colors duration-150 hover:bg-neutral-50 focus:outline-none"
                   >
                     <div className="flex flex-col gap-1 pr-4">
-                      <span className="font-sans font-medium text-[16px] text-[#195236] leading-[24px]">
+                      <span className="font-sans text-[16px] leading-[24px] font-medium text-[#195236]">
                         {project.title}
                       </span>
-                      <span className="font-sans text-[14px] text-[#0D1A14]/70 leading-[21px]">
+                      <span className="font-sans text-[14px] leading-[21px] text-[#0D1A14]/70">
                         {project.duration}
                       </span>
                     </div>
                     {/* Arrow chevron */}
-                    <div className="w-[18px] h-[18px] flex items-center justify-center shrink-0">
+                    <div className="flex h-[18px] w-[18px] shrink-0 items-center justify-center">
                       <svg
                         className={cn(
-                          "w-[18px] h-[18px] text-[#0D1A14] transition-transform duration-300",
+                          "h-[18px] w-[18px] text-[#0D1A14] transition-transform duration-300",
                           isExpanded ? "rotate-180" : "rotate-0"
                         )}
                         fill="none"
@@ -223,7 +241,7 @@ export default function BrandProjectsTable() {
                   >
                     <div className="flex flex-col gap-4">
                       {/* Focus Areas */}
-                      <p className="text-[14px] text-[#0D1A14] leading-[21px] font-sans">
+                      <p className="font-sans text-[14px] leading-[21px] text-[#0D1A14]">
                         {project.focus}
                       </p>
 
@@ -235,20 +253,20 @@ export default function BrandProjectsTable() {
                           width={14}
                           height={14}
                         />
-                        <span className="text-[14px] text-[#0D1A14] leading-[21px] font-sans font-[400]">
+                        <span className="font-sans text-[14px] leading-[21px] font-[400] text-[#0D1A14]">
                           {project.location}
                         </span>
                       </div>
 
                       {/* Divider */}
-                      <div className="border-t border-[#E4E7EC] w-full" />
+                      <div className="w-full border-t border-[#E4E7EC]" />
 
                       {/* Donor */}
                       <div className="flex flex-col gap-1 pb-1">
-                        <span className="text-[14px] text-[#0D1A14]/70 leading-[21px] font-medium font-sans">
+                        <span className="font-sans text-[14px] leading-[21px] font-medium text-[#0D1A14]/70">
                           Donor
                         </span>
-                        <span className="text-[14px] text-[#0D1A14] leading-[21px] font-sans">
+                        <span className="font-sans text-[14px] leading-[21px] text-[#0D1A14]">
                           {project.donor}
                         </span>
                       </div>

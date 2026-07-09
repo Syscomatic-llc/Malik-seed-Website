@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
-import { assessmentConfigs, type PositionAssessmentConfig } from "@/data/questions-data";
+import {
+  assessmentConfigs,
+  type PositionAssessmentConfig,
+} from "@/data/questions-data";
 import { getInitialExamRoute } from "@/data/questions-data";
 import { openPositionsData } from "@/data/career-data";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -15,7 +18,8 @@ export default function StartPage() {
   const { name, email, isOtpVerified, startAssessment } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [agreed, setAgreed] = useState(false);
-  const [backendConfig, setBackendConfig] = useState<PositionAssessmentConfig | null>(null);
+  const [backendConfig, setBackendConfig] =
+    useState<PositionAssessmentConfig | null>(null);
   const [loadingConfig, setLoadingConfig] = useState(true);
 
   const positionId = parseInt(id as string);
@@ -51,19 +55,21 @@ export default function StartPage() {
   if (!hydrated || !isOtpVerified || loadingConfig) {
     return (
       <div className="animate-pulse space-y-4 py-4">
-        <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-        <div className="h-20 bg-gray-200 rounded w-full"></div>
-        <div className="h-10 bg-gray-200 rounded w-full"></div>
+        <div className="h-6 w-1/3 rounded bg-gray-200"></div>
+        <div className="h-20 w-full rounded bg-gray-200"></div>
+        <div className="h-10 w-full rounded bg-gray-200"></div>
       </div>
     );
   }
 
-  const position = openPositionsData.positions.find((pos) => pos.id === positionId);
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id === positionId
+  );
   const config = backendConfig ?? assessmentConfigs[positionId];
 
   if (!position || !config) {
     return (
-      <div className="text-center py-10 text-[#FF4242]">
+      <div className="py-10 text-center text-[#FF4242]">
         Error: Position assessment configuration not found.
       </div>
     );
@@ -88,33 +94,34 @@ export default function StartPage() {
   };
 
   return (
-    <div className="w-full bg-white border border-[#E4E7EC] rounded-[24px] p-6 md:p-10 shadow-sm min-h-[400px]">
-      <div className="w-full flex flex-col gap-12 py-2">
+    <div className="min-h-[400px] w-full rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
+      <div className="flex w-full flex-col gap-12 py-2">
         {/* Instructions Content */}
-        <div className="flex flex-col gap-6 w-full">
+        <div className="flex w-full flex-col gap-6">
           {/* Title and Intro Paragraph */}
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex w-full flex-col gap-2">
             <h2
-              className="font-medium text-[20px] text-[#0D1A14] leading-[20px]"
+              className="text-[20px] leading-[20px] font-medium text-[#0D1A14]"
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
               Hi {name},
             </h2>
-            <p className="font-inter text-[16px] text-[#0D1A14]/70 leading-[24px] mt-2">
+            <p className="font-inter mt-2 text-[16px] leading-[24px] text-[#0D1A14]/70">
               {getJobDetailParagraph()}
             </p>
           </div>
 
           {/* Assessment Rules & Config */}
-          <div className="font-inter text-[16px] text-[#0D1A14] leading-[24px] whitespace-pre-line flex flex-col">
+          <div className="font-inter flex flex-col text-[16px] leading-[24px] whitespace-pre-line text-[#0D1A14]">
             <span>Total questions: {config.totalQuestions}</span>
             <span>Time limit: {config.timeLimitMinutes} minutes</span>
             <span>Passing score: {config.passingScorePercent}%</span>
           </div>
 
           {/* Important Note */}
-          <div className="font-inter italic text-[16px] text-[#0D1A14]/70 leading-[24px]">
-            Important note: Please complete the assessment in one sitting. Once started, the timer cannot be paused.
+          <div className="font-inter text-[16px] leading-[24px] text-[#0D1A14]/70 italic">
+            Important note: Please complete the assessment in one sitting. Once
+            started, the timer cannot be paused.
           </div>
 
           {/* Rules Agreement Checkbox */}
@@ -122,17 +129,28 @@ export default function StartPage() {
             <button
               type="button"
               onClick={() => setAgreed(!agreed)}
-              className="flex items-center gap-3 text-left cursor-pointer select-none group"
+              className="group flex cursor-pointer items-center gap-3 text-left select-none"
             >
-              <div className={cn(
-                "w-[18px] h-[18px] rounded border flex items-center justify-center transition-all",
-                agreed
-                  ? "bg-[#195236] border-[#195236] text-[#F2F7F1]"
-                  : "border-[#D0D5DD] bg-white group-hover:border-[#195236]"
-              )}>
+              <div
+                className={cn(
+                  "flex h-[18px] w-[18px] items-center justify-center rounded border transition-all",
+                  agreed
+                    ? "border-[#195236] bg-[#195236] text-[#F2F7F1]"
+                    : "border-[#D0D5DD] bg-white group-hover:border-[#195236]"
+                )}
+              >
                 {agreed && (
-                  <svg className="w-3 h-3 stroke-[3px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  <svg
+                    className="h-3 w-3 stroke-[3px]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 )}
               </div>
@@ -146,15 +164,15 @@ export default function StartPage() {
         <hr className="w-full border-t border-[#E4E7EC]" />
 
         {/* Buttons Action Row */}
-        <div className="flex items-center justify-between w-full pt-4">
+        <div className="flex w-full items-center justify-between pt-4">
           {/* Back Button */}
           <button
             type="button"
             onClick={() => router.push(`/careers/${id}/apply/otp`)}
-            className="flex items-center justify-center gap-[10px] rounded-[60px] h-[46px] w-[113px] font-medium text-[16px] border border-[#E4E7EC] bg-[#F2F4F7] text-[#414E62] transition-all duration-200 select-none active:scale-95 cursor-pointer hover:bg-gray-100"
+            className="flex h-[46px] w-[113px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border border-[#E4E7EC] bg-[#F2F4F7] text-[16px] font-medium text-[#414E62] transition-all duration-200 select-none hover:bg-gray-100 active:scale-95"
             style={{ fontFamily: "var(--font-inter-tight)" }}
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="h-5 w-5" />
             <span>Back</span>
           </button>
 
@@ -164,15 +182,15 @@ export default function StartPage() {
             disabled={!agreed}
             onClick={handleStart}
             className={cn(
-              "flex items-center justify-center gap-[10px] rounded-[60px] h-[46px] w-[188px] font-medium text-[16px] border transition-all duration-200 select-none active:scale-95 cursor-pointer",
+              "flex h-[46px] w-[188px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border text-[16px] font-medium transition-all duration-200 select-none active:scale-95",
               !agreed
-                ? "bg-[#F2F4F7] border-[#E4E7EC] text-[#97A1AF] cursor-not-allowed"
-                : "bg-[#195236] border-transparent text-[#F2F7F1] hover:bg-[#153e28]"
+                ? "cursor-not-allowed border-[#E4E7EC] bg-[#F2F4F7] text-[#97A1AF]"
+                : "border-transparent bg-[#195236] text-[#F2F7F1] hover:bg-[#153e28]"
             )}
             style={{ fontFamily: "var(--font-inter-tight)" }}
           >
             <span>Start Screening</span>
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="h-5 w-5" />
           </button>
         </div>
       </div>

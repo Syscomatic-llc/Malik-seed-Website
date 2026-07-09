@@ -132,19 +132,21 @@ export default function NewsPage() {
   // -------------------------------------------------------------------------
   return (
     <div className="bg-brand-bg min-h-screen">
-
       {/* ── Hero / Header Section ── */}
       <section className="w-full px-4 pt-[100px] pb-10 md:px-[50px] md:pt-[180px] md:pb-[100px]">
-        <div className="mx-auto  ">
-
+        <div className="mx-auto">
           {/* Header Block */}
           <div className="flex flex-col gap-6 md:gap-8">
-            <SectionBadge variant="outline" showDot className="h-[30px] md:h-[33px]">
+            <SectionBadge
+              variant="outline"
+              showDot
+              className="h-[30px] md:h-[33px]"
+            >
               News
             </SectionBadge>
 
             <h1
-              className="text-[38px] font-medium leading-[46px] text-[#0D1A14] md:text-[64px] md:leading-[77px]"
+              className="text-[38px] leading-[46px] font-medium text-[#0D1A14] md:text-[64px] md:leading-[77px]"
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
               News &amp; Updates
@@ -166,7 +168,7 @@ export default function NewsPage() {
                     role="tab"
                     aria-selected={isSelected}
                     onClick={() => handleCategoryChange(category)}
-                    className={`h-[41px] shrink-0 cursor-pointer rounded-[10px] px-6 text-[14px] font-medium leading-[21px] transition-all duration-200 md:h-[46px] md:text-[16px] md:leading-[24px] ${
+                    className={`h-[41px] shrink-0 cursor-pointer rounded-[10px] px-6 text-[14px] leading-[21px] font-medium transition-all duration-200 md:h-[46px] md:text-[16px] md:leading-[24px] ${
                       isSelected
                         ? "bg-[#0F3221] text-white"
                         : "border border-[#F2F4F7] bg-white text-[#195236] hover:bg-[#F9FAFB]"
@@ -181,7 +183,7 @@ export default function NewsPage() {
           </div>
 
           {/* ── Article Grid ── */}
-          <div className="mt-12 mb-[48px] md:mt-16 min-h-[400px]">
+          <div className="mt-12 mb-[48px] min-h-[400px] md:mt-16">
             {displayedArticles.length > 0 ? (
               <div
                 className={`grid grid-cols-1 gap-[20px] transition-opacity duration-300 md:grid-cols-2 md:gap-[24px] xl:grid-cols-3 xl:gap-x-[24px] xl:gap-y-[40px] ${
@@ -193,17 +195,21 @@ export default function NewsPage() {
                 ))}
               </div>
             ) : (
-              <div className="flex h-[200px] w-full items-center justify-center rounded-[24px] bg-white border border-[#E4E7EC]/50 p-8 text-center text-[#0D1A14]/60">
-                <p className="text-[16px]">No articles found in this category.</p>
+              <div className="flex h-[200px] w-full items-center justify-center rounded-[24px] border border-[#E4E7EC]/50 bg-white p-8 text-center text-[#0D1A14]/60">
+                <p className="text-[16px]">
+                  No articles found in this category.
+                </p>
               </div>
             )}
           </div>
 
           {/* ── Load More Button ── hidden once all cards are visible */}
           {hasMore && (
-            <LoadmoreButton handleLoadMore={handleLoadMore} isLoading={isLoading} />
+            <LoadmoreButton
+              handleLoadMore={handleLoadMore}
+              isLoading={isLoading}
+            />
           )}
-
         </div>
       </section>
 

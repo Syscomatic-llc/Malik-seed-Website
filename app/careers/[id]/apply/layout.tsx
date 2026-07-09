@@ -9,9 +9,15 @@ interface ApplyLayoutProps {
   params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
   const { id } = await params;
-  const position = openPositionsData.positions.find((pos) => pos.id.toString() === id);
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id
+  );
   if (!position) return { title: "Apply - Malik Seeds" };
   return {
     title: `Apply for ${position.title} - Malik Seeds`,
@@ -19,9 +25,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default async function ApplyLayout({ children, params }: ApplyLayoutProps) {
+export default async function ApplyLayout({
+  children,
+  params,
+}: ApplyLayoutProps) {
   const { id } = await params;
-  const position = openPositionsData.positions.find((pos) => pos.id.toString() === id);
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id
+  );
 
   if (!position) {
     notFound();

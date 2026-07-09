@@ -17,8 +17,10 @@ export interface NewsArticle {
 export const newsArticles: NewsArticle[] = [
   {
     id: 1,
-    title: "Achieving GLOBAL G.A.P. Certification: A Commitment to Safe, Sustainable, and High-Quality Agriculture",
-    description: "We are proud to announce that our company has successfully achieved the GLOBAL G.A.P. certification.",
+    title:
+      "Achieving GLOBAL G.A.P. Certification: A Commitment to Safe, Sustainable, and High-Quality Agriculture",
+    description:
+      "We are proud to announce that our company has successfully achieved the GLOBAL G.A.P. certification.",
     category: "Research & Trials",
     date: "Mar 12, 2026",
     image: "/images/news/news-card-3.png",
@@ -26,7 +28,7 @@ export const newsArticles: NewsArticle[] = [
     author: {
       name: "Md. Rafiqul Islam",
       role: "Supply Chain Manager",
-      avatar: "/images/news/rafiqul-islam.png"
+      avatar: "/images/news/rafiqul-islam.png",
     },
     contentHtml: `
       <h3>Achievement Announcement: GLOBAL G.A.P. Certification</h3>
@@ -100,12 +102,14 @@ export const newsArticles: NewsArticle[] = [
 
       <h3>Commitment to Quality and Diversity</h3>
       <p>This wide range of certified crops reflects our dedication to sustainable farming, food safety, and delivering fresh, high-quality produce to our customers. Each product is cultivated following strict GLOBAL G.A.P. standards, ensuring traceability, environmental care, and responsible agricultural practices.</p>
-    `
+    `,
   },
   {
     id: 2,
-    title: "New Hybrid Cabbage Variety Shows Strong Performance in Field Trials",
-    description: "A new hybrid cabbage variety being tested by Malik Seeds has demonstrated strong resistance to black rot and high yield potential in recent trials.",
+    title:
+      "New Hybrid Cabbage Variety Shows Strong Performance in Field Trials",
+    description:
+      "A new hybrid cabbage variety being tested by Malik Seeds has demonstrated strong resistance to black rot and high yield potential in recent trials.",
     category: "Research & Trials",
     date: "Mar 08, 2026",
     image: "/images/news/news-card-2.png",
@@ -120,12 +124,13 @@ export const newsArticles: NewsArticle[] = [
       <p>Market buyers value uniformity and shelf stability. The new hybrid produces extremely uniform, compact heads weighing between 1.8 to 2.2 kg, which is the preferred size for local markets. Furthermore, its thick wrapper leaves provide natural protection during transport, reducing post-harvest losses.</p>
 
       <p>Commercial seed availability is planned for the upcoming sowing season. Our distribution partners will be stocked with trial packets and detailed cultivation guidelines to help growers get the best results from day one.</p>
-    `
+    `,
   },
   {
     id: 3,
     title: "Strengthening Seed Research Through Global Collaboration",
-    description: "Malik Seeds continues its long-standing collaboration with international seed research organizations to introduce climate-resilient crop varieties.",
+    description:
+      "Malik Seeds continues its long-standing collaboration with international seed research organizations to introduce climate-resilient crop varieties.",
     category: "Partnerships",
     date: "Feb 28, 2026",
     image: "/images/news/news-card-3.png",
@@ -140,12 +145,14 @@ export const newsArticles: NewsArticle[] = [
       <p>The collaboration includes regular visits from international experts and joint field evaluations. By matching global breeding technologies with our extensive local trialing network, we reduce the time it takes to develop a new commercial hybrid from ten years down to six.</p>
 
       <p>We believe that global scientific exchange is key to securing food production in the face of environmental shifts. We will continue to bring the world's best agricultural innovations directly to the hands of Bangladeshi farmers.</p>
-    `
+    `,
   },
   {
     id: 4,
-    title: "From Trial Plot to Market Success: A Farmer’s Journey with Malik Seeds",
-    description: "A farmer from Bogura recently reported significantly improved yields and higher profits after transitioning to Malik Seeds' hybrid varieties.",
+    title:
+      "From Trial Plot to Market Success: A Farmer’s Journey with Malik Seeds",
+    description:
+      "A farmer from Bogura recently reported significantly improved yields and higher profits after transitioning to Malik Seeds' hybrid varieties.",
     category: "Farmer Stories",
     date: "Feb 15, 2026",
     image: "/images/news/news-card-4.png",
@@ -165,12 +172,13 @@ export const newsArticles: NewsArticle[] = [
       </blockquote>
 
       <p>Abdur's success has inspired neighboring farmers to adopt hybrid seeds and modern management practices, starting a positive wave of agricultural modernization in his village.</p>
-    `
+    `,
   },
   {
     id: 5,
     title: "Using Data and Field Insights to Improve Seed Selection",
-    description: "Agronomists at Malik Seeds are integrating structured field data collection into their selection processes to better support regional farming needs.",
+    description:
+      "Agronomists at Malik Seeds are integrating structured field data collection into their selection processes to better support regional farming needs.",
     category: "Innovation",
     date: "Jan 22, 2026",
     image: "/images/news/news-card-5.png",
@@ -185,12 +193,13 @@ export const newsArticles: NewsArticle[] = [
       <p>By analyzing multiple years of trial data, we can match specific seed varieties to regional soil types and weather forecasts. This takes the guesswork out of seed selection, allowing us to recommend the highest-performing varieties for each district.</p>
 
       <p>This data-driven approach ensures that our research budget is spent on solving the most pressing problems faced by real farmers in the field.</p>
-    `
+    `,
   },
   {
     id: 6,
     title: "Supporting Local Farming Communities",
-    description: "Malik Seeds regularly organizes community discussions and training events to help smallholders adapt to changing climatic conditions and market demands.",
+    description:
+      "Malik Seeds regularly organizes community discussions and training events to help smallholders adapt to changing climatic conditions and market demands.",
     category: "Community Programs",
     date: "Jan 10, 2026",
     image: "/images/news/news-card-6.png",
@@ -205,12 +214,13 @@ export const newsArticles: NewsArticle[] = [
       <p>Our programs place a strong emphasis on training women farmers, who play an essential but often underrepresented role in crop management. Special workshops focus on seedling nursing, seed storage, and home gardening for nutrition and supplementary income.</p>
 
       <p>By investing in the social fabric of rural farming communities, we ensure that agricultural development is inclusive, equitable, and sustainable for generations to come.</p>
-    `
+    `,
   },
   {
     id: 7,
     title: "Strengthening Seed Research Through Global Collaboration",
-    description: "Malik Seeds continues its long-standing collaboration with international seed research organizations to introduce climate-resilient crop varieties.",
+    description:
+      "Malik Seeds continues its long-standing collaboration with international seed research organizations to introduce climate-resilient crop varieties.",
     category: "Partnerships",
     date: "Feb 28, 2026",
     image: "/images/news/news-card-3.png",
@@ -225,12 +235,14 @@ export const newsArticles: NewsArticle[] = [
       <p>The collaboration includes regular visits from international experts and joint field evaluations. By matching global breeding technologies with our extensive local trialing network, we reduce the time it takes to develop a new commercial hybrid from ten years down to six.</p>
 
       <p>We believe that global scientific exchange is key to securing food production in the face of environmental shifts. We will continue to bring the world's best agricultural innovations directly to the hands of Bangladeshi farmers.</p>
-    `
+    `,
   },
   {
     id: 8,
-    title: "From Trial Plot to Market Success: A Farmer’s Journey with Malik Seeds",
-    description: "A farmer from Bogura recently reported significantly improved yields and higher profits after transitioning to Malik Seeds' hybrid varieties.",
+    title:
+      "From Trial Plot to Market Success: A Farmer’s Journey with Malik Seeds",
+    description:
+      "A farmer from Bogura recently reported significantly improved yields and higher profits after transitioning to Malik Seeds' hybrid varieties.",
     category: "Farmer Stories",
     date: "Feb 15, 2026",
     image: "/images/news/news-card-4.png",
@@ -250,12 +262,13 @@ export const newsArticles: NewsArticle[] = [
       </blockquote>
 
       <p>Abdur's success has inspired neighboring farmers to adopt hybrid seeds and modern management practices, starting a positive wave of agricultural modernization in his village.</p>
-    `
+    `,
   },
   {
     id: 9,
     title: "Using Data and Field Insights to Improve Seed Selection",
-    description: "Agronomists at Malik Seeds are integrating structured field data collection into their selection processes to better support regional farming needs.",
+    description:
+      "Agronomists at Malik Seeds are integrating structured field data collection into their selection processes to better support regional farming needs.",
     category: "Innovation",
     date: "Jan 22, 2026",
     image: "/images/news/news-card-5.png",
@@ -270,12 +283,13 @@ export const newsArticles: NewsArticle[] = [
       <p>By analyzing multiple years of trial data, we can match specific seed varieties to regional soil types and weather forecasts. This takes the guesswork out of seed selection, allowing us to recommend the highest-performing varieties for each district.</p>
 
       <p>This data-driven approach ensures that our research budget is spent on solving the most pressing problems faced by real farmers in the field.</p>
-    `
+    `,
   },
   {
     id: 10,
     title: "Supporting Local Farming Communities",
-    description: "Malik Seeds regularly organizes community discussions and training events to help smallholders adapt to changing climatic conditions and market demands.",
+    description:
+      "Malik Seeds regularly organizes community discussions and training events to help smallholders adapt to changing climatic conditions and market demands.",
     category: "Community Programs",
     date: "Jan 10, 2026",
     image: "/images/news/news-card-6.png",
@@ -290,12 +304,13 @@ export const newsArticles: NewsArticle[] = [
       <p>Our programs place a strong emphasis on training women farmers, who play an essential but often underrepresented role in crop management. Special workshops focus on seedling nursing, seed storage, and home gardening for nutrition and supplementary income.</p>
 
       <p>By investing in the social fabric of rural farming communities, we ensure that agricultural development is inclusive, equitable, and sustainable for generations to come.</p>
-    `
+    `,
   },
   {
     id: 11,
     title: "Empowering Farmers Through Practical Field Training",
-    description: "Participants learned modern crop management techniques, pest monitoring, and safe pesticide usage to improve crop yields.",
+    description:
+      "Participants learned modern crop management techniques, pest monitoring, and safe pesticide usage to improve crop yields.",
     category: "Farmer Stories",
     date: "Mar 12, 2026",
     image: "/images/news/news-card-1.png",
@@ -319,6 +334,6 @@ export const newsArticles: NewsArticle[] = [
       </ul>
 
       <p>Malik Seeds remains committed to empowering farming communities across the nation. By providing both elite genetics and the knowledge required to cultivate them successfully, we ensure a prosperous future for agricultural families.</p>
-    `
-  }
+    `,
+  },
 ];

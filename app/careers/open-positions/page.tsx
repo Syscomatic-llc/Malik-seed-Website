@@ -9,7 +9,6 @@ export const metadata: Metadata = {
     "Explore open roles and career opportunities at Malik Seeds. Join our team and shape the future of agriculture.",
 };
 
-
 export default function OpenPositionsPage() {
   return (
     <div className="min-h-screen bg-[#F2F7F1] pt-[120px] lg:pt-[160px]">

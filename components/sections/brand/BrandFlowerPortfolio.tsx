@@ -60,29 +60,31 @@ const SEGMENTS: FlowerSegment[] = [
 
 export default function BrandFlowerPortfolio() {
   const [activeTab, setActiveTab] = useState("cut-flower");
-  const currentSegment = SEGMENTS.find((s) => s.id === activeTab) || SEGMENTS[0];
+  const currentSegment =
+    SEGMENTS.find((s) => s.id === activeTab) || SEGMENTS[0];
 
   return (
-    <section className="w-full bg-[#0D1A14] text-white py-12 md:py-[80px] lg:py-[100px] px-4 md:px-8 lg:px-[100px]">
-      <div className="max-w-[1240px] mx-auto flex flex-col gap-8 md:gap-12">
-
+    <section className="w-full bg-[#0D1A14] px-4 py-12 text-white md:px-8 md:py-[80px] lg:px-[100px] lg:py-[100px]">
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-8 md:gap-12">
         {/* Header */}
-        <div className="flex flex-col gap-4 text-center max-w-[700px] mx-auto">
-          <SectionBadge className="mx-auto" showDot variant="dark">OUR FLOWER PORTFOLIO</SectionBadge>
-          <h2 className="font-sans text-[28px] md:text-[40px] font-medium leading-[34px] md:leading-[48px] text-[#F2F7F1]">
+        <div className="mx-auto flex max-w-[700px] flex-col gap-4 text-center">
+          <SectionBadge className="mx-auto" showDot variant="dark">
+            OUR FLOWER PORTFOLIO
+          </SectionBadge>
+          <h2 className="font-sans text-[28px] leading-[34px] font-medium text-[#F2F7F1] md:text-[40px] md:leading-[48px]">
             Varieties across three segments
           </h2>
         </div>
 
         {/* Tabs Control - Pill Slider */}
         <div className="flex justify-center">
-          <div className="flex p-[8px] rounded-[16px] bg-[#112019] max-w-full overflow-x-auto scrollbar-none gap-[8px]">
+          <div className="flex max-w-full scrollbar-none gap-[8px] overflow-x-auto rounded-[16px] bg-[#112019] p-[8px]">
             {SEGMENTS.map((seg) => (
               <button
                 key={seg.id}
                 onClick={() => setActiveTab(seg.id)}
                 className={cn(
-                  "h-[39px] md:h-[48px] px-4 py-[9px] md:py-3 md:px-4 rounded-[10px] font-sans font-medium text-[14px] md:text-[16px] leading-[21px] md:leading-[24px] transition-all duration-300 whitespace-nowrap cursor-pointer",
+                  "h-[39px] cursor-pointer rounded-[10px] px-4 py-[9px] font-sans text-[14px] leading-[21px] font-medium whitespace-nowrap transition-all duration-300 md:h-[48px] md:px-4 md:py-3 md:text-[16px] md:leading-[24px]",
                   activeTab === seg.id
                     ? "bg-[#A9E179] text-[#0D1A14]"
                     : "bg-[#0D291C] text-[#F2F7F1] hover:bg-[#0f3424]"
@@ -95,9 +97,9 @@ export default function BrandFlowerPortfolio() {
         </div>
 
         {/* Tab Content Display */}
-        <div className="flex justify-center items-center mt-4">
-          <div className="w-full lg:w-[790px] shrink-0 ">
-            <div className="relative w-full h-[360px] lg:h-[475px] overflow-hidden rounded-[20px] lg:rounded-[24px] border border-white/10 bg-neutral-900">
+        <div className="mt-4 flex items-center justify-center">
+          <div className="w-full shrink-0 lg:w-[790px]">
+            <div className="relative h-[360px] w-full overflow-hidden rounded-[20px] border border-white/10 bg-neutral-900 lg:h-[475px] lg:rounded-[24px]">
               <Image
                 src={currentSegment.image}
                 alt={currentSegment.name}
@@ -108,9 +110,7 @@ export default function BrandFlowerPortfolio() {
               />
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   );

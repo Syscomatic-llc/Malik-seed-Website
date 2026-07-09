@@ -9,12 +9,12 @@ import { SectionBadge } from "@/components/ui/SectionBadge";
 const JobRow = memo(function JobRow({ position }: { position: JobPosition }) {
   return (
     <article
-      className="flex w-full flex-col gap-6 border-b border-[#CED2DA] md:pb-6 pb-8 pt-6 first:pt-0"
+      className="flex w-full flex-col gap-6 border-b border-[#CED2DA] pt-6 pb-8 first:pt-0 md:pb-6"
       aria-label={`Job opening: ${position.title}`}
     >
       {/* Upper part: Title and Tags */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-0">
-        <h3 className="font-inter-tight text-[20px] font-medium leading-[30px] text-[#0D1A14] lg:text-[24px] lg:leading-[36px]">
+        <h3 className="font-inter-tight text-[20px] leading-[30px] font-medium text-[#0D1A14] lg:text-[24px] lg:leading-[36px]">
           {position.title}
         </h3>
 
@@ -23,7 +23,7 @@ const JobRow = memo(function JobRow({ position }: { position: JobPosition }) {
           {position.tags.map((tag) => (
             <span
               key={tag}
-              className="flex h-[33px] items-center justify-center rounded-[16px] bg-[#DCF3C7] px-4 font-inter text-[14px] leading-[17px] font-medium text-[#195236]"
+              className="font-inter flex h-[33px] items-center justify-center rounded-[16px] bg-[#DCF3C7] px-4 text-[14px] leading-[17px] font-medium text-[#195236]"
             >
               {tag}
             </span>
@@ -41,7 +41,7 @@ const JobRow = memo(function JobRow({ position }: { position: JobPosition }) {
         {position.tags.map((tag) => (
           <span
             key={tag}
-            className="flex h-[33px] items-center justify-center rounded-[16px] bg-[#DCF3C7] px-4 font-inter text-[14px] leading-[17px] font-medium text-[#195236]"
+            className="font-inter flex h-[33px] items-center justify-center rounded-[16px] bg-[#DCF3C7] px-4 text-[14px] leading-[17px] font-medium text-[#195236]"
           >
             {tag}
           </span>
@@ -60,7 +60,11 @@ const JobRow = memo(function JobRow({ position }: { position: JobPosition }) {
   );
 });
 
-export default memo(function OpenPositionsSection({ data }: { data: typeof openPositionsData }) {
+export default memo(function OpenPositionsSection({
+  data,
+}: {
+  data: typeof openPositionsData;
+}) {
   return (
     <section
       id="open-positions"
@@ -68,7 +72,6 @@ export default memo(function OpenPositionsSection({ data }: { data: typeof openP
       className="w-full bg-[#F2F7F1] pt-[120px] pb-12 lg:pt-[180px] lg:pb-16"
     >
       <div className="mx-auto w-full max-w-[1030px] px-4 lg:px-0">
-
         {/* Header Block: Badge + Title */}
         <div className="flex flex-col items-start gap-8">
           {/* Badge */}
@@ -77,9 +80,8 @@ export default memo(function OpenPositionsSection({ data }: { data: typeof openP
             {data.badge}
           </SectionBadge>
 
-
           {/* Title */}
-          <h2 className="max-w-[358px] font-inter-tight text-[34px] font-medium leading-[41px] text-[#0D1A14] md:max-w-[633px] lg:text-[64px] lg:leading-[77px]">
+          <h2 className="font-inter-tight max-w-[358px] text-[34px] leading-[41px] font-medium text-[#0D1A14] md:max-w-[633px] lg:text-[64px] lg:leading-[77px]">
             {data.title}
           </h2>
         </div>
@@ -90,7 +92,6 @@ export default memo(function OpenPositionsSection({ data }: { data: typeof openP
             <JobRow key={pos.id} position={pos} />
           ))}
         </div>
-
       </div>
     </section>
   );

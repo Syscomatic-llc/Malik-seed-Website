@@ -5,20 +5,24 @@ import ActionButton from "@/components/ActionButton";
 import type { openPositionsData, JobPosition } from "@/data/career-data";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 
-const PositionCard = memo(function PositionCard({ position }: { position: JobPosition }) {
+const PositionCard = memo(function PositionCard({
+  position,
+}: {
+  position: JobPosition;
+}) {
   return (
     <article
-      className="flex flex-col justify-between gap-6 md:gap-10 rounded-[24px] border border-[#E4E7EC] bg-white p-8 max-h-[361px] w-full"
+      className="flex max-h-[361px] w-full flex-col justify-between gap-6 rounded-[24px] border border-[#E4E7EC] bg-white p-8 md:gap-10"
       aria-label={`Job opportunity: ${position.title}`}
     >
       {/* Top half: Title, description, tags */}
       <div className="flex flex-col gap-8">
         {/* Title & description */}
         <div className="flex flex-col gap-1.5">
-          <h3 className="font-inter-tight text-[24px] font-medium leading-[36px] text-[#0D1A14]">
+          <h3 className="font-inter-tight text-[24px] leading-[36px] font-medium text-[#0D1A14]">
             {position.title}
           </h3>
-          <p className="font-inter text-[16px] leading-[24px] text-[#0D1A14]/70 line-clamp-2">
+          <p className="font-inter line-clamp-2 text-[16px] leading-[24px] text-[#0D1A14]/70">
             {position.description}
           </p>
         </div>
@@ -28,7 +32,7 @@ const PositionCard = memo(function PositionCard({ position }: { position: JobPos
           {position.tags.map((tag) => (
             <span
               key={tag}
-              className="flex h-[33px] items-center justify-center rounded-[16px] bg-[#DCF3C7] px-4 font-inter text-[14px] leading-[17px] font-medium text-[#195236]"
+              className="font-inter flex h-[33px] items-center justify-center rounded-[16px] bg-[#DCF3C7] px-4 text-[14px] leading-[17px] font-medium text-[#195236]"
             >
               {tag}
             </span>
@@ -51,7 +55,11 @@ const PositionCard = memo(function PositionCard({ position }: { position: JobPos
   );
 });
 
-export default memo(function OpenPositionsCardsSection({ data }: { data: typeof openPositionsData }) {
+export default memo(function OpenPositionsCardsSection({
+  data,
+}: {
+  data: typeof openPositionsData;
+}) {
   return (
     <section
       id="open-positions-cards"
@@ -59,16 +67,15 @@ export default memo(function OpenPositionsCardsSection({ data }: { data: typeof 
       className="w-full bg-[#F2F7F1] pt-[100px] pb-12 lg:pt-[120px] lg:pb-16"
     >
       <div className="mx-auto w-full max-w-[1240px] px-4 xl:px-0">
-        
         {/* Header Block: Badge + Title */}
-        <div className="flex flex-col items-center gap-6 mb-12 text-center">
+        <div className="mb-12 flex flex-col items-center gap-6 text-center">
           {/* Badge */}
           <SectionBadge variant="outline" showDot dotSize="6px">
             {data.badge}
           </SectionBadge>
 
           {/* Title */}
-          <h2 className="font-inter-tight text-[32px] font-medium leading-[38px] text-[#0D1A14] md:text-[48px] md:leading-[58px]">
+          <h2 className="font-inter-tight text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
             {data.title}
           </h2>
         </div>
@@ -79,7 +86,6 @@ export default memo(function OpenPositionsCardsSection({ data }: { data: typeof 
             <PositionCard key={pos.id} position={pos} />
           ))}
         </div>
-
       </div>
     </section>
   );

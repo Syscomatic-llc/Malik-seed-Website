@@ -1,7 +1,8 @@
 export const vegetableSeedsData = {
   meta: {
     title: "Vegetable Seeds - Malik Seeds",
-    description: "Seeds built for Bangladesh's farmers. Over half a century of delivering high-yielding, disease-resistant hybrid vegetable varieties.",
+    description:
+      "Seeds built for Bangladesh's farmers. Over half a century of delivering high-yielding, disease-resistant hybrid vegetable varieties.",
   },
   hero: {
     title: "vegetable\nseeds",
@@ -10,13 +11,15 @@ export const vegetableSeedsData = {
   intro: {
     layout: "text-tags" as const,
     title: ["Bangladesh's farmers.\n", "Seeds built for"],
-    description: "For over half a century, we've worked alongside farmers to bring better seeds to Bangladesh's fields-higher yields, stronger resistance, and varieties proven in local conditions.",
+    description:
+      "For over half a century, we've worked alongside farmers to bring better seeds to Bangladesh's fields-higher yields, stronger resistance, and varieties proven in local conditions.",
     highlights: ["Climate Resilient", "Disease Resistant", "High Yielding"],
   },
   grid: {
     badge: "WITH OUR FARMERS",
     title: "Built for the farmers \nwho grow them",
-    description: "Every variety we release is tested, proven, \nand trusted by the farmers who plant it.",
+    description:
+      "Every variety we release is tested, proven, \nand trusted by the farmers who plant it.",
     images: [
       "/images/brand/06_2.png",
       "/images/brand/frame45.png",
@@ -26,24 +29,28 @@ export const vegetableSeedsData = {
   cards: {
     badge: "WHAT WE BREED FOR",
     title: "Three qualities. Every variety.",
-    description: "Our portfolio is selected for three qualities that matter most to Bangladesh's farmers.",
+    description:
+      "Our portfolio is selected for three qualities that matter most to Bangladesh's farmers.",
     cards: [
       {
         title: "Climate Resilient",
-        description: "Our varieties are selected and tested across Bangladesh's diverse agro-climatic zones from summer heat to monsoon conditions.",
+        description:
+          "Our varieties are selected and tested across Bangladesh's diverse agro-climatic zones from summer heat to monsoon conditions.",
       },
       {
         title: "Disease Resistant",
-        description: "Our seed portfolio prioritises varieties with strong natural resistance to the most common and damaging diseases in Bangladesh.",
+        description:
+          "Our seed portfolio prioritises varieties with strong natural resistance to the most common and damaging diseases in Bangladesh.",
       },
       {
         title: "High Yielding",
-        description: "Our varieties produce more-more fruits per plant, more harvests per season. Every hybrid is trialled specifically for superior yield output.",
+        description:
+          "Our varieties produce more-more fruits per plant, more harvests per season. Every hybrid is trialled specifically for superior yield output.",
       },
     ],
   },
   youtube: {
-    badge:"Our Heritage",
+    badge: "Our Heritage",
     title: "Over half a century in \nthe field",
     youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     images: [
@@ -54,7 +61,8 @@ export const vegetableSeedsData = {
   cropPortfolio: {
     badge: "Seed Portfolio",
     title: "Bangladesh’s Trusted Vegetable Seed Portfolio",
-    description: "A carefully curated range of high-value vegetable crops selected for what performs in Bangladesh's fields.",
+    description:
+      "A carefully curated range of high-value vegetable crops selected for what performs in Bangladesh's fields.",
     crops: [
       ["Cauliflower", "Cabbage", "Kohlrabi"],
       ["Broccoli", "Beet Root", "Tomato", "Chilli", "Brinjal", "Cucumber"],

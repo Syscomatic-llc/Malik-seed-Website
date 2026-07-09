@@ -35,7 +35,12 @@ export default function CareersPage() {
       <CareerHero data={careerHeroData} />
       <TalentStandardsSection data={talentStandardsData} />
       <CareerManifestoSection data={careerManifestoData} />
-      <OpenPositionsCardsSection data={{ ...openPositionsData, positions: openPositionsData.positions.slice(0, 3) }} />
+      <OpenPositionsCardsSection
+        data={{
+          ...openPositionsData,
+          positions: openPositionsData.positions.slice(0, 3),
+        }}
+      />
       <TeamCultureSection data={teamCultureData} />
       <FutureProgramSection data={futureProgramData} />
       <EmployeeTestimonialsSection data={employeeTestimonialsData} />

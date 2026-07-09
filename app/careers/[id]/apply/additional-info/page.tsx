@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef, useSyncExternalStore, DragEvent } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useSyncExternalStore,
+  DragEvent,
+} from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
 import { Button } from "@/components/ui/button";
@@ -14,14 +20,14 @@ const HEARD_ABOUT_OPTIONS = [
   "LinkedIn",
   "Employee Referral",
   "Dealer Network",
-  "Other"
+  "Other",
 ];
 
 // Returns false during SSR, true once mounted on the client.
 // Avoids a setState-in-effect just to detect hydration.
 function useHasHydrated() {
   return useSyncExternalStore(
-    () => () => { },
+    () => () => {},
     () => true,
     () => false
   );
@@ -39,7 +45,7 @@ export default function AdditionalInfoPage() {
     location: storeLoc,
     cvFileName: storeCvName,
     cvFileSize: storeCvSize,
-    setAdditionalInfo
+    setAdditionalInfo,
   } = store;
 
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -50,7 +56,9 @@ export default function AdditionalInfoPage() {
 
   // File upload state
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [cvFile, setCvFile] = useState<{ name: string; size: number } | null>(null);
+  const [cvFile, setCvFile] = useState<{ name: string; size: number } | null>(
+    null
+  );
   const [isDragging, setIsDragging] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -86,7 +94,7 @@ export default function AdditionalInfoPage() {
   }, [isOtpVerified, isCompleted, isPassed, hydrated, id, router]);
 
   if (!hydrated || !isCompleted || !isPassed) {
-    return <div className="text-center py-10">Loading form...</div>;
+    return <div className="py-10 text-center">Loading form...</div>;
   }
 
   // Handle file selection
@@ -131,7 +139,7 @@ export default function AdditionalInfoPage() {
 
   const toggleHeardAbout = (option: string) => {
     if (heardAbout.includes(option)) {
-      setHeardAbout(heardAbout.filter(item => item !== option));
+      setHeardAbout(heardAbout.filter((item) => item !== option));
     } else {
       setHeardAbout([...heardAbout, option]);
     }
@@ -166,7 +174,7 @@ export default function AdditionalInfoPage() {
       noticePeriod: "",
       coverLetter: "",
       cvFileName: cvFile.name,
-      cvFileSize: cvFile.size
+      cvFileSize: cvFile.size,
     });
 
     // Simulate submission delay locally
@@ -182,21 +190,26 @@ export default function AdditionalInfoPage() {
   };
 
   return (
-    <div className="w-full bg-white border border-[#E4E7EC] rounded-[24px] p-6 md:p-10 shadow-sm min-h-[400px]">
-      <div className="flex flex-col gap-12 max-w-[736px] mx-auto py-4">
+    <div className="min-h-[400px] w-full rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
+      <div className="mx-auto flex max-w-[736px] flex-col gap-12 py-4">
         <form onSubmit={handleSubmit} className="flex flex-col gap-12">
-
           {/* Section 1: Additional Information */}
           <div className="flex flex-col gap-8">
-            <h2 className="font-inter-tight text-[20px] font-medium text-[#0D1A14] leading-[20px]" style={{ fontFamily: "var(--font-inter-tight)" }}>
+            <h2
+              className="font-inter-tight text-[20px] leading-[20px] font-medium text-[#0D1A14]"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
               Additional Information
             </h2>
 
-            <div className="flex flex-col gap-6 w-full">
+            <div className="flex w-full flex-col gap-6">
               {/* Phone Number */}
               <div className="flex flex-col gap-2">
-                <Label htmlFor="phone" className="font-inter text-[16px] leading-[24px] text-[#0D1A14] font-normal flex items-center">
-                  Phone Number<span className="text-[#FF4242] ml-0.5">*</span>
+                <Label
+                  htmlFor="phone"
+                  className="font-inter flex items-center text-[16px] leading-[24px] font-normal text-[#0D1A14]"
+                >
+                  Phone Number<span className="ml-0.5 text-[#FF4242]">*</span>
                 </Label>
                 <Input
                   id="phone"
@@ -204,14 +217,18 @@ export default function AdditionalInfoPage() {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   disabled={loading}
-                  className="h-12 bg-[#F9FAFB] border border-[#E4E7EC] rounded-[10px] px-[18px] text-[16px] text-[#0D1A14] placeholder:text-[#414E62] focus-visible:ring-[#195236] transition-all"
+                  className="h-12 rounded-[10px] border border-[#E4E7EC] bg-[#F9FAFB] px-[18px] text-[16px] text-[#0D1A14] transition-all placeholder:text-[#414E62] focus-visible:ring-[#195236]"
                 />
               </div>
 
               {/* Current Location */}
               <div className="flex flex-col gap-2">
-                <Label htmlFor="location" className="font-inter text-[16px] leading-[24px] text-[#0D1A14] font-normal flex items-center">
-                  Current Location<span className="text-[#FF4242] ml-0.5">*</span>
+                <Label
+                  htmlFor="location"
+                  className="font-inter flex items-center text-[16px] leading-[24px] font-normal text-[#0D1A14]"
+                >
+                  Current Location
+                  <span className="ml-0.5 text-[#FF4242]">*</span>
                 </Label>
                 <Input
                   id="location"
@@ -219,13 +236,16 @@ export default function AdditionalInfoPage() {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   disabled={loading}
-                  className="h-12 bg-[#F9FAFB] border border-[#E4E7EC] rounded-[10px] px-[18px] text-[16px] text-[#0D1A14] placeholder:text-[#414E62] focus-visible:ring-[#195236] transition-all"
+                  className="h-12 rounded-[10px] border border-[#E4E7EC] bg-[#F9FAFB] px-[18px] text-[16px] text-[#0D1A14] transition-all placeholder:text-[#414E62] focus-visible:ring-[#195236]"
                 />
               </div>
 
               {/* LinkedIn Profile */}
               <div className="flex flex-col gap-2">
-                <Label htmlFor="linkedin" className="font-inter text-[16px] leading-[24px] text-[#0D1A14] font-normal">
+                <Label
+                  htmlFor="linkedin"
+                  className="font-inter text-[16px] leading-[24px] font-normal text-[#0D1A14]"
+                >
                   LinkedIn Profile (Optional)
                 </Label>
                 <Input
@@ -234,13 +254,16 @@ export default function AdditionalInfoPage() {
                   value={linkedin}
                   onChange={(e) => setLinkedin(e.target.value)}
                   disabled={loading}
-                  className="h-12 bg-[#F9FAFB] border border-[#E4E7EC] rounded-[10px] px-[18px] text-[16px] text-[#0D1A14] placeholder:text-[#414E62] focus-visible:ring-[#195236] transition-all"
+                  className="h-12 rounded-[10px] border border-[#E4E7EC] bg-[#F9FAFB] px-[18px] text-[16px] text-[#0D1A14] transition-all placeholder:text-[#414E62] focus-visible:ring-[#195236]"
                 />
               </div>
 
               {/* Portfolio / Website */}
               <div className="flex flex-col gap-2">
-                <Label htmlFor="portfolio" className="font-inter text-[16px] leading-[24px] text-[#0D1A14] font-normal">
+                <Label
+                  htmlFor="portfolio"
+                  className="font-inter text-[16px] leading-[24px] font-normal text-[#0D1A14]"
+                >
                   Portfolio / Website (Optional)
                 </Label>
                 <Input
@@ -249,7 +272,7 @@ export default function AdditionalInfoPage() {
                   value={portfolio}
                   onChange={(e) => setPortfolio(e.target.value)}
                   disabled={loading}
-                  className="h-12 bg-[#F9FAFB] border border-[#E4E7EC] rounded-[10px] px-[18px] text-[16px] text-[#0D1A14] placeholder:text-[#414E62] focus-visible:ring-[#195236] transition-all"
+                  className="h-12 rounded-[10px] border border-[#E4E7EC] bg-[#F9FAFB] px-[18px] text-[16px] text-[#0D1A14] transition-all placeholder:text-[#414E62] focus-visible:ring-[#195236]"
                 />
               </div>
             </div>
@@ -257,7 +280,7 @@ export default function AdditionalInfoPage() {
 
           {/* Section 2: How did you hear about this opportunity? */}
           <div className="flex flex-col gap-4">
-            <h3 className="font-inter text-[16px] leading-[24px] text-[#0D1A14] font-normal">
+            <h3 className="font-inter text-[16px] leading-[24px] font-normal text-[#0D1A14]">
               How did you hear about this opportunity?
             </h3>
             <div className="flex flex-col gap-2">
@@ -268,17 +291,28 @@ export default function AdditionalInfoPage() {
                     key={option}
                     type="button"
                     onClick={() => toggleHeardAbout(option)}
-                    className="flex items-center gap-3 text-left cursor-pointer select-none group w-fit py-1"
+                    className="group flex w-fit cursor-pointer items-center gap-3 py-1 text-left select-none"
                   >
-                    <div className={cn(
-                      "w-[18px] h-[18px] rounded border flex items-center justify-center transition-all",
-                      isChecked
-                        ? "bg-[#195236] border-[#195236] text-[#F2F7F1]"
-                        : "border-[#D0D5DD] bg-white group-hover:border-[#195236]"
-                    )}>
+                    <div
+                      className={cn(
+                        "flex h-[18px] w-[18px] items-center justify-center rounded border transition-all",
+                        isChecked
+                          ? "border-[#195236] bg-[#195236] text-[#F2F7F1]"
+                          : "border-[#D0D5DD] bg-white group-hover:border-[#195236]"
+                      )}
+                    >
                       {isChecked && (
-                        <svg className="w-2.5 h-2.5 stroke-[3px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        <svg
+                          className="h-2.5 w-2.5 stroke-[3px]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
                         </svg>
                       )}
                     </div>
@@ -295,13 +329,17 @@ export default function AdditionalInfoPage() {
 
           {/* Section 3: Upload Documents */}
           <div className="flex flex-col gap-8">
-            <h2 className="font-inter-tight text-[20px] font-medium text-[#0D1A14] leading-[20px]" style={{ fontFamily: "var(--font-inter-tight)" }}>
+            <h2
+              className="font-inter-tight text-[20px] leading-[20px] font-medium text-[#0D1A14]"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
               Upload Documents
             </h2>
 
-            <div className="flex flex-col gap-2 w-full">
-              <Label className="font-inter text-[16px] leading-[24px] text-[#0D1A14] font-normal flex items-center">
-                Upload Your CV / Resume<span className="text-[#FF4242] ml-0.5">*</span>
+            <div className="flex w-full flex-col gap-2">
+              <Label className="font-inter flex items-center text-[16px] leading-[24px] font-normal text-[#0D1A14]">
+                Upload Your CV / Resume
+                <span className="ml-0.5 text-[#FF4242]">*</span>
               </Label>
 
               <input
@@ -315,32 +353,35 @@ export default function AdditionalInfoPage() {
 
               {!cvFile ? (
                 <div
-                  onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDragging(true);
+                  }}
                   onDragLeave={() => setIsDragging(false)}
                   onDrop={handleFileDrop}
                   onClick={() => fileInputRef.current?.click()}
                   className={cn(
-                    "h-[124px] bg-[#F9FAFB] border rounded-[12px] flex items-center justify-center cursor-pointer transition-all",
+                    "flex h-[124px] cursor-pointer items-center justify-center rounded-[12px] border bg-[#F9FAFB] transition-all",
                     isDragging
                       ? "border-[#195236] bg-[#195236]/5"
                       : "border-[#CED2DA] hover:bg-gray-50"
                   )}
                 >
                   <div className="flex items-center gap-2 text-[#344051]">
-                    <Upload className="w-6 h-6 text-[#344051]" />
-                    <span className="font-inter text-[16px] font-medium leading-[24px] text-[#344051]">
+                    <Upload className="h-6 w-6 text-[#344051]" />
+                    <span className="font-inter text-[16px] leading-[24px] font-medium text-[#344051]">
                       Click to upload or drag and drop. PDF preferred
                     </span>
                   </div>
                 </div>
               ) : (
-                <div className="border border-[#E4E7EC] rounded-[16px] p-4 bg-[#F9FAFB] flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 rounded-[16px] border border-[#E4E7EC] bg-[#F9FAFB] p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#195236]/10 flex items-center justify-center text-[#195236]">
-                      <FileText className="w-5 h-5" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#195236]/10 text-[#195236]">
+                      <FileText className="h-5 w-5" />
                     </div>
                     <div className="flex flex-col">
-                      <span className="font-inter font-medium text-[14px] text-[#0D1A14] truncate max-w-[250px] sm:max-w-[400px]">
+                      <span className="font-inter max-w-[250px] truncate text-[14px] font-medium text-[#0D1A14] sm:max-w-[400px]">
                         {cvFile.name}
                       </span>
                       <span className="font-inter text-[12px] text-[#0D1A14]/50">
@@ -352,9 +393,9 @@ export default function AdditionalInfoPage() {
                     key="remove-cv-file"
                     type="button"
                     onClick={removeFile}
-                    className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:text-[#FF4242] hover:bg-gray-100 transition-all cursor-pointer"
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-all hover:bg-gray-100 hover:text-[#FF4242]"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
               )}
@@ -362,21 +403,21 @@ export default function AdditionalInfoPage() {
           </div>
 
           {error && (
-            <div className="text-[14px] text-[#FF4242] bg-[#FF4242]/5 border border-[#FF4242]/20 rounded-[8px] p-3">
+            <div className="rounded-[8px] border border-[#FF4242]/20 bg-[#FF4242]/5 p-3 text-[14px] text-[#FF4242]">
               {error}
             </div>
           )}
 
           {/* Apply Now Button */}
-          <div className="flex justify-end border-t border-[#E4E7EC] pt-6 mt-4">
+          <div className="mt-4 flex justify-end border-t border-[#E4E7EC] pt-6">
             <Button
               type="submit"
               disabled={loading || !phoneNumber || !location || !cvFile}
-              className="flex items-center justify-center gap-2 rounded-[60px] h-[46px] w-[155px] font-medium text-[16px] border border-transparent bg-[#195236] text-[#F2F7F1] hover:bg-[#153e28] transition-all duration-200 select-none active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex h-[46px] w-[155px] cursor-pointer items-center justify-center gap-2 rounded-[60px] border border-transparent bg-[#195236] text-[16px] font-medium text-[#F2F7F1] transition-all duration-200 select-none hover:bg-[#153e28] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
               <span>Apply Now</span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="h-5 w-5" />
             </Button>
           </div>
         </form>

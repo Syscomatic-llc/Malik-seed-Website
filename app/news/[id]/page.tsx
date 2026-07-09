@@ -135,13 +135,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       {/* ── Article wrapper ─────────────────────────────────────────── */}
       <article className="w-full px-4 pt-[100px] pb-10 md:px-12 md:pt-[130px] md:pb-20 lg:px-[100px] lg:pt-[180px] lg:pb-[100px]">
         <div className="mx-auto max-w-[1030px]">
-
           {/* ── Header: back link + meta + share ──────────────────── */}
           <div className="flex flex-col gap-8">
             {/* Back button */}
             <Link
               href="/news"
-              className="inline-flex items-center gap-2 font-heading text-base font-medium leading-6 text-[#0B3124] group focus-visible:outline-none"
+              className="font-heading group inline-flex items-center gap-2 text-base leading-6 font-medium text-[#0B3124] focus-visible:outline-none"
             >
               <Image
                 src={ASSETS.backArrow}
@@ -158,17 +157,20 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <div className="flex flex-col gap-6">
               {/* Category pill + date */}
               <div className="flex items-center gap-4">
-                <div className="inline-flex h-12 items-center justify-center rounded-[10px] border border-brand-border-light bg-white px-6 font-heading text-base font-medium leading-6 text-brand-active">
+                <div className="border-brand-border-light font-heading text-brand-active inline-flex h-12 items-center justify-center rounded-[10px] border bg-white px-6 text-base leading-6 font-medium">
                   {article.category}
                 </div>
-                <span className="h-1 w-1 rounded-full bg-brand-dark" aria-hidden="true" />
-                <span className="font-heading text-base font-medium leading-6 text-brand-dark">
+                <span
+                  className="bg-brand-dark h-1 w-1 rounded-full"
+                  aria-hidden="true"
+                />
+                <span className="font-heading text-brand-dark text-base leading-6 font-medium">
                   {article.date}
                 </span>
               </div>
 
               {/* Article title */}
-              <h1 className="font-heading text-[28px] font-medium leading-[34px] text-[#141C24] md:text-[48px] md:leading-[58px]">
+              <h1 className="font-heading text-[28px] leading-[34px] font-medium text-[#141C24] md:text-[48px] md:leading-[58px]">
                 {article.title}
               </h1>
 
@@ -188,7 +190,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
 
           {/* ── Hero image ──────────────────────────────────────────── */}
-          <div className="relative mt-8 h-[230px] w-full overflow-hidden rounded-[20px] border border-brand-border/30 bg-white md:mt-12 md:h-[598px] md:rounded-[32px]">
+          <div className="border-brand-border/30 relative mt-8 h-[230px] w-full overflow-hidden rounded-[20px] border bg-white md:mt-12 md:h-[598px] md:rounded-[32px]">
             <Image
               src={article.detailImage}
               alt={article.title}
@@ -202,7 +204,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           {/* ── Two-column body: content + sidebar ──────────────────── */}
           <div className="mt-12 flex flex-col lg:flex-row lg:justify-between lg:gap-[130px]">
             {/* Left: article body — order-2 on mobile, order-1 on desktop */}
-            <div className="w-full shrink-0 order-2 lg:order-1 lg:w-[608px]">
+            <div className="order-2 w-full shrink-0 lg:order-1 lg:w-[608px]">
               {/*
                * article-prose is a @utility defined in globals.css that captures
                * all prose element overrides. Keeping them in CSS prevents this
@@ -215,16 +217,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
 
             {/* Right: sticky TOC + author — order-1 on mobile, order-2 on desktop */}
-            <div className="w-full shrink-0 order-1 lg:order-2 lg:w-[292px] mb-8 lg:mb-0 lg:sticky lg:top-[120px] lg:self-start lg:h-fit">
+            <div className="order-1 mb-8 w-full shrink-0 lg:sticky lg:top-[120px] lg:order-2 lg:mb-0 lg:h-fit lg:w-[292px] lg:self-start">
               <NewsTOC headings={headings} author={author} />
             </div>
           </div>
 
           {/* ── Divider ─────────────────────────────────────────────── */}
-          <div className="my-12 h-px w-full bg-brand-partners-border" />
+          <div className="bg-brand-partners-border my-12 h-px w-full" />
 
           {/* ── Prev / Next navigation ───────────────────────────────── */}
-          <div className="flex justify-between items-center w-full gap-4 py-6">
+          <div className="flex w-full items-center justify-between gap-4 py-6">
             {/* Previous */}
             <Link
               href={`/news/${prevArticle.id}`}
@@ -232,10 +234,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             >
               <NavArrow direction="prev" label="Previous article" />
               <div className="flex flex-col text-right">
-                <span className="font-heading text-base font-medium leading-6 text-brand-dark">
+                <span className="font-heading text-brand-dark text-base leading-6 font-medium">
                   Previous
                 </span>
-                <span className="hidden md:line-clamp-2 md:max-w-[240px] font-heading text-sm text-brand-dark/70 transition-colors group-hover:text-brand-active">
+                <span className="font-heading text-brand-dark/70 group-hover:text-brand-active hidden text-sm transition-colors md:line-clamp-2 md:max-w-[240px]">
                   {prevArticle.title}
                 </span>
               </div>
@@ -244,32 +246,31 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {/* Next */}
             <Link
               href={`/news/${nextArticle.id}`}
-              className="group flex items-center gap-3 text-right justify-end focus-visible:outline-none"
+              className="group flex items-center justify-end gap-3 text-right focus-visible:outline-none"
             >
               <div className="flex flex-col text-left">
-                <span className="font-heading text-base font-medium leading-6 text-brand-dark">
+                <span className="font-heading text-brand-dark text-base leading-6 font-medium">
                   Next
                 </span>
-                <span className="hidden md:line-clamp-2 md:max-w-[240px] font-heading text-sm text-brand-dark/70 transition-colors group-hover:text-brand-active">
+                <span className="font-heading text-brand-dark/70 group-hover:text-brand-active hidden text-sm transition-colors md:line-clamp-2 md:max-w-[240px]">
                   {nextArticle.title}
                 </span>
               </div>
               <NavArrow direction="next" label="Next article" />
             </Link>
           </div>
-
         </div>
       </article>
 
       {/* ── Related articles ─────────────────────────────────────────── */}
       {relatedArticles.length > 0 && (
-        <section className="w-full bg-brand-bg py-10 md:py-[100px]">
+        <section className="bg-brand-bg w-full py-10 md:py-[100px]">
           <div className="mx-auto max-w-[1240px] px-4">
             <div className="mb-12 flex flex-col items-center gap-4">
               <SectionBadge variant="outline" showDot>
                 FROM OUR NEWSROOM
               </SectionBadge>
-              <h2 className="text-center font-heading text-[32px] font-medium leading-[38px] text-brand-dark md:text-[48px] md:leading-[58px]">
+              <h2 className="font-heading text-brand-dark text-center text-[32px] leading-[38px] font-medium md:text-[48px] md:leading-[58px]">
                 Related News &amp; Updates
               </h2>
             </div>
@@ -294,25 +295,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 // ---------------------------------------------------------------------------
 
 /** Circular arrow button used in prev/next navigation. */
-function NavArrow({ direction, label }: { direction: "prev" | "next"; label: string }) {
+function NavArrow({
+  direction,
+  label,
+}: {
+  direction: "prev" | "next";
+  label: string;
+}) {
   return (
     <div
       aria-label={label}
-      className="bg-brand-active hover:bg-brand-primary-hover flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full shadow-sm transition-all duration-300 active:scale-95"
+      className="bg-brand-active hover:bg-brand-primary-hover flex h-8 w-8 shrink-0 items-center justify-center rounded-full shadow-sm transition-all duration-300 active:scale-95 md:h-10 md:w-10"
     >
       <Image
         src="/arrow.svg"
         alt=""
         width={16}
         height={16}
-        className={`md:w-5 md:h-5 ${direction === "prev" ? "rotate-180" : ""}`}
+        className={`md:h-5 md:w-5 ${direction === "prev" ? "rotate-180" : ""}`}
       />
     </div>
   );
 }
-
-
-
-
-
-

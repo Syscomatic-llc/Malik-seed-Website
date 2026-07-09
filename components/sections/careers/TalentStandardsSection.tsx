@@ -21,7 +21,7 @@ const StandardCard = memo(function StandardCard({
   return (
     <div
       className={[
-        "flex flex-col items-start md:items-center justify-between gap-8 rounded-[24px] border p-8",
+        "flex flex-col items-start justify-between gap-8 rounded-[24px] border p-8 md:items-center",
         "w-full sm:w-[calc(50%-8px)] lg:w-[342px] lg:flex-shrink-0",
         "min-h-[216px]",
         isDark
@@ -32,12 +32,12 @@ const StandardCard = memo(function StandardCard({
     >
       {/* Numbered badge */}
       <div
-        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[10px] bg-brand-light-green"
+        className="bg-brand-light-green flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[10px]"
         aria-hidden="true"
       >
         <span
           className={[
-            "font-inter-tight text-[20px] font-medium leading-[24px] text-center text-brand-dark"
+            "font-inter-tight text-brand-dark text-center text-[20px] leading-[24px] font-medium",
           ].join(" ")}
         >
           {standard.number}
@@ -45,10 +45,10 @@ const StandardCard = memo(function StandardCard({
       </div>
 
       {/* Title + Description */}
-      <div className="flex w-full flex-col items-start md:items-center gap-2">
+      <div className="flex w-full flex-col items-start gap-2 md:items-center">
         <h3
           className={[
-            "font-inter-tight text-[20px] font-medium leading-[24px] text-center",
+            "font-inter-tight text-center text-[20px] leading-[24px] font-medium",
             isDark ? "text-brand-dark lg:text-brand-bg" : "text-brand-dark",
           ].join(" ")}
         >
@@ -56,7 +56,7 @@ const StandardCard = memo(function StandardCard({
         </h3>
         <p
           className={[
-            "font-inter text-[16px] leading-[24px] text-center",
+            "font-inter text-center text-[16px] leading-[24px]",
             isDark ? "text-brand-dark lg:text-brand-bg" : "text-brand-dark",
           ].join(" ")}
         >
@@ -67,7 +67,11 @@ const StandardCard = memo(function StandardCard({
   );
 });
 
-export default memo(function TalentStandardsSection({ data }: { data: typeof talentStandardsData }) {
+export default memo(function TalentStandardsSection({
+  data,
+}: {
+  data: typeof talentStandardsData;
+}) {
   const { standards } = data;
   const row1 = standards.slice(0, 3); // cards 1-3
   const row2 = standards.slice(3, 5); // cards 4-5
@@ -76,18 +80,15 @@ export default memo(function TalentStandardsSection({ data }: { data: typeof tal
     <section
       id="talent-standards"
       aria-label="Talent Standards"
-      className="w-full bg-brand-bg py-[100px]"
+      className="bg-brand-bg w-full py-[100px]"
     >
       <div className="mx-auto w-full max-w-[1240px] px-4 xl:px-0">
-
         {/* Header: centered badge + title */}
-        <div className="mb-[32px] md:mb-[64px] flex flex-col items-center gap-8">
+        <div className="mb-[32px] flex flex-col items-center gap-8 md:mb-[64px]">
           <SectionBadge variant="outline" showDot dotSize="6px">
             {data.badge}
           </SectionBadge>
-          <h2
-            className="font-inter-tight text-[32px] font-medium leading-[1.2] tracking-tight text-brand-dark text-center md:text-[48px] md:leading-[58px]"
-          >
+          <h2 className="font-inter-tight text-brand-dark text-center text-[32px] leading-[1.2] font-medium tracking-tight md:text-[48px] md:leading-[58px]">
             {data.title}
           </h2>
         </div>
@@ -105,7 +106,6 @@ export default memo(function TalentStandardsSection({ data }: { data: typeof tal
             <StandardCard key={s.number} standard={s} />
           ))}
         </div>
-
       </div>
     </section>
   );

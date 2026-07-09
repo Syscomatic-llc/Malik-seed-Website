@@ -54,15 +54,44 @@ export default function DevNav({ positionId }: { positionId: string }) {
     store.setPersonalInfo("Dev User", "dev@test.com");
     store.setOtpVerified(true);
 
-    if (["start", "mcq", "short-answers", "long-answers", "review", "loading", "result", "additional-info", "submitted"].includes(path)) {
-      store.startAssessment(numId, "Dev Position", config ?? { timeLimitMinutes: 30, assessmentType: "mcq" });
+    if (
+      [
+        "start",
+        "mcq",
+        "short-answers",
+        "long-answers",
+        "review",
+        "loading",
+        "result",
+        "additional-info",
+        "submitted",
+      ].includes(path)
+    ) {
+      store.startAssessment(
+        numId,
+        "Dev Position",
+        config ?? { timeLimitMinutes: 30, assessmentType: "mcq" }
+      );
     }
 
-    if (["mcq", "review", "loading", "result", "additional-info", "submitted"].includes(path)) {
+    if (
+      [
+        "mcq",
+        "review",
+        "loading",
+        "result",
+        "additional-info",
+        "submitted",
+      ].includes(path)
+    ) {
       seedMcqAnswers(numId, seedPass);
     }
 
-    if (["review", "loading", "result", "additional-info", "submitted"].includes(path)) {
+    if (
+      ["review", "loading", "result", "additional-info", "submitted"].includes(
+        path
+      )
+    ) {
       store.completeAssessment();
     }
 
@@ -88,10 +117,10 @@ export default function DevNav({ positionId }: { positionId: string }) {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-9999 flex flex-col items-end gap-2">
+    <div className="fixed right-5 bottom-5 z-9999 flex flex-col items-end gap-2">
       {open && (
-        <div className="bg-gray-900 text-white rounded-xl shadow-2xl p-4 w-[240px] flex flex-col gap-3 border border-gray-700">
-          <div className="text-xs font-bold uppercase tracking-widest text-yellow-400 border-b border-gray-700 pb-2">
+        <div className="flex w-[240px] flex-col gap-3 rounded-xl border border-gray-700 bg-gray-900 p-4 text-white shadow-2xl">
+          <div className="border-b border-gray-700 pb-2 text-xs font-bold tracking-widest text-yellow-400 uppercase">
             🛠 Dev Navigation
           </div>
 
@@ -100,13 +129,13 @@ export default function DevNav({ positionId }: { positionId: string }) {
             <div className="flex gap-2">
               <button
                 onClick={() => setSeedPass(true)}
-                className={`flex-1 px-2 py-1 rounded-full font-bold transition-colors ${seedPass ? "bg-green-500 text-white" : "bg-gray-700 text-gray-300"}`}
+                className={`flex-1 rounded-full px-2 py-1 font-bold transition-colors ${seedPass ? "bg-green-500 text-white" : "bg-gray-700 text-gray-300"}`}
               >
                 All correct
               </button>
               <button
                 onClick={() => setSeedPass(false)}
-                className={`flex-1 px-2 py-1 rounded-full font-bold transition-colors ${!seedPass ? "bg-red-500 text-white" : "bg-gray-700 text-gray-300"}`}
+                className={`flex-1 rounded-full px-2 py-1 font-bold transition-colors ${!seedPass ? "bg-red-500 text-white" : "bg-gray-700 text-gray-300"}`}
               >
                 All wrong
               </button>
@@ -118,7 +147,7 @@ export default function DevNav({ positionId }: { positionId: string }) {
               <button
                 key={path}
                 onClick={() => seedStateAndNavigate(path)}
-                className="text-left text-sm px-3 py-1.5 rounded-lg hover:bg-gray-700 transition-colors text-gray-100"
+                className="rounded-lg px-3 py-1.5 text-left text-sm text-gray-100 transition-colors hover:bg-gray-700"
               >
                 {label}
               </button>
@@ -130,7 +159,7 @@ export default function DevNav({ positionId }: { positionId: string }) {
       <button
         onClick={() => setOpen(!open)}
         title="Dev Navigation"
-        className="w-10 h-10 rounded-full bg-yellow-400 text-gray-900 font-black text-lg shadow-lg hover:bg-yellow-300 transition-colors flex items-center justify-center"
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400 text-lg font-black text-gray-900 shadow-lg transition-colors hover:bg-yellow-300"
       >
         🛠
       </button>
