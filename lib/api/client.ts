@@ -49,6 +49,7 @@ export interface RequestOptions {
   /** Next.js ISR revalidation (seconds), or false to force `no-store` semantics via cache */
   revalidate?: number | false;
   signal?: AbortSignal;
+  headers?: HeadersInit;
 }
 
 async function request<T>(

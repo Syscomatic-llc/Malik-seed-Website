@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { NewsArticle } from "@/data/news-data";
 
@@ -8,12 +8,13 @@ interface NewsCardProps {
 }
 
 export default function NewsCard({ article }: NewsCardProps) {
+  console.log(article)
   return (
     <Link href={`/news/${article.id}`} className="group block">
       <article className="flex h-full w-full flex-col rounded-[24px] border border-[#E4E7EC]/50 bg-white p-[16px] pb-[24px] transition-all duration-300 hover:shadow-md">
         {/* Image */}
         <div className="relative h-[260px] w-full overflow-hidden rounded-[16px] bg-[#F9FAFB]">
-          <Image
+          <OptimizedImage
             src={article.image}
             alt={article.title}
             fill
@@ -28,7 +29,7 @@ export default function NewsCard({ article }: NewsCardProps) {
             className="line-clamp-2 text-[20px] leading-[30px] font-medium text-[#0D1A14]"
             style={{ fontFamily: "var(--font-inter-tight)" }}
           >
-            {article.title}
+            {article.title} 
           </h3>
 
           <p className="mt-2 line-clamp-3 flex-1 text-[16px] leading-[24px] text-[#0D1A14]/70">

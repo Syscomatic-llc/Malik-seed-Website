@@ -4,8 +4,18 @@ import crypto from "crypto";
 import fs from "fs/promises";
 import path from "path";
 
+// Helper to extract hostname from URL
+function getHostname(urlStr: string | undefined): string {
+  if (!urlStr) return "";
+  try {
+    return new URL(urlStr).hostname;
+  } catch {
+    return urlStr;
+  }
+}
+
 // Allow proxying from our CMS domain
-const ALLOWED_HOSTNAME = process.env.API_BACKEND_URL!;
+const ALLOWED_HOSTNAME = getHostname(process.env.API_BACKEND_URL);
 const CACHE_DIR = path.join(process.cwd(), ".image-cache");
 
 // The CMS serves files slowly (e.g. 569 KB/s for 8MB+ PNGs), so we use a 45s timeout

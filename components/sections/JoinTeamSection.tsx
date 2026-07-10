@@ -3,22 +3,25 @@ import ActionButton from "@/components/ActionButton";
 import Image from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { joinTeamData as staticJoinTeamData } from "@/data/sections-data";
-import { ApiCtaBanner } from "@/lib/api";
+import { homepageApi } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
-export interface JoinTeamSectionProps {
-  apiData?: ApiCtaBanner[];
-}
 
-export default function JoinTeamSection({ apiData }: JoinTeamSectionProps) {
+export default async function JoinTeamSection() {
+  let apiData = null;
+  try {
+    apiData = await homepageApi.getCtaBanners({ revalidate: 60 });
+  } catch (err) {
+    console.error("Failed to fetch join team section data from API:", err);
+  }
   const activeJoinTeamData =
     apiData && apiData.length > 0
       ? {
-          badge: apiData[0].title || "Join our Team",
-          title: apiData[0].subtitle || "",
+          badge: apiData[0].title,
+          title: apiData[0].subtitle,
           cta: {
-            label: apiData[0].cta_text || "Join Today",
-            href: apiData[0].cta_link || "/careers",
+            label: apiData[0].cta_text,
+            href: apiData[0].cta_link,
           },
           images: {
             desktop: resolveImageUrl(apiData[0].background_image),

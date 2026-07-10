@@ -135,3 +135,66 @@ export interface ApiHomepageData {
   news: ApiNewsArticle[];
   cta_banners: ApiCtaBanner[];
 }
+
+export interface ApiNewsArticle {
+  id: number;
+  title: string;
+  slug: string;
+  category: string;
+  excerpt: string;
+  content: string;
+  tags: string[];
+  meta_keywords: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  og_image: string | null;
+  featured_image: string | null;
+  gallery_images: string[];
+  video_url: string | null;
+  video_thumbnail: string | null;
+  author_name: string | null;
+  author_title: string | null;
+  author_bio: string | null;
+  author_avatar: string | null;
+  is_active: boolean;
+  is_featured: boolean;
+  is_published: boolean;
+  view_count: number;
+  share_count: number;
+  related_article_ids: number[];
+  published_at: string | null;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiNewsCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description: string | null;
+  image_url: string | null;
+  icon: string | null;
+  article_count: number;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiPressRelease {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt?: string;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiNewsPageData {
+  articles: ApiNewsArticle[];
+  featured_articles: ApiNewsArticle[];
+  categories: ApiNewsCategory[];
+  press_releases: ApiPressRelease[];
+}

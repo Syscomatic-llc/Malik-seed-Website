@@ -39,7 +39,7 @@ export default async function Home() {
       <NewsSection apiData={apiData?.news} />
 
       {/* Join our Team Career CTA */}
-      <JoinTeamSection apiData={apiData?.cta_banners} />
+      <JoinTeamSection/>
     </>
   );
 }

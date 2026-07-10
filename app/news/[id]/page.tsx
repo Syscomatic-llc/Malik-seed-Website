@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { newsArticles, type NewsArticle } from "@/data/news-data";
@@ -8,6 +9,8 @@ import ShareButton from "@/components/ShareButton";
 import NewsTOC from "@/components/NewsTOC";
 import NewsCard from "@/components/NewsCard";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { newsApi } from "@/lib/api";
+import { mapApiArticleToNewsArticle } from "@/lib/news-mapper";
 
 // ---------------------------------------------------------------------------
 // Route-level constants — single source of truth for every hardcoded value.
@@ -68,7 +71,11 @@ function parseHeadings(html: string): {
   H3_REGEX.lastIndex = 0;
 
   const parsedHtml = html.replace(H3_REGEX, (_, innerHtml: string) => {
-    const cleanText = innerHtml.replace(TAG_REGEX, "").trim();
+    const cleanText = innerHtml
+      .replace(/&nbsp;/g, " ")
+      .replace(/\u00a0/g, " ")
+      .replace(TAG_REGEX, "")
+      .trim();
     const id = `heading-${cleanText
       .toLowerCase()
       .replace(SLUG_STRIP_REGEX, "-")
@@ -90,6 +97,14 @@ interface ArticlePageProps {
 
 /** Statically generates params for every article at build time. */
 export async function generateStaticParams() {
+  try {
+    const apiData = await newsApi.getNews();
+    if (apiData && apiData.articles) {
+      return apiData.articles.map((article) => ({ id: article.id.toString() }));
+    }
+  } catch (err) {
+    console.error("Failed to generate static params from API:", err);
+  }
   return newsArticles.map((article) => ({ id: article.id.toString() }));
 }
 
@@ -98,10 +113,32 @@ export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { id } = await params;
-  const article = findArticle(id);
+  
+  let article = null;
+  try {
+    const apiData = await newsApi.getNews({ revalidate: 60 });
+    if (apiData && apiData.articles) {
+      const found = apiData.articles.find((a) => a.id.toString() === id);
+      if (found) {
+        article = {
+          title: found.title,
+          description: found.excerpt,
+        };
+      }
+    }
+  } catch (err) {
+    console.error("Failed to fetch article metadata from API:", err);
+  }
 
   if (!article) {
-    return { title: `Article Not Found - ${SITE_NAME}` };
+    const staticArticle = findArticle(id);
+    if (!staticArticle) {
+      return { title: `Article Not Found - ${SITE_NAME}` };
+    }
+    article = {
+      title: staticArticle.title,
+      description: staticArticle.description,
+    };
   }
 
   return {
@@ -112,22 +149,39 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { id } = await params;
-  const article = findArticle(id);
 
-  if (!article) notFound();
+  let article: NewsArticle | null = null;
+  let allArticles: NewsArticle[] = [];
+
+  try {
+    const apiData = await newsApi.getNews({ revalidate: 60 });
+    if (apiData && apiData.articles) {
+      allArticles = apiData.articles.map(mapApiArticleToNewsArticle);
+      article = allArticles.find((a) => a.id.toString() === id) || null;
+    }
+  } catch (err) {
+    console.error("Failed to fetch article details from API:", err);
+  }
+
+  if (!article) {
+    const staticArticle = findArticle(id);
+    if (!staticArticle) notFound();
+    article = staticArticle;
+    allArticles = newsArticles;
+  }
 
   const { headings, parsedHtml } = parseHeadings(article.contentHtml);
   const author = article.author ?? DEFAULT_AUTHOR;
 
   // Circular prev/next navigation
-  const currentIndex = newsArticles.findIndex((a) => a.id === article.id);
-  const lastIndex = newsArticles.length - 1;
-  const prevArticle = newsArticles[currentIndex - 1] ?? newsArticles[lastIndex];
-  const nextArticle = newsArticles[currentIndex + 1] ?? newsArticles[0];
+  const currentIndex = allArticles.findIndex((a) => a.id === article!.id);
+  const lastIndex = allArticles.length - 1;
+  const prevArticle = allArticles[currentIndex - 1] ?? allArticles[lastIndex];
+  const nextArticle = allArticles[currentIndex + 1] ?? allArticles[0];
 
   // Related articles: exclude current, cap at constant
-  const relatedArticles = newsArticles
-    .filter((a) => a.id !== article.id)
+  const relatedArticles = allArticles
+    .filter((a) => a.id !== article!.id)
     .slice(0, RELATED_ARTICLE_COUNT);
 
   return (
@@ -191,7 +245,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
           {/* ── Hero image ──────────────────────────────────────────── */}
           <div className="border-brand-border/30 relative mt-8 h-[230px] w-full overflow-hidden rounded-[20px] border bg-white md:mt-12 md:h-[598px] md:rounded-[32px]">
-            <Image
+            <OptimizedImage
               src={article.detailImage}
               alt={article.title}
               fill
