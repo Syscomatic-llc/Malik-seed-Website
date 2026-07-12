@@ -55,22 +55,43 @@ function buildStats(apiStats: ApiAboutStat[]) {
  * data for any missing fields.
  */
 function buildAboutData(apiData?: ApiAbout) {
-  if (!apiData) return staticAboutData;
+  const fullStaticDesc =
+    staticAboutData.introDesktop.highlight + staticAboutData.introDesktop.muted;
+
+  if (!apiData) {
+    const splitIdx = Math.min(fullStaticDesc.length, 258);
+    const introDesktop = {
+      highlight: fullStaticDesc.substring(0, splitIdx),
+      muted: fullStaticDesc.substring(splitIdx),
+    };
+
+    let truncatedMobile = fullStaticDesc;
+    if (fullStaticDesc.length > 132) {
+      truncatedMobile = fullStaticDesc.substring(0, 132) + "...";
+    }
+    const mobileSplitIdx = Math.min(truncatedMobile.length, 258);
+    const introMobile = {
+      highlight: truncatedMobile.substring(0, mobileSplitIdx),
+      muted: truncatedMobile.substring(mobileSplitIdx),
+    };
+
+    return {
+      ...staticAboutData,
+      introDesktop,
+      introMobile,
+    };
+  }
 
   const statsArray = parseStats(apiData.stats);
   const parsedStats = buildStats(statsArray);
 
-  // Split description at "in Japan." for the highlight/muted desktop display
+  // Split description at index 258 for the highlight/muted desktop display
   const desc = apiData.description || "";
-  const splitWord = "in Japan.";
-  const splitIdx = desc.indexOf(splitWord);
-  const introDesktop =
-    splitIdx !== -1
-      ? {
-          highlight: desc.substring(0, splitIdx),
-          muted: desc.substring(splitIdx),
-        }
-      : { highlight: desc, muted: "" };
+  const splitIdx = Math.min(desc.length, 258);
+  const introDesktop = {
+    highlight: desc.substring(0, splitIdx),
+    muted: desc.substring(splitIdx),
+  };
 
   // Resolve the main image from API
   const teamBanner = resolveImageUrl(apiData.image_url);
@@ -85,10 +106,20 @@ function buildAboutData(apiData?: ApiAbout) {
     ? resolveImageUrl(gallery[1])
     : staticAboutData.images.about2;
 
+  let truncatedMobile = desc;
+  if (desc.length > 132) {
+    truncatedMobile = desc.substring(0, 132) + "...";
+  }
+  const mobileSplitIdx = Math.min(truncatedMobile.length, 258);
+  const introMobile = {
+    highlight: truncatedMobile.substring(0, mobileSplitIdx),
+    muted: truncatedMobile.substring(mobileSplitIdx),
+  };
+
   return {
     badge: apiData.title || "About Malik Seeds",
     introDesktop,
-    introMobile: apiData.description || "",
+    introMobile,
     cta: {
       label: apiData.cta_text || "Learn More",
       href: apiData.cta_link || "/our-story",
@@ -223,7 +254,10 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
               <div className="flex flex-col items-center gap-[32px]">
                 {/* Text — 358px, 24px, weight 500, center, lineHeight 36px */}
                 <p className="text-brand-dark text-center font-sans text-[24px] leading-[36px] font-medium">
-                  <span>{aboutData.introMobile}</span>
+                  <span>{aboutData.introMobile.highlight}</span>
+                  <span className="text-brand-dark/60">
+                    {aboutData.introMobile.muted}
+                  </span>
                 </p>
 
                 {/* CTA — 123x41, bg #195236, radius 60px */}

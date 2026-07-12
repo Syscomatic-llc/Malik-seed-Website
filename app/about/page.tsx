@@ -7,6 +7,7 @@ import AboutMissionTwo from "@/components/sections/AboutMissionTwo";
 import GalleryHeroSection from "@/components/sections/GalleryHeroSection";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import { timelineItems } from "@/data/sections-data";
+import { homepageApi } from "@/lib/api";
 
 export const metadata = {
   title: "Our Story - Malik Seeds",
@@ -14,13 +15,20 @@ export const metadata = {
     "Discover the historical journey of A.R. Malik, our mission, core brand values, and agricultural milestones from 1962 to today.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  let apiTimeline = undefined;
+  try {
+    apiTimeline = await homepageApi.getTimeline({ revalidate: 60 });
+  } catch (err) {
+    console.error("Failed to fetch timeline data from API:", err);
+  }
+
   return (
     <div className="bg-brand-bg min-h-screen">
       <AboutHero />
       <AboutMissionOne />
       <AboutValues />
-      <TimelineStory items={timelineItems} />
+      <TimelineStory items={timelineItems} apiData={apiTimeline} />
       <AboutMissionTwo />
       {/* Suspense required: GalleryHeroSection uses useSearchParams() internally */}
       <Suspense fallback={null}>

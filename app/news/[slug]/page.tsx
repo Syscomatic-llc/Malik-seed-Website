@@ -48,10 +48,9 @@ const SLUG_TRIM_REGEX = /(^-|-$)/g;
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Returns the article matching `id`, or `undefined`. */
-function findArticle(id: string): NewsArticle | undefined {
-  const numericId = parseInt(id, 10);
-  return newsArticles.find((a) => a.id === numericId);
+/** Returns the article matching `slug`, or `undefined`. */
+function findArticle(slug: string): NewsArticle | undefined {
+  return newsArticles.find((a) => a.slug === slug);
 }
 
 /**
@@ -92,7 +91,7 @@ function parseHeadings(html: string): {
 // ---------------------------------------------------------------------------
 
 interface ArticlePageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 /** Statically generates params for every article at build time. */
@@ -100,25 +99,25 @@ export async function generateStaticParams() {
   try {
     const apiData = await newsApi.getNews();
     if (apiData && apiData.articles) {
-      return apiData.articles.map((article) => ({ id: article.id.toString() }));
+      return apiData.articles.map((article) => ({ slug: article.slug || article.article_slug || `article-${article.id}` }));
     }
   } catch (err) {
     console.error("Failed to generate static params from API:", err);
   }
-  return newsArticles.map((article) => ({ id: article.id.toString() }));
+  return newsArticles.map((article) => ({ slug: article.slug }));
 }
 
 /** Dynamic per-article SEO metadata. */
 export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
-  const { id } = await params;
-  
+  const { slug } = await params;
+
   let article = null;
   try {
     const apiData = await newsApi.getNews({ revalidate: 60 });
     if (apiData && apiData.articles) {
-      const found = apiData.articles.find((a) => a.id.toString() === id);
+      const found = apiData.articles.find((a) => (a.slug || a.article_slug || `article-${a.id}`) === slug);
       if (found) {
         article = {
           title: found.title,
@@ -131,7 +130,7 @@ export async function generateMetadata({
   }
 
   if (!article) {
-    const staticArticle = findArticle(id);
+    const staticArticle = findArticle(slug);
     if (!staticArticle) {
       return { title: `Article Not Found - ${SITE_NAME}` };
     }
@@ -148,7 +147,7 @@ export async function generateMetadata({
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-  const { id } = await params;
+  const { slug } = await params;
 
   let article: NewsArticle | null = null;
   let allArticles: NewsArticle[] = [];
@@ -157,14 +156,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const apiData = await newsApi.getNews({ revalidate: 60 });
     if (apiData && apiData.articles) {
       allArticles = apiData.articles.map(mapApiArticleToNewsArticle);
-      article = allArticles.find((a) => a.id.toString() === id) || null;
+      article = allArticles.find((a) => a.slug === slug) || null;
     }
   } catch (err) {
     console.error("Failed to fetch article details from API:", err);
   }
 
   if (!article) {
-    const staticArticle = findArticle(id);
+    const staticArticle = findArticle(slug);
     if (!staticArticle) notFound();
     article = staticArticle;
     allArticles = newsArticles;
@@ -174,14 +173,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const author = article.author ?? DEFAULT_AUTHOR;
 
   // Circular prev/next navigation
-  const currentIndex = allArticles.findIndex((a) => a.id === article!.id);
+  const currentIndex = allArticles.findIndex((a) => a.slug === article!.slug);
   const lastIndex = allArticles.length - 1;
   const prevArticle = allArticles[currentIndex - 1] ?? allArticles[lastIndex];
   const nextArticle = allArticles[currentIndex + 1] ?? allArticles[0];
 
   // Related articles: exclude current, cap at constant
   const relatedArticles = allArticles
-    .filter((a) => a.id !== article!.id)
+    .filter((a) => a.slug !== article!.slug)
     .slice(0, RELATED_ARTICLE_COUNT);
 
   return (
@@ -283,7 +282,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <div className="flex w-full items-center justify-between gap-4 py-6">
             {/* Previous */}
             <Link
-              href={`/news/${prevArticle.id}`}
+              href={`/news/${prevArticle.slug}`}
               className="group flex items-center gap-3 text-right focus-visible:outline-none"
             >
               <NavArrow direction="prev" label="Previous article" />
@@ -299,7 +298,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             {/* Next */}
             <Link
-              href={`/news/${nextArticle.id}`}
+              href={`/news/${nextArticle.slug}`}
               className="group flex items-center justify-end gap-3 text-right focus-visible:outline-none"
             >
               <div className="flex flex-col text-left">

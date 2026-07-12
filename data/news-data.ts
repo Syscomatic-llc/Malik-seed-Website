@@ -1,5 +1,6 @@
 export interface NewsArticle {
   id: number;
+  slug: string;
   title: string;
   description: string;
   category: string;
@@ -17,6 +18,7 @@ export interface NewsArticle {
 export const newsArticles: NewsArticle[] = [
   {
     id: 1,
+    slug: "achieving-global-gap-certification",
     title:
       "Achieving GLOBAL G.A.P. Certification: A Commitment to Safe, Sustainable, and High-Quality Agriculture",
     description:
@@ -106,6 +108,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 2,
+    slug: "new-hybrid-cabbage-variety-shows-strong-performance",
     title:
       "New Hybrid Cabbage Variety Shows Strong Performance in Field Trials",
     description:
@@ -128,6 +131,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 3,
+    slug: "strengthening-seed-research-through-global-collaboration",
     title: "Strengthening Seed Research Through Global Collaboration",
     description:
       "Malik Seeds continues its long-standing collaboration with international seed research organizations to introduce climate-resilient crop varieties.",
@@ -149,6 +153,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 4,
+    slug: "from-trial-plot-to-market-success",
     title:
       "From Trial Plot to Market Success: A Farmer’s Journey with Malik Seeds",
     description:
@@ -176,6 +181,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 5,
+    slug: "using-data-and-field-insights-to-improve-seed-selection",
     title: "Using Data and Field Insights to Improve Seed Selection",
     description:
       "Agronomists at Malik Seeds are integrating structured field data collection into their selection processes to better support regional farming needs.",
@@ -197,6 +203,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 6,
+    slug: "supporting-local-farming-communities",
     title: "Supporting Local Farming Communities",
     description:
       "Malik Seeds regularly organizes community discussions and training events to help smallholders adapt to changing climatic conditions and market demands.",
@@ -218,6 +225,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 7,
+    slug: "strengthening-seed-research-through-global-collaboration-2",
     title: "Strengthening Seed Research Through Global Collaboration",
     description:
       "Malik Seeds continues its long-standing collaboration with international seed research organizations to introduce climate-resilient crop varieties.",
@@ -239,6 +247,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 8,
+    slug: "from-trial-plot-to-market-success-2",
     title:
       "From Trial Plot to Market Success: A Farmer’s Journey with Malik Seeds",
     description:
@@ -266,6 +275,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 9,
+    slug: "using-data-and-field-insights-to-improve-seed-selection-2",
     title: "Using Data and Field Insights to Improve Seed Selection",
     description:
       "Agronomists at Malik Seeds are integrating structured field data collection into their selection processes to better support regional farming needs.",
@@ -287,6 +297,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 10,
+    slug: "supporting-local-farming-communities-2",
     title: "Supporting Local Farming Communities",
     description:
       "Malik Seeds regularly organizes community discussions and training events to help smallholders adapt to changing climatic conditions and market demands.",
@@ -308,6 +319,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: 11,
+    slug: "empowering-farmers-through-practical-field-training",
     title: "Empowering Farmers Through Practical Field Training",
     description:
       "Participants learned modern crop management techniques, pest monitoring, and safe pesticide usage to improve crop yields.",

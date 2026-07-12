@@ -53,7 +53,7 @@ const HeroSlideshow = memo(function HeroSlideshow({
           <div
             key={slide.src + index}
             className={[
-              "absolute inset-0 transition-opacity duration-[2000ms] ease-in-out",
+              "absolute inset-0 transition-opacity duration-[2500ms] ease-in-out",
               isActive
                 ? "z-10 opacity-100"
                 : "pointer-events-none z-0 opacity-0",
@@ -180,18 +180,18 @@ const HeroContentDesktop = memo(function HeroContentDesktop({
 
       {/* Frame 2147229466 — CTA row */}
       <div className="flex items-center gap-4">
-        {data.ctaProducts?.label && data.ctaProducts?.href && (
+        {data.ctaProducts?.label && (
           <ActionButton
-            href={data.ctaProducts.href}
+            href={data.ctaProducts.href || "#"}
             label={data.ctaProducts.label}
             variant="primary"
             className="h-[44px] w-[152px] text-[14px] leading-[17px]"
             iconSize={20}
           />
         )}
-        {data.ctaAbout?.label && data.ctaAbout?.href && (
+        {data.ctaAbout?.label && (
           <ActionButton
-            href={data.ctaAbout.href}
+            href={data.ctaAbout.href || "#"}
             label={data.ctaAbout.label}
             variant="secondary"
             className="h-[44px] w-[143px] text-[14px] leading-[17px]"
@@ -237,18 +237,18 @@ const HeroContentMobile = memo(function HeroContentMobile({
 
       {/* CTA row: 358×41, gap:8 */}
       <div className="flex w-full items-center justify-center gap-3 sm:gap-4">
-        {data.ctaProducts?.label && data.ctaProducts?.href && (
+        {data.ctaProducts?.label && (
           <ActionButton
-            href={data.ctaProducts.href}
+            href={data.ctaProducts.href || "#"}
             label={data.ctaProducts.label}
             variant="primary"
             className="h-[41px] w-[132px] text-[14px] leading-[17px]"
             iconSize={16}
           />
         )}
-        {data.ctaAbout?.label && data.ctaAbout?.href && (
+        {data.ctaAbout?.label && (
           <ActionButton
-            href={data.ctaAbout.href}
+            href={data.ctaAbout.href || "#"}
             label={data.ctaAbout.label}
             variant="secondary"
             className="h-[41px] w-[121px] text-[14px] leading-[17px]"
@@ -319,7 +319,7 @@ export interface HeroSectionProps {
  */
 function buildSlides(
   apiData: ApiHeroSlide[] | undefined,
-  fallback: HeroSlide[],
+  fallback: HeroSlide[]
 ): HeroSlide[] {
   if (!apiData || apiData.length === 0) return fallback;
 
@@ -336,7 +336,10 @@ export default function HeroSection({
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [showOverlay, setShowOverlay] = useState(true);
 
-  const finalSlides = useMemo(() => buildSlides(apiData, data.slides), [apiData, data.slides]);
+  const finalSlides = useMemo(
+    () => buildSlides(apiData, data.slides),
+    [apiData, data.slides]
+  );
 
   // Preload all slideshow images immediately in the browser cache
   useEffect(() => {
@@ -374,31 +377,34 @@ export default function HeroSection({
 
   const { currentIndex } = useAutoSlide({
     count: finalSlides.length,
-    interval: apiData && apiData.length > 0 ? 7500 : data.intervalMs,
+    interval: apiData && apiData.length > 0 ? 3000 : data.intervalMs,
   });
 
   const activeSlide =
     apiData && apiData.length > 0 ? apiData[currentIndex] : null;
 
+  const ctaSource =
+    apiData && apiData.length > 0 ? apiData[apiData.length - 1] : null;
+
   const finalData: HeroData = activeSlide
     ? {
         slides: finalSlides,
-        intervalMs: 7500,
+        intervalMs: 3000,
         titleDesktop: activeSlide.title || "",
         titleMobile: activeSlide.title || "",
         subtitle: activeSlide.subtitle || "",
         ctaProducts: {
-          label: activeSlide.primary_cta_text || "",
-          href: activeSlide.primary_cta_link || "",
+          label: ctaSource?.primary_cta_text || "",
+          href: ctaSource?.primary_cta_link || "",
         },
         ctaAbout: {
-          label: activeSlide.secondary_cta_text || "",
-          href: activeSlide.secondary_cta_link || "",
+          label: ctaSource?.secondary_cta_text || "",
+          href: ctaSource?.secondary_cta_link || "",
         },
         scrollText: data.scrollText,
       }
     : data;
-
+  console.log("ctasource", ctaSource);
   return (
     <section
       id="hero"

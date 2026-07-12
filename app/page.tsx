@@ -6,15 +6,24 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import PartnersSection from "@/components/sections/PartnersSection";
 import NewsSection from "@/components/sections/NewsSection";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
-import { homepageApi } from "@/lib/api";
+import { homepageApi, newsApi } from "@/lib/api";
 
 export default async function Home() {
   let apiData = null;
+  let newsPageData = null;
+
   try {
     apiData = await homepageApi.getAll({ revalidate: 60 });
   } catch (err) {
     console.error("Failed to fetch homepage data from API:", err);
   }
+
+  try {
+    newsPageData = await newsApi.getAll({ revalidate: 60 });
+  } catch (err) {
+    console.error("Failed to fetch news from API:", err);
+  }
+
   return (
     <>
       {/* Hero Section */}
@@ -36,7 +45,7 @@ export default async function Home() {
       <PartnersSection apiData={apiData?.partners} />
 
       {/* News & Stories Insights */}
-      <NewsSection apiData={apiData?.news} />
+      <NewsSection apiData={newsPageData?.articles} />
 
       {/* Join our Team Career CTA */}
       <JoinTeamSection/>

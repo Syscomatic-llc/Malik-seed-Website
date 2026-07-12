@@ -1,6 +1,3 @@
-"use client";
-
-import { useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 
@@ -23,80 +20,12 @@ const HERO_IMAGES = [
     src: "/images/about/hero-field-67.png",
     alt: "Farmers working actively in the hybrid seed production fields",
   },
-  {
-    id: 4,
-    src: "/images/hero/hero-bg.png",
-    alt: "Malik Seeds aerial field view",
-  },
-  {
-    id: 5,
-    src: "/images/hero/hero-slide-1.jpg",
-    alt: "Season crop in full bloom",
-  },
-  {
-    id: 6,
-    src: "/images/hero/hero-slide-2.jpg",
-    alt: "Seed trial plots in cultivation",
-  },
-  {
-    id: 7,
-    src: "/images/hero/hero-slide-3.jpg",
-    alt: "Agricultural research team at work",
-  },
 ] as const;
-
-// Duplicate for seamless infinite loop — no JS clone needed
-const LOOPED_IMAGES = [...HERO_IMAGES, ...HERO_IMAGES] as const;
-
-/** Scroll velocity in px/second — tweak to taste */
-const SCROLL_SPEED_PX_PER_S = 60;
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 export default function AboutHero() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  // Using a plain ref for paused state avoids a re-render + sync effect cycle
-  const pausedRef = useRef(false);
-  const rafRef = useRef<number | null>(null);
-  const lastTimeRef = useRef<number | null>(null);
-
-  // requestAnimationFrame loop — runs once on mount, cleans up on unmount
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const animate = (timestamp: number) => {
-      if (lastTimeRef.current === null) lastTimeRef.current = timestamp;
-      const delta = timestamp - lastTimeRef.current;
-      lastTimeRef.current = timestamp;
-
-      if (!pausedRef.current) {
-        track.scrollLeft += (SCROLL_SPEED_PX_PER_S * delta) / 1000;
-
-        // Seamless reset: once past the first set, jump back by its width
-        if (track.scrollLeft >= track.scrollWidth / 2) {
-          track.scrollLeft -= track.scrollWidth / 2;
-        }
-      }
-
-      rafRef.current = requestAnimationFrame(animate);
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  // Stable handler references — no re-renders triggered
-  const pause = useCallback(() => {
-    pausedRef.current = true;
-  }, []);
-  const resume = useCallback(() => {
-    pausedRef.current = false;
-  }, []);
-
   return (
     <section className="bg-brand-bg w-full overflow-hidden pt-[120px] pb-12 md:pt-[150px] md:pb-[80px] xl:pt-[180px] xl:pb-[100px]">
       {/* Title & Badge — constrained only for readability */}
@@ -115,32 +44,25 @@ export default function AboutHero() {
         </h1>
       </div>
 
-      {/* Auto-scrolling gallery strip — merged wrapper+track into one element */}
-      <div
-        ref={trackRef}
-        onMouseEnter={pause}
-        onMouseLeave={resume}
-        onTouchStart={pause}
-        onTouchEnd={resume}
-        className="mt-8 flex w-full cursor-grab scrollbar-none gap-4 overflow-x-scroll active:cursor-grabbing md:mt-12 md:gap-6"
-        aria-label="Image gallery, scrolls automatically. Hover or touch to pause."
-        role="region"
-      >
-        {LOOPED_IMAGES.map((img, i) => (
-          <div
-            key={`${img.id}-${i}`}
-            className="relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm md:h-[420px] md:w-[548px] md:rounded-[24px]"
-          >
-            <Image
-              src={img.src}
-              alt={img.alt}
-              fill
-              priority={i < 3}
-              sizes="(max-width: 768px) 310px, 548px"
-              className="object-cover transition-transform duration-500 hover:scale-105"
-            />
-          </div>
-        ))}
+      {/* 3-image static row — Centered on desktop, swipeable on mobile */}
+      <div className="mt-8 flex w-full justify-start overflow-x-auto scrollbar-none gap-4 px-4 md:mt-12 md:justify-center md:overflow-x-hidden md:gap-6 md:px-0">
+        <div className="flex shrink-0 gap-4 md:gap-6">
+          {HERO_IMAGES.map((img, i) => (
+            <div
+              key={img.id}
+              className="relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm md:h-[420px] md:w-[548px] md:rounded-[24px]"
+            >
+              <Image
+                src={img.src}
+                alt={img.alt}
+                fill
+                priority={i < 3}
+                sizes="(max-width: 768px) 310px, 548px"
+                className="object-cover transition-transform duration-500 hover:scale-105"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -88,6 +88,7 @@ export interface TestimonialsData {
 
 export interface NewsArticle {
   id: number;
+  slug: string;
   category: string;
   date: string;
   title: string;
@@ -160,7 +161,7 @@ export const heroData: HeroData = {
       alt: "hero image 3",
     },
   ],
-  intervalMs: 7500,
+  intervalMs: 3000,
   titleDesktop: "Helping Farmers Grow\nwith Confidence",
   titleMobile: "Helping Farmers Grow with Confidence",
   subtitle: "Since 1969",
@@ -348,6 +349,7 @@ export const newsData: NewsData = {
   items: [
     {
       id: 1,
+      slug: "achieving-global-gap-certification",
       category: "Climate",
       date: "SEP 12, 2024",
       title:
@@ -356,6 +358,7 @@ export const newsData: NewsData = {
     },
     {
       id: 2,
+      slug: "new-hybrid-cabbage-variety-shows-strong-performance",
       category: "Commercial Growers",
       date: "JUN 18, 2024",
       title: "Introducing High-Yield Pumpkin Variety for Commercial Growers",
@@ -363,6 +366,7 @@ export const newsData: NewsData = {
     },
     {
       id: 3,
+      slug: "strengthening-seed-research-through-global-collaboration",
       category: "",
       date: "AUG 03, 2024",
       title: "Expanding Farmer Training Programs Across Northern Regions",
@@ -370,6 +374,7 @@ export const newsData: NewsData = {
     },
     {
       id: 4,
+      slug: "from-trial-plot-to-market-success",
       category: "Climate",
       date: "SEP 12, 2024",
       title:
@@ -378,6 +383,7 @@ export const newsData: NewsData = {
     },
     {
       id: 5,
+      slug: "using-data-and-field-insights-to-improve-seed-selection",
       category: "Commercial Growers",
       date: "JUN 18, 2024",
       title: "Introducing High-Yield Pumpkin Variety for Commercial Growers",
@@ -385,6 +391,7 @@ export const newsData: NewsData = {
     },
     {
       id: 6,
+      slug: "supporting-local-farming-communities",
       category: "",
       date: "AUG 03, 2024",
       title: "Expanding Farmer Training Programs Across Northern Regions",

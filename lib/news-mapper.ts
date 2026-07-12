@@ -100,6 +100,7 @@ export function mapApiArticleToNewsArticle(a: ApiNewsArticle): NewsArticle {
 
   return {
     id: a.id,
+    slug: a.slug || a.article_slug || `article-${a.id}`,
     title: a.title,
     description: cleanedExcerpt,
     category: a.category || "General",
