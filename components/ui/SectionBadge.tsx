@@ -49,14 +49,14 @@ export function SectionBadge({
       {/* ping ring — same shape/color as the icon, just animated + behind it */}
       <span
         className={cn(
-          "animate-badge-glow absolute inline-flex h-full w-full rounded-[2px]",
+          "animate-badge-glow absolute inline-flex h-full w-full rounded-full",
           dotVariants[variant]
         )}
       />
       {/* the actual icon — static, always visible */}
       <span
         className={cn(
-          "relative inline-flex h-full w-full rounded-[2px]",
+          "relative inline-flex h-full w-full rounded-full",
           dotVariants[variant]
         )}
         style={{ height: dotSize, width: dotSize }}

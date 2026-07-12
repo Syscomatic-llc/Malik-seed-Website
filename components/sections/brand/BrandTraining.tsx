@@ -364,6 +364,34 @@ export default function BrandTraining() {
           </div>
         </div>
 
+        {/* Navigation Arrows - Figma: w-12 h-12, rounded-full bg-brand-active, arrows from /arrow.svg, 16px gap, hidden on mobile */}
+        <div
+          className="mt-[48px] hidden justify-center gap-4 sm:flex"
+          onMouseEnter={() => setScanPaused(true)}
+          onMouseLeave={() => setScanPaused(false)}
+        >
+          <button
+            onClick={scanPrev}
+            aria-label="Previous testimonial"
+            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
+          >
+            <Image
+              src="/arrow.svg"
+              alt="Previous"
+              width={24}
+              height={24}
+              className="rotate-180"
+            />
+          </button>
+          <button
+            onClick={scanNext}
+            aria-label="Next testimonial"
+            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
+          >
+            <Image src="/arrow.svg" alt="Next" width={24} height={24} />
+          </button>
+        </div>
+
         {/* Contact Call to Action Banner */}
         <div className="mx-auto mt-16 max-w-[1240px] px-4 md:mt-24 md:px-8 lg:px-[100px]">
           <div className="mx-auto flex w-full max-w-[784px] items-center justify-center rounded-[24px] bg-[#0D1A14] p-6 text-center text-[#F2F7F1] md:p-10">
