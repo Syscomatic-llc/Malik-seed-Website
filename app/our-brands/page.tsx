@@ -15,9 +15,10 @@ export default function BrandsPage() {
       <section className="w-full bg-[#0D1A14] px-4 pt-[120px] pb-16 md:pt-[160px] md:pb-24 lg:pt-[200px] lg:pb-32">
         <div className="mx-auto flex max-w-[1030px] flex-col gap-10 md:gap-12">
           {/* Hero Title */}
-          <h1 className="font-heading text-center text-[38px] leading-[46px] font-medium text-white md:text-[64px] md:leading-[77px]">
+          <h1 className="font-heading text-center text-[28px] leading-[34px] font-medium text-white md:text-[64px] md:leading-[77px]">
             Building a Connected
-            <br className="hidden md:inline" /> Agricultural Ecosystem
+            <br className="hidden md:inline" />{" "}
+            <span className="text-[#A9E179]">Agricultural Ecosystem</span>
           </h1>
 
           {/* Hero Image */}

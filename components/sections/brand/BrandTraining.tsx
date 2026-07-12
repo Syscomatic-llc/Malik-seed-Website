@@ -203,7 +203,6 @@ export default function BrandTraining() {
                 </button>
               ))}
             </div>
-
             {/* Active Tab Image Frame */}
             <div className="group relative h-[350px] w-full max-w-[1030px] overflow-hidden rounded-[20px] bg-[#112019] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:aspect-[1030/475] md:h-auto md:rounded-[24px]">
               <Image
@@ -212,18 +211,7 @@ export default function BrandTraining() {
                 fill
                 className="object-cover opacity-90 transition-all duration-1000 ease-out group-hover:scale-103"
                 priority
-              />
-
-              {/* Decorative SVG group icon at bottom-right */}
-              <div className="absolute right-6 bottom-6 h-8 w-[46px] transition-opacity duration-300 md:right-10 md:bottom-10">
-                <Image
-                  src="/images/brand/group_4.svg"
-                  alt="Decorative icon"
-                  width={46}
-                  height={32}
-                  className="opacity-75 brightness-0 invert"
-                />
-              </div>
+              />       
             </div>
           </div>
 
