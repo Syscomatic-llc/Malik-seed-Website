@@ -4,9 +4,8 @@ const INITIAL_VISIBLE = 6;
 const LOAD_MORE_STEP = 6;
 const COUNT_PARAM = "count";
 const ALL_CATEGORY = "All News";
-const LOAD_DELAY_MS = 600;
 
-import { useState, useTransition, useMemo, useCallback } from "react";
+import { useState, useEffect, useTransition, useMemo, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import {
@@ -17,6 +16,7 @@ import NewsCard from "@/components/NewsCard";
 import LoadmoreButton from "@/components/LoadmoreButton";
 import { mapApiArticleToNewsArticle } from "@/lib/news-mapper";
 import { ApiNewsPageData } from "@/lib/api/types";
+import { newsApi } from "@/lib/api";
 
 interface NewsPageProps {
   apiData?: ApiNewsPageData | null;
@@ -35,13 +35,6 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     return [ALL_CATEGORY, ...apiData.categories.map((c) => c.name)];
   }, [apiData]);
 
-  const articles = useMemo<NewsArticle[]>(() => {
-    if (!apiData?.articles || apiData.articles.length === 0) {
-      return staticNewsArticles;
-    }
-    return apiData.articles.map(mapApiArticleToNewsArticle);
-  }, [apiData]);
-
   const getInitialCount = useCallback(() => {
     const raw = Number(searchParams.get(COUNT_PARAM));
     if (!Number.isFinite(raw) || raw <= INITIAL_VISIBLE) return INITIAL_VISIBLE;
@@ -50,28 +43,97 @@ export default function NewsPage({ apiData }: NewsPageProps) {
 
   const [visibleCount, setVisibleCount] = useState(getInitialCount);
 
-  const filteredArticles = useMemo<NewsArticle[]>(
-    () =>
-      activeCategory === ALL_CATEGORY
-        ? articles
-        : articles.filter(
-            (a) => a.category?.toLowerCase() === activeCategory.toLowerCase()
-          ),
-    [activeCategory, articles]
-  );
+  const [loadedArticles, setLoadedArticles] = useState<NewsArticle[]>(() => {
+    if (apiData?.articles && apiData.articles.length > 0) {
+      return apiData.articles.map(mapApiArticleToNewsArticle);
+    }
+    return staticNewsArticles;
+  });
+
+  // Handle client-side mount loading when URL specifies a higher count
+  useEffect(() => {
+    const initialCount = getInitialCount();
+    if (initialCount > INITIAL_VISIBLE) {
+      setIsSimulatingLoad(true);
+      newsApi
+        .getArticles({
+          category: activeCategory === ALL_CATEGORY ? undefined : activeCategory,
+          limit: initialCount,
+        })
+        .then((apiArticles) => {
+          if (apiArticles && apiArticles.length > 0) {
+            setLoadedArticles(apiArticles.map(mapApiArticleToNewsArticle));
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch initial articles:", err);
+        })
+        .finally(() => {
+          setIsSimulatingLoad(false);
+        });
+    }
+  }, []);
 
   const displayedArticles = useMemo<NewsArticle[]>(
-    () => filteredArticles.slice(0, visibleCount),
-    [filteredArticles, visibleCount]
+    () => loadedArticles.slice(0, visibleCount),
+    [loadedArticles, visibleCount]
   );
 
-  const hasMore = visibleCount < filteredArticles.length;
+  const hasMore = useMemo(() => {
+    if (loadedArticles.length < visibleCount) {
+      return false;
+    }
+    const isUsingStatic = !apiData?.articles || apiData.articles.length === 0;
+    if (isUsingStatic) {
+      const totalFilteredStatic = staticNewsArticles.filter(
+        (a) =>
+          activeCategory === ALL_CATEGORY ||
+          a.category?.toLowerCase() === activeCategory.toLowerCase()
+      ).length;
+      return visibleCount < totalFilteredStatic;
+    }
+    return loadedArticles.length === visibleCount;
+  }, [loadedArticles, visibleCount, activeCategory, apiData]);
+
   const isLoading = isPending || isSimulatingLoad;
 
   const handleCategoryChange = (category: string) => {
     startTransition(() => {
       setActiveCategory(category);
-      setVisibleCount(INITIAL_VISIBLE);
+      const fetchLimit = INITIAL_VISIBLE;
+      setIsSimulatingLoad(true);
+
+      newsApi
+        .getArticles({
+          category: category === ALL_CATEGORY ? undefined : category,
+          limit: fetchLimit,
+        })
+        .then((apiArticles) => {
+          if (apiArticles && apiArticles.length > 0) {
+            setLoadedArticles(apiArticles.map(mapApiArticleToNewsArticle));
+          } else {
+            const fallback = staticNewsArticles.filter(
+              (a) =>
+                category === ALL_CATEGORY ||
+                a.category?.toLowerCase() === category.toLowerCase()
+            );
+            setLoadedArticles(fallback);
+          }
+          setVisibleCount(fetchLimit);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch articles by category:", err);
+          const fallback = staticNewsArticles.filter(
+            (a) =>
+              category === ALL_CATEGORY ||
+              a.category?.toLowerCase() === category.toLowerCase()
+          );
+          setLoadedArticles(fallback);
+          setVisibleCount(fetchLimit);
+        })
+        .finally(() => {
+          setIsSimulatingLoad(false);
+        });
 
       const params = new URLSearchParams(searchParams.toString());
       params.delete(COUNT_PARAM);
@@ -84,18 +146,30 @@ export default function NewsPage({ apiData }: NewsPageProps) {
 
   const handleLoadMore = () => {
     setIsSimulatingLoad(true);
-    setTimeout(() => {
-      const next = Math.min(
-        visibleCount + LOAD_MORE_STEP,
-        filteredArticles.length
-      );
-      setVisibleCount(next);
-      setIsSimulatingLoad(false);
+    const nextLimit = visibleCount + LOAD_MORE_STEP;
 
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(COUNT_PARAM, String(next));
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-    }, LOAD_DELAY_MS);
+    newsApi
+      .getArticles({
+        category: activeCategory === ALL_CATEGORY ? undefined : activeCategory,
+        limit: nextLimit,
+      })
+      .then((apiArticles) => {
+        if (apiArticles && apiArticles.length > 0) {
+          setLoadedArticles(apiArticles.map(mapApiArticleToNewsArticle));
+        }
+        setVisibleCount(nextLimit);
+      })
+      .catch((err) => {
+        console.error("Failed to load more articles:", err);
+        setVisibleCount(nextLimit);
+      })
+      .finally(() => {
+        setIsSimulatingLoad(false);
+      });
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(COUNT_PARAM, String(nextLimit));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   return (

@@ -45,7 +45,6 @@ export default function ContactHeroSection({
 }: {
   apiData: ApiContactPageData | null;
 }) {
-  const hqLocation = apiData?.locations?.find((loc) => loc.is_headquarters);
   const info = apiData?.info;
 
   // Unique accessible IDs
@@ -206,7 +205,6 @@ export default function ContactHeroSection({
         }));
       });
   };
-
   return (
     <section className="bg-brand-dark relative min-h-fit w-full pt-[120px] pb-16 text-white md:pt-[180px] md:pb-[100px]">
       <div className="mx-auto w-full max-w-[1240px] px-4 xl:px-0">
@@ -230,7 +228,7 @@ export default function ContactHeroSection({
               <div className="relative flex w-full flex-col items-start gap-4 lg:gap-6">
                 {/* Office Type Label — Figma: 18px (desktop) / 14px (mobile) */}
                 <div className="text-card-label text-brand-dark font-medium tracking-tight uppercase opacity-90">
-                  {hqLocation?.name || OFFICE_DETAILS.officeLabel}
+                  {OFFICE_DETAILS.officeLabel}
                 </div>
 
                 <div className="relative flex w-full flex-col items-start gap-6 lg:gap-8">
@@ -242,7 +240,7 @@ export default function ContactHeroSection({
                     </div>
                     {/* Address Text — Figma: 16px */}
                     <p className="text-brand-dark text-[16px] leading-[1.25] font-normal opacity-90">
-                      {hqLocation?.address || info?.address || OFFICE_DETAILS.address}
+                      {info?.address || OFFICE_DETAILS.address}
                     </p>
                   </div>
 
@@ -258,14 +256,14 @@ export default function ContactHeroSection({
                         className="shrink-0"
                       />
                       <a
-                        href={`tel:${hqLocation?.phone || info?.phone_primary || OFFICE_DETAILS.phone.href.replace("tel:", "")}`}
+                        href={`tel:${info?.phone_primary || OFFICE_DETAILS.phone.href.replace("tel:", "")}`}
                         className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none"
                       >
                         <span className="opacity-80">
                           {OFFICE_DETAILS.phone.label}
                         </span>
                         <span className="font-medium">
-                          {hqLocation?.phone || info?.phone_primary || OFFICE_DETAILS.phone.value}
+                          {info?.phone_primary || OFFICE_DETAILS.phone.value}
                         </span>
                       </a>
                     </div>
@@ -280,14 +278,14 @@ export default function ContactHeroSection({
                         className="shrink-0"
                       />
                       <a
-                        href={`mailto:${hqLocation?.email || info?.email_primary || OFFICE_DETAILS.email.href.replace("mailto:", "")}`}
+                        href={`mailto:${info?.email_primary || OFFICE_DETAILS.email.href.replace("mailto:", "")}`}
                         className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none"
                       >
                         <span className="opacity-80">
                           {OFFICE_DETAILS.email.label}
                         </span>
                         <span className="font-medium">
-                          {hqLocation?.email || info?.email_primary || OFFICE_DETAILS.email.value}
+                          {info?.email_primary || OFFICE_DETAILS.email.value}
                         </span>
                       </a>
                     </div>

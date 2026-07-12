@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, TransitionEvent } from "react";
 import Image from "@/components/ui/OptimizedImage";
 import NextImage from "next/image";
 import { cn } from "@/lib/utils";
@@ -67,22 +67,27 @@ function TestimonialCard({
     <div
       onClick={onClick}
       className={cn(
-        "group relative shrink-0 cursor-pointer overflow-hidden shadow-md transition-all duration-500 ease-out",
+        "group relative shrink-0 cursor-pointer overflow-hidden shadow-md",
         isMobile ? "rounded-[20px]" : "rounded-[32px] hover:shadow-lg",
         widthClass,
         heightClass,
-        isResetting ? "transition-none" : ""
+        isResetting
+          ? "transition-none"
+          : "transition-[box-shadow] duration-500 ease-out"
       )}
     >
       {/* Zoom scale binds automatically to active state */}
       <div
         className={cn(
-          "absolute inset-0 transition-transform duration-500 ease-out",
+          "absolute inset-0",
+          isResetting
+            ? "transition-none"
+            : "transition-transform duration-500 ease-out",
           isActive ? "scale-105" : "scale-100"
         )}
       >
         <Image
-          src={testimonial.images[0]}
+          src={testimonial.image}
           alt={testimonial.name}
           fill
           className="object-cover object-center"
@@ -149,7 +154,7 @@ function buildTestimonials(apiData?: ApiTestimonial[]): TestimonialItem[] {
       ? `${t.designation}, ${t.company}`
       : t.designation || "Farmer",
     quote: t.content,
-    images: [resolveImageUrl(t.avatar_url)],
+    image: resolveImageUrl(t.avatar_url),
   }));
 }
 
@@ -212,7 +217,8 @@ export default function TestimonialsSection({
   }, [touchStart, touchEnd, next, prev]);
 
   // Infinite wrap reset
-  const handleTransitionEnd = useCallback(() => {
+  const handleTransitionEnd = useCallback((e: TransitionEvent) => {
+    if (e.target !== e.currentTarget) return;
     if (activeIndex >= LOOP_RESET_LIMIT) {
       setIsResetting(true);
       setActiveIndex(activeIndex - TESTIMONIALS_COUNT);
@@ -220,7 +226,7 @@ export default function TestimonialsSection({
       setIsResetting(true);
       setActiveIndex(activeIndex + TESTIMONIALS_COUNT);
     }
-  }, [activeIndex]);
+  }, [activeIndex, LOOP_RESET_LIMIT, LOOP_SET_START, TESTIMONIALS_COUNT]);
 
   useEffect(() => {
     if (isResetting) {

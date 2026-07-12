@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "@/components/ui/OptimizedImage";
+import NextImage from "next/image";
 
 // ---------------------------------------------------------------------------
 // Types — exported so the page can reuse them without duplicating declarations
@@ -9,6 +10,7 @@ import Image from "@/components/ui/OptimizedImage";
 export interface HeadingItem {
   text: string;
   id: string;
+  level: number;
 }
 
 export interface Author {
@@ -100,7 +102,7 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
       {/* TOC header */}
       <div className="flex flex-col gap-4 px-6 lg:gap-5">
         <div className="flex items-center gap-2">
-          <Image
+          <NextImage
             src="/images/news/menu-02.svg"
             alt=""
             aria-hidden="true"
@@ -122,14 +124,19 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
           <div className="absolute top-1 bottom-1 w-[2px] rounded-full bg-[#0B3124]/10" />
 
           <div className="flex min-w-0 flex-1 flex-col gap-2 pl-6 break-words lg:gap-4">
-            {headings.map(({ id, text }) => {
+            {headings.map(({ id, text, level }) => {
               const isActive = activeId === id;
+              const isH3 = level === 3;
               return (
                 <a
                   key={id}
                   href={`#${id}`}
                   onClick={(e) => handleClick(e, id)}
-                  className={`font-heading hover:text-brand-active relative block text-sm leading-[21px] break-words transition-colors duration-200 lg:text-base lg:leading-6 ${
+                  className={`font-heading hover:text-brand-active relative block break-words transition-colors duration-200 ${
+                    isH3
+                      ? "pl-4 text-xs leading-[18px] lg:text-sm lg:leading-[21px]"
+                      : "text-sm leading-[21px] lg:text-base lg:leading-6"
+                  } ${
                     isActive
                       ? "font-medium text-[#0D1A14]"
                       : "text-[#0D1A14]/70"
@@ -137,7 +144,11 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
                 >
                   {/* Active indicator pill, positioned exactly over the vertical guide line track */}
                   {isActive && (
-                    <span className="bg-brand-accent absolute top-[2px] bottom-[2px] -left-[23px] w-[2px] rounded-[2px]" />
+                    <span
+                      className={`bg-brand-accent absolute top-[2px] bottom-[2px] w-[2px] rounded-[2px] ${
+                        isH3 ? "-left-[7px]" : "-left-[23px]"
+                      }`}
+                    />
                   )}
                   {text}
                 </a>

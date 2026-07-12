@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { footerData, FooterLink, SocialLink } from "@/data/sections-data";
-import { contactApi } from "@/lib/api";
+import { contactApi, homepageApi } from "@/lib/api";
 
 // Common Typography Classes for Scalability
 const TYPOGRAPHY = {
@@ -67,6 +67,22 @@ export default async function Footer() {
   } catch (err) {
     console.error("Failed to fetch contact details for footer:", err);
   }
+
+  let brands: FooterLink[] = [];
+  try {
+    const services = await homepageApi.getServices({ revalidate: 60 });
+    if (services && services.length > 0) {
+      brands = services.map((s) => ({
+        label: s.title,
+        href: s.link,
+      }));
+    }
+  } catch (err) {
+    console.error("Failed to fetch services/brands for footer:", err);
+  }
+
+  // Fallback to static brands data if API fetch fails or is empty
+  const displayBrands = brands.length > 0 ? brands : footerData.links.brands;
 
   // Dynamically map social icons based on API data
   const socials: SocialLink[] = [];
@@ -136,7 +152,7 @@ export default async function Footer() {
             </Link>
 
             <p className="font-inter text-brand-light-green/70 mt-4 text-[16px] leading-6 font-normal md:mt-6 md:text-[18px] md:leading-6.75">
-              {footerData.mission}
+              {contactInfo?.description || footerData.mission}
             </p>
 
             <div className="mt-8 flex flex-col gap-4 lg:mt-16.75">
@@ -161,7 +177,7 @@ export default async function Footer() {
               />
               <FooterLinkColumn
                 title="Our Brands"
-                links={footerData.links.brands}
+                links={displayBrands}
               />
             </div>
 

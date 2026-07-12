@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { newsArticles, type NewsArticle } from "@/data/news-data";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import ShareButton from "@/components/ShareButton";
+import ShareBar from "@/components/ShareBar";
 import NewsTOC from "@/components/NewsTOC";
 import NewsCard from "@/components/NewsCard";
 import { SectionBadge } from "@/components/ui/SectionBadge";
@@ -39,7 +40,7 @@ const ASSETS = {
 // ---------------------------------------------------------------------------
 // Heading regex — compiled once at module load, not on every render/request
 // ---------------------------------------------------------------------------
-const H3_REGEX = /<h3>(.*?)<\/h3>/g;
+const HEADING_REGEX = /<(h2|h3)(\s+[^>]*?)?>([\s\S]*?)<\/\1>/gi;
 const TAG_REGEX = /<[^>]*>/g;
 const SLUG_STRIP_REGEX = /[^a-z0-9]+/g;
 const SLUG_TRIM_REGEX = /(^-|-$)/g;
@@ -60,16 +61,16 @@ function findArticle(slug: string): NewsArticle | undefined {
  * The heading regex is a module-level constant so it is never re-compiled.
  */
 function parseHeadings(html: string): {
-  headings: { text: string; id: string }[];
+  headings: { text: string; id: string; level: number }[];
   parsedHtml: string;
 } {
-  const headings: { text: string; id: string }[] = [];
+  const headings: { text: string; id: string; level: number }[] = [];
   let counter = 0;
 
   // Reset lastIndex because we reuse the module-level regex with the `g` flag
-  H3_REGEX.lastIndex = 0;
+  HEADING_REGEX.lastIndex = 0;
 
-  const parsedHtml = html.replace(H3_REGEX, (_, innerHtml: string) => {
+  const parsedHtml = html.replace(HEADING_REGEX, (match, tag, attrs, innerHtml: string) => {
     const cleanText = innerHtml
       .replace(/&nbsp;/g, " ")
       .replace(/\u00a0/g, " ")
@@ -79,8 +80,22 @@ function parseHeadings(html: string): {
       .toLowerCase()
       .replace(SLUG_STRIP_REGEX, "-")
       .replace(SLUG_TRIM_REGEX, "")}-${counter++}`;
-    headings.push({ text: cleanText, id });
-    return `<h3 id="${id}" class="scroll-mt-[120px]">${innerHtml}</h3>`;
+    const level = tag.toLowerCase() === "h2" ? 2 : 3;
+    headings.push({ text: cleanText, id, level });
+
+    // Handle attributes (like class="ql-align-justify") gracefully
+    const attributes = attrs || "";
+    let headingAttrs = attributes;
+    const classRegex = /class=(['"])(.*?)\1/i;
+    if (classRegex.test(headingAttrs)) {
+      headingAttrs = headingAttrs.replace(classRegex, (_: string, quote: string, classVal: string) => {
+        return `class=${quote}scroll-mt-[120px] ${classVal}${quote}`;
+      });
+    } else {
+      headingAttrs += ' class="scroll-mt-[120px]"';
+    }
+
+    return `<${tag} id="${id}"${headingAttrs}>${innerHtml}</${tag}>`;
   });
 
   return { headings, parsedHtml };
@@ -233,14 +248,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               {/* Share bar */}
               <div className="flex items-center gap-4">
                 <ShareButton />
-                <div className="relative h-10 w-[184px]">
-                  <Image
-                    src={ASSETS.shareIcons}
-                    alt="Share options"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+                <ShareBar title={article.title} />
               </div>
             </div>
           </div>

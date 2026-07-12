@@ -77,7 +77,7 @@ export interface TestimonialItem {
   name: string;
   location: string;
   quote: string;
-  images: string[];
+  image: string;
 }
 
 export interface TestimonialsData {
@@ -302,7 +302,7 @@ export const testimonialsData: TestimonialsData = {
       location: "Maitka, Hemayetpur, Savar",
       quote:
         "After losing his father in 2003, he carried my family through farming and Malik Seeds has been with him all the way. Green Crown variety has a special place in his broccoli project.",
-      images: ["/images/testimonials/ovi.png"],
+      image: "/images/testimonials/ovi.png",
     },
     {
       id: 2,
@@ -310,7 +310,7 @@ export const testimonialsData: TestimonialsData = {
       location: "Nabagram, Baldhara, Singair",
       quote:
         "22 years abroad, then back to the soil. He learned about companion cropping from our FB page and now farms multiple varieties successfully.",
-      images: ["/images/testimonials/rafiq-alt.png"],
+      image: "/images/testimonials/rafiq-alt.png",
     },
     {
       id: 3,
@@ -318,7 +318,7 @@ export const testimonialsData: TestimonialsData = {
       location: "Nabagram, Baldhara, Singair",
       quote:
         "22 years abroad, then back to the soil. He learned about companion cropping from our FB page and now farms multiple varieties successfully.",
-      images: ["/images/testimonials/rafiq.png"],
+      image: "/images/testimonials/rafiq.png",
     },
     {
       id: 4,
@@ -326,7 +326,7 @@ export const testimonialsData: TestimonialsData = {
       location: "Brahmankanda",
       quote:
         "Became talk of the town after harvesting PurpleBeauty in only 60 days, and within 120 days, total production reached 4.5 tons.",
-      images: ["/images/testimonials/jangir.png"],
+      image: "/images/testimonials/jangir.png",
     },
     {
       id: 5,
@@ -334,10 +334,7 @@ export const testimonialsData: TestimonialsData = {
       location: "Sakrail, Garpara, Sadar, Manikganj",
       quote:
         "Ex-electrician turned farmer. In 2021, I bet 1.3 lakh on Malik Seeds' Ice Green cucumber and walked away with 3.0 lakh revenue.",
-      images: [
-        "/images/testimonials/saiful-1.png",
-        "/images/testimonials/saiful-2.png",
-      ],
+      image: "/images/testimonials/saiful-1.png",
     },
   ],
 };
@@ -428,7 +425,7 @@ export const footerData: FooterData = {
     ],
     brands: [
       { label: "Vegetable Seeds", href: "/our-brands/vegetable-seeds" },
-      { label: "Potato Seeds", href: "/our-brands/potato-seed" },
+      { label: "Potato Seeds", href: "/our-brands/potato-seeds" },
       { label: "Malik's Farm", href: "/our-brands/maliks-farm" },
       { label: "Origene by Malik", href: "/our-brands/origene" },
       { label: "Malik's Flower", href: "/our-brands/maliks-flower" },

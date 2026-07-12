@@ -6,6 +6,7 @@ import Link from "next/link";
 import { maliksFarmData } from "@/data/brands/maliks-farm";
 import { cn } from "@/lib/utils";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { ApiContactInfo } from "@/lib/api";
 
 // Scans carousel sizing constants
 const SCAN_CARD_WIDTH_DESKTOP = 398;
@@ -72,7 +73,11 @@ function FacilityCard({
   );
 }
 
-export default function BrandTraining() {
+export default function BrandTraining({
+  contactInfo,
+}: {
+  contactInfo?: ApiContactInfo | null;
+}) {
   const [activeTab, setActiveTab] = useState("global-gap");
   const facilities = maliksFarmData.training.facilities;
 
@@ -126,17 +131,31 @@ export default function BrandTraining() {
     }
   }, [scanIndex, scanLoopLimit, scanLoopStart, scansCount]);
 
+  // Instant, invisible snap-back to the real (middle) set once the
+  // "transition: none" jump has actually been painted. A setTimeout
+  // guess can lose the race on slower devices/tabs and cause a
+  // visible rewind — double rAF guarantees the jump is committed
+  // before the transition is re-enabled.
   useEffect(() => {
     if (scanResetting) {
-      const t = setTimeout(() => setScanResetting(false), 30);
-      return () => clearTimeout(t);
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setScanResetting(false));
+      });
+      return () => {
+        cancelAnimationFrame(raf1);
+        if (raf2) cancelAnimationFrame(raf2);
+      };
     }
   }, [scanResetting]);
 
-  // Auto-advance scans every 3 s (paused on hover)
+  // Auto-advance scans every 3s, paused on hover and while resetting
+  // (scanNext already no-ops during scanResetting).
   useEffect(() => {
     if (scanPaused) return;
-    const interval = setInterval(() => scanNext(), 3000);
+    const interval = setInterval(() => {
+      scanNext();
+    }, 3000);
     return () => clearInterval(interval);
   }, [scanNext, scanPaused]);
 
@@ -211,7 +230,7 @@ export default function BrandTraining() {
                 fill
                 className="object-cover opacity-90 transition-all duration-1000 ease-out group-hover:scale-103"
                 priority
-              />       
+              />
             </div>
           </div>
 
@@ -300,6 +319,7 @@ export default function BrandTraining() {
                         fill
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                         sizes="398px"
+                        priority={idx === scanLoopStart}
                       />
                     </div>
                   </div>
@@ -355,6 +375,7 @@ export default function BrandTraining() {
                         fill
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                         sizes="280px"
+                        priority={idx === scanLoopStart}
                       />
                     </div>
                   </div>
@@ -399,14 +420,14 @@ export default function BrandTraining() {
               If you are interested in hosting a program at our facility or
               purchasing GAP certified fruits and vegetables, contact us at{" "}
               <Link
-                href={`mailto:${maliksFarmData.contact.email}`}
+                href={`mailto:${contactInfo?.email_primary || maliksFarmData.contact.email}`}
                 className="font-semibold text-[#A9E179] transition-all hover:underline"
               >
-                {maliksFarmData.contact.email}
+                {contactInfo?.email_primary || maliksFarmData.contact.email}
               </Link>{" "}
               or hotline at{" "}
               <span className="font-semibold text-[#A9E179]">
-                {maliksFarmData.contact.hotline}
+                {contactInfo?.phone_primary || maliksFarmData.contact.hotline}
               </span>
             </p>
           </div>

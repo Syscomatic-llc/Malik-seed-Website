@@ -3,6 +3,7 @@ import { Inter_Tight, Inter, Anton } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
+import { homepageApi } from "@/lib/api";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -56,11 +57,26 @@ export const metadata: Metadata = {
     shortcut: "/favicons/favicon.ico",
   },
 };
-export default function RootLayout({
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let brands: { name: string; description: string; href: string }[] = [];
+  try {
+    const data = await homepageApi.getServices({ revalidate: 60 });
+    if (data && data.length > 0) {
+      brands = data.map((s) => ({
+        name: s.title,
+        description: s.description,
+        href: s.link,
+      }));
+    }
+  } catch (err) {
+    console.error("Failed to fetch navbar brands on server:", err);
+  }
+
   return (
     <html
       lang="en"
@@ -68,7 +84,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <Navbar />
+        <Navbar brands={brands} />
         <main className="relative flex-grow">{children}</main>
         <Footer />
       </body>

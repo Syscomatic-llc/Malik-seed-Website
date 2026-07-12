@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import BrandHero from "@/components/sections/brand/BrandHero";
 import BrandIntro from "@/components/sections/brand/BrandIntro";
@@ -8,9 +8,22 @@ import BrandCropPortfolio from "@/components/sections/brand/BrandCropPortfolio";
 import BrandTraining from "@/components/sections/brand/BrandTraining";
 import { maliksFarmData } from "@/data/brands/maliks-farm";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { contactApi, ApiContactInfo } from "@/lib/api";
 
 export default function MaliksFarmPage() {
   const bottomImagesContainerRef = useRef<HTMLDivElement>(null);
+  const [contactInfo, setContactInfo] = useState<ApiContactInfo | null>(null);
+
+  useEffect(() => {
+    contactApi
+      .getContact()
+      .then((data) => {
+        if (data?.info) setContactInfo(data.info);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch contact info for Maliks Farm page:", err);
+      });
+  }, []);
 
   useEffect(() => {
     const container = bottomImagesContainerRef.current;
@@ -224,7 +237,7 @@ export default function MaliksFarmPage() {
       </section>
 
       {/* 6. Training Centre, Facilities & Visitor Testimonial Scans */}
-      <BrandTraining />
+      <BrandTraining contactInfo={contactInfo} />
     </div>
   );
 }

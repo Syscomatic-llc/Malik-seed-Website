@@ -478,12 +478,20 @@ function MobileNav({
   );
 }
 
-export default function Navbar() {
+interface NavbarProps {
+  brands?: { name: string; description: string; href: string }[];
+}
+
+export default function Navbar({ brands: initialBrands = [] }: NavbarProps) {
   const [brands, setBrands] = useState<
     { name: string; description: string; href: string }[]
-  >([]);
+  >(initialBrands);
 
   useEffect(() => {
+    if (initialBrands && initialBrands.length > 0) {
+      setBrands(initialBrands);
+      return;
+    }
     let active = true;
     homepageApi
       .getServices()
@@ -504,7 +512,7 @@ export default function Navbar() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialBrands]);
 
   return (
     <header className="absolute top-6 z-50 w-full px-4 lg:px-[100px]">
