@@ -147,14 +147,6 @@ export default memo(function Footer() {
             priority
           />
         </div>
-
-        {/* Legal & Copyright */}
-        <div className="mt-8 flex flex-col gap-8 lg:mt-16 lg:gap-10">
-          <div className="h-px w-full bg-white/10" aria-hidden="true" />
-          <p className="font-inter-tight text-brand-light-green/50 text-center text-[14px] leading-4.25 font-normal">
-            {footerData.contact.copyright}
-          </p>
-        </div>
       </div>
     </footer>
   );

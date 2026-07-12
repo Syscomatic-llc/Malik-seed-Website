@@ -32,7 +32,7 @@ export default function AboutMissionTwo() {
               alt="Malik's Farm modern agriculture fields and seed trials"
               fill
               sizes="(max-width: 768px) 100vw, 1128px"
-              className="object-cover transition-transform duration-700 hover:scale-[1.02]"
+              className="object-cover object-top transition-transform duration-700 hover:scale-[1.02]"
             />
           </div>
         </div>

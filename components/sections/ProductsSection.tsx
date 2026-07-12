@@ -160,7 +160,7 @@ export default function ProductsSection({
             </div>
           ) : (
             /* HORIZONTAL: snap-scrollable row of 280×350 cards */
-            <div className="flex snap-x snap-mandatory scrollbar-none flex-row gap-4 overflow-x-auto scroll-smooth px-4 py-10 pb-4">
+            <div className="flex snap-x snap-mandatory scrollbar-none flex-row gap-4 overflow-x-auto scroll-smooth px-4 py-6 pb-10">
               {products.map((product) => (
                 <Link
                   key={product.id}

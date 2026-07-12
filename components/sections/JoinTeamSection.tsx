@@ -6,7 +6,6 @@ import { joinTeamData as staticJoinTeamData } from "@/data/sections-data";
 import { homepageApi } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
-
 export default async function JoinTeamSection() {
   let apiData = null;
   try {
@@ -36,7 +35,7 @@ export default async function JoinTeamSection() {
     <section className="w-full bg-[#F2F7F1] py-10 md:py-[100px]" id="careers">
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
         {/* White card — Figma: 1240x490, bg #FFFFFF, radius 32px (Frame 2147229509) */}
-        <div className="relative flex w-full flex-col items-center justify-between overflow-hidden rounded-[24px] bg-white lg:h-[490px] lg:flex-row lg:rounded-[32px]">
+        <div className="group relative flex w-full flex-col items-center justify-between overflow-hidden rounded-[24px] bg-white lg:h-[490px] lg:flex-row lg:rounded-[32px]">
           {/* Left content — Figma: 403x301, left:60px, top:95px (Frame 2147229510) */}
           <div className="flex w-full shrink-0 flex-col items-start justify-between gap-[16px] px-6 py-10 lg:ml-[60px] lg:h-[301px] lg:w-[403px] lg:px-0 lg:py-0 xl:absolute xl:top-[95px] xl:left-[60px] xl:ml-0">
             {/* Badge — Figma: "Join our Team" (Frame 2147229487) */}
@@ -85,7 +84,7 @@ export default async function JoinTeamSection() {
                 fill
                 sizes="726px"
                 quality={50}
-                className="object-cover"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
             </div>
           </div>
@@ -98,7 +97,7 @@ export default async function JoinTeamSection() {
               fill
               sizes="100vw"
               quality={50}
-              className="object-cover"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
           </div>
         </div>

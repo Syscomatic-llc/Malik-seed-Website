@@ -23,14 +23,20 @@ const GLOWS = [
 function buildTimelineItems(apiData?: ApiTimelineItem[]): TimelineItem[] | undefined {
   if (!apiData || apiData.length === 0) return undefined;
 
-  return apiData.map((item, index) => ({
-    year: item.year,
-    title: item.title,
-    description: item.description,
-    image: resolveImageUrl(item.image_url),
-    glow: GLOWS[index % GLOWS.length],
-    side: (index % 2 === 0 ? "right" : "left") as "left" | "right",
-  }));
+  return apiData.map((item, index) => {
+    const glow = item.gallery_images && item.gallery_images[0]
+      ? resolveImageUrl(item.gallery_images[0])
+      : GLOWS[index % GLOWS.length];
+
+    return {
+      year: item.year,
+      title: item.title,
+      description: item.description,
+      image: resolveImageUrl(item.image_url),
+      glow,
+      side: (index % 2 === 0 ? "right" : "left") as "left" | "right",
+    };
+  });
 }
 
 export default function TimelineSection({

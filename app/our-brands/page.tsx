@@ -43,7 +43,7 @@ export default function BrandsPage() {
           </h2>
 
           {/* Brands Grid */}
-          <ProductsSection direction="vertical" />
+          <ProductsSection/>
         </div>
       </section>
 

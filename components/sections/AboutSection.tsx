@@ -177,7 +177,7 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
           {/* Right — Frame 37: 503x582, left:737px, col, gap 16 */}
           <div className="flex w-[320px] shrink-0 flex-col gap-[16px] sm:w-[400px] lg:w-[440px] xl:w-[503px]">
             {/* Frame 32 — 503x340, bg-[#F9FAFB], radius 24px */}
-            <div className="bg-brand-neutral-light relative aspect-[503/340] w-full overflow-hidden rounded-[16px] xl:rounded-[24px]">
+            <div className="bg-brand-neutral-light group relative aspect-[503/340] w-full overflow-hidden rounded-[16px] xl:rounded-[24px]">
               <Image
                 src={aboutData.images.teamBanner}
                 alt="Malik Seeds Team"
@@ -185,32 +185,32 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
                 sizes="(max-width: 768px) 358px, (max-width: 1200px) 440px, 503px"
                 quality={50}
                 priority
-                className="object-cover"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
             </div>
 
             {/* Frame 35 — 503x226, gap 16 */}
             <div className="flex w-full flex-row gap-[16px]">
               {/* Frame 33 — 243x226 */}
-              <div className="relative aspect-[243/226] flex-1 overflow-hidden rounded-[16px] xl:rounded-[24px]">
+              <div className="group relative aspect-[243/226] flex-1 overflow-hidden rounded-[16px] xl:rounded-[24px]">
                 <Image
                   src={aboutData.images.about1}
                   alt="Years of Experience"
                   fill
                   sizes="(max-width: 1200px) 200px, 243px"
                   quality={50}
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
               {/* Frame 34 — 243x226 */}
-              <div className="relative aspect-[243/226] flex-1 overflow-hidden rounded-[16px] xl:rounded-[24px]">
+              <div className="group relative aspect-[243/226] flex-1 overflow-hidden rounded-[16px] xl:rounded-[24px]">
                 <Image
                   src={aboutData.images.about2}
                   alt="Farmer Partners"
                   fill
                   sizes="(max-width: 1200px) 200px, 243px"
                   quality={50}
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
             </div>

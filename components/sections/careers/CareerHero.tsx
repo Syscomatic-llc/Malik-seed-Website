@@ -57,7 +57,7 @@ const TypewriterText = memo(function TypewriterText({
   }, [subIndex, index, words]);
 
   return (
-    <span className="text-brand-light-green relative inline-block min-h-[46px] pr-[4px] md:min-h-[58px] lg:min-h-[62px] xl:min-h-[77px]">
+    <span className="text-brand-light-green relative inline-block min-h-[36px] pr-[4px] md:min-h-[58px] lg:min-h-[62px] xl:min-h-[77px]">
       {text}
       <span className="bg-brand-light-green animate-cursor-blink ml-1 inline-block h-[0.8em] w-[3px] align-middle" />
     </span>
@@ -106,7 +106,7 @@ export default memo(function CareerHero({
             </SectionBadge>
 
             {/* 3-line headline — responsively scaling font-size */}
-            <h1 className="font-inter-tight text-center text-[38px] leading-[46px] font-medium tracking-tight text-white/70 md:text-[48px] md:leading-[58px] lg:text-left lg:text-[52px] lg:leading-[62px] xl:text-[64px] xl:leading-[77px]">
+            <h1 className="font-inter-tight text-center text-[28px] leading-[36px] font-medium tracking-tight text-white/70 md:text-[48px] md:leading-[58px] lg:text-left lg:text-[52px] lg:leading-[62px] xl:text-[64px] xl:leading-[77px]">
               {data.titleLine1}
               <br />
               <TypewriterText words={data.titleLine2 || []} />

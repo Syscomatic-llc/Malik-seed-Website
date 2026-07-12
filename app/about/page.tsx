@@ -30,7 +30,6 @@ export default async function AboutPage() {
       <AboutValues />
       <TimelineStory items={timelineItems} apiData={apiTimeline} />
       <AboutMissionTwo />
-      {/* Suspense required: GalleryHeroSection uses useSearchParams() internally */}
       <Suspense fallback={null}>
         <GalleryHeroSection isHero={false} />
       </Suspense>

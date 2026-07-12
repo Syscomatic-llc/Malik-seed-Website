@@ -99,13 +99,13 @@ export default function BrandFlowerPortfolio() {
         {/* Tab Content Display */}
         <div className="mt-4 flex items-center justify-center">
           <div className="w-full shrink-0 lg:w-[790px]">
-            <div className="relative h-[360px] w-full overflow-hidden rounded-[20px] border border-white/10 bg-neutral-900 lg:h-[475px] lg:rounded-[24px]">
+            <div className="group relative h-[360px] w-full overflow-hidden rounded-[20px] border border-white/10 bg-neutral-900 lg:h-[475px] lg:rounded-[24px]">
               <Image
                 src={currentSegment.image}
                 alt={currentSegment.name}
                 fill
                 priority
-                className="object-cover transition-all duration-700 ease-out"
+                className="object-cover transition-all duration-700 ease-out group-hover:scale-105"
                 sizes="(max-width: 1024px) 100vw, 790px"
               />
             </div>

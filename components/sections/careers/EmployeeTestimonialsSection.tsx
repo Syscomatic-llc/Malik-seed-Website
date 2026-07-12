@@ -44,7 +44,7 @@ const TestimonialCard = memo(function TestimonialCard({
   return (
     <article
       className={cn(
-        "flex flex-shrink-0 flex-col gap-6 rounded-[20px] border border-[#F2F4F7] bg-white p-6 transition-all duration-300",
+        "group flex flex-shrink-0 flex-col gap-6 rounded-[20px] border border-[#F2F4F7] bg-white p-6 transition-all duration-300",
         "h-[451px] w-[310px]", // Mobile size
         "lg:h-[335px] lg:w-[608px] lg:flex-row lg:gap-8 lg:rounded-[28px]", // Desktop size
         isActive ? "shadow-md" : "opacity-90"
@@ -59,7 +59,7 @@ const TestimonialCard = memo(function TestimonialCard({
             alt={testimonial.name}
             fill
             sizes="(min-width: 1024px) 180px, 80px"
-            className="object-cover object-center"
+            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
           />
         ) : (
           <AvatarInitials name={testimonial.name} />

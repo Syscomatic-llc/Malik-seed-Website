@@ -6,6 +6,8 @@ import { useMemo, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { TimelineItem } from "@/data/sections-data";
 import { SectionBadge } from "./ui/SectionBadge";
+import { cn, resolveImageUrl } from "@/lib/utils";
+import { ApiTimelineItem } from "@/lib/api";
 
 /* ────────────────── sub‑components ────────────────── */
 
@@ -274,19 +276,68 @@ function TimelineSpine({
 /** Image panel — 503 × 372, rounded‑[32px], overflow hidden */
 function ImagePanel({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="relative aspect-[503/372] w-full max-w-[503px] shrink-0 overflow-hidden rounded-[32px] bg-[#E4E7EC]">
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover"
-        sizes="(max-width: 1280px) 45vw, 503px"
-      />
+    <div className="group relative aspect-[503/372] w-full max-w-[503px] shrink-0 overflow-hidden rounded-[32px] bg-[#E4E7EC]">
+      {src && (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          sizes="(max-width: 1280px) 45vw, 503px"
+        />
+      )}
     </div>
   );
 }
 
-/** Content card — title + description, with glow overlay */
+/**
+ * A shared glow overlay component that displays a blurred, screen-blended
+ * image behind the card text. It uses CSS mask composites to fade the image
+ * inward from all four borders, creating a curved rectangular fade that respects
+ * the container's border-radius.
+ */
+function GlowOverlay({
+  src,
+  className,
+  style,
+}: {
+  src?: string;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  if (!src) return null;
+
+  return (
+    <div
+      className={cn(
+        "pointer-events-none absolute z-0 overflow-hidden [transform:translate3d(0,0,0)]",
+        className
+      )}
+      style={{
+        maskImage:
+          "linear-gradient(to bottom, transparent, black 24px, black calc(100% - 24px), transparent), linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
+        WebkitMaskImage:
+          "linear-gradient(to bottom, transparent, black 24px, black calc(100% - 24px), transparent), linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
+        maskComposite: "intersect",
+        WebkitMaskComposite: "source-in",
+        ...style,
+      }}
+      aria-hidden="true"
+    >
+      <div className="absolute inset-0 scale-110 blur-[8px] [transform:translate3d(0,0,0)]">
+        <Image
+          src={src}
+          alt=""
+          fill
+          className="object-cover opacity-70 mix-blend-screen"
+          sizes="(max-width: 768px) 140px, 252px"
+        />
+      </div>
+    </div>
+  );
+}
+
+/** Content card — title + description, with a blurred photo chip tucked behind it */
 function ContentCard({
   title,
   description,
@@ -296,7 +347,7 @@ function ContentCard({
 }: {
   title: string;
   description: string;
-  glow: string;
+  glow?: string;
   cardTop?: string;
   cardHeight?: string;
 }) {
@@ -304,21 +355,13 @@ function ContentCard({
     <div
       className={`relative w-full max-w-[474px] rounded-[24px] ${cardTop ?? "top-[-44px]"} ${cardHeight ?? "h-[462px]"}`}
     >
-      {/* Glow overlay */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[24px]">
-        <NextImage
-          src={glow}
-          alt=""
-          width={252}
-          height={186}
-          style={{ width: "252px", height: "186px" }}
-          className="absolute top-0 right-0 opacity-70 mix-blend-screen blur-[2px]"
-          aria-hidden="true"
-        />
-      </div>
+      <GlowOverlay
+        src={glow}
+        className="top-[-6px] left-1/2 h-[186px] w-[252px] -translate-x-1/2 rounded-[16px]"
+      />
 
       {/* Text content — vertically centered inside the card */}
-      <div className="absolute top-1/2 left-[32px] flex max-w-[410px] -translate-y-1/2 flex-col gap-4">
+      <div className="absolute top-1/2 left-[32px] z-10 flex max-w-[410px] -translate-y-1/2 flex-col gap-4">
         <h3
           className="font-anton text-brand-bg text-[44px] leading-[53px] whitespace-pre-line"
           style={{ fontFamily: "var(--font-anton)" }}
@@ -535,9 +578,10 @@ function useGlobalMobileProgress(
  * Because it's driven by a single shared progress value (not one useScroll
  * per item), it can never desync or fragment — same guarantee as desktop.
  *
- * Vertical position (318px) = height of the image/text block above it (240)
- * + its margin-top (54) + half of the year row's own height (24).
- * Horizontal inset (155px each side) = half the item width (310 / 2),
+ * Vertical position (320px) is the vertical center of the year row (which
+ * starts at 296px, 48px tall) so the dashed line + dot travel directly
+ * behind every year label — matches the Figma spec (node 2537:2545).
+ * Horizontal inset (183px each side) = half the item width (366 / 2),
  * i.e. the first/last item's own horizontal center.
  */
 function GlobalMobileLine({
@@ -550,7 +594,7 @@ function GlobalMobileLine({
   return (
     <div
       className="pointer-events-none absolute z-0 h-[1px]"
-      style={{ top: 318, left: 235, right: 155 }}
+      style={{ top: 320, left: 183, right: 183 }}
     >
       {/* Faint background dashes, continuous across the whole track */}
       <div className="border-brand-bg absolute inset-0 overflow-hidden border-t border-dashed opacity-20" />
@@ -608,29 +652,24 @@ function TabletTimelineRow({
           {item.year}
         </span>
         {/* Image */}
-        <div className="relative aspect-[503/372] w-full overflow-hidden rounded-[24px] bg-[#E4E7EC]">
-          <Image
-            src={item.image}
-            alt={item.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 55vw, 503px"
-          />
+        <div className="group relative aspect-[503/372] w-full overflow-hidden rounded-[24px] bg-[#E4E7EC]">
+          {item.image && (
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              sizes="(max-width: 1024px) 55vw, 503px"
+            />
+          )}
         </div>
         {/* Text card */}
-        <div className="relative overflow-hidden rounded-[24px]">
-          <div className="pointer-events-none absolute inset-0">
-            <Image
-              src={item.glow}
-              alt=""
-              width={200}
-              height={148}
-              style={{ width: "200px", height: "148px" }}
-              className="absolute top-0 right-0 opacity-70 mix-blend-screen"
-              aria-hidden="true"
-            />
-          </div>
-          <div className="relative flex flex-col gap-3 p-6">
+        <div className="relative rounded-[24px]">
+          <GlowOverlay
+            src={item.glow}
+            className="right-[8px] top-[8px] w-[140px] h-[100px] rounded-[16px]"
+          />
+          <div className="relative z-10 flex flex-col gap-3 p-6">
             <h3
               className="font-anton text-brand-bg text-[32px] leading-tight whitespace-pre-line"
               style={{ fontFamily: "var(--font-anton)" }}
@@ -654,18 +693,49 @@ function TabletTimelineRow({
 
 export default function TimelineStory({
   items = [],
+  apiData,
 }: {
   items?: TimelineItem[];
+  apiData?: ApiTimelineItem[];
 }) {
   const mobileRef = useRef<HTMLDivElement>(null);
   const desktopTimelineRef = useRef<HTMLDivElement>(null);
   const tabletTimelineRef = useRef<HTMLDivElement>(null);
 
+  const resolvedItems = useMemo(() => {
+    if (apiData && apiData.length > 0) {
+      return apiData.map((item, index) => {
+        // Prefer a dedicated gallery image for the glow; fall back to the
+        // item's own photo so every year gets a glow, not just the ones
+        // that happen to have gallery_images populated.
+        const glow =
+          item.gallery_images && item.gallery_images[0]
+            ? resolveImageUrl(item.gallery_images[0])
+            : item.image_url
+              ? resolveImageUrl(item.image_url)
+              : "";
+
+        return {
+          year: item.year,
+          title: item.title,
+          description: item.description,
+          image: item.image_url ? resolveImageUrl(item.image_url) : "",
+          glow,
+          side: (index % 2 === 0 ? "right" : "left") as "left" | "right",
+        };
+      });
+    }
+    return items;
+  }, [apiData, items]);
+
   // One shared, spring-smoothed scroll value drives every row's dashed-line
   // reveal (each sliced to its own pixel-accurate range) and the single
   // traveling dot — so all of it moves at identical speed, by construction.
   const smoothProgress = useGlobalSpineProgress(desktopTimelineRef);
-  const rowRanges = useMemo(() => getRowLineRanges(items), [items]);
+  const rowRanges = useMemo(
+    () => getRowLineRanges(resolvedItems),
+    [resolvedItems]
+  );
 
   const tabletSmoothProgress = useGlobalSpineProgress(tabletTimelineRef);
   const mobileSmoothProgress = useGlobalMobileProgress(mobileRef);
@@ -699,8 +769,8 @@ export default function TimelineStory({
                 smoothProgress={smoothProgress}
                 rowRanges={rowRanges}
               />
-              {items.map((item, idx) => {
-                const isLast = idx === items.length - 1;
+              {resolvedItems.map((item, idx) => {
+                const isLast = idx === resolvedItems.length - 1;
                 return (
                   <div
                     key={item.year}
@@ -743,8 +813,8 @@ export default function TimelineStory({
               className="relative flex flex-col self-stretch"
             >
               <GlobalTabletLine smoothProgress={tabletSmoothProgress} />
-              {items.map((item, idx) => {
-                const isLast = idx === items.length - 1;
+              {resolvedItems.map((item, idx) => {
+                const isLast = idx === resolvedItems.length - 1;
                 return (
                   <TabletTimelineRow
                     key={item.year}
@@ -780,14 +850,21 @@ export default function TimelineStory({
             ref={mobileRef}
             className="flex w-full snap-x snap-mandatory scrollbar-none flex-row overflow-x-auto px-6 pb-8"
           >
-            <div className="relative flex flex-row gap-[95px]">
+            <div className="relative flex flex-row gap-[80px]">
               <GlobalMobileLine smoothProgress={mobileSmoothProgress} />
 
-              {items.map((item, idx) => {
+              {resolvedItems.map((item, idx) => {
                 const isEven = idx % 2 === 0;
+                // Every year gets a glow now — prefer the dedicated glow
+                // image, fall back to the item's main photo so nobody
+                // renders blank.
+                const glowSrc = item.glow || item.image;
 
                 const imageEl = (
-                  <div className="relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[24px] bg-[#F2F4F7]">
+                  <div
+                    className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] bg-[#F2F4F7] ${isEven ? "top-0" : "top-[392px]"
+                      }`}
+                  >
                     {item.image && (
                       <Image
                         src={item.image}
@@ -801,53 +878,56 @@ export default function TimelineStory({
                 );
 
                 const textEl = (
-                  <div className="relative flex h-[240px] w-[310px] flex-col items-center justify-center overflow-hidden text-center">
-                    <Image
-                      src={item.glow}
-                      alt=""
-                      width={140}
-                      height={100}
-                      style={{ width: "140px", height: "100px" }}
-                      className={`pointer-events-none absolute z-0 opacity-70 mix-blend-screen ${
-                        isEven ? "bottom-0 left-0" : "top-0 right-0"
+                  <div
+                    className={`absolute left-[28px] flex h-[220px] w-[310px] flex-col items-center justify-center rounded-[24px] px-4 text-center ${isEven ? "top-[412px]" : "top-[20px]"
                       }`}
-                      aria-hidden="true"
+                  >
+                    <GlowOverlay
+                      src={glowSrc}
+                      className={cn(
+                        "w-[140px] h-[100px] rounded-[16px]",
+                        isEven ? "left-[8px] bottom-[8px]" : "right-[8px] top-[8px]"
+                      )}
                     />
-                    <h3
-                      className="font-anton text-brand-bg relative z-10 mb-4 text-[32px] leading-[38px] whitespace-pre-line"
-                      style={{ fontFamily: "var(--font-anton)" }}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      className="text-brand-bg/95 relative z-10 text-base leading-[24px] whitespace-pre-line"
-                      style={{ fontFamily: "var(--font-inter)" }}
-                    >
-                      {item.description}
-                    </p>
+
+                    <div className="relative z-10 flex flex-col gap-4">
+                      <h3
+                        className="font-anton text-brand-bg text-[32px] leading-[38px] whitespace-pre-line"
+                        style={{ fontFamily: "var(--font-anton)" }}
+                      >
+                        {item.title}
+                      </h3>
+                      <p
+                        className="text-brand-bg/95 text-base leading-[24px] whitespace-pre-line"
+                        style={{ fontFamily: "var(--font-inter)" }}
+                      >
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+
+                const yearEl = (
+                  <div className="pointer-events-none absolute top-[296px] left-0 z-30 flex h-[48px] w-full items-center justify-center">
+                    <div className="relative z-30 flex items-center select-none">
+                      <span
+                        className="font-anton text-brand-light-green bg-brand-dark px-[2rem] text-center text-[40px] leading-[48px]"
+                        style={{ fontFamily: "var(--font-anton)" }}
+                      >
+                        {item.year}
+                      </span>
+                    </div>
                   </div>
                 );
 
                 return (
                   <div
                     key={item.year}
-                    className="flex w-auto max-w-[310px] shrink-0 snap-center flex-col items-center"
+                    className="relative h-[632px] w-[366px] shrink-0 snap-center"
                   >
-                    {isEven ? imageEl : textEl}
-
-                    <div className="relative mt-[54px] mb-[70px] flex h-[48px] w-full items-center justify-center">
-                      {/* Year badge — z-30 masks the line/dot passing directly behind it */}
-                      <div className="relative z-30 flex items-center select-none">
-                        <span
-                          className="font-anton text-brand-light-green bg-brand-dark px-[2rem] text-center text-[40px] leading-[48px]"
-                          style={{ fontFamily: "var(--font-anton)" }}
-                        >
-                          {item.year}
-                        </span>
-                      </div>
-                    </div>
-
-                    {isEven ? textEl : imageEl}
+                    {imageEl}
+                    {yearEl}
+                    {textEl}
                   </div>
                 );
               })}

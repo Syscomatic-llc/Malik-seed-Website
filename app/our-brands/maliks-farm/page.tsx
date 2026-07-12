@@ -53,12 +53,12 @@ export default function MaliksFarmPage() {
           </div>
 
           {/* Right: Image */}
-          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[20px] bg-neutral-200 lg:rounded-[24px]">
+          <div className="group relative aspect-[16/9] w-full overflow-hidden rounded-[20px] bg-neutral-200 lg:rounded-[24px]">
             <Image
               src={maliksFarmData.split1.image}
               alt={maliksFarmData.split1.title}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               sizes="(max-width: 1240px) 100vw, 608px"
               priority
             />

@@ -300,7 +300,7 @@ export default function BrandTraining() {
                       if (scanResetting) return;
                       setScanIndex(idx);
                     }}
-                    className="relative h-[598px] w-[398px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
+                    className="group relative h-[598px] w-[398px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
                     style={{
                       border: "1.5px solid rgba(25, 82, 54, 0.2)",
                     }}
@@ -310,7 +310,7 @@ export default function BrandTraining() {
                         src={scan.image}
                         alt={scan.title}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                         sizes="398px"
                       />
                     </div>
@@ -355,7 +355,7 @@ export default function BrandTraining() {
                       if (scanResetting) return;
                       setScanIndex(idx);
                     }}
-                    className="relative h-[420px] w-[280px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
+                    className="group relative h-[420px] w-[280px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
                     style={{
                       border: "1.5px solid rgba(25, 82, 54, 0.2)",
                     }}
@@ -365,7 +365,7 @@ export default function BrandTraining() {
                         src={scan.image}
                         alt={scan.title}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                         sizes="280px"
                       />
                     </div>
