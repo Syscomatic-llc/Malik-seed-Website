@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { memo } from "react";
 import { footerData, FooterLink, SocialLink } from "@/data/sections-data";
+import { contactApi } from "@/lib/api";
 
 // Common Typography Classes for Scalability
 const TYPOGRAPHY = {
@@ -59,7 +59,61 @@ const SocialIcon = ({ social }: { social: SocialLink }) => (
   </a>
 );
 
-export default memo(function Footer() {
+export default async function Footer() {
+  let contactInfo = null;
+  try {
+    const data = await contactApi.getContact({ revalidate: 60 });
+    contactInfo = data?.info || null;
+  } catch (err) {
+    console.error("Failed to fetch contact details for footer:", err);
+  }
+
+  // Dynamically map social icons based on API data
+  const socials: SocialLink[] = [];
+  if (contactInfo) {
+    if (contactInfo.facebook_url) {
+      socials.push({
+        label: "Facebook",
+        path: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z",
+        href: contactInfo.facebook_url,
+      });
+    }
+    if (contactInfo.instagram_url) {
+      socials.push({
+        label: "Instagram",
+        path: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051C.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z",
+        href: contactInfo.instagram_url,
+      });
+    }
+    if (contactInfo.linkedin_url) {
+      socials.push({
+        label: "LinkedIn",
+        path: "M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z M4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+        href: contactInfo.linkedin_url,
+      });
+    }
+    if (contactInfo.twitter_url) {
+      socials.push({
+        label: "Twitter",
+        path: "M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z",
+        href: contactInfo.twitter_url,
+      });
+    }
+    if (contactInfo.youtube_url) {
+      socials.push({
+        label: "YouTube",
+        path: "M22.54 6.42a2.78 2.78 0 0 0-1.96-1.96C18.88 4 12 4 12 4s-6.88 0-8.58.46a2.78 2.78 0 0 0-1.96 1.96C1 8.12 1 12 1 12s0 3.88.46 5.58a2.78 2.78 0 0 0 1.96 1.96C5.12 20 12 20 12 20s6.88 0 8.58-.46a2.78 2.78 0 0 0 1.96-1.96C23 15.88 23 12 23 12s0-3.88-.46-5.58ZM10 15.5v-7l6 3.5-6 3.5Z",
+        href: contactInfo.youtube_url,
+      });
+    }
+  }
+  const displaySocials = socials.length > 0 ? socials : footerData.socials;
+
+  const phoneLabel = contactInfo?.phone_primary || footerData.contact.phone.label;
+  const phoneHref = contactInfo?.phone_primary ? `tel:${contactInfo.phone_primary}` : footerData.contact.phone.href;
+  const emailLabel = contactInfo?.email_primary || footerData.contact.email.label;
+  const emailHref = contactInfo?.email_primary ? `mailto:${contactInfo.email_primary}` : footerData.contact.email.href;
+
   return (
     <footer
       className="bg-brand-dark w-full py-12 text-white md:py-21"
@@ -90,7 +144,7 @@ export default memo(function Footer() {
                 {footerData.followUsText}
               </span>
               <div className="flex gap-2">
-                {footerData.socials.map((social) => (
+                {displaySocials.map((social) => (
                   <SocialIcon key={social.label} social={social} />
                 ))}
               </div>
@@ -116,20 +170,20 @@ export default memo(function Footer() {
               <div className="flex flex-col gap-2 md:gap-4">
                 <h4 className={TYPOGRAPHY.label}>Contact</h4>
                 <a
-                  href={footerData.contact.phone.href}
+                  href={phoneHref}
                   className={TYPOGRAPHY.contact}
                 >
-                  {footerData.contact.phone.label}
+                  {phoneLabel}
                 </a>
               </div>
 
               <div className="flex flex-col gap-2 md:gap-4">
                 <h4 className={TYPOGRAPHY.label}>Email</h4>
                 <a
-                  href={footerData.contact.email.href}
+                  href={emailHref}
                   className={`${TYPOGRAPHY.contact} break-all`}
                 >
-                  {footerData.contact.email.label}
+                  {emailLabel}
                 </a>
               </div>
             </address>
@@ -150,4 +204,4 @@ export default memo(function Footer() {
       </div>
     </footer>
   );
-});
+}

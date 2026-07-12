@@ -20,13 +20,16 @@ const GLOWS = [
  * Convert API timeline items to the shape TimelineStory expects.
  * Uses only API data — no mixing with static fields.
  */
-function buildTimelineItems(apiData?: ApiTimelineItem[]): TimelineItem[] | undefined {
+function buildTimelineItems(
+  apiData?: ApiTimelineItem[]
+): TimelineItem[] | undefined {
   if (!apiData || apiData.length === 0) return undefined;
 
   return apiData.map((item, index) => {
-    const glow = item.gallery_images && item.gallery_images[0]
-      ? resolveImageUrl(item.gallery_images[0])
-      : GLOWS[index % GLOWS.length];
+    const glow =
+      item.gallery_images && item.gallery_images[0]
+        ? resolveImageUrl(item.gallery_images[0])
+        : GLOWS[index % GLOWS.length];
 
     return {
       year: item.year,

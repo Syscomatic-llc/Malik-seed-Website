@@ -53,7 +53,7 @@ const HeroSlideshow = memo(function HeroSlideshow({
           <div
             key={slide.src + index}
             className={[
-              "absolute inset-0 transition-opacity duration-[2500ms] ease-in-out",
+              "absolute inset-0 transition-opacity duration-[3000ms] ease-in-out",
               isActive
                 ? "z-10 opacity-100"
                 : "pointer-events-none z-0 opacity-0",

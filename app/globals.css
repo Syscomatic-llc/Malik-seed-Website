@@ -611,3 +611,27 @@
 .animate-badge-glow {
   animation: badge-glow 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
+
+@layer components {
+  .brand-card {
+    position: relative;
+  }
+
+  .brand-border-svg {
+    overflow: visible;
+  }
+
+  .brand-border-path {
+    fill: none;
+    stroke: #a9e179;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 1.5s ease;
+  }
+
+  .brand-card:hover .brand-border-path {
+    stroke-dashoffset: 0;
+  }
+}

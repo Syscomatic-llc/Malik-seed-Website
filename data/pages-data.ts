@@ -9,7 +9,7 @@ export const SUBJECT_OPTIONS = [
 export const OFFICE_DETAILS = {
   badgeText: "contact us",
   officeLabel: "Head Office",
-  companyName: "Malik Seeds Ltd.",
+  companyName: "Malik Seeds.",
   address: "House XX, Road XX, Dhaka, Bangladesh",
   phone: {
     label: "Phone: ",

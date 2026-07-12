@@ -310,7 +310,7 @@ function GlowOverlay({
   return (
     <div
       className={cn(
-        "pointer-events-none absolute z-0 overflow-hidden [transform:translate3d(0,0,0)]",
+        "pointer-events-none absolute z-0 [transform:translate3d(0,0,0)] overflow-hidden",
         className
       )}
       style={{
@@ -324,7 +324,7 @@ function GlowOverlay({
       }}
       aria-hidden="true"
     >
-      <div className="absolute inset-0 scale-110 blur-[8px] [transform:translate3d(0,0,0)]">
+      <div className="absolute inset-0 scale-110 [transform:translate3d(0,0,0)] blur-[8px]">
         <Image
           src={src}
           alt=""
@@ -667,7 +667,7 @@ function TabletTimelineRow({
         <div className="relative rounded-[24px]">
           <GlowOverlay
             src={item.glow}
-            className="right-[8px] top-[8px] w-[140px] h-[100px] rounded-[16px]"
+            className="top-[8px] right-[8px] h-[100px] w-[140px] rounded-[16px]"
           />
           <div className="relative z-10 flex flex-col gap-3 p-6">
             <h3
@@ -862,8 +862,9 @@ export default function TimelineStory({
 
                 const imageEl = (
                   <div
-                    className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] bg-[#F2F4F7] ${isEven ? "top-0" : "top-[392px]"
-                      }`}
+                    className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] bg-[#F2F4F7] ${
+                      isEven ? "top-0" : "top-[392px]"
+                    }`}
                   >
                     {item.image && (
                       <Image
@@ -879,14 +880,17 @@ export default function TimelineStory({
 
                 const textEl = (
                   <div
-                    className={`absolute left-[28px] flex h-[220px] w-[310px] flex-col items-center justify-center rounded-[24px] px-4 text-center ${isEven ? "top-[412px]" : "top-[20px]"
-                      }`}
+                    className={`absolute left-[28px] flex h-[220px] w-[310px] flex-col items-center justify-center rounded-[24px] px-4 text-center ${
+                      isEven ? "top-[412px]" : "top-[20px]"
+                    }`}
                   >
                     <GlowOverlay
                       src={glowSrc}
                       className={cn(
-                        "w-[140px] h-[100px] rounded-[16px]",
-                        isEven ? "left-[8px] bottom-[8px]" : "right-[8px] top-[8px]"
+                        "h-[100px] w-[140px] rounded-[16px]",
+                        isEven
+                          ? "bottom-[8px] left-[8px]"
+                          : "top-[8px] right-[8px]"
                       )}
                     />
 

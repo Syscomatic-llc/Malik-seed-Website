@@ -31,7 +31,7 @@ const TypewriterText = memo(function TypewriterText({
     if (words.length === 0) return;
 
     if (subIndex === words[index].length + 1 && !reverse) {
-      const timeout = setTimeout(() => setReverse(true), 2000);
+      const timeout = setTimeout(() => setReverse(true), 1500);
       return () => clearTimeout(timeout);
     }
 

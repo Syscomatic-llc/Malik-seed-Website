@@ -82,7 +82,9 @@ export default function NewsSection({ apiData }: NewsSectionProps) {
             id: a.id,
             slug: a.slug || a.article_slug || `article-${a.id}`,
             category: a.category || "General",
-            date: a.display_date || formatDate(a.published_at || a.publish_date || a.created_at),
+            date:
+              a.display_date ||
+              formatDate(a.published_at || a.publish_date || a.created_at),
             title: a.title,
             image: resolveImageUrl(a.featured_image || a.image_url),
           })),

@@ -21,33 +21,22 @@ const MANIFESTO_IMAGES = [
   {
     src: "/images/team/malik_farm_grid.png",
     alt: "Malik Seeds farm - aerial view grid",
-    hasLeftFade: true,
-    widthClass: "w-[310px] lg:w-[608px]",
   },
   {
     src: "/images/team/malik_seeds_team-5.png",
     alt: "Malik Seeds team",
-    hasLeftFade: false,
-    widthClass: "w-[348px] lg:w-[608px]",
   },
   {
     src: "/images/team/maliks_farm_rd.png",
     alt: "Malik Seeds R&D farm",
-    hasLeftFade: true,
-    widthClass: "w-[310px] lg:w-[608px]",
   },
 ];
 
-// Static style objects for the slider side fades (using #0D1A14 / rgb(13,26,20) to blend with bg-brand-dark)
-const LEFT_FADE_STYLE = {
-  background:
-    "linear-gradient(270deg, rgba(13, 26, 20, 0.00) 0%, rgba(13, 26, 20, 0.75) 65.43%, #0D1A14 100%)",
-} as const;
-
-const RIGHT_FADE_STYLE = {
-  background:
-    "linear-gradient(90deg, rgba(13, 26, 20, 0.00) 0%, rgba(13, 26, 20, 0.75) 65.43%, #0D1A14 100%)",
-} as const;
+// Side-fade gradients blend into the section bg (#0D1A14) — matches Figma exactly
+const LEFT_FADE =
+  "linear-gradient(270deg, rgba(13,26,20,0) 0%, rgba(13,26,20,0.75) 65%, #0D1A14 100%)";
+const RIGHT_FADE =
+  "linear-gradient(90deg, rgba(13,26,20,0) 0%, rgba(13,26,20,0.75) 65%, #0D1A14 100%)";
 
 export default memo(function CareerManifestoSection({
   data,
@@ -105,38 +94,40 @@ export default memo(function CareerManifestoSection({
           </div>
         </div>
 
-        {/* ── Bottom image strip: Infinite auto-scroll Marquee ── */}
-        <div className="relative mt-[60px] w-full overflow-hidden pb-[100px] lg:pb-[104px]">
-          {/* Side Fades — gradient overlays to smoothly transition images in/out */}
+        {/* ── Bottom image strip — centered peek layout ──────────────────────────
+             The middle card is centered on screen. The left & right cards peek
+             in from the sides. Deep gradient fades blend edges into the bg.
+             Matches Figma node 2424:13883 visual intent. */}
+        <div className="relative mt-16 w-full overflow-hidden pb-[100px] lg:pb-[104px]">
+          {/* Deep left-edge fade — blends first card into bg */}
           <div
-            className="pointer-events-none absolute top-0 left-0 z-20 h-[280px] w-24 lg:h-[360px] lg:w-[214px]"
-            style={LEFT_FADE_STYLE}
+            aria-hidden="true"
+            className="pointer-events-none absolute top-0 left-0 z-10 h-[280px] w-[96px] lg:h-[360px] lg:w-[214px]"
+            style={{ background: LEFT_FADE }}
           />
+          {/* Deep right-edge fade — blends last card into bg */}
           <div
-            className="pointer-events-none absolute top-0 -right-1 z-20 h-[280px] w-24 lg:h-[360px] lg:w-[214px]"
-            style={RIGHT_FADE_STYLE}
+            aria-hidden="true"
+            className="pointer-events-none absolute top-0 right-0 z-10 h-[280px] w-[96px] lg:h-[360px] lg:w-[214px]"
+            style={{ background: RIGHT_FADE }}
           />
 
-          <div className="animate-marquee flex gap-4 hover:[animation-play-state:paused] lg:gap-6">
-            {[...MANIFESTO_IMAGES, ...MANIFESTO_IMAGES].map((img, i) => (
+          {/* Centered strip — all 3 cards are 616×360px (aspect 77/45).
+              Total width 3×616 + 2×24gap = 1896px > viewport → side cards bleed off-screen. */}
+          <div className="flex items-center justify-center gap-4 lg:gap-6">
+            {MANIFESTO_IMAGES.map((img, i) => (
               <div
                 key={i}
-                className={`relative h-[280px] flex-shrink-0 overflow-hidden rounded-[20px] bg-white lg:h-[360px] lg:rounded-[24px] ${img.widthClass}`}
+                className="group relative h-[280px] w-[348px] shrink-0 overflow-hidden rounded-[20px] bg-[#1a2d24] lg:h-[360px] lg:w-[616px] lg:rounded-[24px]"
+                style={{ aspectRatio: "12/7" }}
               >
                 <Image
                   src={img.src}
                   alt={img.alt}
                   fill
-                  sizes="(min-width: 1024px) 608px, 348px"
-                  className="object-cover object-center"
+                  sizes="616px"
+                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                {/* Left-side gradient fade overlay on specific cards */}
-                {img.hasLeftFade && (
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-y-0 left-0 w-[96px] lg:w-[214px]"
-                  />
-                )}
               </div>
             ))}
           </div>

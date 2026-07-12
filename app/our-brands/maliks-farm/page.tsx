@@ -58,7 +58,7 @@ export default function MaliksFarmPage() {
               src={maliksFarmData.split1.image}
               alt={maliksFarmData.split1.title}
               fill
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
               sizes="(max-width: 1240px) 100vw, 608px"
               priority
             />

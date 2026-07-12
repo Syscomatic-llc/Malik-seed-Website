@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { OFFICE_DETAILS, SUBJECT_OPTIONS } from "@/data/pages-data";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { ApiContactPageData, contactApi } from "@/lib/api";
 
 // ---------------------------------------------------------------------------
 // Constants & Static Configurations (Architectural Cleanliness)
@@ -39,7 +40,14 @@ const getBorderClass = (hasError: boolean) =>
 // Component
 // ---------------------------------------------------------------------------
 
-export default function ContactHeroSection() {
+export default function ContactHeroSection({
+  apiData,
+}: {
+  apiData: ApiContactPageData | null;
+}) {
+  const hqLocation = apiData?.locations?.find((loc) => loc.is_headquarters);
+  const info = apiData?.info;
+
   // Unique accessible IDs
   const nameId = useId();
   const emailId = useId();
@@ -167,18 +175,36 @@ export default function ContactHeroSection() {
 
     setIsSubmitting(true);
 
-    // Simulate Secure Submission API Request
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
+    contactApi
+      .submitContact({
+        name: sanitizedName,
+        email: sanitizedEmail,
+        phone: sanitizedPhone,
+        subject: sanitizedSubject,
+        message: sanitizedMessage,
+      })
+      .then(() => {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+      })
+      .catch((err) => {
+        setIsSubmitting(false);
+        console.error("Failed to submit contact form:", err);
+        setErrors((prev) => ({
+          ...prev,
+          message:
+            err instanceof Error
+              ? err.message
+              : "Failed to submit the contact form. Please try again later.",
+        }));
       });
-    }, 1500);
   };
 
   return (
@@ -204,7 +230,7 @@ export default function ContactHeroSection() {
               <div className="relative flex w-full flex-col items-start gap-4 lg:gap-6">
                 {/* Office Type Label — Figma: 18px (desktop) / 14px (mobile) */}
                 <div className="text-card-label text-brand-dark font-medium tracking-tight uppercase opacity-90">
-                  {OFFICE_DETAILS.officeLabel}
+                  {hqLocation?.name || OFFICE_DETAILS.officeLabel}
                 </div>
 
                 <div className="relative flex w-full flex-col items-start gap-6 lg:gap-8">
@@ -216,7 +242,7 @@ export default function ContactHeroSection() {
                     </div>
                     {/* Address Text — Figma: 16px */}
                     <p className="text-brand-dark text-[16px] leading-[1.25] font-normal opacity-90">
-                      {OFFICE_DETAILS.address}
+                      {hqLocation?.address || info?.address || OFFICE_DETAILS.address}
                     </p>
                   </div>
 
@@ -232,14 +258,14 @@ export default function ContactHeroSection() {
                         className="shrink-0"
                       />
                       <a
-                        href={OFFICE_DETAILS.phone.href}
+                        href={`tel:${hqLocation?.phone || info?.phone_primary || OFFICE_DETAILS.phone.href.replace("tel:", "")}`}
                         className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none"
                       >
                         <span className="opacity-80">
                           {OFFICE_DETAILS.phone.label}
                         </span>
                         <span className="font-medium">
-                          {OFFICE_DETAILS.phone.value}
+                          {hqLocation?.phone || info?.phone_primary || OFFICE_DETAILS.phone.value}
                         </span>
                       </a>
                     </div>
@@ -254,14 +280,14 @@ export default function ContactHeroSection() {
                         className="shrink-0"
                       />
                       <a
-                        href={OFFICE_DETAILS.email.href}
+                        href={`mailto:${hqLocation?.email || info?.email_primary || OFFICE_DETAILS.email.href.replace("mailto:", "")}`}
                         className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none"
                       >
                         <span className="opacity-80">
                           {OFFICE_DETAILS.email.label}
                         </span>
                         <span className="font-medium">
-                          {OFFICE_DETAILS.email.value}
+                          {hqLocation?.email || info?.email_primary || OFFICE_DETAILS.email.value}
                         </span>
                       </a>
                     </div>

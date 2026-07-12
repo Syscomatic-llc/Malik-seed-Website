@@ -66,11 +66,11 @@ export default function OptimizedImage({
     placeholder === "blur" && blurDataURL ? "blur" : undefined;
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="relative h-full w-full overflow-hidden">
       {/* Premium Skeleton/Pulse loader */}
       {loading && (
-        <div className="absolute inset-0 animate-pulse bg-brand-bg/50 dark:bg-brand-dark/20 flex items-center justify-center z-10">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-active border-t-transparent opacity-40" />
+        <div className="bg-brand-bg/50 dark:bg-brand-dark/20 absolute inset-0 z-10 flex animate-pulse items-center justify-center">
+          <div className="border-brand-active h-6 w-6 animate-spin rounded-full border-2 border-t-transparent opacity-40" />
         </div>
       )}
 

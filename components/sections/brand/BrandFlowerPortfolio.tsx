@@ -105,7 +105,7 @@ export default function BrandFlowerPortfolio() {
                 alt={currentSegment.name}
                 fill
                 priority
-                className="object-cover transition-all duration-700 ease-out group-hover:scale-105"
+                className="object-cover object-center transition-all duration-700 ease-out group-hover:scale-105"
                 sizes="(max-width: 1024px) 100vw, 790px"
               />
             </div>

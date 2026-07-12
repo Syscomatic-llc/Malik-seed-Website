@@ -37,7 +37,7 @@ export default function BrandHero({ title, bgImage }: BrandHeroProps) {
           alt={title.replace(/\n/g, " ")}
           fill
           priority
-          className="object-cover object-[55%] opacity-90 transition-transform duration-[1200ms] ease-out hover:scale-105 md:object-center"
+          className="object-cover object-top opacity-90 transition-transform duration-[1200ms] ease-out"
           sizes="100vw"
         />
       </div>

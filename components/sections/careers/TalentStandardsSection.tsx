@@ -48,7 +48,7 @@ const StandardCard = memo(function StandardCard({
       <div className="flex w-full flex-col items-start gap-2 md:items-center">
         <h3
           className={[
-            "font-inter-tight text-left md:text-center text-[20px] leading-[24px] font-medium w-full",
+            "font-inter-tight w-full text-left text-[20px] leading-[24px] font-medium md:text-center",
             isDark ? "text-brand-dark lg:text-brand-bg" : "text-brand-dark",
           ].join(" ")}
         >
@@ -56,7 +56,7 @@ const StandardCard = memo(function StandardCard({
         </h3>
         <p
           className={[
-            "font-inter text-left md:text-center text-[16px] leading-[24px] w-full",
+            "font-inter w-full text-left text-[16px] leading-[24px] md:text-center",
             isDark ? "text-brand-dark lg:text-brand-bg" : "text-brand-dark",
           ].join(" ")}
         >

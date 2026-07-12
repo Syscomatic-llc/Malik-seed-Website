@@ -21,13 +21,13 @@ export default function BrandsPage() {
           </h1>
 
           {/* Hero Image */}
-          <div className="relative h-[240px] w-full overflow-hidden rounded-[24px] bg-[#1a2d24] sm:h-[400px] md:h-[520px]">
+          <div className="group relative h-[240px] w-full overflow-hidden rounded-[24px] bg-[#1a2d24] sm:h-[400px] md:h-[520px]">
             <Image
               src="/images/brand/dscf8592_1.png"
               alt="Building a Connected Agricultural Ecosystem"
               fill
               priority
-              className="object-cover"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               sizes="(max-width: 1200px) 100vw, 1030px"
             />
           </div>
@@ -43,7 +43,7 @@ export default function BrandsPage() {
           </h2>
 
           {/* Brands Grid */}
-          <ProductsSection/>
+          <ProductsSection />
         </div>
       </section>
 

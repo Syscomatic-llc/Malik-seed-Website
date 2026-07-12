@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 
 // ---------------------------------------------------------------------------
 // Types — exported so the page can reuse them without duplicating declarations
@@ -94,7 +94,6 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
     },
     []
   );
-
   // ── Render ───────────────────────────────────────────────────────────────
   return (
     <div className="border-brand-border/50 flex w-full flex-col gap-6 rounded-[16px] border bg-white px-0 py-6 shadow-[0_4px_30px_rgba(0,0,0,0.03)] md:mx-auto md:max-w-[400px] lg:mx-0 lg:max-w-[292px] lg:gap-10">
@@ -155,13 +154,19 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
         </span>
         <div className="flex items-center gap-3">
           <div className="border-brand-border bg-brand-neutral-light relative h-12 w-12 shrink-0 overflow-hidden rounded-full border">
-            <Image
-              src={author.avatar}
-              alt={author.name}
-              fill
-              sizes="48px"
-              className="object-cover"
-            />
+            {author.avatar ? (
+              <Image
+                src={author.avatar}
+                alt={author.name}
+                fill
+                sizes="48px"
+                className="object-cover"
+              />
+            ) : (
+              <span className="bg-brand-active text-brand-bg flex h-full w-full items-center justify-center text-base font-semibold">
+                {author.name.charAt(0).toUpperCase()}
+              </span>
+            )}
           </div>
           <div className="flex flex-col gap-0.5">
             <span className="font-heading text-base leading-6 font-medium text-[#0D1A14]">

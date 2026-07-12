@@ -16,7 +16,8 @@ export const newsApi = {
   getArticles(params?: GetArticlesParams, options?: RequestOptions) {
     const query = new URLSearchParams();
     if (params?.category) query.set("category", params.category);
-    if (params?.featured !== undefined) query.set("featured", String(params.featured));
+    if (params?.featured !== undefined)
+      query.set("featured", String(params.featured));
     if (params?.limit !== undefined) query.set("limit", String(params.limit));
     const qs = query.toString();
     return apiGet<ApiNewsArticle[]>(
@@ -37,7 +38,10 @@ export const newsApi = {
     return apiGet<ApiPressRelease[]>("/api/v1/news/press-releases", options);
   },
   getPressReleaseBySlug(slug: string, options?: RequestOptions) {
-    return apiGet<ApiPressRelease>(`/api/v1/news/press-releases/${slug}`, options);
+    return apiGet<ApiPressRelease>(
+      `/api/v1/news/press-releases/${slug}`,
+      options
+    );
   },
   subscribeNewsletter(
     email: string,

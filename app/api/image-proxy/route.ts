@@ -52,8 +52,12 @@ export async function GET(req: NextRequest) {
   }
 
   // Determine width and quality
-  const width = widthParam ? Math.min(1920, Math.max(16, parseInt(widthParam, 10))) : 1200;
-  const quality = qualityParam ? Math.min(100, Math.max(10, parseInt(qualityParam, 10))) : 75;
+  const width = widthParam
+    ? Math.min(1920, Math.max(16, parseInt(widthParam, 10)))
+    : 1200;
+  const quality = qualityParam
+    ? Math.min(100, Math.max(10, parseInt(qualityParam, 10)))
+    : 75;
 
   // Check disk cache
   await fs.mkdir(CACHE_DIR, { recursive: true });
@@ -98,7 +102,10 @@ export async function GET(req: NextRequest) {
         .webp({ quality })
         .toBuffer();
     } catch (sharpError) {
-      console.error("[image-proxy] sharp optimization failed, serving raw image:", sharpError);
+      console.error(
+        "[image-proxy] sharp optimization failed, serving raw image:",
+        sharpError
+      );
       // Fallback: serve raw buffer if sharp fails (e.g. unsupported format/corrupted file)
       const contentType = upstream.headers.get("content-type") || "image/png";
       return new NextResponse(new Uint8Array(buffer), {

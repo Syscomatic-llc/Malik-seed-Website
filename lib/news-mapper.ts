@@ -111,7 +111,7 @@ export function mapApiArticleToNewsArticle(a: ApiNewsArticle): NewsArticle {
     author: {
       name: a.author_name || "Research Team",
       role: a.author_title || "Staff Writer",
-      avatar: resolveImageUrl(a.author_avatar) || "/images/news/rafiqul-islam.png",
+      avatar: resolveImageUrl(a.author_avatar) || "",
     },
   };
 }

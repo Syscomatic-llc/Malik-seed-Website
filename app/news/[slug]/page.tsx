@@ -99,7 +99,9 @@ export async function generateStaticParams() {
   try {
     const apiData = await newsApi.getNews();
     if (apiData && apiData.articles) {
-      return apiData.articles.map((article) => ({ slug: article.slug || article.article_slug || `article-${article.id}` }));
+      return apiData.articles.map((article) => ({
+        slug: article.slug || article.article_slug || `article-${article.id}`,
+      }));
     }
   } catch (err) {
     console.error("Failed to generate static params from API:", err);
@@ -117,7 +119,9 @@ export async function generateMetadata({
   try {
     const apiData = await newsApi.getNews({ revalidate: 60 });
     if (apiData && apiData.articles) {
-      const found = apiData.articles.find((a) => (a.slug || a.article_slug || `article-${a.id}`) === slug);
+      const found = apiData.articles.find(
+        (a) => (a.slug || a.article_slug || `article-${a.id}`) === slug
+      );
       if (found) {
         article = {
           title: found.title,
@@ -182,11 +186,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const relatedArticles = allArticles
     .filter((a) => a.slug !== article!.slug)
     .slice(0, RELATED_ARTICLE_COUNT);
-
   return (
     <div className="bg-brand-bg min-h-screen">
       {/* ── Article wrapper ─────────────────────────────────────────── */}
-      <article className="w-full px-4 pt-[100px] pb-10 md:px-12 md:pt-[130px] md:pb-20 lg:px-[100px] lg:pt-[180px] lg:pb-[100px]">
+      <article className="w-full px-4 pt-[100px] pb-10 md:px-12 md:pt-[130px] md:pb-20 lg:px-16 lg:pt-[180px] lg:pb-[100px] xl:px-[100px]">
         <div className="mx-auto max-w-[1030px]">
           {/* ── Header: back link + meta + share ──────────────────── */}
           <div className="flex flex-col gap-8">
@@ -255,9 +258,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
 
           {/* ── Two-column body: content + sidebar ──────────────────── */}
-          <div className="mt-12 flex flex-col lg:flex-row lg:justify-between lg:gap-[130px]">
+          <div className="mt-12 flex flex-col lg:flex-row lg:justify-between lg:gap-10 xl:gap-[130px]">
             {/* Left: article body — order-2 on mobile, order-1 on desktop */}
-            <div className="order-2 w-full shrink-0 lg:order-1 lg:w-[608px]">
+            <div className="order-2 w-full lg:order-1 lg:max-w-[608px] lg:flex-1">
               {/*
                * article-prose is a @utility defined in globals.css that captures
                * all prose element overrides. Keeping them in CSS prevents this

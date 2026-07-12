@@ -142,16 +142,16 @@ function BrandsDropdownItem({
       {/* Dropdown Container */}
       <div
         className={cn(
-          "absolute top-full left-1/2 z-50 mt-2 w-[480px] origin-top -translate-x-1/2 rounded-[20px] border border-neutral-100/80 bg-white p-5 shadow-[0_10px_40px_rgba(0,0,0,0.08)] backdrop-blur-md transition-all duration-300 ease-out",
+          "absolute top-full left-1/2 z-50 mt-2 w-[760px] origin-top -translate-x-1/2 rounded-[20px] border border-neutral-100/80 bg-white p-5 shadow-[0_10px_40px_rgba(0,0,0,0.08)] backdrop-blur-md transition-all duration-300 ease-out",
           "before:absolute before:inset-x-0 before:-top-4 before:h-4 before:content-['']",
           isOpen
             ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
             : "pointer-events-none -translate-y-2 scale-95 opacity-0"
         )}
       >
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {brands.length === 0 ? (
-            <div className="col-span-2 flex items-center justify-center gap-2 py-6">
+            <div className="col-span-3 flex items-center justify-center gap-2 py-6">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
               <span className="text-[14px] text-neutral-500">
                 Loading brands...
@@ -391,7 +391,9 @@ function MobileNav({
                         <button
                           onClick={() => setBrandsOpen((v) => !v)}
                           aria-label={
-                            brandsOpen ? "Collapse Our Brands" : "Expand Our Brands"
+                            brandsOpen
+                              ? "Collapse Our Brands"
+                              : "Expand Our Brands"
                           }
                           aria-expanded={brandsOpen}
                           className="flex h-[35px] w-[35px] shrink-0 cursor-pointer items-center justify-center focus-visible:ring-2 focus-visible:ring-[#A9E179] focus-visible:outline-none"
@@ -399,7 +401,9 @@ function MobileNav({
                           <ChevronDownIcon
                             className={cn(
                               "h-4 w-4 transition-transform duration-300 ease-in-out",
-                              brandsOpen ? "text-brand-accent rotate-180" : "text-[#0D1A14]/70"
+                              brandsOpen
+                                ? "text-brand-accent rotate-180"
+                                : "text-[#0D1A14]/70"
                             )}
                           />
                         </button>
@@ -408,8 +412,10 @@ function MobileNav({
                       {/* Collapsible Brands List */}
                       <div
                         className={cn(
-                          "overflow-hidden transition-all duration-300 ease-in-out pl-4 flex flex-col gap-3",
-                          brandsOpen ? "mt-3 max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+                          "flex flex-col gap-3 overflow-hidden pl-4 transition-all duration-300 ease-in-out",
+                          brandsOpen
+                            ? "mt-3 max-h-[400px] opacity-100"
+                            : "max-h-0 opacity-0"
                         )}
                       >
                         {brands.length === 0 ? (

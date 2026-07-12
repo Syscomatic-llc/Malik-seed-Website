@@ -22,8 +22,6 @@ const anton = Anton({
   weight: ["400"],
 });
 
-
-
 export const viewport: Viewport = {
   themeColor: "#1b4d32",
   width: "device-width",

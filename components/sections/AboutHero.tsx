@@ -46,11 +46,11 @@ export default function AboutHero() {
 
       {/* 3-image static row — Centered, side images partially overflowing the screen */}
       <div className="mt-8 flex w-full justify-center overflow-x-hidden md:mt-12">
-        <div className="flex shrink-0 gap-4 justify-center items-center md:gap-6">
+        <div className="flex shrink-0 items-center justify-center gap-4 md:gap-6">
           {HERO_IMAGES.map((img, i) => (
             <div
               key={img.id}
-              className="relative shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm h-[240px] w-[310px] md:h-auto md:aspect-[548/420] md:w-[42vw] md:rounded-[24px]"
+              className="relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm md:aspect-[548/420] md:h-auto md:w-[42vw] md:rounded-[24px]"
             >
               <Image
                 src={img.src}

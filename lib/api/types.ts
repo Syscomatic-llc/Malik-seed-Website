@@ -198,3 +198,74 @@ export interface ApiNewsPageData {
   categories: ApiNewsCategory[];
   press_releases: ApiPressRelease[];
 }
+
+export interface ApiContactInfo {
+  id: number;
+  title: string;
+  subtitle: string | null;
+  description: string | null;
+  address: string | null;
+  city: string | null;
+  country: string | null;
+  postal_code: string | null;
+  phone_primary: string | null;
+  phone_secondary: string | null;
+  email_primary: string | null;
+  email_secondary: string | null;
+  facebook_url: string | null;
+  twitter_url: string | null;
+  instagram_url: string | null;
+  linkedin_url: string | null;
+  youtube_url: string | null;
+  map_image_url: string | null;
+  map_embed_url: string | null;
+  business_hours: { day: string; hours: string }[] | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ApiContactLocation {
+  id: number;
+  name: string;
+  address: string;
+  city: string;
+  country: string;
+  postal_code: string | null;
+  phone: string | null;
+  email: string | null;
+  image_url: string | null;
+  map_url: string | null;
+  is_headquarters: boolean;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiFaq {
+  id: number;
+  question: string;
+  answer: string;
+  category: string;
+  is_featured: boolean;
+  sort_order: number;
+  is_active: boolean;
+  view_count: number;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiContactPageData {
+  info: ApiContactInfo;
+  locations: ApiContactLocation[];
+  faqs: ApiFaq[];
+  featured_faqs: ApiFaq[];
+}
+
+export interface ApiContactSubmitResponse {
+  status: string;
+  message: string;
+  id?: number;
+}
+

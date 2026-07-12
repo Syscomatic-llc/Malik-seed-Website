@@ -16,7 +16,7 @@ export default async function NewsRoute() {
   } catch (err) {
     console.error("Failed to fetch news from API:", err);
   }
-
+  console.log(apiData);
   return (
     <>
       <Suspense fallback={null}>

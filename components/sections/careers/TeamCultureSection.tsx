@@ -36,7 +36,7 @@ export default memo(function TeamCultureSection({
             <div className="flex flex-col gap-6 md:flex-row">
               {/* Wide image */}
               <div
-                className="relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
+                className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
                 style={{ height: 380, flex: "1 1 62%" }}
               >
                 <Image
@@ -44,12 +44,12 @@ export default memo(function TeamCultureSection({
                   alt={wide.alt}
                   fill
                   sizes="(min-width: 1280px) 768px, 100vw"
-                  className="object-cover object-center"
+                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
               {/* Narrow image */}
               <div
-                className="relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
+                className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
                 style={{ height: 380, flex: "1 1 36%" }}
               >
                 <Image
@@ -57,7 +57,7 @@ export default memo(function TeamCultureSection({
                   alt={narrow.alt}
                   fill
                   sizes="(min-width: 1280px) 448px, 100vw"
-                  className="object-cover object-center"
+                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
             </div>
@@ -67,7 +67,7 @@ export default memo(function TeamCultureSection({
               {thirds.map((img, i) => (
                 <div
                   key={i}
-                  className="relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
+                  className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
                   style={{ height: 380 }}
                 >
                   <Image
@@ -75,7 +75,7 @@ export default memo(function TeamCultureSection({
                     alt={img.alt}
                     fill
                     sizes="(min-width: 1280px) 398px, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover object-center"
+                    className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                 </div>
               ))}
@@ -89,14 +89,14 @@ export default memo(function TeamCultureSection({
             {[...images, ...images].map((img, i) => (
               <div
                 key={i}
-                className="relative h-[290px] w-[280px] flex-shrink-0 overflow-hidden rounded-[20px] bg-[#F2F4F7]"
+                className="group relative h-[290px] w-[280px] flex-shrink-0 overflow-hidden rounded-[20px] bg-[#F2F4F7]"
               >
                 <Image
                   src={img.src}
                   alt={img.alt}
                   fill
                   sizes="280px"
-                  className="object-cover object-center"
+                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
             ))}

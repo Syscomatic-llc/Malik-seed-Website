@@ -224,7 +224,7 @@ function LayoutTextOnly({
             title={title}
             className="w-full max-w-[730px] text-center font-[family-name:var(--font-inter-tight)] text-[32px] leading-[38px] font-medium md:text-[40px] md:leading-[48px] lg:text-[48px] lg:leading-[58px]"
           />
-          <p className="w-full max-w-[662px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:text-[16px] md:leading-[24px]">
+          <p className="w-full hidden md:block max-w-[662px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:text-[16px] md:leading-[24px]">
             {description}
           </p>
         </div>
@@ -274,7 +274,7 @@ function LayoutTextStats({
               title={title}
               className="w-full text-center font-[family-name:var(--font-inter-tight)] text-[32px] leading-[38px] font-medium md:text-[40px] md:leading-[48px] lg:text-[48px] lg:leading-[58px]"
             />
-            <p className="w-full max-w-[636px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:text-[16px] md:leading-[24px]">
+            <p className="w-full hidden md:block max-w-[636px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:text-[16px] md:leading-[24px]">
               {description}
             </p>
           </div>
@@ -301,7 +301,7 @@ function LayoutTextTagsStats({
                 title={title}
                 className="w-full text-center font-[family-name:var(--font-inter-tight)] text-[32px] leading-[38px] font-medium md:text-[40px] md:leading-[48px] lg:text-[48px] lg:leading-[58px]"
               />
-              <p className="w-full max-w-[676px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:text-[16px] md:leading-[24px]">
+              <p className="w-full hidden md:block max-w-[676px] text-center font-[family-name:var(--font-inter)] text-[14px] leading-[22px] text-white/80 md:text-[16px] md:leading-[24px]">
                 {description}
               </p>
             </div>

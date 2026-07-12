@@ -24,7 +24,7 @@ function isLocalStaticAsset(cleanPath: string): boolean {
 function buildProxyUrl(
   originUrl: string,
   width?: number,
-  quality?: number,
+  quality?: number
 ): string {
   const params = new URLSearchParams({ url: originUrl });
   if (width) params.set("w", String(width));
@@ -46,12 +46,15 @@ function buildProxyUrl(
 export function resolveImageUrl(
   path?: string | null,
   width?: number,
-  quality?: number,
+  quality?: number
 ): string {
   if (!path) return "";
 
   // Already routed through the proxy — do not wrap again.
-  if (path.startsWith("/api/image-proxy") || path.startsWith("api/image-proxy")) {
+  if (
+    path.startsWith("/api/image-proxy") ||
+    path.startsWith("api/image-proxy")
+  ) {
     return path.startsWith("/") ? path : `/${path}`;
   }
 
