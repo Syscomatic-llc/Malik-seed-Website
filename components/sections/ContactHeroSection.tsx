@@ -65,11 +65,16 @@ export default function ContactHeroSection() {
     Partial<Record<keyof FormState, string>>
   >({});
 
+  // Track if the form has ever been submitted to avoid focusing on initial mount
+  const hasSubmittedRef = useRef(false);
+
   // Focus modal button when it opens, and restore submit button focus when it closes
   useEffect(() => {
     if (isSubmitted) {
+      hasSubmittedRef.current = true;
       continueButtonRef.current?.focus();
-    } else {
+    } else if (hasSubmittedRef.current) {
+      // Only restore focus to submit button after an actual submission, not on mount
       submitButtonRef.current?.focus();
     }
   }, [isSubmitted]);
