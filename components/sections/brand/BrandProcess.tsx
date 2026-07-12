@@ -72,9 +72,9 @@ export default function BrandProcess({
               >
                 {/* Tag Badge or Number */}
                 {step.tag ? (
-                  <div className="flex w-fit shrink-0 items-center justify-center rounded-full border border-[#E4E7EC] bg-[#EAF3DE] px-4 py-1.5 font-sans text-[12px] leading-[18px] font-medium text-[#0F3221]">
+                  <SectionBadge variant="green" className="h-auto rounded-full border border-[#E4E7EC] py-1.5 text-[12px] leading-[18px]">
                     {step.tag}
-                  </div>
+                  </SectionBadge>
                 ) : (
                   step.number && (
                     <div
