@@ -6,8 +6,9 @@ import type { talentStandardsData, TalentStandard } from "@/data/career-data";
 // Figma node 2424:13820 — 1440×835, bg #F2F7F1
 // Inner: 1240px container, centered badge + "Talent Standards" 48px title,
 // then 3-up row of cards + 2-up row of cards below, each card 342×216
-// Row 1: 3 cards (card 1 light, card 2 dark #0F3221, card 3 light)
-// Row 2: 2 cards centered (both light)
+// All cards share the same normal (light) style. On hover, a card switches
+// to the dark green style (#0F3221 bg, light text) — same as the original
+// "dark" card variant — while non-hovered cards remain in the normal style.
 // Each card: padding 32px, numbered green badge (40×40 radius-10, #A9E179),
 //            title 20px Inter Tight 500, description 16px Inter
 // ────────────────────────────────────────────────────────────────────────────
@@ -17,16 +18,13 @@ const StandardCard = memo(function StandardCard({
 }: {
   standard: TalentStandard;
 }) {
-  const isDark = standard.dark;
   return (
     <div
       className={[
-        "flex flex-col items-start justify-between gap-8 rounded-[24px] border p-8 md:items-center",
+        "group flex flex-col items-start justify-between gap-8 rounded-[24px] border p-8 md:items-center",
         "w-full sm:w-[calc(50%-8px)] lg:w-[342px] lg:flex-shrink-0",
-        "min-h-[216px]",
-        isDark
-          ? "border-brand-border bg-brand-neutral-light lg:bg-[#0F3221]"
-          : "border-brand-border bg-brand-neutral-light",
+        "min-h-[216px] transition-colors duration-200",
+        "border-brand-border bg-brand-neutral-light hover:bg-[#0F3221]",
       ].join(" ")}
       style={{ padding: "32px 32px" }}
     >
@@ -35,11 +33,7 @@ const StandardCard = memo(function StandardCard({
         className="bg-brand-light-green flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[10px]"
         aria-hidden="true"
       >
-        <span
-          className={[
-            "font-inter-tight text-brand-dark text-center text-[20px] leading-[24px] font-medium",
-          ].join(" ")}
-        >
+        <span className="font-inter-tight text-brand-dark text-center text-[20px] leading-[24px] font-medium">
           {standard.number}
         </span>
       </div>
@@ -48,16 +42,16 @@ const StandardCard = memo(function StandardCard({
       <div className="flex w-full flex-col items-start gap-2 md:items-center">
         <h3
           className={[
-            "font-inter-tight w-full text-left text-[20px] leading-[24px] font-medium md:text-center",
-            isDark ? "text-brand-dark lg:text-brand-bg" : "text-brand-dark",
+            "font-inter-tight text-brand-dark w-full text-left text-[20px] leading-[24px] font-medium",
+            "transition-colors duration-200 group-hover:text-brand-bg md:text-center",
           ].join(" ")}
         >
           {standard.title}
         </h3>
         <p
           className={[
-            "font-inter w-full text-left text-[16px] leading-[24px] md:text-center",
-            isDark ? "text-brand-dark lg:text-brand-bg" : "text-brand-dark",
+            "font-inter text-brand-dark w-full text-left text-[16px] leading-[24px]",
+            "transition-colors duration-200 group-hover:text-brand-bg md:text-center",
           ].join(" ")}
         >
           {standard.description}

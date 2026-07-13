@@ -73,7 +73,7 @@ function TestimonialCard({
         heightClass,
         isResetting
           ? "transition-none"
-          : "transition-[box-shadow] duration-500 ease-out"
+          : "transition-[height,box-shadow] duration-500 ease-out"
       )}
     >
       {/* Zoom scale binds automatically to active state */}

@@ -881,17 +881,20 @@ export default function TimelineStory({
 
                 const textEl = (
                   <div
-                    className={`absolute left-[28px] flex h-[220px] w-[310px] flex-col items-center justify-center rounded-[24px] px-4 text-center ${
-                      isEven ? "top-[412px]" : "top-[20px]"
-                    }`}
+                    className={cn(
+                      "absolute left-[28px] flex w-[310px] flex-col items-center rounded-[24px] px-4 text-center h-[240px]",
+                      isEven
+                        ? "top-[392px] justify-start pt-6" // Text below timeline bar, top aligned
+                        : "top-0 justify-end pb-6"        // Text above timeline bar, bottom aligned
+                    )}
                   >
                     <GlowOverlay
                       src={glowSrc}
                       className={cn(
                         "h-[100px] w-[140px] rounded-[16px]",
                         isEven
-                          ? "bottom-[8px] left-[8px]"
-                          : "top-[8px] right-[8px]"
+                          ? "top-[8px] left-[8px]"
+                          : "bottom-[8px] right-[8px]"
                       )}
                     />
 

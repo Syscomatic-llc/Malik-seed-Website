@@ -87,7 +87,7 @@ export default function BrandFlowerPortfolio() {
                 key={seg.id}
                 onClick={() => setActiveTab(seg.id)}
                 className={cn(
-                  "h-[39px] cursor-pointer rounded-[10px] px-4 py-[9px] font-sans text-[14px] leading-[21px] font-medium whitespace-nowrap transition-all duration-300 md:h-[48px] md:px-4 md:py-3 md:text-[16px] md:leading-[24px]",
+                  "h-[39px] cursor-pointer rounded-[10px] px-4 py-[9px] font-sans text-[14px] leading-[21px] font-medium whitespace-nowrap transition-colors duration-300 ease-in-out md:h-[48px] md:px-4 md:py-3 md:text-[16px] md:leading-[24px]",
                   activeTab === seg.id
                     ? "bg-[#A9E179] text-[#0D1A14]"
                     : "bg-[#0D291C] text-[#F2F7F1] hover:bg-[#0f3424]"
@@ -103,14 +103,27 @@ export default function BrandFlowerPortfolio() {
         <div className="mt-4 flex items-center justify-center">
           <div className="w-full shrink-0 lg:w-[790px]">
             <div className="group relative h-[360px] w-full overflow-hidden rounded-[20px] border border-white/10 bg-neutral-900 lg:h-[475px] lg:rounded-[24px]">
-              <Image
-                src={currentSegment.image}
-                alt={currentSegment.name}
-                fill
-                priority
-                className="object-cover object-center transition-all duration-700 ease-out group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 790px"
-              />
+              {SEGMENTS.map((seg) => {
+                const isSelected = seg.id === activeTab;
+                return (
+                  <div
+                    key={seg.id}
+                    className={cn(
+                      "absolute inset-0 transition-opacity duration-500 ease-in-out",
+                      isSelected ? "opacity-100 z-10" : "opacity-0 z-0"
+                    )}
+                  >
+                    <Image
+                      src={seg.image}
+                      alt={seg.name}
+                      fill
+                      priority={seg.id === "cut-flower"}
+                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 790px"
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
