@@ -45,9 +45,13 @@ export default async function CareersPage() {
     console.error("Failed to fetch hiring content:", err);
   }
 
+  const sortedApiPositions = [...apiPositions].sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+
   const resolvedPositions =
-    apiPositions && apiPositions.length > 0
-      ? apiPositions.map(mapApiPositionToJobPosition)
+    sortedApiPositions.length > 0
+      ? sortedApiPositions.map(mapApiPositionToJobPosition)
       : openPositionsData.positions;
 
   const resolvedTestimonialsData = {

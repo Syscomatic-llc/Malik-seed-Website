@@ -18,9 +18,13 @@ export default async function OpenPositionsPage() {
     console.error("Failed to fetch open positions:", err);
   }
 
+  const sortedApiPositions = [...apiPositions].sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+
   const resolvedPositions =
-    apiPositions && apiPositions.length > 0
-      ? apiPositions.map(mapApiPositionToJobPosition)
+    sortedApiPositions.length > 0
+      ? sortedApiPositions.map(mapApiPositionToJobPosition)
       : openPositionsData.positions;
 
   return (
