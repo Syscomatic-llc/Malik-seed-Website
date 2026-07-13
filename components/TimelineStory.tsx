@@ -272,13 +272,13 @@ function useYearHighlight(
   outputRange.push(1); // active highlighted opacity (glow)
 
   if (next !== null) {
-    // Dim it quickly after moving past current (e.g., 5% of the distance to next)
-    const endGlowPoint = current + (next - current) * 0.05;
+    // Stay glowing until 95% of the distance to the next year
+    const endGlowPoint = current + (next - current) * 0.95;
     inputRange.push(endGlowPoint);
-    outputRange.push(0.3);
+    outputRange.push(1); // keep glowing
 
     inputRange.push(next);
-    outputRange.push(0.3); // muted opacity
+    outputRange.push(0.3); // dim out as next one starts to glow
   }
 
   return useTransform(smoothProgress, inputRange, outputRange);
