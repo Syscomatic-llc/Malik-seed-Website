@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
+import BrandCardBorder from "./BrandCardBorder";
 
 interface StepItem {
   number?: string;
@@ -62,53 +63,61 @@ export default function BrandProcess({
               <div
                 key={i}
                 className={cn(
-                  "flex flex-col gap-6 transition-all duration-300 md:gap-12",
-                  variant === "light"
-                    ? "rounded-[24px] border border-[#E4E7EC] bg-[#F9FAFB] p-8"
-                    : variant === "dark"
-                      ? "rounded-[24px] border border-white/5 bg-[#0F3221] p-8"
-                      : "rounded-[20px] border border-[#0D1A14]/8 bg-white p-6 hover:border-[#195236]/30 hover:shadow-md"
+                  "brand-card group",
+                  variant === "default" ? "rounded-[20px]" : "rounded-[24px]"
                 )}
               >
-                {/* Tag Badge or Number */}
-                {step.tag ? (
-                  <SectionBadge variant="green" className="h-auto rounded-full border border-[#E4E7EC] py-1.5 text-[12px] leading-[18px]">
-                    {step.tag}
-                  </SectionBadge>
-                ) : (
-                  step.number && (
-                    <div
+                <div
+                  className={cn(
+                    "flex h-full w-full flex-col gap-6 justify-start overflow-hidden rounded-[inherit] transition-all duration-300 md:gap-12",
+                    variant === "light"
+                      ? "border border-[#E4E7EC] bg-[#F9FAFB] p-8"
+                      : variant === "dark"
+                        ? "border border-white/5 bg-[#0F3221] p-8"
+                        : "border border-[#0D1A14]/8 bg-white p-6 hover:shadow-md"
+                  )}
+                >
+                  {/* Tag Badge or Number */}
+                  {step.tag ? (
+                    <SectionBadge variant="green" className="h-auto rounded-full border border-[#E4E7EC] py-1.5 text-[12px] leading-[18px]">
+                      {step.tag}
+                    </SectionBadge>
+                  ) : (
+                    step.number && (
+                      <div
+                        className={cn(
+                          "flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-sans text-[18px] font-[500]",
+                          variant === "dark"
+                            ? "bg-[#A9E179] text-[#0D1A14]"
+                            : "bg-[#195236] text-white"
+                        )}
+                      >
+                        {step.number}
+                      </div>
+                    )
+                  )}
+                  <div className="flex flex-col gap-2 md:gap-3">
+                    <h3
                       className={cn(
-                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-sans text-[18px] font-[500]",
-                        variant === "dark"
-                          ? "bg-[#A9E179] text-[#0D1A14]"
-                          : "bg-[#195236] text-white"
+                        "font-sans text-[20px] leading-[24px] font-medium md:text-[24px] md:leading-[29px]",
+                        variant === "dark" ? "text-[#F2F7F1]" : "text-[#0D1A14]"
                       )}
                     >
-                      {step.number}
-                    </div>
-                  )
-                )}
-                <div className="flex flex-col gap-2 md:gap-3">
-                  <h3
-                    className={cn(
-                      "font-sans text-[20px] leading-[24px] font-medium md:text-[24px] md:leading-[29px]",
-                      variant === "dark" ? "text-[#F2F7F1]" : "text-[#0D1A14]"
-                    )}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    className={cn(
-                      "font-sans text-[16px] leading-[24px]",
-                      variant === "dark"
-                        ? "text-[#F2F7F1]/70"
-                        : "text-[#0D1A14]/65"
-                    )}
-                  >
-                    {step.description}
-                  </p>
+                      {step.title}
+                    </h3>
+                    <p
+                      className={cn(
+                        "font-sans text-[16px] leading-[24px]",
+                        variant === "dark"
+                          ? "text-[#F2F7F1]/70"
+                          : "text-[#0D1A14]/65"
+                      )}
+                    >
+                      {step.description}
+                    </p>
+                  </div>
                 </div>
+                <BrandCardBorder />
               </div>
             ))}
           </div>
