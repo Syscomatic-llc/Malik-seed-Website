@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { SectionBadge } from "../ui/SectionBadge";
+import { resolveImageUrl } from "@/lib/utils";
+import { ApiOurStoryValue } from "@/lib/api";
 
-// ---------------------------------------------------------------------------
-// Static data
-// ---------------------------------------------------------------------------
+interface AboutValuesProps {
+  apiData?: ApiOurStoryValue[] | null;
+}
+
 const BRAND_VALUES = [
   {
     id: 1,
@@ -31,10 +34,18 @@ const BRAND_VALUES = [
   },
 ] as const;
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-export default function AboutValues() {
+export default function AboutValues({ apiData }: AboutValuesProps) {
+  const values = apiData?.length
+    ? [...apiData]
+        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+        .map((val) => ({
+          id: val.id,
+          title: val.title,
+          src: resolveImageUrl(val.image_url),
+          alt: val.title,
+        }))
+    : BRAND_VALUES;
+
   return (
     <section className="bg-brand-bg w-full pb-12 md:pb-[100px]" id="values">
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
@@ -51,7 +62,7 @@ export default function AboutValues() {
 
         {/* 2 × 2 values grid */}
         <div className="mx-auto grid w-full max-w-[368px] grid-cols-2 gap-3 md:max-w-[820px] md:gap-6">
-          {BRAND_VALUES.map((val) => (
+          {values.map((val) => (
             <div
               key={val.id}
               className="bg-brand-neutral-light border-brand-border-light flex w-full flex-col items-center justify-between rounded-[20px] border p-3 pb-4 md:rounded-[24px] md:p-4 md:pb-6"

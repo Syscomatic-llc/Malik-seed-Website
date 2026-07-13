@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { resolveImageUrl } from "@/lib/utils";
+import { ApiOurStoryHero } from "@/lib/api";
 
-// ---------------------------------------------------------------------------
-// Static data
-// ---------------------------------------------------------------------------
+interface AboutHeroProps {
+  apiData?: ApiOurStoryHero | null;
+}
+
 const HERO_IMAGES = [
   {
     id: 1,
@@ -22,10 +25,17 @@ const HERO_IMAGES = [
   },
 ] as const;
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-export default function AboutHero() {
+export default function AboutHero({ apiData }: AboutHeroProps) {
+  const badgeText = apiData?.title || "Our Story";
+  const titleText = apiData?.subtitle || "Cultivating the Future of Agriculture in Bangladesh";
+  const images = apiData?.background_images?.length
+    ? apiData.background_images.map((img, i) => ({
+        id: i,
+        src: resolveImageUrl(img),
+        alt: `Our story image ${i + 1}`,
+      }))
+    : HERO_IMAGES;
+
   return (
     <section className="bg-brand-bg w-full overflow-hidden pt-[120px] pb-12 md:pt-[150px] md:pb-[80px] xl:pt-[180px] xl:pb-[100px]">
       {/* Title & Badge — constrained only for readability */}
@@ -35,19 +45,18 @@ export default function AboutHero() {
           showDot
           className="h-[30px] px-4 md:h-[33px]"
         >
-          Our Story
+          {badgeText}
         </SectionBadge>
 
-        <h1 className="text-brand-dark max-w-[844px] text-center font-sans text-[38px] leading-[46px] font-medium tracking-tight md:text-[54px] md:leading-[64px] xl:text-[64px] xl:leading-[77px]">
-          Cultivating the Future <br className="hidden md:inline" />
-          of Agriculture in Bangladesh
+        <h1 className="text-brand-dark max-w-[844px] text-center font-sans text-[38px] leading-[46px] font-medium tracking-tight md:text-[54px] md:leading-[64px] xl:text-[64px] xl:leading-[77px] whitespace-pre-line">
+          {titleText}
         </h1>
       </div>
 
       {/* 3-image static row — Centered, side images partially overflowing the screen */}
       <div className="mt-8 flex w-full justify-center overflow-x-hidden md:mt-12">
         <div className="flex shrink-0 items-center justify-center gap-4 md:gap-6">
-          {HERO_IMAGES.map((img, i) => (
+          {images.map((img, i) => (
             <div
               key={img.id}
               className="relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm md:aspect-[548/420] md:h-auto md:w-[42vw] md:rounded-[24px]"

@@ -7,7 +7,7 @@ import AboutMissionTwo from "@/components/sections/AboutMissionTwo";
 import GalleryHeroSection from "@/components/sections/GalleryHeroSection";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import { timelineItems } from "@/data/sections-data";
-import { homepageApi, galleryApi } from "@/lib/api";
+import { galleryApi, aboutpageApi } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
 export const metadata = {
@@ -17,11 +17,11 @@ export const metadata = {
 };
 
 export default async function AboutPage() {
-  let apiTimeline = undefined;
+  let ourStoryData = null;
   try {
-    apiTimeline = await homepageApi.getTimeline({ revalidate: 60 });
+    ourStoryData = await aboutpageApi.getAll({ revalidate: 60 });
   } catch (err) {
-    console.error("Failed to fetch timeline data from API:", err);
+    console.error("Failed to fetch our story data from API:", err);
   }
 
   let galleryData = null;
@@ -44,11 +44,14 @@ export default async function AboutPage() {
 
   return (
     <div className="bg-brand-bg min-h-screen">
-      <AboutHero />
-      <AboutMissionOne />
-      <AboutValues />
-      <TimelineStory items={timelineItems} apiData={apiTimeline} />
-      <AboutMissionTwo />
+      <AboutHero apiData={ourStoryData?.hero} />
+      <AboutMissionOne apiData={ourStoryData?.mission} />
+      <AboutValues apiData={ourStoryData?.values} />
+      <TimelineStory
+        items={timelineItems}
+        apiData={ourStoryData?.timeline ? (ourStoryData.timeline as any) : undefined}
+      />
+      <AboutMissionTwo apiData={ourStoryData?.mission} />
       <Suspense fallback={null}>
         <GalleryHeroSection isHero={false} initialImages={mappedGalleryImages} />
       </Suspense>
@@ -56,4 +59,3 @@ export default async function AboutPage() {
     </div>
   );
 }
-

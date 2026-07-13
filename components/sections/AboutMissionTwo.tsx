@@ -3,20 +3,25 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { SectionBadge } from "../ui/SectionBadge";
+import { resolveImageUrl } from "@/lib/utils";
+import { ApiOurStoryMission } from "@/lib/api";
 
-// ---------------------------------------------------------------------------
-// Full text — typed out entirely on scroll trigger
-// ---------------------------------------------------------------------------
-const FULL_TEXT =
+interface AboutMissionTwoProps {
+  apiData?: ApiOurStoryMission | null;
+}
+
+const DEFAULT_TEXT =
   "Helping farmers grow with confidence, by providing the highest quality seeds, research backed knowledge and hands on support, season after season";
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-export default function AboutMissionTwo() {
+export default function AboutMissionTwo({ apiData }: AboutMissionTwoProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [started, setStarted] = useState(false);
   const [displayedCount, setDisplayedCount] = useState(0);
+
+  const missionText = apiData?.vision_description || DEFAULT_TEXT;
+  const bannerImage = apiData?.image_url
+    ? resolveImageUrl(apiData.image_url)
+    : "/images/about/maliks_farm_new_3_1.png";
 
   // Trigger once when section is ≥ 30 % visible
   useEffect(() => {
@@ -43,19 +48,19 @@ export default function AboutMissionTwo() {
 
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const targetMs = isMobile ? 2000 : 3000;
-    const delay = Math.max(8, Math.round(targetMs / FULL_TEXT.length));
+    const delay = Math.max(8, Math.round(targetMs / missionText.length));
 
     let frame: ReturnType<typeof setTimeout>;
 
     const type = (index: number) => {
-      if (index > FULL_TEXT.length) return;
+      if (index > missionText.length) return;
       setDisplayedCount(index);
       frame = setTimeout(() => type(index + 1), delay);
     };
 
     type(0);
     return () => clearTimeout(frame);
-  }, [started]);
+  }, [started, missionText]);
 
   return (
     <section
@@ -69,21 +74,11 @@ export default function AboutMissionTwo() {
             OUR MISSION
           </SectionBadge>
 
-          {/*
-            Before scroll  → displayedCount = 0  → full text shown muted
-            While typing   → typedPart grows bright, mutedPart shrinks muted
-            After typing   → full text bright, no cursor
-          */}
-          {/*
-            Each character lives in its own <span> so the browser always
-            lays out the FULL text — word-wrapping never shifts as typing
-            progresses. Only the color changes per character.
-          */}
           <h2
-            aria-label={FULL_TEXT}
+            aria-label={missionText}
             className="max-w-[1128px] font-sans text-[24px] leading-[29px] font-medium tracking-tight md:text-[40px] md:leading-[50px] xl:text-[48px] xl:leading-[58px]"
           >
-            {FULL_TEXT.split("").map((char, i) => (
+            {missionText.split("").map((char, i) => (
               <span
                 key={i}
                 aria-hidden="true"
@@ -96,13 +91,12 @@ export default function AboutMissionTwo() {
                 {char}
               </span>
             ))}
-
           </h2>
 
           {/* Farm banner */}
           <div className="bg-brand-neutral-light/5 relative aspect-[310/200] w-full overflow-hidden rounded-[18px] md:aspect-[1128/532] md:rounded-[24px]">
             <Image
-              src="/images/about/maliks_farm_new_3_1.png"
+              src={bannerImage}
               alt="Malik's Farm modern agriculture fields and seed trials"
               fill
               sizes="(max-width: 768px) 100vw, 1128px"

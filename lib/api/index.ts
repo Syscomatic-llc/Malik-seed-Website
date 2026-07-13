@@ -4,5 +4,7 @@ export * from "./homepage";
 export * from "./newspage";
 export * from "./contact";
 export * from "./gallery";
+export * from "./about";
+
 
 

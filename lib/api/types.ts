@@ -318,4 +318,64 @@ export interface ApiGalleryData {
   videos: ApiGalleryVideo[];
 }
 
+export interface ApiOurStoryHero {
+  id: number;
+  title: string;
+  subtitle: string;
+  background_image: string;
+  background_video: string | null;
+  background_images: string[];
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiOurStoryMission {
+  id: number;
+  title: string;
+  description: string;
+  vision_description: string | null;
+  image_url: string | null;
+  icon: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiOurStoryValue {
+  id: number;
+  title: string;
+  description: string;
+  icon: string | null;
+  image_url: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiOurStoryTimelineItem {
+  id: number;
+  year: string;
+  title: string;
+  description: string;
+  image_url: string | null;
+  is_milestone: boolean;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiOurStoryData {
+  hero: ApiOurStoryHero;
+  mission: ApiOurStoryMission;
+  values: ApiOurStoryValue[];
+  timeline: ApiOurStoryTimelineItem[];
+  team: unknown[];
+  leadership: unknown[];
+  awards: unknown[];
+}
+
+
 
