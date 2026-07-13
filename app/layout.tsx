@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Inter_Tight, Inter, Anton, Stack_Sans_Notch } from "next/font/google";
 import "./globals.css";
-import "lenis/dist/lenis.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import { homepageApi } from "@/lib/api";
 import LenisProvider from "@/components/LenisProvider";
+import "lenis/dist/lenis.css";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],

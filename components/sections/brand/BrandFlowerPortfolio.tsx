@@ -80,7 +80,6 @@ export default function BrandFlowerPortfolio() {
         <div className="flex justify-center">
           <div
             className="flex max-w-full scrollbar-none gap-[8px] overflow-x-auto rounded-[16px] bg-[#112019] p-[8px]"
-            data-lenis-prevent
           >
             {SEGMENTS.map((seg) => (
               <button

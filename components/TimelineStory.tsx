@@ -233,18 +233,64 @@ function GlobalTimelineDot({
   );
 }
 
+function getYearProgressPoints(items: TimelineItem[]) {
+  const heights = getRowHeights(items);
+  const total = heights.reduce((sum, h) => sum + h, 0);
+  let accumulated = 0;
+  return heights.map((h) => {
+    const point = accumulated / total;
+    accumulated += h;
+    return point;
+  });
+}
+
+function useYearHighlight(
+  smoothProgress: import("motion/react").MotionValue<number>,
+  idx: number,
+  points: number[]
+) {
+  if (points.length <= 1) return 1;
+
+  const current = points[idx];
+  const prev = idx > 0 ? points[idx - 1] : null;
+  const next = idx < points.length - 1 ? points[idx + 1] : null;
+
+  const inputRange: number[] = [];
+  const outputRange: number[] = [];
+
+  if (prev !== null) {
+    inputRange.push(prev);
+    outputRange.push(0.3); // muted opacity
+  }
+  inputRange.push(current);
+  outputRange.push(1); // active highlighted opacity
+
+  if (next !== null) {
+    inputRange.push(next);
+    outputRange.push(0.3); // muted opacity
+  }
+
+  return useTransform(smoothProgress, inputRange, outputRange);
+}
+
 function TimelineSpine({
   year,
   isLast = false,
   smoothProgress,
   range,
+  idx,
+  yearPoints,
 }: {
   year: string;
   isLast?: boolean;
   smoothProgress: import("motion/react").MotionValue<number>;
   range: [number, number];
+  idx: number;
+  yearPoints: number[];
 }) {
   const height = (isLast ? 518 : 456) + YEAR_GAP;
+  const yearOpacity = useYearHighlight(smoothProgress, idx, yearPoints);
+
   return (
     <div className="relative shrink-0" style={{ width: 72, height }}>
       <SegmentSpineLine
@@ -262,12 +308,12 @@ function TimelineSpine({
         className="bg-brand-dark absolute left-1/2 z-30 -translate-x-1/2 px-2"
         style={{ top: 0 }}
       >
-        <span
+        <motion.span
           className="font-anton text-brand-light-green block text-center text-5xl leading-[58px] whitespace-nowrap"
-          style={{ fontFamily: "var(--font-anton)" }}
+          style={{ fontFamily: "var(--font-anton)", opacity: yearOpacity }}
         >
           {year}
-        </span>
+        </motion.span>
       </div>
     </div>
   );
@@ -324,7 +370,7 @@ function GlowOverlay({
       }}
       aria-hidden="true"
     >
-      <div className="absolute inset-0 scale-110 [transform:translate3d(0,0,0)] blur-[8px]">
+      <div className="absolute inset-0 scale-110 [transform:translate3d(0,0,0)] blur-[4px]">
         <Image
           src={src}
           alt=""
@@ -398,11 +444,15 @@ function TimelineRow({
   isLast,
   smoothProgress,
   range,
+  idx,
+  yearPoints,
 }: {
   item: TimelineItem;
   isLast: boolean;
   smoothProgress: import("motion/react").MotionValue<number>;
   range: [number, number];
+  idx: number;
+  yearPoints: number[];
 }) {
   const spine = (
     <TimelineSpine
@@ -410,6 +460,8 @@ function TimelineRow({
       isLast={isLast}
       smoothProgress={smoothProgress}
       range={range}
+      idx={idx}
+      yearPoints={yearPoints}
     />
   );
 
@@ -633,11 +685,19 @@ function TabletTimelineRow({
   item,
   isLast,
   isFirst = false,
+  smoothProgress,
+  idx,
+  yearPoints,
 }: {
   item: TimelineItem;
   isLast: boolean;
   isFirst?: boolean;
+  smoothProgress: import("motion/react").MotionValue<number>;
+  idx: number;
+  yearPoints: number[];
 }) {
+  const yearOpacity = useYearHighlight(smoothProgress, idx, yearPoints);
+
   return (
     <div className="grid w-full grid-cols-[40px_1fr] items-stretch">
       {/* Left: spine spacing */}
@@ -645,12 +705,12 @@ function TabletTimelineRow({
       {/* Right: content */}
       <div className="flex flex-col gap-5 pb-16">
         {/* Year */}
-        <span
+        <motion.span
           className="font-anton text-brand-light-green text-3xl leading-tight whitespace-nowrap"
-          style={{ fontFamily: "var(--font-anton)" }}
+          style={{ fontFamily: "var(--font-anton)", opacity: yearOpacity }}
         >
           {item.year}
-        </span>
+        </motion.span>
         {/* Image */}
         <div className="group relative aspect-[503/372] w-full overflow-hidden rounded-[24px] bg-[#E4E7EC]">
           {item.image && (
@@ -769,22 +829,27 @@ export default function TimelineStory({
                 smoothProgress={smoothProgress}
                 rowRanges={rowRanges}
               />
-              {resolvedItems.map((item, idx) => {
-                const isLast = idx === resolvedItems.length - 1;
-                return (
-                  <div
-                    key={item.year}
-                    className="flex flex-col items-center self-stretch"
-                  >
-                    <TimelineRow
-                      item={item}
-                      isLast={isLast}
-                      smoothProgress={smoothProgress}
-                      range={rowRanges[idx]}
-                    />
-                  </div>
-                );
-              })}
+              {(() => {
+                const yearPoints = getYearProgressPoints(resolvedItems);
+                return resolvedItems.map((item, idx) => {
+                  const isLast = idx === resolvedItems.length - 1;
+                  return (
+                    <div
+                      key={item.year}
+                      className="flex flex-col items-center self-stretch"
+                    >
+                      <TimelineRow
+                        item={item}
+                        isLast={isLast}
+                        smoothProgress={smoothProgress}
+                        range={rowRanges[idx]}
+                        idx={idx}
+                        yearPoints={yearPoints}
+                      />
+                    </div>
+                  );
+                });
+              })()}
             </div>
           </div>
         </div>
@@ -813,17 +878,25 @@ export default function TimelineStory({
               className="relative flex flex-col self-stretch"
             >
               <GlobalTabletLine smoothProgress={tabletSmoothProgress} />
-              {resolvedItems.map((item, idx) => {
-                const isLast = idx === resolvedItems.length - 1;
-                return (
-                  <TabletTimelineRow
-                    key={item.year}
-                    item={item}
-                    isLast={isLast}
-                    isFirst={idx === 0}
-                  />
+              {(() => {
+                const tabletPoints = resolvedItems.map(
+                  (_, idx) => idx / (resolvedItems.length - 1 || 1)
                 );
-              })}
+                return resolvedItems.map((item, idx) => {
+                  const isLast = idx === resolvedItems.length - 1;
+                  return (
+                    <TabletTimelineRow
+                      key={item.year}
+                      item={item}
+                      isLast={isLast}
+                      isFirst={idx === 0}
+                      smoothProgress={tabletSmoothProgress}
+                      idx={idx}
+                      yearPoints={tabletPoints}
+                    />
+                  );
+                });
+              })()}
             </div>
           </div>
         </div>
@@ -849,84 +922,95 @@ export default function TimelineStory({
           <div
             ref={mobileRef}
             className="flex w-full snap-x snap-mandatory scrollbar-none flex-row overflow-x-auto px-6 pb-8"
-            data-lenis-prevent
           >
             <div className="relative flex flex-row gap-[80px]">
               <GlobalMobileLine smoothProgress={mobileSmoothProgress} />
 
-              {resolvedItems.map((item, idx) => {
-                const isEven = idx % 2 === 0;
-                // Every year gets a glow now — prefer the dedicated glow
-                // image, fall back to the item's main photo so nobody
-                // renders blank.
-                const glowSrc = item.glow || item.image;
-
-                const imageEl = (
-                  <div
-                    className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] bg-[#F2F4F7] ${
-                      isEven ? "top-0" : "top-[392px]"
-                    }`}
-                  >
-                    {item.image && (
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        fill
-                        className="object-cover"
-                        sizes="310px"
-                      />
-                    )}
-                  </div>
+              {(() => {
+                const mobilePoints = resolvedItems.map(
+                  (_, idx) => idx / (resolvedItems.length - 1 || 1)
                 );
+                return resolvedItems.map((item, idx) => {
+                  const isEven = idx % 2 === 0;
+                  // Every year gets a glow now — prefer the dedicated glow
+                  // image, fall back to the item's main photo so nobody
+                  // renders blank.
+                  const glowSrc = item.glow || item.image;
+                  const yearOpacity = useYearHighlight(
+                    mobileSmoothProgress,
+                    idx,
+                    mobilePoints
+                  );
 
-                const textEl = (
-                  <div
-                    className={cn(
-                      "absolute left-[28px] flex w-[310px] flex-col items-center rounded-[24px] px-4 text-center h-[240px]",
-                      isEven
-                        ? "top-[392px] justify-start pt-6" // Text below timeline bar, top aligned
-                        : "top-0 justify-end pb-6"        // Text above timeline bar, bottom aligned
-                    )}
-                  >
-                    <GlowOverlay
-                      src={glowSrc}
-                      className={cn(
-                        "h-[100px] w-[140px] rounded-[16px]",
-                        isEven
-                          ? "top-[8px] left-[8px]"
-                          : "bottom-[8px] right-[8px]"
+                  const imageEl = (
+                    <div
+                      className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] bg-[#F2F4F7] ${
+                        isEven ? "top-0" : "top-[392px]"
+                      }`}
+                    >
+                      {item.image && (
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                          sizes="310px"
+                        />
                       )}
-                    />
-
-                    <div className="relative z-10 flex flex-col gap-4">
-                      <h3
-                        className="font-anton text-brand-bg text-[32px] leading-[38px] whitespace-pre-line"
-                        style={{ fontFamily: "var(--font-anton)" }}
-                      >
-                        {item.title}
-                      </h3>
-                      <p
-                        className="text-brand-bg/95 text-base leading-[24px] whitespace-pre-line"
-                        style={{ fontFamily: "var(--font-inter)" }}
-                      >
-                        {item.description}
-                      </p>
                     </div>
-                  </div>
-                );
+                  );
 
-                const yearEl = (
-                  <div className="pointer-events-none absolute top-[296px] left-0 z-30 flex h-[48px] w-full items-center justify-center">
-                    <div className="relative z-30 flex items-center select-none">
-                      <span
-                        className="font-anton text-brand-light-green bg-brand-dark px-[2rem] text-center text-[40px] leading-[48px]"
-                        style={{ fontFamily: "var(--font-anton)" }}
+                  const textEl = (
+                    <div
+                      className={cn(
+                        "absolute left-[28px] w-[310px] h-[240px] rounded-[24px]",
+                        isEven ? "top-[392px]" : "top-0"
+                      )}
+                    >
+                      <GlowOverlay
+                        src={glowSrc}
+                        className={cn(
+                          "h-[100px] w-[140px] rounded-[16px]",
+                          isEven
+                            ? "bottom-[8px] left-[8px]"
+                            : "top-[8px] right-[8px]"
+                        )}
+                      />
+
+                      <div
+                        className={cn(
+                          "absolute left-4 right-4 z-10 flex flex-col gap-4 text-center items-center",
+                          isEven ? "top-6" : "bottom-6"
+                        )}
                       >
-                        {item.year}
-                      </span>
+                        <h3
+                          className="font-anton text-brand-bg text-[32px] leading-[38px] whitespace-pre-line"
+                          style={{ fontFamily: "var(--font-anton)" }}
+                        >
+                          {item.title}
+                        </h3>
+                        <p
+                          className="text-brand-bg/95 text-base leading-[24px] whitespace-pre-line"
+                          style={{ fontFamily: "var(--font-inter)" }}
+                        >
+                          {item.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                );
+                  );
+
+                  const yearEl = (
+                    <div className="pointer-events-none absolute top-[296px] left-0 z-30 flex h-[48px] w-full items-center justify-center">
+                      <div className="relative z-30 flex items-center select-none">
+                        <motion.span
+                          className="font-anton text-brand-light-green bg-brand-dark px-[2rem] text-center text-[40px] leading-[48px]"
+                          style={{ fontFamily: "var(--font-anton)", opacity: yearOpacity }}
+                        >
+                          {item.year}
+                        </motion.span>
+                      </div>
+                    </div>
+                  );
 
                 return (
                   <div
@@ -938,7 +1022,7 @@ export default function TimelineStory({
                     {textEl}
                   </div>
                 );
-              })}
+              })})()}
             </div>
           </div>
         </div>

@@ -232,7 +232,6 @@ export default function NewsSection({ apiData }: NewsSectionProps) {
             {/* Mobile/Tablet swipe */}
             <div
               className="block w-full snap-x snap-mandatory scrollbar-none overflow-x-auto pb-4 xl:hidden"
-              data-lenis-prevent
             >
               <div className="flex gap-4 pr-8">
                 {newsData.items.map((article) => (

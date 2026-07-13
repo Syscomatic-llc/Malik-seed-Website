@@ -651,7 +651,4 @@
   animation: blink 0.8s step-start infinite;
 }
 
-html.lenis {
-  scroll-behavior: auto !important;
-}
 

@@ -165,7 +165,6 @@ export default function BrandProcess({
         {images && images.length > 0 && (
           <div
             className="flex w-full snap-x snap-mandatory scrollbar-none gap-5 overflow-x-auto pb-4 md:grid md:grid-cols-2 md:gap-6 md:pb-0"
-            data-lenis-prevent
           >
             {images.map((img, idx) => (
               <div

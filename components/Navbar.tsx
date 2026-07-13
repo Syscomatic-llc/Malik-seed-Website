@@ -336,7 +336,6 @@ function MobileNav({
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
-          data-lenis-prevent
           className={cn(
             "absolute top-[calc(48px+16px)] left-0 w-full rounded-[24px] bg-white shadow-lg transition-all duration-300 ease-in-out",
             isOpen

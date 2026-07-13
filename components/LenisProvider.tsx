@@ -1,15 +1,27 @@
 "use client";
 
-import { ReactLenis } from "lenis/react";
-import { ReactNode } from "react";
+import { ReactLenis, useLenis } from "lenis/react";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
-interface LenisProviderProps {
-  children: ReactNode;
+function ScrollReset() {
+  const lenis = useLenis();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (lenis) {
+      // Instantly reset scroll to top on path change
+      lenis.scrollTo(0, { immediate: true });
+    }
+  }, [pathname, lenis]);
+
+  return null;
 }
 
-export default function LenisProvider({ children }: LenisProviderProps) {
+export default function LenisProvider({ children }: { children: React.ReactNode }) {
   return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.2, smoothWheel: true, allowNestedScroll: true }}>
+    <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
+      <ScrollReset />
       {children}
     </ReactLenis>
   );
