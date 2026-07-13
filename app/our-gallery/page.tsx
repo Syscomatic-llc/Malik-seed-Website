@@ -18,11 +18,15 @@ export default async function OurGalleryPage() {
   }
 
   const mappedImages =
-    galleryData?.items?.map((item) => ({
-      id: item.id,
-      src: resolveImageUrl(item.image_url),
-      alt: item.title || "Gallery Image",
-    })) || [];
+    galleryData?.items
+      ? [...galleryData.items]
+          .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+          .map((item) => ({
+            id: item.id,
+            src: resolveImageUrl(item.image_url),
+            alt: item.title || "Gallery Image",
+          }))
+      : [];
 
   return (
     <Suspense fallback={null}>

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import LoadmoreButton from "../LoadmoreButton";
+import OptimizedImage from "../ui/OptimizedImage";
 
 // ---------------------------------------------------------------------------
 // Type Definitions
@@ -195,7 +196,7 @@ const GalleryHeroSection = ({
                     key={image.id}
                     className={`${mobileClass} ${widthClass} group relative overflow-hidden rounded-[16px] bg-neutral-100 xl:h-[450px] xl:rounded-[24px]`}
                   >
-                    <Image
+                    <OptimizedImage
                       src={image.src}
                       alt={image.alt}
                       fill
@@ -268,7 +269,7 @@ const GalleryHeroSection = ({
                   key={image.id}
                   className={`${mobileClass} ${widthClass} ${mobileHideClass} group relative overflow-hidden rounded-[16px] bg-neutral-100 xl:h-[450px] xl:rounded-[24px]`}
                 >
-                  <Image
+                  <OptimizedImage
                     src={image.src}
                     alt={image.alt}
                     fill
