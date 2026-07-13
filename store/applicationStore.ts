@@ -41,6 +41,7 @@ export interface ApplicationState {
   noticePeriod: string;
   cvFileName: string;
   cvFileSize: number;
+  cvUrl: string;
   coverLetter: string;
 
   // Actions
@@ -95,6 +96,7 @@ export const useApplicationStore = create<ApplicationState>()(
       noticePeriod: "",
       cvFileName: "",
       cvFileSize: 0,
+      cvUrl: "",
       coverLetter: "",
 
       // Actions
@@ -260,6 +262,7 @@ export const useApplicationStore = create<ApplicationState>()(
           noticePeriod: "",
           cvFileName: "",
           cvFileSize: 0,
+          cvUrl: "",
           coverLetter: "",
         }),
     }),

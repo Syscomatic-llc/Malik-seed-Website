@@ -15,7 +15,7 @@ import {
   futureProgramData,
   employeeTestimonialsData,
 } from "@/data/career-data";
-import { hiringApi, mapApiPositionToJobPosition } from "@/lib/api";
+import { hiringApi, mapApiPositionToJobPosition, ApiJobPosition, ApiHiringTestimonial } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -31,54 +31,44 @@ export const metadata: Metadata = {
 };
 
 export default async function CareersPage() {
-  let apiData = null;
+  let apiPositions: ApiJobPosition[] = [];
+  let apiTestimonials: ApiHiringTestimonial[] = [];
+
   try {
-    apiData = await hiringApi.getAllHiringContent({ revalidate: 60 });
+    const [positionsRes, testimonialsRes] = await Promise.all([
+      hiringApi.getPositions(undefined, { revalidate: 60 }),
+      hiringApi.getTestimonials({ revalidate: 60 }),
+    ]);
+    apiPositions = positionsRes || [];
+    apiTestimonials = testimonialsRes || [];
   } catch (err) {
     console.error("Failed to fetch hiring content:", err);
   }
 
-  const resolvedHeroData = {
-    ...careerHeroData,
-    badge: apiData?.page_content?.hero_title || careerHeroData.badge,
-    titleLine1: apiData?.page_content?.hero_subtitle || careerHeroData.titleLine1,
-    teamImage: apiData?.page_content?.hero_image
-      ? resolveImageUrl(apiData.page_content.hero_image)
-      : careerHeroData.teamImage,
-  };
-
-  const resolvedManifestoData = {
-    ...careerManifestoData,
-    subtitle: apiData?.page_content?.manifesto_title || careerManifestoData.subtitle,
-    paragraphs: apiData?.page_content?.manifesto_description
-      ? apiData.page_content.manifesto_description.split("\n\n").filter(Boolean)
-      : careerManifestoData.paragraphs,
-  };
-
   const resolvedPositions =
-    apiData?.positions && apiData.positions.length > 0
-      ? apiData.positions.map(mapApiPositionToJobPosition)
+    apiPositions && apiPositions.length > 0
+      ? apiPositions.map(mapApiPositionToJobPosition)
       : openPositionsData.positions;
 
   const resolvedTestimonialsData = {
     ...employeeTestimonialsData,
     testimonials:
-      apiData?.testimonials && apiData.testimonials.length > 0
-        ? apiData.testimonials.map((t) => ({
+      apiTestimonials && apiTestimonials.length > 0
+        ? apiTestimonials.map((t) => ({
             id: t.id,
             name: t.name,
-            role: t.role,
-            quote: t.quote,
-            avatar: t.avatar ? resolveImageUrl(t.avatar) : undefined,
+            role: t.designation,
+            quote: t.content,
+            avatar: t.avatar_url ? resolveImageUrl(t.avatar_url) : undefined,
           }))
         : employeeTestimonialsData.testimonials,
   };
 
   return (
     <div className="min-h-screen bg-[#F2F7F1]">
-      <CareerHero data={resolvedHeroData} />
+      <CareerHero data={careerHeroData} />
       <TalentStandardsSection data={talentStandardsData} />
-      <CareerManifestoSection data={resolvedManifestoData} />
+      <CareerManifestoSection data={careerManifestoData} />
       <OpenPositionsCardsSection
         data={{
           ...openPositionsData,

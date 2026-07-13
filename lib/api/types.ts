@@ -422,9 +422,12 @@ export interface ApiHiringBenefit {
 export interface ApiHiringTestimonial {
   id: number;
   name: string;
-  role: string;
-  quote: string;
-  avatar: string | null;
+  designation: string;
+  content: string;
+  avatar_url: string | null;
+  department: string;
+  years_at_company: number | null;
+  video_url: string | null;
   sort_order: number;
   is_active: boolean;
   created_at: string;

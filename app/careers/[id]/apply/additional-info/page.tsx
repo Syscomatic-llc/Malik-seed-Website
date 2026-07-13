@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Upload, FileText, Trash2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { hiringApi } from "@/lib/api";
 
 const HEARD_ABOUT_OPTIONS = [
   "Company Website",
@@ -59,6 +60,7 @@ export default function AdditionalInfoPage() {
   const [cvFile, setCvFile] = useState<{ name: string; size: number } | null>(
     null
   );
+  const [cvFileObject, setCvFileObject] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -105,6 +107,7 @@ export default function AdditionalInfoPage() {
       const file = e.dataTransfer.files[0];
       if (validateFile(file)) {
         setCvFile({ name: file.name, size: file.size });
+        setCvFileObject(file);
       }
     }
   };
@@ -114,6 +117,7 @@ export default function AdditionalInfoPage() {
       const file = e.target.files[0];
       if (validateFile(file)) {
         setCvFile({ name: file.name, size: file.size });
+        setCvFileObject(file);
       }
     }
   };
@@ -134,6 +138,7 @@ export default function AdditionalInfoPage() {
 
   const removeFile = () => {
     setCvFile(null);
+    setCvFileObject(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -162,26 +167,41 @@ export default function AdditionalInfoPage() {
     setLoading(true);
     setError("");
 
-    // Update local store
-    setAdditionalInfo({
-      phoneNumber,
-      location,
-      linkedin,
-      portfolio,
-      heardAbout,
-      experience: "",
-      expectedSalary: "",
-      noticePeriod: "",
-      coverLetter: "",
-      cvFileName: cvFile.name,
-      cvFileSize: cvFile.size,
-    });
+    let cvUrl = store.cvUrl || "";
 
-    // Simulate submission delay locally
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      if (cvFileObject) {
+        const formData = new FormData();
+        formData.append("file", cvFileObject);
+        const uploadRes = await hiringApi.uploadResume(formData);
+        if (uploadRes && uploadRes.url) {
+          cvUrl = uploadRes.url;
+        }
+      }
+
+      // Update local store
+      setAdditionalInfo({
+        phoneNumber,
+        location,
+        linkedin,
+        portfolio,
+        heardAbout,
+        experience: "",
+        expectedSalary: "",
+        noticePeriod: "",
+        coverLetter: "",
+        cvFileName: cvFile.name,
+        cvFileSize: cvFile.size,
+        cvUrl,
+      });
+
       router.push(`/careers/${id}/apply/submitted`);
-    }, 1200);
+    } catch (err: any) {
+      console.error("Failed to upload resume / submit application:", err);
+      setError(err?.message || "An error occurred during resume upload. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Format file size in MB
