@@ -993,7 +993,7 @@ export default function TimelineStory({
                       <div
                         className={cn(
                           "absolute left-4 right-4 z-10 flex flex-col gap-4 text-center items-center",
-                          isEven ? "top-6" : "bottom-6"
+                          isEven ? "top-0" : "bottom-0"
                         )}
                       >
                         <h3
@@ -1014,7 +1014,7 @@ export default function TimelineStory({
 
                   const yearEl = (
                     <div className="pointer-events-none absolute top-[296px] left-0 z-30 flex h-[48px] w-full items-center justify-center">
-                      <div className="bg-brand-dark relative z-30 flex h-full items-center select-none px-[2rem]">
+                      <div className="bg-brand-dark relative z-30 flex h-full items-center select-none px-[24px]">
                         <motion.span
                           className="font-anton text-brand-light-green text-center text-[40px] leading-[48px]"
                           style={{ fontFamily: "var(--font-anton)", opacity: yearOpacity }}
