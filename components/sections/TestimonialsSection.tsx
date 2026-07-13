@@ -83,7 +83,7 @@ function TestimonialCard({
           isResetting
             ? "transition-none"
             : "transition-transform duration-500 ease-out",
-          isActive ? "scale-105" : "scale-100"
+          isActive ? "scale-[1.02]" : "scale-100"
         )}
       >
         <Image

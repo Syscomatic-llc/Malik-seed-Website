@@ -247,7 +247,8 @@ function getYearProgressPoints(items: TimelineItem[]) {
 function useYearHighlight(
   smoothProgress: import("motion/react").MotionValue<number>,
   idx: number,
-  points: number[]
+  points: number[],
+  glowThreshold = 0.95
 ) {
   if (points.length <= 1) return 1;
 
@@ -262,8 +263,8 @@ function useYearHighlight(
     inputRange.push(prev);
     outputRange.push(0.3); // muted opacity
 
-    // Keep it dim until 95% of the distance to current
-    const startGlowPoint = prev + (current - prev) * 0.95;
+    // Keep it dim until glowThreshold of the distance to current
+    const startGlowPoint = prev + (current - prev) * glowThreshold;
     inputRange.push(startGlowPoint);
     outputRange.push(0.3);
   }
@@ -272,8 +273,8 @@ function useYearHighlight(
   outputRange.push(1); // active highlighted opacity (glow)
 
   if (next !== null) {
-    // Stay glowing until 95% of the distance to the next year
-    const endGlowPoint = current + (next - current) * 0.95;
+    // Stay glowing until glowThreshold of the distance to the next year
+    const endGlowPoint = current + (next - current) * glowThreshold;
     inputRange.push(endGlowPoint);
     outputRange.push(1); // keep glowing
 
@@ -950,7 +951,8 @@ export default function TimelineStory({
                   const yearOpacity = useYearHighlight(
                     mobileSmoothProgress,
                     idx,
-                    mobilePoints
+                    mobilePoints,
+                    0.70
                   );
 
                   const imageEl = (
@@ -1012,9 +1014,9 @@ export default function TimelineStory({
 
                   const yearEl = (
                     <div className="pointer-events-none absolute top-[296px] left-0 z-30 flex h-[48px] w-full items-center justify-center">
-                      <div className="relative z-30 flex items-center select-none">
+                      <div className="bg-brand-dark relative z-30 flex h-full items-center select-none px-[2rem]">
                         <motion.span
-                          className="font-anton text-brand-light-green bg-brand-dark px-[2rem] text-center text-[40px] leading-[48px]"
+                          className="font-anton text-brand-light-green text-center text-[40px] leading-[48px]"
                           style={{ fontFamily: "var(--font-anton)", opacity: yearOpacity }}
                         >
                           {item.year}
