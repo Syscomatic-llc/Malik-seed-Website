@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, Fragment, useState, useEffect, useMemo } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { useAutoSlide } from "@/hooks/useAutoSlide";
 import ActionButton from "@/components/ActionButton";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
@@ -29,7 +29,7 @@ const HeroSlideshow = memo(function HeroSlideshow({
     const isProxied = slide.src.startsWith("/api/image-proxy");
     return (
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-        <Image
+        <OptimizedImage
           src={slide.src}
           alt={slide.alt}
           fill
@@ -59,7 +59,7 @@ const HeroSlideshow = memo(function HeroSlideshow({
                 : "pointer-events-none z-0 opacity-0",
             ].join(" ")}
           >
-            <Image
+            <OptimizedImage
               src={slide.src}
               alt={slide.alt}
               fill
@@ -321,7 +321,7 @@ function buildSlides(
   apiData: ApiHeroSlide[] | undefined,
   fallback: HeroSlide[]
 ): HeroSlide[] {
-  if (!apiData || apiData.length === 0) return fallback;
+  if (!Array.isArray(apiData) || apiData.length === 0) return fallback;
 
   return apiData.map((slide) => ({
     src: resolveImageUrl(slide.background_image),
@@ -377,14 +377,14 @@ export default function HeroSection({
 
   const { currentIndex } = useAutoSlide({
     count: finalSlides.length,
-    interval: apiData && apiData.length > 0 ? 3000 : data.intervalMs,
+    interval: Array.isArray(apiData) && apiData.length > 0 ? 3000 : data.intervalMs,
   });
 
   const activeSlide =
-    apiData && apiData.length > 0 ? apiData[currentIndex] : null;
+    Array.isArray(apiData) && apiData.length > 0 ? apiData[currentIndex] : null;
 
   const ctaSource =
-    apiData && apiData.length > 0 ? apiData[apiData.length - 1] : null;
+    Array.isArray(apiData) && apiData.length > 0 ? apiData[apiData.length - 1] : null;
 
   const finalData: HeroData = activeSlide
     ? {

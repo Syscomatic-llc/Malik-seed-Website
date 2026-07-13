@@ -2,7 +2,7 @@
 
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { useState } from "react";
 
 interface Project {
@@ -247,7 +247,7 @@ export default function BrandProjectsTable() {
 
                       {/* Location with Pin on right */}
                       <div className="flex items-center gap-2">
-                        <Image
+                        <OptimizedImage
                           src={"/location.svg"}
                           alt="Location"
                           width={14}

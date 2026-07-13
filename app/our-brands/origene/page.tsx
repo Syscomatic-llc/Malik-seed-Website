@@ -5,7 +5,7 @@ import BrandSplit from "@/components/sections/brand/BrandSplit";
 import BrandProcess from "@/components/sections/brand/BrandProcess";
 import { origeneData } from "@/data/brands/origene";
 import { Metadata } from "next";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 
 export const metadata: Metadata = {
@@ -69,7 +69,7 @@ export default function OrigenePage() {
 
           {/* Right Column: Image */}
           <div className="relative h-[220px] w-full shrink-0 overflow-hidden rounded-[20px] bg-neutral-200 lg:h-[714px] lg:max-w-[608px] lg:rounded-[24px]">
-            <Image
+            <OptimizedImage
               src={origeneData.split1.image}
               alt={origeneData.split1.title.join(" ").replace(/\n/g, "")}
               fill

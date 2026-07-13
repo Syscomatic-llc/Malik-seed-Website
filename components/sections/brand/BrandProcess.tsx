@@ -1,4 +1,4 @@
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
 import BrandCardBorder from "./BrandCardBorder";
@@ -171,7 +171,7 @@ export default function BrandProcess({
                 key={idx}
                 className="group relative h-[260px] w-[290px] shrink-0 snap-start overflow-hidden rounded-[24px] bg-neutral-200 sm:h-[350px] sm:w-[400px] md:h-[377px] md:w-full"
               >
-                <Image
+                <OptimizedImage
                   src={img}
                   alt={`Process detail ${idx + 1}`}
                   fill

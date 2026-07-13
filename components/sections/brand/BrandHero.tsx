@@ -1,4 +1,4 @@
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ScrollIndicator } from "../HeroSection";
 import { memo } from "react";
 
@@ -32,7 +32,7 @@ export default function BrandHero({ title, bgImage }: BrandHeroProps) {
     <section className="relative flex h-screen w-full items-center">
       {/* Background Image */}
       <div className="absolute inset-0 z-0 bg-[#0d1a14]">
-        <Image
+        <OptimizedImage
           src={bgImage}
           alt={title.replace(/\n/g, " ")}
           fill

@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useState, useEffect } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import ActionButton from "@/components/ActionButton";
@@ -140,7 +140,7 @@ export default memo(function CareerHero({
           <div className="relative h-[260px] w-full max-w-[358px] flex-shrink-0 overflow-hidden rounded-[20px] bg-white md:h-[360px] md:max-w-[540px] lg:h-[420px] lg:w-[400px] lg:max-w-none lg:rounded-[24px] xl:h-[520px] xl:w-[503px]">
             {/* Mobile view image */}
             <div className="relative h-full w-full lg:hidden">
-              <Image
+              <OptimizedImage
                 src={data.teamImage}
                 alt="Malik Seeds team"
                 fill
@@ -151,7 +151,7 @@ export default memo(function CareerHero({
             </div>
             {/* Desktop view image */}
             <div className="relative hidden h-full w-full lg:block">
-              <Image
+              <OptimizedImage
                 src={data.teamImage}
                 alt="Malik Seeds team"
                 fill

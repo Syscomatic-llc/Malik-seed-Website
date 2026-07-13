@@ -23,7 +23,7 @@ const GLOWS = [
 function buildTimelineItems(
   apiData?: ApiTimelineItem[]
 ): TimelineItem[] | undefined {
-  if (!apiData || apiData.length === 0) return undefined;
+  if (!Array.isArray(apiData) || apiData.length === 0) return undefined;
 
   return apiData.map((item, index) => {
     const glow =

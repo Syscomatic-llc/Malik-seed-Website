@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import ActionButton from "@/components/ActionButton";
 import type { careerManifestoData } from "@/data/career-data";
@@ -121,7 +121,7 @@ export default memo(function CareerManifestoSection({
                 className="group relative h-[280px] w-[348px] shrink-0 overflow-hidden rounded-[20px] bg-[#1a2d24] lg:h-[360px] lg:w-[616px] lg:rounded-[24px]"
                 style={{ aspectRatio: "12/7" }}
               >
-                <Image
+                <OptimizedImage
                   src={img.src}
                   alt={img.alt}
                   fill

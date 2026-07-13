@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "../ui/SectionBadge";
 import { resolveImageUrl } from "@/lib/utils";
 import { ApiOurStoryMission } from "@/lib/api";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 
 interface AboutMissionTwoProps {
   apiData?: ApiOurStoryMission | null;

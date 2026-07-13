@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
 
@@ -112,7 +112,7 @@ export default function BrandFlowerPortfolio() {
                       isSelected ? "opacity-100 z-10" : "opacity-0 z-0"
                     )}
                   >
-                    <Image
+                    <OptimizedImage
                       src={seg.image}
                       alt={seg.name}
                       fill

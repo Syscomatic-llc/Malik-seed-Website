@@ -1,6 +1,6 @@
 import ActionButton from "@/components/ActionButton";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 interface BrandYouTubeProps {
   badge?: string;
@@ -60,7 +60,7 @@ export default function BrandYouTube({
                 className="relative shrink-0 snap-center overflow-hidden rounded-[24px] shadow-md"
                 style={{ width: "280px", height: "290px" }}
               >
-                <Image
+                <OptimizedImage
                   src={img}
                   alt={`field activity preview ${i + 1}`}
                   fill
@@ -85,7 +85,7 @@ export default function BrandYouTube({
                 className="group relative w-full overflow-hidden shadow-md"
                 style={{ height: "440px", borderRadius: "24px" }}
               >
-                <Image
+                <OptimizedImage
                   src={img}
                   alt={`field activity preview ${i + 1}`}
                   fill
@@ -122,7 +122,7 @@ export default function BrandYouTube({
                 className="absolute top-1/2 right-0 hidden -translate-y-1/2 md:block"
                 style={{ width: "336px", height: "160px" }}
               >
-                <Image
+                <OptimizedImage
                   src={brandLogo}
                   alt={brandLogoAlt}
                   fill
@@ -136,7 +136,7 @@ export default function BrandYouTube({
                 className="relative mt-8 md:hidden"
                 style={{ width: "220px", height: "104px" }}
               >
-                <Image
+                <OptimizedImage
                   src={brandLogo}
                   alt={brandLogoAlt}
                   fill

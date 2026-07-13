@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 interface ShareBarProps {
   title: string;
@@ -45,7 +45,7 @@ export default function ShareBar({ title }: ShareBarProps) {
   return (
     <div className="relative h-10 w-[184px]">
       {/* The original design SVG image */}
-      <Image
+      <OptimizedImage
         src="/images/news/share-icons.svg"
         alt="Share options"
         fill

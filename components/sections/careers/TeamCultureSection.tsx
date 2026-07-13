@@ -1,5 +1,5 @@
 import { memo } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import type { teamCultureData } from "@/data/career-data";
 
@@ -39,7 +39,7 @@ export default memo(function TeamCultureSection({
                 className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
                 style={{ height: 380, flex: "1 1 62%" }}
               >
-                <Image
+                <OptimizedImage
                   src={wide.src}
                   alt={wide.alt}
                   fill
@@ -52,7 +52,7 @@ export default memo(function TeamCultureSection({
                 className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
                 style={{ height: 380, flex: "1 1 36%" }}
               >
-                <Image
+                <OptimizedImage
                   src={narrow.src}
                   alt={narrow.alt}
                   fill
@@ -70,7 +70,7 @@ export default memo(function TeamCultureSection({
                   className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
                   style={{ height: 380 }}
                 >
-                  <Image
+                  <OptimizedImage
                     src={img.src}
                     alt={img.alt}
                     fill
@@ -91,7 +91,7 @@ export default memo(function TeamCultureSection({
                 key={i}
                 className="group relative h-[290px] w-[280px] flex-shrink-0 overflow-hidden rounded-[20px] bg-[#F2F4F7]"
               >
-                <Image
+                <OptimizedImage
                   src={img.src}
                   alt={img.alt}
                   fill

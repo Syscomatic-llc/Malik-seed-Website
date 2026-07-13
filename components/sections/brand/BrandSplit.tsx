@@ -1,4 +1,4 @@
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
 
@@ -82,7 +82,7 @@ export default function BrandSplit({
           {/* Bottom: Full Width Image */}
           {image && (
             <div className="relative h-[220px] w-full overflow-hidden rounded-[20px] bg-neutral-200 md:h-[630px] md:rounded-[24px]">
-              <Image
+              <OptimizedImage
                 src={image}
                 alt={title}
                 fill
@@ -216,7 +216,7 @@ export default function BrandSplit({
         {/* Right: Image */}
         {image && (
           <div className="relative h-[220px] w-full shrink-0 overflow-hidden rounded-[20px] bg-neutral-200 lg:h-[530px] lg:max-w-[503px] lg:rounded-[24px]">
-            <Image
+            <OptimizedImage
               src={image}
               alt={title}
               fill

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, memo } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import type {
   employeeTestimonialsData,
@@ -54,7 +54,7 @@ const TestimonialCard = memo(function TestimonialCard({
       {/* Avatar Image (80x80 on mobile, 180x180 on desktop) */}
       <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-[20px] bg-[#F2F4F7] lg:h-[180px] lg:w-[180px] lg:rounded-[24px]">
         {testimonial.avatar ? (
-          <Image
+          <OptimizedImage
             src={testimonial.avatar}
             alt={testimonial.name}
             fill

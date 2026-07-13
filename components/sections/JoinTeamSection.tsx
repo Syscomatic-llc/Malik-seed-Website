@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import ActionButton from "@/components/ActionButton";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { joinTeamData as staticJoinTeamData } from "@/data/sections-data";
 import { homepageApi } from "@/lib/api";
@@ -14,7 +14,7 @@ export default async function JoinTeamSection() {
     console.error("Failed to fetch join team section data from API:", err);
   }
   const activeJoinTeamData =
-    apiData && apiData.length > 0
+    Array.isArray(apiData) && apiData.length > 0
       ? {
           badge: apiData[0].title,
           title: apiData[0].subtitle,
@@ -78,7 +78,7 @@ export default async function JoinTeamSection() {
           <div className="relative ml-auto hidden h-[430px] w-full max-w-[690px] overflow-hidden rounded-[32px] bg-white lg:mr-[23px] lg:block xl:absolute xl:top-[30px] xl:left-[527px] xl:mr-0">
             {/* Overflowing team image — Figma: 726x544, left:-30px, top:-32px (Malik Seeds Team-3 2) */}
             <div className="absolute top-[-32px] left-[-30px] h-[544px] w-[726px] overflow-hidden">
-              <Image
+              <OptimizedImage
                 src={joinTeamData.images.desktop}
                 alt="Join the Malik Seeds Team"
                 fill
@@ -91,7 +91,7 @@ export default async function JoinTeamSection() {
 
           {/* Mobile image fallback */}
           <div className="relative h-[200px] w-full overflow-hidden sm:h-[320px] lg:hidden">
-            <Image
+            <OptimizedImage
               src={joinTeamData.images.mobile}
               alt="Join the Malik Seeds Team"
               fill

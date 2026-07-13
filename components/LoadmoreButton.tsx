@@ -1,4 +1,4 @@
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 interface LoadmoreButtonProps {
   handleLoadMore: () => void;
@@ -20,7 +20,7 @@ export default function LoadmoreButton({
         <span className="font-medium">Load More</span>
         {isLoading && (
           <span className="flex h-4 w-4 items-center justify-center xl:h-5 xl:w-5">
-            <Image
+            <OptimizedImage
               src="/loading.svg"
               alt=""
               aria-hidden="true"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef, memo } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { newsData as staticNewsData, NewsArticle } from "@/data/sections-data";
 import Link from "next/link";
@@ -35,7 +35,7 @@ const NewsCard = memo(function NewsCard({ article }: NewsCardProps) {
     >
       <article className="border-brand-border-light bg-brand-neutral-light flex h-[434px] w-[330px] flex-col overflow-hidden rounded-[24px] border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md xl:h-[488px] xl:w-[361px]">
         <div className="relative h-[256px] w-full overflow-hidden bg-neutral-100 xl:h-[264px]">
-          <Image
+          <OptimizedImage
             src={article.image}
             alt={article.title}
             fill
@@ -74,7 +74,7 @@ export interface NewsSectionProps {
 
 export default function NewsSection({ apiData }: NewsSectionProps) {
   const newsData =
-    apiData && apiData.length > 0
+    Array.isArray(apiData) && apiData.length > 0
       ? {
           badge: staticNewsData.badge,
           title: staticNewsData.title,

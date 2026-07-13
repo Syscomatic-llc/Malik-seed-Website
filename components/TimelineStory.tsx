@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import NextImage from "next/image";
 import { useMemo, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
@@ -336,7 +336,7 @@ function ImagePanel({ src, alt }: { src: string; alt: string }) {
   return (
     <div className="group relative aspect-[503/372] w-full max-w-[503px] shrink-0 overflow-hidden rounded-[32px] bg-[#E4E7EC]">
       {src && (
-        <Image
+        <OptimizedImage
           src={src}
           alt={alt}
           fill
@@ -383,7 +383,7 @@ function GlowOverlay({
       aria-hidden="true"
     >
       <div className="absolute inset-0 scale-110 [transform:translate3d(0,0,0)] blur-[4px]">
-        <Image
+        <OptimizedImage
           src={src}
           alt=""
           fill
@@ -678,7 +678,7 @@ function GlobalMobileLine({
         style={{ left: widthVal }}
         className="absolute top-1/2 h-[16px] w-[16px] -translate-x-1/2 -translate-y-1/2"
       >
-        <Image
+        <OptimizedImage
           src="/images/timeline/Ellipse.svg"
           alt="Dot"
           width={16}
@@ -726,7 +726,7 @@ function TabletTimelineRow({
         {/* Image */}
         <div className="group relative aspect-[503/372] w-full overflow-hidden rounded-[24px] bg-[#E4E7EC]">
           {item.image && (
-            <Image
+            <OptimizedImage
               src={item.image}
               alt={item.title}
               fill
@@ -962,7 +962,7 @@ export default function TimelineStory({
                       }`}
                     >
                       {item.image && (
-                        <Image
+                        <OptimizedImage
                           src={item.image}
                           alt={item.title}
                           fill

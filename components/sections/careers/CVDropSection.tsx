@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useRef, useState, DragEvent } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 export default memo(function CVDropSection() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,7 +68,7 @@ export default memo(function CVDropSection() {
               />
 
               <div className="flex flex-col items-center gap-4 transition-transform duration-300 group-hover/drop:scale-105">
-                <Image
+                <OptimizedImage
                   src="/images/careers/prime_upload.svg"
                   alt="Upload Icon"
                   width={24}

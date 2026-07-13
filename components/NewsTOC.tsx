@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import NextImage from "next/image";
 
 // ---------------------------------------------------------------------------
@@ -166,7 +166,7 @@ export default function NewsTOC({ headings, author }: NewsTOCProps) {
         <div className="flex items-center gap-3">
           <div className="border-brand-border bg-brand-neutral-light relative h-12 w-12 shrink-0 overflow-hidden rounded-full border">
             {author.avatar ? (
-              <Image
+              <OptimizedImage
                 src={author.avatar}
                 alt={author.name}
                 fill

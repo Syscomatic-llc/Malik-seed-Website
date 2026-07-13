@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import NextImage from "next/image";
 import { cn } from "@/lib/utils";
 import { SectionBadge } from "@/components/ui/SectionBadge";
@@ -86,7 +86,7 @@ function TestimonialCard({
           isActive ? "scale-[1.02]" : "scale-100"
         )}
       >
-        <Image
+        <OptimizedImage
           src={testimonial.image}
           alt={testimonial.name}
           fill
@@ -145,7 +145,7 @@ export interface TestimonialsSectionProps {
  * Uses only API data — no mixing with static images.
  */
 function buildTestimonials(apiData?: ApiTestimonial[]): TestimonialItem[] {
-  if (!apiData || apiData.length === 0) return testimonialsData.items;
+  if (!Array.isArray(apiData) || apiData.length === 0) return testimonialsData.items;
 
   return apiData.map((t) => ({
     id: t.id,

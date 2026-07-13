@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import ActionButton from "@/components/ActionButton";
 import CountUp from "@/components/ui/CountUp";
 import { SectionBadge } from "@/components/ui/SectionBadge";
@@ -226,7 +226,7 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
           <div className="flex w-[320px] shrink-0 flex-col gap-[16px] sm:w-[400px] lg:w-[440px] xl:w-[503px]">
             {/* Frame 32 — 503x340, bg-[#F9FAFB], radius 24px */}
             <div className="bg-brand-neutral-light group relative aspect-[503/340] w-full overflow-hidden rounded-[16px] xl:rounded-[24px]">
-              <Image
+              <OptimizedImage
                 src={aboutData.images.teamBanner}
                 alt="Malik Seeds Team"
                 fill
@@ -241,7 +241,7 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
             <div className="flex w-full flex-row gap-[16px]">
               {/* Frame 33 — 243x226 */}
               <div className="group relative aspect-[243/226] flex-1 overflow-hidden rounded-[16px] xl:rounded-[24px]">
-                <Image
+                <OptimizedImage
                   src={aboutData.images.about1}
                   alt="Years of Experience"
                   fill
@@ -252,7 +252,7 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
               </div>
               {/* Frame 34 — 243x226 */}
               <div className="group relative aspect-[243/226] flex-1 overflow-hidden rounded-[16px] xl:rounded-[24px]">
-                <Image
+                <OptimizedImage
                   src={aboutData.images.about2}
                   alt="Farmer Partners"
                   fill
@@ -321,7 +321,7 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
             <div className="flex flex-col gap-[16px]">
               {/* Frame 32 — 358x240, bg #F9FAFB, radius 16px */}
               <div className="bg-brand-neutral-light relative h-[240px] w-full overflow-hidden rounded-[16px]">
-                <Image
+                <OptimizedImage
                   src={aboutData.images.teamBanner}
                   alt="Malik Seeds Team"
                   fill
@@ -335,7 +335,7 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
               <div className="flex flex-row gap-[16px]">
                 {/* Frame 33 — 171x160 */}
                 <div className="relative h-[160px] flex-1">
-                  <Image
+                  <OptimizedImage
                     src={aboutData.images.about1Mobile}
                     alt="Years of Experience"
                     fill
@@ -346,7 +346,7 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
                 </div>
                 {/* Frame 34 — 171x160 */}
                 <div className="relative h-[160px] flex-1">
-                  <Image
+                  <OptimizedImage
                     src={aboutData.images.about2Mobile}
                     alt="Farmer Partners"
                     fill

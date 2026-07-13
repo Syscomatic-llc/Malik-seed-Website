@@ -1,4 +1,4 @@
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "../ui/SectionBadge";
 import { resolveImageUrl } from "@/lib/utils";
 import { ApiOurStoryValue } from "@/lib/api";
@@ -35,7 +35,7 @@ const BRAND_VALUES = [
 ] as const;
 
 export default function AboutValues({ apiData }: AboutValuesProps) {
-  const values = apiData?.length
+  const values = Array.isArray(apiData) && apiData.length
     ? [...apiData]
         .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
         .map((val) => ({
@@ -69,7 +69,7 @@ export default function AboutValues({ apiData }: AboutValuesProps) {
             >
               {/* Fixed-ratio image */}
               <div className="relative aspect-[365/264] w-full overflow-hidden rounded-[14px] bg-neutral-100 md:rounded-[18px]">
-                <Image
+                <OptimizedImage
                   src={val.src}
                   alt={val.alt}
                   fill

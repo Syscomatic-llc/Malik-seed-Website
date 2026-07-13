@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { notFound } from "next/navigation";
 import { openPositionsData } from "@/data/career-data";
 import {
@@ -262,7 +262,7 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                           {benefit.text}
                         </span>
                         <div className="relative h-[14px] w-[14px] shrink-0 lg:h-[18px] lg:w-[18px]">
-                          <Image
+                          <OptimizedImage
                             src={`/images/careers/${benefit.icon}`}
                             alt=""
                             fill

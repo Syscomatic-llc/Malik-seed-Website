@@ -1,4 +1,4 @@
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { productsData as staticProductsData } from "@/data/sections-data";
@@ -43,7 +43,7 @@ function CardContent({
     <>
       {/* Background image */}
       <div className="absolute inset-0 z-0 transition-transform duration-700 ease-out group-hover:scale-105">
-        <Image
+        <OptimizedImage
           src={product.image}
           alt={product.name}
           fill
@@ -95,7 +95,7 @@ function CardContent({
  * If API data is missing, falls back to static data.
  */
 function buildProducts(apiData?: ApiService[]): ProductItem[] {
-  if (apiData && apiData.length > 0) {
+  if (Array.isArray(apiData) && apiData.length > 0) {
     return apiData.map((s) => ({
       id: s.id,
       category: s.title,

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
@@ -216,7 +216,7 @@ export default function BrandGrid({
                         isActive ? "scale-[1.02]" : "scale-100"
                       )}
                     >
-                      <Image
+                      <OptimizedImage
                         src={image}
                         alt={`${title} - image ${(idx % IMAGES_COUNT) + 1}`}
                         fill
@@ -241,7 +241,7 @@ export default function BrandGrid({
                 images.length === 2 ? "aspect-[608/377]" : "aspect-[397/377]"
               )}
             >
-              <Image
+              <OptimizedImage
                 src={image}
                 alt={`${title} - image ${idx + 1}`}
                 fill

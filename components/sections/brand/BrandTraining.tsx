@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import NextImage from "next/image";
 import { maliksFarmData } from "@/data/brands/maliks-farm";
 import { cn } from "@/lib/utils";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { ApiContactInfo } from "@/lib/api";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 
 // Scans carousel sizing constants
 const SCAN_CARD_WIDTH_DESKTOP = 398;
@@ -248,7 +247,7 @@ export default function BrandTraining({
                       isSelected ? "opacity-90 z-10" : "opacity-0 z-0"
                     )}
                   >
-                    <Image
+                    <OptimizedImage
                       src={prog.image}
                       alt={prog.title}
                       fill
@@ -335,7 +334,7 @@ export default function BrandTraining({
                     }}
                   >
                     <div className="absolute inset-0">
-                      <Image
+                      <OptimizedImage
                         src={scan.image}
                         alt={scan.title}
                         fill
@@ -386,7 +385,7 @@ export default function BrandTraining({
                     }}
                   >
                     <div className="absolute inset-0">
-                      <Image
+                      <OptimizedImage
                         src={scan.image}
                         alt={scan.title}
                         fill

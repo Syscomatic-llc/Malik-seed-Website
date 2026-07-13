@@ -1,4 +1,4 @@
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import ProductsSection from "@/components/sections/ProductsSection";
 
@@ -23,7 +23,7 @@ export default function BrandsPage() {
 
           {/* Hero Image */}
           <div className="group relative h-[240px] w-full overflow-hidden rounded-[24px] bg-[#1a2d24] sm:h-[400px] md:h-[520px]">
-            <Image
+            <OptimizedImage
               src="/images/brand/dscf8592_1.png"
               alt="Building a Connected Agricultural Ecosystem"
               fill

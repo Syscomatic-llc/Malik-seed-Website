@@ -1,4 +1,4 @@
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { resolveImageUrl } from "@/lib/utils";
 import { ApiOurStoryHero } from "@/lib/api";
@@ -61,7 +61,7 @@ export default function AboutHero({ apiData }: AboutHeroProps) {
               key={img.id}
               className="relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm md:aspect-[548/420] md:h-auto md:w-[42vw] md:rounded-[24px]"
             >
-              <Image
+              <OptimizedImage
                 src={img.src}
                 alt={img.alt}
                 fill

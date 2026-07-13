@@ -1,5 +1,5 @@
 import { memo, useMemo } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { partnersData } from "@/data/sections-data";
 import { ApiPartner } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
@@ -29,7 +29,7 @@ export default memo(function PartnersSection({
   apiData,
 }: PartnersSectionProps) {
   const activePartners = useMemo(() => {
-    if (apiData && apiData.length > 0) {
+    if (Array.isArray(apiData) && apiData.length > 0) {
       return apiData.map((item) => ({
         id: item.id,
         name: item.name,
@@ -80,7 +80,7 @@ export default memo(function PartnersSection({
           <div className="relative w-full overflow-hidden">
             <div className="animate-partner-marquee flex w-max gap-2">
               {row1Items.map((item, idx) => (
-                <Image
+                <OptimizedImage
                   key={`r1-${item.id}-${idx}`}
                   src={item.src}
                   alt={item.name}
@@ -98,7 +98,7 @@ export default memo(function PartnersSection({
           <div className="relative w-full overflow-hidden">
             <div className="animate-partner-marquee-reverse flex w-max gap-2">
               {row2Items.map((item, idx) => (
-                <Image
+                <OptimizedImage
                   key={`r2-${item.id}-${idx}`}
                   src={item.src}
                   alt={item.name}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useId, FormEvent, useRef, useEffect } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { OFFICE_DETAILS, SUBJECT_OPTIONS } from "@/data/pages-data";
 import { SectionBadge } from "@/components/ui/SectionBadge";
@@ -249,7 +249,7 @@ export default function ContactHeroSection({
                     {/* Phone link */}
                     <div className="relative flex w-full items-center gap-3">
                       <div className="h-[30px] w-[30px] shrink-0">
-                        <Image
+                        <OptimizedImage
                           src="/images/contact/phone.svg"
                           alt="Phone Icon"
                           width={30}
@@ -273,7 +273,7 @@ export default function ContactHeroSection({
                     {/* Email link */}
                     <div className="relative flex w-full items-center gap-3">
                       <div className="h-[30px] w-[30px] shrink-0">
-                        <Image
+                        <OptimizedImage
                           src="/images/contact/email.svg"
                           alt="Email Icon"
                           width={30}

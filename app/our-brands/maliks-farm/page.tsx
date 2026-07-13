@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import BrandHero from "@/components/sections/brand/BrandHero";
 import BrandIntro from "@/components/sections/brand/BrandIntro";
 import BrandCropPortfolio from "@/components/sections/brand/BrandCropPortfolio";
@@ -66,7 +66,7 @@ export default function MaliksFarmPage() {
 
           {/* Right: Image */}
           <div className="group relative aspect-[16/9] w-full overflow-hidden rounded-[20px] bg-neutral-200 lg:rounded-[24px]">
-            <Image
+            <OptimizedImage
               src={maliksFarmData.split1.image}
               alt={maliksFarmData.split1.title}
               fill
@@ -120,7 +120,7 @@ export default function MaliksFarmPage() {
             className="flex w-full snap-x snap-mandatory scrollbar-none gap-4 overflow-x-auto pb-4 md:gap-6"
           >
             <div className="group relative h-[290px] w-[280px] shrink-0 snap-center overflow-hidden rounded-[24px] bg-neutral-200 md:h-[377px] md:w-[608px]">
-              <Image
+              <OptimizedImage
                 src={maliksFarmData.process.images[0]}
                 alt="Structured field trials variety check"
                 fill
@@ -129,7 +129,7 @@ export default function MaliksFarmPage() {
               />
             </div>
             <div className="group relative h-[290px] w-[280px] shrink-0 snap-center overflow-hidden rounded-[24px] bg-neutral-200 md:h-[377px] md:w-[608px]">
-              <Image
+              <OptimizedImage
                 src={maliksFarmData.process.images[1]}
                 alt="Product evaluation during harvest"
                 fill
@@ -163,7 +163,7 @@ export default function MaliksFarmPage() {
               <div className="flex flex-col gap-6 md:gap-8">
                 <div className="flex items-center gap-4 md:gap-6">
                   <div className="relative h-14 w-14 shrink-0 md:h-20 md:w-20">
-                    <Image
+                    <OptimizedImage
                       src={maliksFarmData.split2.gapLogo}
                       alt="Global GAP badge"
                       fill
@@ -186,7 +186,7 @@ export default function MaliksFarmPage() {
 
             {/* Small image card 1 */}
             <div className="group relative aspect-square min-h-[320px] overflow-hidden rounded-[24px] bg-neutral-200 lg:aspect-auto lg:h-full">
-              <Image
+              <OptimizedImage
                 src={maliksFarmData.split2.images[0]}
                 alt="GAP Certified field crop"
                 fill
@@ -197,7 +197,7 @@ export default function MaliksFarmPage() {
 
             {/* Small image card 2 */}
             <div className="group relative aspect-square min-h-[320px] overflow-hidden rounded-[24px] bg-neutral-200 lg:aspect-auto lg:h-full">
-              <Image
+              <OptimizedImage
                 src={maliksFarmData.split2.images[1]}
                 alt="Quality control checking"
                 fill
@@ -224,7 +224,7 @@ export default function MaliksFarmPage() {
                 key={idx}
                 className="group relative h-[290px] w-[280px] shrink-0 snap-center overflow-hidden rounded-[24px] bg-neutral-200 md:h-[377px] md:w-full md:shrink"
               >
-                <Image
+                <OptimizedImage
                   src={imgUrl}
                   alt={`Agricultural field view ${idx + 1}`}
                   fill

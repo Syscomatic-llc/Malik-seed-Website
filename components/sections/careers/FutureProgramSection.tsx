@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useRef, useState } from "react";
-import Image from "@/components/ui/OptimizedImage";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import type { futureProgramData } from "@/data/career-data";
 import { z } from "zod";
@@ -84,7 +84,7 @@ export default memo(function FutureProgramSection({
 
           {/* ── Right column: photo card (visible on mobile lower side, right on desktop) ── */}
           <div className="relative h-[280px] w-full max-w-[503px] self-center overflow-hidden rounded-[20px] bg-white sm:h-[380px] lg:h-[435px] lg:w-[503px] lg:shrink-0 lg:self-auto">
-            <Image
+            <OptimizedImage
               src={data.image}
               alt="Future Leader Program - Malik Seeds"
               fill
