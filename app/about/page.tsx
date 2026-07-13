@@ -7,7 +7,8 @@ import AboutMissionTwo from "@/components/sections/AboutMissionTwo";
 import GalleryHeroSection from "@/components/sections/GalleryHeroSection";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import { timelineItems } from "@/data/sections-data";
-import { homepageApi } from "@/lib/api";
+import { homepageApi, galleryApi } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/utils";
 
 export const metadata = {
   title: "Our Story - Malik Seeds",
@@ -23,6 +24,20 @@ export default async function AboutPage() {
     console.error("Failed to fetch timeline data from API:", err);
   }
 
+  let galleryData = null;
+  try {
+    galleryData = await galleryApi.getAll({ revalidate: 60 });
+  } catch (err) {
+    console.error("Failed to fetch gallery data from API:", err);
+  }
+
+  const mappedGalleryImages =
+    galleryData?.items?.map((item) => ({
+      id: item.id,
+      src: resolveImageUrl(item.image_url),
+      alt: item.title || "Gallery Image",
+    })) || [];
+
   return (
     <div className="bg-brand-bg min-h-screen">
       <AboutHero />
@@ -31,9 +46,10 @@ export default async function AboutPage() {
       <TimelineStory items={timelineItems} apiData={apiTimeline} />
       <AboutMissionTwo />
       <Suspense fallback={null}>
-        <GalleryHeroSection isHero={false} />
+        <GalleryHeroSection isHero={false} initialImages={mappedGalleryImages} />
       </Suspense>
       <JoinTeamSection />
     </div>
   );
 }
+

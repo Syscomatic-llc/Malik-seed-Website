@@ -270,3 +270,52 @@ export interface ApiContactSubmitResponse {
   id?: number;
 }
 
+export interface ApiGalleryItem {
+  thumbnail_url: string | null;
+  id: number;
+  description: string | null;
+  tags: string[];
+  date_taken: string | null;
+  is_active: boolean;
+  created_at: string;
+  title: string;
+  image_url: string;
+  category: string | null;
+  location: string | null;
+  is_featured: boolean;
+  sort_order: number;
+  updated_at: string | null;
+}
+
+export interface ApiGalleryCategory {
+  name: string;
+  cover_image: string | null;
+  item_count: number;
+  sort_order: number;
+  updated_at: string | null;
+  slug: string;
+  description: string | null;
+  id: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface ApiGalleryVideo {
+  id: number;
+  title: string;
+  description: string | null;
+  video_url: string;
+  thumbnail_url: string | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ApiGalleryData {
+  items: ApiGalleryItem[];
+  featured_items: ApiGalleryItem[];
+  categories: ApiGalleryCategory[];
+  videos: ApiGalleryVideo[];
+}
+
+
