@@ -7,11 +7,6 @@ const nextConfig: NextConfig = {
   images: {
     // Serve modern formats — WebP is ~30% smaller than JPEG at same quality.
     formats: ["image/webp"],
-    localPatterns: [
-      {
-        pathname: "/api/image-proxy",
-      },
-    ],
 
     // Quality levels Next.js will use (maps to the `quality` prop on <Image>).
     qualities: [50, 75],
