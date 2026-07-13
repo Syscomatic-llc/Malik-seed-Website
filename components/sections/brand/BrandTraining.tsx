@@ -152,7 +152,7 @@ export default function BrandTraining({
       } else {
         setIsTransitioning(false);
       }
-    }, 700);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [scanIndex, isTransitioning, scanLoopLimit, scanLoopStart, scansCount]);
@@ -297,7 +297,7 @@ export default function BrandTraining({
               className={cn(
                 "flex items-center gap-6 overflow-visible",
                 isTransitionEnabled
-                  ? "transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                  ? "transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
                   : "transition-none"
               )}
               style={{
@@ -348,7 +348,7 @@ export default function BrandTraining({
               className={cn(
                 "flex items-center gap-4 overflow-visible",
                 isTransitionEnabled
-                  ? "transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                  ? "transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
                   : "transition-none"
               )}
               style={{

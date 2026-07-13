@@ -149,7 +149,7 @@ export default memo(function EmployeeTestimonialsSection({
       } else {
         setIsTransitioning(false);
       }
-    }, 500); // Wait for transition animation to complete
+    }, 400); // Wait for transition animation to complete
 
     return () => clearTimeout(timer);
   }, [activeIndex, isTransitioning, testimonials.length]);
@@ -283,7 +283,7 @@ export default memo(function EmployeeTestimonialsSection({
                 ? `translateX(-${activeIndex * cardWidthWithGap}px)`
                 : `translateX(calc(50vw - 155px - ${activeIndex * cardWidthWithGap}px))`,
               transition: isTransitionEnabled
-                ? "transform 500ms ease-in-out"
+                ? "transform 400ms ease-in-out"
                 : "none",
             }}
             role="list"
