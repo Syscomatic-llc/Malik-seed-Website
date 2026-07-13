@@ -1,0 +1,159 @@
+import {
+  apiGet,
+  apiPostForm,
+  apiPostMultipart,
+  RequestOptions,
+} from "./client";
+import {
+  ApiJobPosition,
+  ApiHiringBenefit,
+  ApiHiringTestimonial,
+  ApiHiringPageContent,
+  ApiHiringData,
+} from "./types";
+import { JobPosition } from "@/data/career-data";
+
+export interface GetPositionsParams {
+  department?: string | null;
+  location?: string | null;
+  job_type?: string | null;
+}
+
+export const hiringApi = {
+  getPositions(params?: GetPositionsParams, options?: RequestOptions) {
+    return apiGet<ApiJobPosition[]>("/api/v1/hiring/positions", {
+      ...options,
+      params: params as any,
+    });
+  },
+
+  getPositionById(positionId: number, options?: RequestOptions) {
+    return apiGet<ApiJobPosition>(`/api/v1/hiring/positions/${positionId}`, options);
+  },
+
+  getBenefits(options?: RequestOptions) {
+    return apiGet<ApiHiringBenefit[]>("/api/v1/hiring/benefits", options);
+  },
+
+  getTestimonials(options?: RequestOptions) {
+    return apiGet<ApiHiringTestimonial[]>("/api/v1/hiring/testimonials", options);
+  },
+
+  getPageContent(options?: RequestOptions) {
+    return apiGet<ApiHiringPageContent>("/api/v1/hiring/page-content", options);
+  },
+
+  getAllHiringContent(options?: RequestOptions) {
+    return apiGet<ApiHiringData>("/api/v1/hiring/", options);
+  },
+
+  getPositionAssessment(positionId: number, options?: RequestOptions) {
+    return apiGet<unknown>(`/api/v1/hiring/positions/${positionId}/assessment`, options);
+  },
+
+  applyStep1(
+    form: Record<string, string | number | boolean | undefined | null>,
+    options?: RequestOptions
+  ) {
+    return apiPostForm<unknown>("/api/v1/hiring/apply/step-1", form, options);
+  },
+
+  applyStep2(formData: FormData, options?: RequestOptions) {
+    return apiPostMultipart<unknown>("/api/v1/hiring/apply/step-2", formData, options);
+  },
+
+  applyStep3(
+    form: Record<string, string | number | boolean | undefined | null>,
+    options?: RequestOptions
+  ) {
+    return apiPostForm<unknown>("/api/v1/hiring/apply/step-3", form, options);
+  },
+
+  applyStep4(
+    form: Record<string, string | number | boolean | undefined | null>,
+    options?: RequestOptions
+  ) {
+    return apiPostForm<unknown>("/api/v1/hiring/apply/step-4", form, options);
+  },
+
+  applyStep5(
+    form: Record<string, string | number | boolean | undefined | null>,
+    options?: RequestOptions
+  ) {
+    return apiPostForm<unknown>("/api/v1/hiring/apply/step-5", form, options);
+  },
+
+  getApplicationStatus(applicationId: number, email: string, options?: RequestOptions) {
+    return apiGet<unknown>(`/api/v1/hiring/applications/${applicationId}`, {
+      ...options,
+      params: { email },
+    });
+  },
+
+  getApplicationsByEmail(email: string, options?: RequestOptions) {
+    return apiGet<unknown[]>("/api/v1/hiring/applications", {
+      ...options,
+      params: { email },
+    });
+  },
+
+  uploadResume(formData: FormData, options?: RequestOptions) {
+    return apiPostMultipart<{ url: string }>("/api/v1/hiring/upload/resume", formData, options);
+  },
+};
+
+/* --- Mapping helpers to bridge API data to Career-data structure --- */
+
+export function getBenefitIcon(text: string): string {
+  const t = text.toLowerCase();
+  if (t.includes("salary") || t.includes("pay") || t.includes("compensation")) return "briefcase-01.svg";
+  if (t.includes("incentive") || t.includes("bonus") || t.includes("commission") || t.includes("target")) return "target-01.svg";
+  if (t.includes("travel") || t.includes("allowance") || t.includes("transport") || t.includes("fuel")) return "location-03.svg";
+  if (t.includes("development") || t.includes("growth") || t.includes("training") || t.includes("learn")) return "rocket-01.svg";
+  if (t.includes("insurance") || t.includes("health") || t.includes("medical") || t.includes("provident") || t.includes("leave")) return "shield-tick.svg";
+  return "briefcase-01.svg";
+}
+
+export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
+  const jobTypeLabel =
+    item.job_type === "full_time"
+      ? "Full-time"
+      : item.job_type === "part_time"
+        ? "Part-time"
+        : item.job_type === "contract"
+          ? "Contract"
+          : item.job_type || "Full-time";
+
+  const locationLabel = item.location
+    ? item.location.charAt(0).toUpperCase() + item.location.slice(1)
+    : "Dhaka";
+
+  const tags = ["Onsite", jobTypeLabel, locationLabel];
+
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.short_description || item.description,
+    tags,
+    salary: item.salary_range
+      ? `${item.salary_range} ${item.salary_currency}`
+      : undefined,
+    location: locationLabel,
+    jobType: jobTypeLabel,
+    experience: item.experience_required,
+    fullDescription: item.description,
+    whatYoullDo: item.responsibilities || [],
+    whatWereLookingFor: item.requirements || [],
+    skillsAndCompetencies: item.skills_required || [],
+    whyJoin: [
+      "Work in a research-driven agricultural environment",
+      "Contribute directly to farmer productivity and food security",
+      "Opportunities for leadership and professional growth",
+      "Collaborative and mission-focused team culture",
+    ],
+    benefitsList: (item.benefits || []).map((b) => ({
+      text: b,
+      icon: getBenefitIcon(b),
+    })),
+  };
+}

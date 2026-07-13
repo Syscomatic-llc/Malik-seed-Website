@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { openPositionsData } from "@/data/career-data";
 import ApplyHeader from "./ApplyHeader";
 import DevNav from "./DevNav";
+import { hiringApi, mapApiPositionToJobPosition } from "@/lib/api";
 
 interface ApplyLayoutProps {
   children: React.ReactNode;
@@ -15,9 +16,22 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const position = openPositionsData.positions.find(
-    (pos) => pos.id.toString() === id
-  );
+  let position = null;
+  try {
+    const apiPosition = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+    if (apiPosition) {
+      position = mapApiPositionToJobPosition(apiPosition);
+    }
+  } catch (err) {
+    console.error(`Failed to fetch metadata for apply layout job ${id}:`, err);
+  }
+
+  if (!position) {
+    position = openPositionsData.positions.find(
+      (pos) => pos.id.toString() === id
+    );
+  }
+
   if (!position) return { title: "Apply - Malik Seeds" };
   return {
     title: `Apply for ${position.title} - Malik Seeds`,
@@ -30,9 +44,21 @@ export default async function ApplyLayout({
   params,
 }: ApplyLayoutProps) {
   const { id } = await params;
-  const position = openPositionsData.positions.find(
-    (pos) => pos.id.toString() === id
-  );
+  let position = null;
+  try {
+    const apiPosition = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+    if (apiPosition) {
+      position = mapApiPositionToJobPosition(apiPosition);
+    }
+  } catch (err) {
+    console.error(`Failed to fetch job details for apply layout ${id}:`, err);
+  }
+
+  if (!position) {
+    position = openPositionsData.positions.find(
+      (pos) => pos.id.toString() === id
+    );
+  }
 
   if (!position) {
     notFound();

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import ActionButton from "@/components/ActionButton";
 import CVDropSection from "@/components/sections/careers/CVDropSection";
+import { hiringApi, mapApiPositionToJobPosition } from "@/lib/api";
 
 interface JobDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -20,8 +21,18 @@ interface JobDetailsPageProps {
 
 const SITE_NAME = "Malik Seeds";
 
-/** Statically pre-generate dynamic routes for all 6 job positions at build time. */
+/** Statically pre-generate dynamic routes for all job positions at build time. */
 export async function generateStaticParams() {
+  try {
+    const apiPositions = await hiringApi.getPositions(undefined, { revalidate: 60 });
+    if (apiPositions && apiPositions.length > 0) {
+      return apiPositions.map((pos) => ({
+        id: pos.id.toString(),
+      }));
+    }
+  } catch (err) {
+    console.error("Failed to generate static params for careers:", err);
+  }
   return openPositionsData.positions.map((pos) => ({
     id: pos.id.toString(),
   }));
@@ -32,9 +43,22 @@ export async function generateMetadata({
   params,
 }: JobDetailsPageProps): Promise<Metadata> {
   const { id } = await params;
-  const position = openPositionsData.positions.find(
-    (pos) => pos.id.toString() === id
-  );
+  
+  let position = null;
+  try {
+    const apiPosition = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+    if (apiPosition) {
+      position = mapApiPositionToJobPosition(apiPosition);
+    }
+  } catch (err) {
+    console.error(`Failed to fetch metadata for job ${id}:`, err);
+  }
+
+  if (!position) {
+    position = openPositionsData.positions.find(
+      (pos) => pos.id.toString() === id
+    );
+  }
 
   if (!position) {
     return { title: `Position Not Found - ${SITE_NAME}` };
@@ -53,9 +77,22 @@ export async function generateMetadata({
 
 export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
   const { id } = await params;
-  const position = openPositionsData.positions.find(
-    (pos) => pos.id.toString() === id
-  );
+  
+  let position = null;
+  try {
+    const apiPosition = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+    if (apiPosition) {
+      position = mapApiPositionToJobPosition(apiPosition);
+    }
+  } catch (err) {
+    console.error(`Failed to fetch job details for ${id}:`, err);
+  }
+
+  if (!position) {
+    position = openPositionsData.positions.find(
+      (pos) => pos.id.toString() === id
+    );
+  }
 
   if (!position) {
     notFound();

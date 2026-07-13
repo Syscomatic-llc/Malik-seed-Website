@@ -377,5 +377,79 @@ export interface ApiOurStoryData {
   awards: unknown[];
 }
 
+export interface ApiJobPosition {
+  id: number;
+  title: string;
+  slug: string;
+  department: string;
+  location: string;
+  job_type: string;
+  experience_required: string;
+  education_required: string | null;
+  salary_range: string | null;
+  salary_currency: string;
+  is_active: boolean;
+  is_featured: boolean;
+  is_urgent: boolean;
+  positions_available: number;
+  description: string;
+  short_description: string;
+  requirements: string[];
+  responsibilities: string[];
+  skills_required: string[];
+  benefits: string[];
+  has_assessment: boolean;
+  assessment_duration: number;
+  passing_score: number;
+  view_count: number;
+  application_count: number;
+  application_deadline: string | null;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiHiringBenefit {
+  id: number;
+  title: string;
+  description: string | null;
+  icon: string | null;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiHiringTestimonial {
+  id: number;
+  name: string;
+  role: string;
+  quote: string;
+  avatar: string | null;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiHiringPageContent {
+  id: number;
+  hero_title: string;
+  hero_subtitle: string;
+  hero_image: string | null;
+  manifesto_title: string | null;
+  manifesto_description: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface ApiHiringData {
+  page_content: ApiHiringPageContent | null;
+  positions: ApiJobPosition[];
+  benefits: ApiHiringBenefit[];
+  testimonials: ApiHiringTestimonial[];
+}
+
+
 
 
