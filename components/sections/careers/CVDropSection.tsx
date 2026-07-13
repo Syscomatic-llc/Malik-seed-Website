@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useRef, useState, DragEvent } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 
 export default memo(function CVDropSection() {
   const fileInputRef = useRef<HTMLInputElement>(null);

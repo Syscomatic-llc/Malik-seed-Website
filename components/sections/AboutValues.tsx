@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "../ui/SectionBadge";
 import { resolveImageUrl } from "@/lib/utils";
 import { ApiOurStoryValue } from "@/lib/api";

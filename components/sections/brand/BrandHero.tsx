@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { ScrollIndicator } from "../HeroSection";
 import { memo } from "react";
 

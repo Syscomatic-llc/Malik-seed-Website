@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import BrandHero from "@/components/sections/brand/BrandHero";
 import BrandIntro from "@/components/sections/brand/BrandIntro";
 import BrandCropPortfolio from "@/components/sections/brand/BrandCropPortfolio";

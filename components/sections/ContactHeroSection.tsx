@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useId, FormEvent, useRef, useEffect } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { OFFICE_DETAILS, SUBJECT_OPTIONS } from "@/data/pages-data";
 import { SectionBadge } from "@/components/ui/SectionBadge";

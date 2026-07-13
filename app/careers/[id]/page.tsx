@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { notFound } from "next/navigation";
 import { openPositionsData } from "@/data/career-data";
 import {

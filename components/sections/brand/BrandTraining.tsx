@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { maliksFarmData } from "@/data/brands/maliks-farm";
 import { cn } from "@/lib/utils";

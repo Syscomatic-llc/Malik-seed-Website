@@ -5,7 +5,7 @@ import BrandSplit from "@/components/sections/brand/BrandSplit";
 import BrandProcess from "@/components/sections/brand/BrandProcess";
 import { origeneData } from "@/data/brands/origene";
 import { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 
 export const metadata: Metadata = {

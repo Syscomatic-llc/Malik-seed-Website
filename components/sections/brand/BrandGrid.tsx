@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";

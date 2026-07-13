@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import ProductsSection from "@/components/sections/ProductsSection";
 

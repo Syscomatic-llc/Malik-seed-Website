@@ -1,6 +1,6 @@
 import ActionButton from "@/components/ActionButton";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 
 interface BrandYouTubeProps {
   badge?: string;

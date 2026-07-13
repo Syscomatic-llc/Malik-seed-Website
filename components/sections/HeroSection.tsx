@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, Fragment, useState, useEffect, useMemo } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { useAutoSlide } from "@/hooks/useAutoSlide";
 import ActionButton from "@/components/ActionButton";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";

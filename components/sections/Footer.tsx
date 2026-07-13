@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import { footerData, FooterLink, SocialLink } from "@/data/sections-data";
 import { contactApi, homepageApi } from "@/lib/api";
 

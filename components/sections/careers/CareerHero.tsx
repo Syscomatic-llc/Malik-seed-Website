@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useState, useEffect } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import ActionButton from "@/components/ActionButton";
