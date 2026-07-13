@@ -63,7 +63,7 @@ export default function BrandProcess({
               <div
                 key={i}
                 className={cn(
-                  "brand-card group",
+                  "brand-card group relative h-full w-full",
                   variant === "default" ? "rounded-[20px]" : "rounded-[24px]"
                 )}
               >
@@ -117,7 +117,7 @@ export default function BrandProcess({
                     </p>
                   </div>
                 </div>
-                <BrandCardBorder />
+                <BrandCardBorder isDark={variant === "dark"} />
               </div>
             ))}
           </div>

@@ -23,7 +23,7 @@ type Dimensions = {
   radius: number;
 };
 
-export default function BrandCardBorder() {
+export default function BrandCardBorder({ isDark = true }: { isDark?: boolean }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState<Dimensions | null>(null);
@@ -88,11 +88,13 @@ export default function BrandCardBorder() {
             className="brand-border-path"
             d={paths.right}
             vectorEffect="non-scaling-stroke"
+            style={{ stroke: isDark ? "#a9e179" : "#195236" }}
           />
           <path
             className="brand-border-path"
             d={paths.left}
             vectorEffect="non-scaling-stroke"
+            style={{ stroke: isDark ? "#a9e179" : "#195236" }}
           />
         </svg>
       )}
