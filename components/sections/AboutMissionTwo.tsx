@@ -5,6 +5,7 @@ import Image from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "../ui/SectionBadge";
 import { resolveImageUrl } from "@/lib/utils";
 import { ApiOurStoryMission } from "@/lib/api";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 interface AboutMissionTwoProps {
   apiData?: ApiOurStoryMission | null;
@@ -95,7 +96,7 @@ export default function AboutMissionTwo({ apiData }: AboutMissionTwoProps) {
 
           {/* Farm banner */}
           <div className="bg-brand-neutral-light/5 relative aspect-[310/200] w-full overflow-hidden rounded-[18px] md:aspect-[1128/532] md:rounded-[24px]">
-            <Image
+            <OptimizedImage
               src={bannerImage}
               alt="Malik's Farm modern agriculture fields and seed trials"
               fill

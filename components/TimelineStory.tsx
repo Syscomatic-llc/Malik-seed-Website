@@ -261,11 +261,22 @@ function useYearHighlight(
   if (prev !== null) {
     inputRange.push(prev);
     outputRange.push(0.3); // muted opacity
+
+    // Keep it dim until 95% of the distance to current
+    const startGlowPoint = prev + (current - prev) * 0.95;
+    inputRange.push(startGlowPoint);
+    outputRange.push(0.3);
   }
+
   inputRange.push(current);
-  outputRange.push(1); // active highlighted opacity
+  outputRange.push(1); // active highlighted opacity (glow)
 
   if (next !== null) {
+    // Dim it quickly after moving past current (e.g., 5% of the distance to next)
+    const endGlowPoint = current + (next - current) * 0.05;
+    inputRange.push(endGlowPoint);
+    outputRange.push(0.3);
+
     inputRange.push(next);
     outputRange.push(0.3); // muted opacity
   }
