@@ -3,10 +3,12 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "@/components/ui/OptimizedImage";
 import Link from "next/link";
+import NextImage from "next/image";
 import { maliksFarmData } from "@/data/brands/maliks-farm";
 import { cn } from "@/lib/utils";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { ApiContactInfo } from "@/lib/api";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 // Scans carousel sizing constants
 const SCAN_CARD_WIDTH_DESKTOP = 398;
@@ -53,7 +55,7 @@ function FacilityCard({
       }}
     >
       <div className="relative h-[200px] w-[310px] flex-shrink-0 overflow-hidden rounded-2xl border border-white/5 bg-[#0F3221] lg:h-[240px] lg:w-[372px] lg:rounded-3xl">
-        <Image
+        <OptimizedImage
           src={facility.image}
           alt={facility.title}
           fill
@@ -411,7 +413,7 @@ export default function BrandTraining({
             aria-label="Previous testimonial"
             className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
           >
-            <Image
+            <NextImage
               src="/arrow.svg"
               alt="Previous"
               width={24}
@@ -424,7 +426,7 @@ export default function BrandTraining({
             aria-label="Next testimonial"
             className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
           >
-            <Image src="/arrow.svg" alt="Next" width={24} height={24} />
+            <NextImage src="/arrow.svg" alt="Next" width={24} height={24} />
           </button>
         </div>
 
