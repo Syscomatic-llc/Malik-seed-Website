@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, TransitionEvent } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "@/components/ui/OptimizedImage";
 import NextImage from "next/image";
 import { cn } from "@/lib/utils";
@@ -170,17 +170,22 @@ export default function TestimonialsSection({
   const extendedTestimonials = [...items, ...items, ...items];
 
   const [activeIndex, setActiveIndex] = useState(LOOP_SET_START);
-  const [isResetting, setIsResetting] = useState(false);
+  const [isTransitionEnabled, setIsTransitionEnabled] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const prev = useCallback(() => {
-    if (isResetting) return;
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setIsTransitionEnabled(true);
     setActiveIndex((prevIndex) => prevIndex - 1);
-  }, [isResetting]);
+  }, [isTransitioning]);
 
   const next = useCallback(() => {
-    if (isResetting) return;
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setIsTransitionEnabled(true);
     setActiveIndex((prevIndex) => prevIndex + 1);
-  }, [isResetting]);
+  }, [isTransitioning]);
 
   // Mobile Swipe state
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -189,23 +194,23 @@ export default function TestimonialsSection({
   // Touch Swipe handlers for mobile (useCallback for performance stability)
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
-      if (isResetting) return;
+      if (isTransitioning) return;
       setTouchEnd(null);
       setTouchStart(e.targetTouches[0].clientX);
     },
-    [isResetting]
+    [isTransitioning]
   );
 
   const handleTouchMove = useCallback(
     (e: React.TouchEvent) => {
-      if (isResetting) return;
+      if (isTransitioning) return;
       setTouchEnd(e.targetTouches[0].clientX);
     },
-    [isResetting]
+    [isTransitioning]
   );
 
   const handleTouchEnd = useCallback(() => {
-    if (!touchStart || !touchEnd) return;
+    if (!touchStart || !touchEnd || isTransitioning) return;
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
@@ -214,28 +219,38 @@ export default function TestimonialsSection({
     } else if (isRightSwipe) {
       prev();
     }
-  }, [touchStart, touchEnd, next, prev]);
+  }, [touchStart, touchEnd, next, prev, isTransitioning]);
 
-  // Infinite wrap reset
-  const handleTransitionEnd = useCallback((e: TransitionEvent) => {
-    if (e.target !== e.currentTarget) return;
-    if (activeIndex >= LOOP_RESET_LIMIT) {
-      setIsResetting(true);
-      setActiveIndex(activeIndex - TESTIMONIALS_COUNT);
-    } else if (activeIndex < LOOP_SET_START) {
-      setIsResetting(true);
-      setActiveIndex(activeIndex + TESTIMONIALS_COUNT);
-    }
-  }, [activeIndex, LOOP_RESET_LIMIT, LOOP_SET_START, TESTIMONIALS_COUNT]);
-
+  // Handle jump wrapping after transition finishes (400ms duration)
   useEffect(() => {
-    if (isResetting) {
-      const timer = setTimeout(() => {
-        setIsResetting(false);
-      }, 30);
-      return () => clearTimeout(timer);
-    }
-  }, [isResetting]);
+    if (!isTransitioning) return;
+
+    const timer = setTimeout(() => {
+      let targetIndex = activeIndex;
+      let shouldJump = false;
+
+      if (activeIndex >= LOOP_RESET_LIMIT) {
+        targetIndex = activeIndex - TESTIMONIALS_COUNT;
+        shouldJump = true;
+      } else if (activeIndex < LOOP_SET_START) {
+        targetIndex = activeIndex + TESTIMONIALS_COUNT;
+        shouldJump = true;
+      }
+
+      if (shouldJump) {
+        setIsTransitionEnabled(false);
+        setActiveIndex(targetIndex);
+        setTimeout(() => {
+          setIsTransitionEnabled(true);
+          setIsTransitioning(false);
+        }, 50);
+      } else {
+        setIsTransitioning(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [activeIndex, isTransitioning, LOOP_RESET_LIMIT, LOOP_SET_START, TESTIMONIALS_COUNT]);
 
   return (
     <section
@@ -264,14 +279,13 @@ export default function TestimonialsSection({
               <div
                 className={cn(
                   "flex items-center gap-6 overflow-visible",
-                  isResetting
-                    ? "transition-none"
-                    : "transition-transform duration-500 ease-out"
+                  isTransitionEnabled
+                    ? "transition-transform duration-[400ms] ease-out"
+                    : "transition-none"
                 )}
                 style={{
                   transform: `translateX(calc(50vw - ${HALF_CARD_DESKTOP}px - (${activeIndex} * ${SLOT_WIDTH_DESKTOP}px)))`,
                 }}
-                onTransitionEnd={handleTransitionEnd}
               >
                 {extendedTestimonials.map((t, idx) => {
                   const isActive = idx === activeIndex;
@@ -280,10 +294,14 @@ export default function TestimonialsSection({
                       key={`${t.id}-dt-${idx}`}
                       testimonial={t}
                       isActive={isActive}
-                      isResetting={isResetting}
+                      isResetting={!isTransitionEnabled}
                       priority={idx === LOOP_SET_START}
                       onClick={() => {
-                        if (!isResetting) setActiveIndex(idx);
+                        if (!isTransitioning && activeIndex !== idx) {
+                          setIsTransitioning(true);
+                          setIsTransitionEnabled(true);
+                          setActiveIndex(idx);
+                        }
                       }}
                     />
                   );
@@ -303,14 +321,13 @@ export default function TestimonialsSection({
               <div
                 className={cn(
                   "flex items-center gap-4 overflow-visible",
-                  isResetting
-                    ? "transition-none"
-                    : "transition-transform duration-500 ease-out"
+                  isTransitionEnabled
+                    ? "transition-transform duration-[400ms] ease-out"
+                    : "transition-none"
                 )}
                 style={{
                   transform: `translateX(calc(50vw - ${HALF_CARD_MOBILE}px - (${activeIndex} * ${SLOT_WIDTH_MOBILE}px)))`,
                 }}
-                onTransitionEnd={handleTransitionEnd}
               >
                 {extendedTestimonials.map((t, idx) => {
                   const isActive = idx === activeIndex;
@@ -319,11 +336,15 @@ export default function TestimonialsSection({
                       key={`${t.id}-mob-${idx}`}
                       testimonial={t}
                       isActive={isActive}
-                      isResetting={isResetting}
+                      isResetting={!isTransitionEnabled}
                       isMobile={true}
                       priority={idx === LOOP_SET_START}
                       onClick={() => {
-                        if (!isResetting) setActiveIndex(idx);
+                        if (!isTransitioning && activeIndex !== idx) {
+                          setIsTransitioning(true);
+                          setIsTransitionEnabled(true);
+                          setActiveIndex(idx);
+                        }
                       }}
                     />
                   );
