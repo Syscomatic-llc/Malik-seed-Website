@@ -1,5 +1,5 @@
 import { apiGet, apiPostQuery, RequestOptions } from "./client";
-import { ApiContactPageData, ApiContactSubmitResponse } from "./types";
+import { ApiContactInfo, ApiContactSubmitResponse } from "./types";
 
 export interface ContactSubmitParams {
   name: string;
@@ -12,7 +12,7 @@ export interface ContactSubmitParams {
 
 export const contactApi = {
   getContact(options?: RequestOptions) {
-    return apiGet<ApiContactPageData>("/api/v1/contact/", options);
+    return apiGet<ApiContactInfo>("/api/v1/contact/info", options);
   },
   submitContact(params: ContactSubmitParams, options?: RequestOptions) {
     return apiPostQuery<ApiContactSubmitResponse>(

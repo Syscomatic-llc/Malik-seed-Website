@@ -8,10 +8,10 @@ const SITE_NAME = "Malik Seeds";
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const data = await contactApi.getContact({ revalidate: 60 });
-    if (data?.info) {
+    if (data) {
       return {
-        title: `${data.info.title} - ${SITE_NAME}`,
-        description: data.info.description || "Get in touch with Malik Seeds.",
+        title: `${data.title} - ${SITE_NAME}`,
+        description: data.description || "Get in touch with Malik Seeds.",
       };
     }
   } catch (err) {
@@ -33,7 +33,6 @@ export default async function ContactPage() {
   } catch (err) {
     console.error("Failed to fetch contact page data from API:", err);
   }
-
   return (
     <>
       <ContactHeroSection apiData={apiData} />

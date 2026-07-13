@@ -18,7 +18,7 @@ export default function MaliksFarmPage() {
     contactApi
       .getContact()
       .then((data) => {
-        if (data?.info) setContactInfo(data.info);
+        if (data) setContactInfo(data);
       })
       .catch((err) => {
         console.error("Failed to fetch contact info for Maliks Farm page:", err);

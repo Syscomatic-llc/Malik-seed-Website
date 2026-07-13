@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { OFFICE_DETAILS, SUBJECT_OPTIONS } from "@/data/pages-data";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { ApiContactPageData, contactApi } from "@/lib/api";
+import { ApiContactInfo, contactApi } from "@/lib/api";
 
 // ---------------------------------------------------------------------------
 // Constants & Static Configurations (Architectural Cleanliness)
@@ -43,9 +43,9 @@ const getBorderClass = (hasError: boolean) =>
 export default function ContactHeroSection({
   apiData,
 }: {
-  apiData: ApiContactPageData | null;
+  apiData: ApiContactInfo | null;
 }) {
-  const info = apiData?.info;
+  const info = apiData;
 
   // Unique accessible IDs
   const nameId = useId();

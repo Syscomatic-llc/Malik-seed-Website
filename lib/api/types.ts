@@ -221,6 +221,7 @@ export interface ApiContactInfo {
   map_embed_url: string | null;
   business_hours: { day: string; hours: string }[] | null;
   is_active: boolean;
+  footer_description: string | null;
   created_at: string;
   updated_at: string;
 }

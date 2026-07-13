@@ -63,7 +63,7 @@ export default async function Footer() {
   let contactInfo = null;
   try {
     const data = await contactApi.getContact({ revalidate: 60 });
-    contactInfo = data?.info || null;
+    contactInfo = data || null;
   } catch (err) {
     console.error("Failed to fetch contact details for footer:", err);
   }
@@ -152,7 +152,7 @@ export default async function Footer() {
             </Link>
 
             <p className="font-inter text-brand-light-green/70 mt-4 text-[16px] leading-6 font-normal md:mt-6 md:text-[18px] md:leading-6.75">
-              {contactInfo?.description || footerData.mission}
+              {contactInfo?.footer_description || footerData.mission}
             </p>
 
             <div className="mt-8 flex flex-col gap-4 lg:mt-16.75">
