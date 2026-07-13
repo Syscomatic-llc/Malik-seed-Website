@@ -20,10 +20,10 @@ export const newsApi = {
       query.set("featured", String(params.featured));
     if (params?.limit !== undefined) query.set("limit", String(params.limit));
     const qs = query.toString();
-    return apiGet<ApiNewsArticle[]>(
+    return apiGet<{ items: ApiNewsArticle[]; total: number }>(
       `/api/v1/news/articles${qs ? `?${qs}` : ""}`,
       options
-    );
+    ).then((res) => res?.items || []);
   },
   getFeaturedArticles(options?: RequestOptions) {
     return apiGet<ApiNewsArticle[]>("/api/v1/news/articles/featured", options);

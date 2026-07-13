@@ -9,7 +9,6 @@ import { useState, useEffect, useTransition, useMemo, useCallback } from "react"
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import {
-  newsArticles as staticNewsArticles,
   type NewsArticle,
 } from "@/data/news-data";
 import NewsCard from "@/components/NewsCard";
@@ -47,7 +46,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     if (apiData?.articles && apiData.articles.length > 0) {
       return apiData.articles.map(mapApiArticleToNewsArticle);
     }
-    return staticNewsArticles;
+    return [];
   });
 
   // Handle client-side mount loading when URL specifies a higher count
@@ -83,17 +82,8 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     if (loadedArticles.length < visibleCount) {
       return false;
     }
-    const isUsingStatic = !apiData?.articles || apiData.articles.length === 0;
-    if (isUsingStatic) {
-      const totalFilteredStatic = staticNewsArticles.filter(
-        (a) =>
-          activeCategory === ALL_CATEGORY ||
-          a.category?.toLowerCase() === activeCategory.toLowerCase()
-      ).length;
-      return visibleCount < totalFilteredStatic;
-    }
     return loadedArticles.length === visibleCount;
-  }, [loadedArticles, visibleCount, activeCategory, apiData]);
+  }, [loadedArticles, visibleCount]);
 
   const isLoading = isPending || isSimulatingLoad;
 
@@ -112,23 +102,13 @@ export default function NewsPage({ apiData }: NewsPageProps) {
           if (apiArticles && apiArticles.length > 0) {
             setLoadedArticles(apiArticles.map(mapApiArticleToNewsArticle));
           } else {
-            const fallback = staticNewsArticles.filter(
-              (a) =>
-                category === ALL_CATEGORY ||
-                a.category?.toLowerCase() === category.toLowerCase()
-            );
-            setLoadedArticles(fallback);
+            setLoadedArticles([]);
           }
           setVisibleCount(fetchLimit);
         })
         .catch((err) => {
           console.error("Failed to fetch articles by category:", err);
-          const fallback = staticNewsArticles.filter(
-            (a) =>
-              category === ALL_CATEGORY ||
-              a.category?.toLowerCase() === category.toLowerCase()
-          );
-          setLoadedArticles(fallback);
+          setLoadedArticles([]);
           setVisibleCount(fetchLimit);
         })
         .finally(() => {
