@@ -1,8 +1,7 @@
 "use client";
 
 import { memo, useRef, useState, DragEvent } from "react";
-import OptimizedImage from "@/components/ui/OptimizedImage";
-
+import NextImage from "next/image"
 export default memo(function CVDropSection() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -64,11 +63,11 @@ export default memo(function CVDropSection() {
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 accept=".pdf,.doc,.docx"
-                className="hidden"
+                className=" hidden"
               />
 
               <div className="flex flex-col items-center gap-4 transition-transform duration-300 group-hover/drop:scale-105">
-                <OptimizedImage
+                <NextImage
                   src="/images/careers/prime_upload.svg"
                   alt="Upload Icon"
                   width={24}
