@@ -1,5 +1,6 @@
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
+import BrandCardBorder from "./BrandCardBorder";
 
 interface CardItem {
   title: string;
@@ -77,17 +78,18 @@ export default function BrandCards({
         {/* Cards Grid */}
         <div className={`grid grid-cols-1 ${gridCols} gap-4 md:gap-6`}>
           {cards.map((card, idx) => (
-            // OUTER wrapper: relative, hosts the SVG border-draw overlay
             <div
               key={idx}
-              className="brand-card group relative rounded-[20px] lg:rounded-[24px]"
+              className={cn(
+                "brand-card group rounded-[20px] lg:rounded-[24px]",
+                isDark && "lg:h-[321px] lg:w-[503px]"
+              )}
             >
-              {/* INNER wrapper: bg, clipping, content */}
               <div
                 className={cn(
-                  "relative flex h-full w-full flex-col justify-start overflow-hidden rounded-[inherit] bg-[#0F3221] shadow-md transition-colors duration-300 group-hover:bg-[#0c2a1c]",
+                  "flex h-full w-full flex-col justify-start overflow-hidden rounded-[inherit] bg-[#0F3221] shadow-md transition-all duration-300 group-hover:bg-[#0c2a1c]",
                   isDark
-                    ? "gap-3 p-[30px] px-6 md:gap-4 lg:h-[321px] lg:w-[503px] lg:gap-[32px] lg:px-[32px] lg:pt-[40px] lg:pb-[104px]"
+                    ? "gap-3 p-[30px] px-6 md:gap-4 lg:gap-[32px] lg:px-[32px] lg:pt-[40px] lg:pb-[104px]"
                     : "gap-3 p-[30px] px-6 md:gap-4 lg:p-12 lg:px-10",
                   isCentered
                     ? "items-center text-center"
@@ -128,38 +130,7 @@ export default function BrandCards({
                   </p>
                 </div>
               </div>
-
-              {/* Border-draw SVG overlay — placed AFTER inner div so it
-                  paints on top without needing z-index tricks */}
-              <svg
-                className="brand-border-svg pointer-events-none absolute inset-0 h-full w-full"
-                viewBox="0 0 200 200"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                {/* Right half: top-center → top-right → bottom-right → bottom-center (clockwise) */}
-                <path
-                  className="brand-border-path"
-                  d="M 100,2 L 182,2 A 16,16 0 0 1 198,18 L 198,182 A 16,16 0 0 1 182,198 L 100,198"
-                  vectorEffect="non-scaling-stroke"
-                  pathLength={100}
-                  style={{
-                    strokeDasharray: "100",
-                    strokeDashoffset: "100",
-                  }}
-                />
-                {/* Left half: top-center → top-left → bottom-left → bottom-center (counter-clockwise) */}
-                <path
-                  className="brand-border-path"
-                  d="M 100,2 L 18,2 A 16,16 0 0 0 2,18 L 2,182 A 16,16 0 0 0 18,198 L 100,198"
-                  vectorEffect="non-scaling-stroke"
-                  pathLength={100}
-                  style={{
-                    strokeDasharray: "100",
-                    strokeDashoffset: "100",
-                  }}
-                />
-              </svg>
+              <BrandCardBorder />
             </div>
           ))}
         </div>

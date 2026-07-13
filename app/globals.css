@@ -611,6 +611,7 @@
 @layer components {
   .brand-card {
     position: relative;
+    overflow: visible;
   }
 
   .brand-border-svg {
@@ -622,11 +623,13 @@
     stroke: #a9e179;
     stroke-width: 3;
     stroke-linecap: round;
+    stroke-dasharray: var(--path-length, 1000);
+    stroke-dashoffset: var(--path-length, 1000);
     transition: stroke-dashoffset 0.6s ease;
   }
 
   .brand-card:hover .brand-border-path {
-    stroke-dashoffset: 0 !important;
+    stroke-dashoffset: 0;
   }
 }
 
