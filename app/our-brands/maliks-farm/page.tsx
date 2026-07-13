@@ -38,7 +38,6 @@ export default function MaliksFarmPage() {
       }
     }
   }, []);
-
   return (
     <div className="min-h-screen bg-[#F2F7F1]">
       {/* 1. Brand Hero (Untouched) */}

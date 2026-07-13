@@ -104,84 +104,96 @@ export default function BrandTraining({
   const scanLoopLimit = scansCount * 2;
   const extendedScans = [...visitorScans, ...visitorScans, ...visitorScans];
 
-  // ── Scans Carousel (same pattern as TestimonialsSection) ──
+  // ── Scans Carousel (setTimeout & useEffect based Infinite Scroll) ──
   const [scanIndex, setScanIndex] = useState(scanLoopStart);
-  const [scanResetting, setScanResetting] = useState(false);
+  const [isTransitionEnabled, setIsTransitionEnabled] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [scanPaused, setScanPaused] = useState(false);
   const [scanTouchStart, setScanTouchStart] = useState<number | null>(null);
   const [scanTouchEnd, setScanTouchEnd] = useState<number | null>(null);
 
   const scanNext = useCallback(() => {
-    if (scanResetting) return;
-    setScanIndex((p) => p + 1);
-  }, [scanResetting]);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setIsTransitionEnabled(true);
+    setScanIndex((prev) => prev + 1);
+  }, [isTransitioning]);
 
   const scanPrev = useCallback(() => {
-    if (scanResetting) return;
-    setScanIndex((p) => p - 1);
-  }, [scanResetting]);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setIsTransitionEnabled(true);
+    setScanIndex((prev) => prev - 1);
+  }, [isTransitioning]);
 
-  const handleScanTransitionEnd = useCallback(() => {
-    if (scanIndex >= scanLoopLimit) {
-      setScanResetting(true);
-      setScanIndex(scanIndex - scansCount);
-    } else if (scanIndex < scanLoopStart) {
-      setScanResetting(true);
-      setScanIndex(scanIndex + scansCount);
-    }
-  }, [scanIndex, scanLoopLimit, scanLoopStart, scansCount]);
-
-  // Instant, invisible snap-back to the real (middle) set once the
-  // "transition: none" jump has actually been painted. A setTimeout
-  // guess can lose the race on slower devices/tabs and cause a
-  // visible rewind — double rAF guarantees the jump is committed
-  // before the transition is re-enabled.
+  // Handle jump wrapping after transition finishes (700ms duration)
   useEffect(() => {
-    if (scanResetting) {
-      let raf2 = 0;
-      const raf1 = requestAnimationFrame(() => {
-        raf2 = requestAnimationFrame(() => setScanResetting(false));
-      });
-      return () => {
-        cancelAnimationFrame(raf1);
-        if (raf2) cancelAnimationFrame(raf2);
-      };
-    }
-  }, [scanResetting]);
+    if (!isTransitioning) return;
 
-  // Auto-advance scans every 3s, paused on hover and while resetting
-  // (scanNext already no-ops during scanResetting).
+    const timer = setTimeout(() => {
+      let targetIndex = scanIndex;
+      let shouldJump = false;
+
+      if (scanIndex >= scanLoopLimit) {
+        targetIndex = scanIndex - scansCount;
+        shouldJump = true;
+      } else if (scanIndex < scanLoopStart) {
+        targetIndex = scanIndex + scansCount;
+        shouldJump = true;
+      }
+
+      if (shouldJump) {
+        setIsTransitionEnabled(false);
+        setScanIndex(targetIndex);
+        setTimeout(() => {
+          setIsTransitionEnabled(true);
+          setIsTransitioning(false);
+        }, 50);
+      } else {
+        setIsTransitioning(false);
+      }
+    }, 700);
+
+    return () => clearTimeout(timer);
+  }, [scanIndex, isTransitioning, scanLoopLimit, scanLoopStart, scansCount]);
+
+  // Auto-scroll effect (fires every 3 seconds unless hovered or transitioning)
   useEffect(() => {
-    if (scanPaused) return;
+    if (scanPaused || isTransitioning) return;
+
     const interval = setInterval(() => {
       scanNext();
     }, 3000);
+
     return () => clearInterval(interval);
-  }, [scanNext, scanPaused]);
+  }, [scanNext, scanPaused, isTransitioning]);
 
   const handleScanTouchStart = useCallback(
     (e: React.TouchEvent) => {
-      if (scanResetting) return;
+      if (isTransitioning) return;
       setScanTouchEnd(null);
       setScanTouchStart(e.targetTouches[0].clientX);
     },
-    [scanResetting]
+    [isTransitioning]
   );
 
   const handleScanTouchMove = useCallback(
     (e: React.TouchEvent) => {
-      if (scanResetting) return;
+      if (isTransitioning) return;
       setScanTouchEnd(e.targetTouches[0].clientX);
     },
-    [scanResetting]
+    [isTransitioning]
   );
 
   const handleScanTouchEnd = useCallback(() => {
-    if (!scanTouchStart || !scanTouchEnd) return;
+    if (!scanTouchStart || !scanTouchEnd || isTransitioning) return;
     const d = scanTouchStart - scanTouchEnd;
-    if (d > 50) scanNext();
-    else if (d < -50) scanPrev();
-  }, [scanTouchStart, scanTouchEnd, scanNext, scanPrev]);
+    if (d > 50) {
+      scanNext();
+    } else if (d < -50) {
+      scanPrev();
+    }
+  }, [scanTouchStart, scanTouchEnd, scanNext, scanPrev, isTransitioning]);
 
   const currentProgram =
     maliksFarmData.training.programs.find((p) => p.id === activeTab) ||
@@ -284,18 +296,13 @@ export default function BrandTraining({
             <div
               className={cn(
                 "flex items-center gap-6 overflow-visible",
-                scanResetting
-                  ? "transition-none"
-                  : "transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                isTransitionEnabled
+                  ? "transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                  : "transition-none"
               )}
               style={{
                 transform: `translateX(calc(50vw - ${SCAN_HALF_DESKTOP}px - (${scanIndex} * ${SCAN_SLOT_DESKTOP}px)))`,
                 willChange: "transform",
-              }}
-              onTransitionEnd={(e) => {
-                if (e.target !== e.currentTarget) return;
-                if (e.propertyName !== "transform") return;
-                handleScanTransitionEnd();
               }}
             >
               {extendedScans.map((scan, idx) => {
@@ -304,7 +311,7 @@ export default function BrandTraining({
                   <div
                     key={idx}
                     onClick={() => {
-                      if (scanResetting) return;
+                      if (isTransitioning) return;
                       setScanIndex(idx);
                     }}
                     className="group relative h-[598px] w-[398px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
@@ -340,18 +347,13 @@ export default function BrandTraining({
             <div
               className={cn(
                 "flex items-center gap-4 overflow-visible",
-                scanResetting
-                  ? "transition-none"
-                  : "transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                isTransitionEnabled
+                  ? "transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                  : "transition-none"
               )}
               style={{
                 transform: `translateX(calc(50vw - ${SCAN_HALF_MOBILE}px - (${scanIndex} * ${SCAN_SLOT_MOBILE}px)))`,
                 willChange: "transform",
-              }}
-              onTransitionEnd={(e) => {
-                if (e.target !== e.currentTarget) return;
-                if (e.propertyName !== "transform") return;
-                handleScanTransitionEnd();
               }}
             >
               {extendedScans.map((scan, idx) => {
@@ -360,7 +362,7 @@ export default function BrandTraining({
                   <div
                     key={idx}
                     onClick={() => {
-                      if (scanResetting) return;
+                      if (isTransitioning) return;
                       setScanIndex(idx);
                     }}
                     className="group relative h-[420px] w-[280px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
