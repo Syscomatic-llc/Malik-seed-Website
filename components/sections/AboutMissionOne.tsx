@@ -38,13 +38,13 @@ export default function AboutMissionOne({ apiData }: AboutMissionOneProps) {
     return () => observer.disconnect();
   }, []);
 
-  // Typing effect — duration-based: always finishes in ~3 s desktop / ~2 s mobile
+  // Typing effect — duration-based: always finishes in ~1.2 s desktop / ~0.8 s mobile
   useEffect(() => {
     if (!started) return;
 
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const targetMs = isMobile ? 2000 : 3000;
-    const delay = Math.max(8, Math.round(targetMs / missionText.length));
+    const targetMs = isMobile ? 800 : 1200;
+    const delay = Math.max(4, Math.round(targetMs / missionText.length));
 
     let frame: ReturnType<typeof setTimeout>;
 
