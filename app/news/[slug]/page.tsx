@@ -192,9 +192,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const prevArticle = allArticles[currentIndex - 1] ?? allArticles[lastIndex];
   const nextArticle = allArticles[currentIndex + 1] ?? allArticles[0];
 
-  // Related articles: exclude current, cap at constant
+  // Related articles: same category, exclude current, cap at 3
   const relatedArticles = allArticles
-    .filter((a) => a.slug !== article!.slug)
+    .filter((a) => a.slug !== article!.slug && a.category === article!.category)
     .slice(0, RELATED_ARTICLE_COUNT);
 
   return (

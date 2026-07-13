@@ -79,10 +79,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
   );
 
   const hasMore = useMemo(() => {
-    if (loadedArticles.length < visibleCount) {
-      return false;
-    }
-    return loadedArticles.length === visibleCount;
+    return loadedArticles.length >= visibleCount;
   }, [loadedArticles, visibleCount]);
 
   const isLoading = isPending || isSimulatingLoad;
@@ -203,10 +200,29 @@ export default function NewsPage({ apiData }: NewsPageProps) {
           </div>
 
           <div className="mt-12 mb-[48px] min-h-[400px] md:mt-16">
-            {displayedArticles.length > 0 ? (
+            {isLoading && displayedArticles.length === 0 ? (
+              <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[24px] xl:grid-cols-3 xl:gap-x-[24px] xl:gap-y-[40px]">
+                {[1, 2, 3].map((idx) => (
+                  <div
+                    key={idx}
+                    className="flex h-[480px] w-full flex-col rounded-[24px] border border-[#E4E7EC]/50 bg-white p-[16px] pb-[24px]"
+                  >
+                    <div className="relative h-[260px] w-full animate-pulse overflow-hidden rounded-[16px] bg-[#F2F4F7]" />
+                    <div className="flex flex-1 flex-col pt-6">
+                      <div className="h-5 w-5/6 animate-pulse rounded bg-[#E4E7EC]" />
+                      <div className="mt-2 h-5 w-2/3 animate-pulse rounded bg-[#E4E7EC]" />
+                      <div className="mt-4 h-4 w-full animate-pulse rounded bg-[#F2F4F7]" />
+                      <div className="mt-2 h-4 w-11/12 animate-pulse rounded bg-[#F2F4F7]" />
+                      <div className="my-6 w-full border-t border-[#CED2DA]/50" />
+                      <div className="h-5 w-[100px] animate-pulse rounded bg-[#E4E7EC]" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : displayedArticles.length > 0 ? (
               <div
                 className={`grid grid-cols-1 gap-[20px] transition-opacity duration-300 md:grid-cols-2 md:gap-[24px] xl:grid-cols-3 xl:gap-x-[24px] xl:gap-y-[40px] ${
-                  isPending ? "opacity-50" : "opacity-100"
+                  isLoading ? "opacity-50" : "opacity-100"
                 }`}
               >
                 {displayedArticles.map((article) => (
