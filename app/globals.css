@@ -633,7 +633,6 @@
   }
 }
 
-/* ── Scan marquee: seamless infinite loop ── */
 @keyframes scan-marquee-d {
   from { transform: translateX(0); }
   to   { transform: translateX(-2110px); } /* 5 × (398 + 24) */
@@ -642,3 +641,17 @@
   from { transform: translateX(0); }
   to   { transform: translateX(-1480px); } /* 5 × (280 + 16) */
 }
+
+/* ── Typing cursor blink ── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.animate-blink {
+  animation: blink 0.8s step-start infinite;
+}
+
+html.lenis {
+  scroll-behavior: auto !important;
+}
+

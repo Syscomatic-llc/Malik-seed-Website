@@ -116,7 +116,10 @@ export default function MaliksFarmPage() {
           </div>
 
           {/* R&D Images Row */}
-          <div className="flex w-full snap-x snap-mandatory scrollbar-none gap-4 overflow-x-auto pb-4 md:gap-6">
+          <div
+            className="flex w-full snap-x snap-mandatory scrollbar-none gap-4 overflow-x-auto pb-4 md:gap-6"
+            data-lenis-prevent
+          >
             <div className="group relative h-[290px] w-[280px] shrink-0 snap-center overflow-hidden rounded-[24px] bg-neutral-200 md:h-[377px] md:w-[608px]">
               <Image
                 src={maliksFarmData.process.images[0]}
@@ -216,6 +219,7 @@ export default function MaliksFarmPage() {
           <div
             ref={bottomImagesContainerRef}
             className="flex w-full snap-x snap-mandatory scrollbar-none gap-4 overflow-x-auto px-10 pb-4 md:grid md:grid-cols-3 md:gap-6 md:overflow-x-visible md:px-0 md:pb-0"
+            data-lenis-prevent
           >
             {maliksFarmData.split2.gallery.map((imgUrl, idx) => (
               <div

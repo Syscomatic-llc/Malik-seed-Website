@@ -178,6 +178,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
               className="no-scrollbar flex w-full gap-2 overflow-x-auto pb-4 md:flex-wrap md:overflow-visible md:pb-0"
               role="tablist"
               aria-label="News categories"
+              data-lenis-prevent
             >
               {categoriesList.map((category) => {
                 const isSelected = activeCategory === category;

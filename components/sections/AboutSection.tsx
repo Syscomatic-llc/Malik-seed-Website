@@ -1,4 +1,6 @@
-import { Fragment } from "react";
+"use client";
+
+import { Fragment, useEffect, useRef, useState } from "react";
 import Image from "@/components/ui/OptimizedImage";
 import ActionButton from "@/components/ActionButton";
 import CountUp from "@/components/ui/CountUp";
@@ -55,49 +57,30 @@ function buildStats(apiStats: ApiAboutStat[]) {
  * data for any missing fields.
  */
 function buildAboutData(apiData?: ApiAbout) {
+  // Plain full description — no highlight/muted split
   const fullStaticDesc =
     staticAboutData.introDesktop.highlight + staticAboutData.introDesktop.muted;
 
   if (!apiData) {
-    const splitIdx = Math.min(fullStaticDesc.length, 258);
-    const introDesktop = {
-      highlight: fullStaticDesc.substring(0, splitIdx),
-      muted: fullStaticDesc.substring(splitIdx),
-    };
-
-    let truncatedMobile = fullStaticDesc;
-    if (fullStaticDesc.length > 132) {
-      truncatedMobile = fullStaticDesc.substring(0, 132) + "...";
-    }
-    const mobileSplitIdx = Math.min(truncatedMobile.length, 258);
-    const introMobile = {
-      highlight: truncatedMobile.substring(0, mobileSplitIdx),
-      muted: truncatedMobile.substring(mobileSplitIdx),
-    };
+    const introDesktopText = fullStaticDesc;
+    const introMobileText =
+      fullStaticDesc.length > 132
+        ? fullStaticDesc.substring(0, 132) + "..."
+        : fullStaticDesc;
 
     return {
       ...staticAboutData,
-      introDesktop,
-      introMobile,
+      introDesktopText,
+      introMobileText,
     };
   }
 
   const statsArray = parseStats(apiData.stats);
   const parsedStats = buildStats(statsArray);
 
-  // Split description at index 258 for the highlight/muted desktop display
   const desc = apiData.description || "";
-  const splitIdx = Math.min(desc.length, 258);
-  const introDesktop = {
-    highlight: desc.substring(0, splitIdx),
-    muted: desc.substring(splitIdx),
-  };
-
-  // Resolve the main image from API
   const teamBanner = resolveImageUrl(apiData.image_url);
 
-  // Use gallery_images from API for the two smaller about images,
-  // falling back to static assets if not provided.
   const gallery = apiData.gallery_images ?? [];
   const about1 = gallery[0]
     ? resolveImageUrl(gallery[0])
@@ -106,20 +89,13 @@ function buildAboutData(apiData?: ApiAbout) {
     ? resolveImageUrl(gallery[1])
     : staticAboutData.images.about2;
 
-  let truncatedMobile = desc;
-  if (desc.length > 132) {
-    truncatedMobile = desc.substring(0, 132) + "...";
-  }
-  const mobileSplitIdx = Math.min(truncatedMobile.length, 258);
-  const introMobile = {
-    highlight: truncatedMobile.substring(0, mobileSplitIdx),
-    muted: truncatedMobile.substring(mobileSplitIdx),
-  };
+  const introMobileText =
+    desc.length > 132 ? desc.substring(0, 132) + "..." : desc;
 
   return {
     badge: apiData.title || "About Malik Seeds",
-    introDesktop,
-    introMobile,
+    introDesktopText: desc,
+    introMobileText,
     cta: {
       label: apiData.cta_text || "Learn More",
       href: apiData.cta_link || "/our-story",
@@ -129,7 +105,6 @@ function buildAboutData(apiData?: ApiAbout) {
       teamBanner,
       about1,
       about2,
-      // Mobile images: use gallery if available, else static
       about1Mobile: gallery[0]
         ? resolveImageUrl(gallery[0])
         : staticAboutData.images.about1Mobile,
@@ -140,8 +115,83 @@ function buildAboutData(apiData?: ApiAbout) {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Typing text block — shared between desktop and mobile
+// ---------------------------------------------------------------------------
+interface TypingTextProps {
+  text: string;
+  className?: string;
+}
+
+function TypingText({ text, className = "" }: TypingTextProps) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const [started, setStarted] = useState(false);
+  const [displayedCount, setDisplayedCount] = useState(0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStarted(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  // Typing effect — duration-based: always finishes in ~3 s desktop / ~2 s mobile
+  useEffect(() => {
+    if (!started) return;
+
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const targetMs = isMobile ? 2000 : 3000;
+    const delay = Math.max(8, Math.round(targetMs / text.length));
+
+    let frame: ReturnType<typeof setTimeout>;
+
+    const type = (index: number) => {
+      if (index > text.length) return;
+      setDisplayedCount(index);
+      frame = setTimeout(() => type(index + 1), delay);
+    };
+
+    type(0);
+    return () => clearTimeout(frame);
+  }, [started, text]);
+
+
+  return (
+    <p ref={ref} aria-label={text} className={className}>
+      {/*
+        Each character lives in its own <span> so the browser always
+        lays out the FULL text — word-wrapping never shifts as typing
+        progresses. Only the color changes per character.
+      */}
+      {text.split("").map((char, i) => (
+        <span
+          key={i}
+          aria-hidden="true"
+          className={i < displayedCount ? "text-brand-dark" : "text-brand-dark/40"}
+        >
+          {char}
+        </span>
+      ))}
+    </p>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
 export default function AboutSection({ apiData }: AboutSectionProps) {
   const aboutData = buildAboutData(apiData);
+
   return (
     <section className="bg-brand-bg w-full" id="about">
       <div className="mx-auto max-w-[1440px]">
@@ -155,13 +205,11 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
 
             {/* Frame 2147229506 — 608x526, col, gap 48 */}
             <div className="flex flex-col gap-8 lg:gap-12 xl:gap-[48px]">
-              {/* Group 1 — text content */}
-              <p className="text-body-intro text-brand-dark">
-                <span>{aboutData.introDesktop.highlight}</span>
-                <span className="text-brand-dark/60">
-                  {aboutData.introDesktop.muted}
-                </span>
-              </p>
+              {/* Typing text — desktop */}
+              <TypingText
+                text={aboutData.introDesktopText}
+                className="text-body-intro"
+              />
 
               {/* Frame 6 CTA — 159x46, bg #195236, radius 60px */}
               <ActionButton
@@ -252,13 +300,11 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
 
               {/* Main text + CTA */}
               <div className="flex flex-col items-center gap-[32px]">
-                {/* Text — 358px, 24px, weight 500, center, lineHeight 36px */}
-                <p className="text-brand-dark text-center font-sans text-[24px] leading-[36px] font-medium">
-                  <span>{aboutData.introMobile.highlight}</span>
-                  <span className="text-brand-dark/60">
-                    {aboutData.introMobile.muted}
-                  </span>
-                </p>
+                {/* Typing text — mobile */}
+                <TypingText
+                  text={aboutData.introMobileText}
+                  className="text-brand-dark text-center font-sans text-[24px] leading-[36px] font-medium"
+                />
 
                 {/* CTA — 123x41, bg #195236, radius 60px */}
                 <ActionButton

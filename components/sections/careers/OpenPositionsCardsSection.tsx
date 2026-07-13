@@ -86,6 +86,16 @@ export default memo(function OpenPositionsCardsSection({
             <PositionCard key={pos.id} position={pos} />
           ))}
         </div>
+
+        {/* View Open Positions CTA */}
+        <div className="mt-12 flex justify-center">
+          <ActionButton
+            href="/careers/open-positions"
+            label="View Open Positions"
+            variant="primary"
+            className="!text-brand-dark h-[46px] px-6 text-[16px]"
+          />
+        </div>
       </div>
     </section>
   );

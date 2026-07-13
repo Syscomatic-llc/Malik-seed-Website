@@ -849,6 +849,7 @@ export default function TimelineStory({
           <div
             ref={mobileRef}
             className="flex w-full snap-x snap-mandatory scrollbar-none flex-row overflow-x-auto px-6 pb-8"
+            data-lenis-prevent
           >
             <div className="relative flex flex-row gap-[80px]">
               <GlobalMobileLine smoothProgress={mobileSmoothProgress} />

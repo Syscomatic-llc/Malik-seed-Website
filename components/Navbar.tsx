@@ -139,17 +139,16 @@ function BrandsDropdownItem({
         />
       </Link>
 
-      {/* Dropdown Container */}
       <div
         className={cn(
-          "absolute top-full left-1/2 z-50 mt-2 w-[760px] origin-top -translate-x-1/2 rounded-[20px] border border-neutral-100/80 bg-white p-5 shadow-[0_10px_40px_rgba(0,0,0,0.08)] backdrop-blur-md transition-all duration-300 ease-out",
+          "absolute top-full left-1/2 z-50 mt-2 w-[580px] origin-top -translate-x-1/2 rounded-[20px] border border-neutral-100/80 bg-white p-4 shadow-[0_10px_40px_rgba(0,0,0,0.08)] backdrop-blur-md transition-all duration-300 ease-out",
           "before:absolute before:inset-x-0 before:-top-4 before:h-4 before:content-['']",
           isOpen
             ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
             : "pointer-events-none -translate-y-2 scale-95 opacity-0"
         )}
       >
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-2">
           {brands.length === 0 ? (
             <div className="col-span-3 flex items-center justify-center gap-2 py-6">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
@@ -162,7 +161,7 @@ function BrandsDropdownItem({
               <Link
                 key={brand.href}
                 href={brand.href}
-                className="group flex flex-col gap-1 rounded-xl p-3 transition-colors duration-200 hover:bg-neutral-50"
+                className="group flex items-center rounded-xl py-2 px-3 transition-colors duration-200 hover:bg-neutral-50"
               >
                 <div className="group-hover:text-brand-accent flex items-center gap-1.5 text-[15px] font-semibold text-[#0D1A14] transition-colors duration-200">
                   <span>{brand.name}</span>
@@ -171,9 +170,6 @@ function BrandsDropdownItem({
                     className="text-brand-accent -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
                   />
                 </div>
-                <p className="line-clamp-2 font-sans text-[13px] leading-[18px] font-normal text-neutral-500">
-                  {brand.description}
-                </p>
               </Link>
             ))
           )}
@@ -340,6 +336,7 @@ function MobileNav({
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
+          data-lenis-prevent
           className={cn(
             "absolute top-[calc(48px+16px)] left-0 w-full rounded-[24px] bg-white shadow-lg transition-all duration-300 ease-in-out",
             isOpen

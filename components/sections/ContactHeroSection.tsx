@@ -219,7 +219,7 @@ export default function ContactHeroSection({
 
               {/* H1 Heading — Figma: 64px (desktop) / 38px (mobile) */}
               <h1 className="contact-page-hero-title white-space w-full leading-[120%] font-medium tracking-tight text-white lg:max-w-md xl:max-w-none">
-                Get in touch with Malik Seeds
+                {info?.description}
               </h1>
             </div>
 

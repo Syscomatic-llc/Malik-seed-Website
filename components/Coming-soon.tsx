@@ -19,6 +19,7 @@ export default function ComingSoonPage() {
         {/* Section Badge */}
         <SectionBadge
           variant="dark"
+          showDot
           className="border-white/10 bg-[#195236] px-4 py-1.5 text-[13px] tracking-widest text-white"
         >
           COMING SOON
@@ -28,7 +29,7 @@ export default function ComingSoonPage() {
         <div className="flex flex-col gap-4">
           <h1
             className="text-[42px] leading-[1.1] font-semibold text-white sm:text-[60px] md:text-[76px]"
-            style={{ fontFamily: "var(--font-inter-tight)" }}
+            style={{ fontFamily: "var(--font-stack-sans-notch)" }}
           >
             Cultivating
             <br />

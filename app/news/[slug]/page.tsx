@@ -1,9 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { newsArticles, type NewsArticle } from "@/data/news-data";
+import type { NewsArticle } from "@/data/news-data";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import ShareButton from "@/components/ShareButton";
 import ShareBar from "@/components/ShareBar";
@@ -15,7 +14,6 @@ import { mapApiArticleToNewsArticle } from "@/lib/news-mapper";
 
 // ---------------------------------------------------------------------------
 // Route-level constants — single source of truth for every hardcoded value.
-// Changing a colour or dimension here propagates to all usages automatically.
 // ---------------------------------------------------------------------------
 const SITE_NAME = "Malik Seeds";
 const RELATED_ARTICLE_COUNT = 3;
@@ -28,7 +26,7 @@ const DEFAULT_AUTHOR: NonNullable<NewsArticle["author"]> = {
 };
 
 // ---------------------------------------------------------------------------
-// Static asset paths — avoids duplicated string literals in JSX
+// Static asset paths
 // ---------------------------------------------------------------------------
 const ASSETS = {
   backArrow: "/images/news/arrow-right_up.svg",
@@ -38,9 +36,9 @@ const ASSETS = {
 } as const;
 
 // ---------------------------------------------------------------------------
-// Heading regex — compiled once at module load, not on every render/request
+// Heading regex — compiled once at module load
 // ---------------------------------------------------------------------------
-const HEADING_REGEX = /<(h2|h3)(\s+[^>]*?)?>([\s\S]*?)<\/\1>/gi;
+const HEADING_REGEX = /<(h2|h3)(\s+[^>]*)?>[\s\S]*?<\/\1>/gi;
 const TAG_REGEX = /<[^>]*>/g;
 const SLUG_STRIP_REGEX = /[^a-z0-9]+/g;
 const SLUG_TRIM_REGEX = /(^-|-$)/g;
@@ -49,16 +47,9 @@ const SLUG_TRIM_REGEX = /(^-|-$)/g;
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Returns the article matching `slug`, or `undefined`. */
-function findArticle(slug: string): NewsArticle | undefined {
-  return newsArticles.find((a) => a.slug === slug);
-}
-
 /**
- * Parses all `<h3>` nodes from `html`, injects unique IDs for scroll-anchoring,
- * and returns a heading manifest consumed by `NewsTOC`.
- *
- * The heading regex is a module-level constant so it is never re-compiled.
+ * Parses all `<h2>`/`<h3>` nodes from `html`, injects unique IDs for
+ * scroll-anchoring, and returns a heading manifest consumed by `NewsTOC`.
  */
 function parseHeadings(html: string): {
   headings: { text: string; id: string; level: number }[];
@@ -67,36 +58,39 @@ function parseHeadings(html: string): {
   const headings: { text: string; id: string; level: number }[] = [];
   let counter = 0;
 
-  // Reset lastIndex because we reuse the module-level regex with the `g` flag
   HEADING_REGEX.lastIndex = 0;
 
-  const parsedHtml = html.replace(HEADING_REGEX, (match, tag, attrs, innerHtml: string) => {
-    const cleanText = innerHtml
-      .replace(/&nbsp;/g, " ")
-      .replace(/\u00a0/g, " ")
-      .replace(TAG_REGEX, "")
-      .trim();
-    const id = `heading-${cleanText
-      .toLowerCase()
-      .replace(SLUG_STRIP_REGEX, "-")
-      .replace(SLUG_TRIM_REGEX, "")}-${counter++}`;
-    const level = tag.toLowerCase() === "h2" ? 2 : 3;
-    headings.push({ text: cleanText, id, level });
+  const parsedHtml = html.replace(
+    /<(h2|h3)(\s+[^>]*)?>([\s\S]*?)<\/\1>/gi,
+    (match, tag, attrs, innerHtml: string) => {
+      const cleanText = innerHtml
+        .replace(/&nbsp;/g, " ")
+        .replace(/\u00a0/g, " ")
+        .replace(TAG_REGEX, "")
+        .trim();
+      const id = `heading-${cleanText
+        .toLowerCase()
+        .replace(SLUG_STRIP_REGEX, "-")
+        .replace(SLUG_TRIM_REGEX, "")}-${counter++}`;
+      const level = tag.toLowerCase() === "h2" ? 2 : 3;
+      headings.push({ text: cleanText, id, level });
 
-    // Handle attributes (like class="ql-align-justify") gracefully
-    const attributes = attrs || "";
-    let headingAttrs = attributes;
-    const classRegex = /class=(['"])(.*?)\1/i;
-    if (classRegex.test(headingAttrs)) {
-      headingAttrs = headingAttrs.replace(classRegex, (_: string, quote: string, classVal: string) => {
-        return `class=${quote}scroll-mt-[120px] ${classVal}${quote}`;
-      });
-    } else {
-      headingAttrs += ' class="scroll-mt-[120px]"';
+      const attributes = attrs || "";
+      let headingAttrs = attributes;
+      const classRegex = /class=(['"])(.*?)\1/i;
+      if (classRegex.test(headingAttrs)) {
+        headingAttrs = headingAttrs.replace(
+          classRegex,
+          (_: string, quote: string, classVal: string) =>
+            `class=${quote}scroll-mt-[120px] ${classVal}${quote}`
+        );
+      } else {
+        headingAttrs += ' class="scroll-mt-[120px]"';
+      }
+
+      return `<${tag} id="${id}"${headingAttrs}>${innerHtml}</${tag}>`;
     }
-
-    return `<${tag} id="${id}"${headingAttrs}>${innerHtml}</${tag}>`;
-  });
+  );
 
   return { headings, parsedHtml };
 }
@@ -109,11 +103,11 @@ interface ArticlePageProps {
   params: Promise<{ slug: string }>;
 }
 
-/** Statically generates params for every article at build time. */
+/** Generates params from the API only — no static fallback. */
 export async function generateStaticParams() {
   try {
     const apiData = await newsApi.getNews();
-    if (apiData && apiData.articles) {
+    if (apiData?.articles?.length) {
       return apiData.articles.map((article) => ({
         slug: article.slug || article.article_slug || `article-${article.id}`,
       }));
@@ -121,25 +115,24 @@ export async function generateStaticParams() {
   } catch (err) {
     console.error("Failed to generate static params from API:", err);
   }
-  return newsArticles.map((article) => ({ slug: article.slug }));
+  return [];
 }
 
-/** Dynamic per-article SEO metadata. */
+/** Dynamic per-article SEO metadata — API only. */
 export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
 
-  let article = null;
   try {
     const apiData = await newsApi.getNews({ revalidate: 60 });
-    if (apiData && apiData.articles) {
+    if (apiData?.articles) {
       const found = apiData.articles.find(
         (a) => (a.slug || a.article_slug || `article-${a.id}`) === slug
       );
       if (found) {
-        article = {
-          title: found.title,
+        return {
+          title: `${found.title} - ${SITE_NAME}`,
           description: found.excerpt,
         };
       }
@@ -148,21 +141,7 @@ export async function generateMetadata({
     console.error("Failed to fetch article metadata from API:", err);
   }
 
-  if (!article) {
-    const staticArticle = findArticle(slug);
-    if (!staticArticle) {
-      return { title: `Article Not Found - ${SITE_NAME}` };
-    }
-    article = {
-      title: staticArticle.title,
-      description: staticArticle.description,
-    };
-  }
-
-  return {
-    title: `${article.title} - ${SITE_NAME}`,
-    description: article.description,
-  };
+  return { title: `Article Not Found - ${SITE_NAME}` };
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
@@ -173,21 +152,37 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   try {
     const apiData = await newsApi.getNews({ revalidate: 60 });
-    if (apiData && apiData.articles) {
+    if (apiData?.articles) {
       allArticles = apiData.articles.map(mapApiArticleToNewsArticle);
-      article = allArticles.find((a) => a.slug === slug) || null;
+      article = allArticles.find((a) => a.slug === slug) ?? null;
     }
   } catch (err) {
     console.error("Failed to fetch article details from API:", err);
   }
-
+  // ── No data from backend → show a friendly "not found" page ──────────────
   if (!article) {
-    const staticArticle = findArticle(slug);
-    if (!staticArticle) notFound();
-    article = staticArticle;
-    allArticles = newsArticles;
+    return (
+      <div className="bg-brand-bg flex min-h-screen flex-col items-center justify-center gap-6 px-4 text-center">
+        <SectionBadge variant="outline" showDot>
+          ARTICLE NOT FOUND
+        </SectionBadge>
+        <h1 className="font-heading text-brand-dark text-[28px] leading-[34px] font-medium md:text-[40px] md:leading-[50px]">
+          No article data available
+        </h1>
+        <p className="text-brand-dark/60 max-w-[480px] text-base leading-7">
+          We couldn&apos;t load this article right now. It may have been removed
+          or the content is not yet available from our server.
+        </p>
+        <Link
+          href="/news"
+          className="bg-brand-active text-white font-heading inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-opacity hover:opacity-90"
+        >
+          ← Back to News
+        </Link>
+      </div>
+    );
   }
-
+  console.log(article.contentHtml,"content html")
   const { headings, parsedHtml } = parseHeadings(article.contentHtml);
   const author = article.author ?? DEFAULT_AUTHOR;
 
@@ -201,6 +196,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const relatedArticles = allArticles
     .filter((a) => a.slug !== article!.slug)
     .slice(0, RELATED_ARTICLE_COUNT);
+
   return (
     <div className="bg-brand-bg min-h-screen">
       {/* ── Article wrapper ─────────────────────────────────────────── */}
@@ -267,20 +263,15 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
           {/* ── Two-column body: content + sidebar ──────────────────── */}
           <div className="mt-12 flex flex-col lg:flex-row lg:justify-between lg:gap-10 xl:gap-[130px]">
-            {/* Left: article body — order-2 on mobile, order-1 on desktop */}
+            {/* Left: article body */}
             <div className="order-2 w-full lg:order-1 lg:max-w-[608px] lg:flex-1">
-              {/*
-               * article-prose is a @utility defined in globals.css that captures
-               * all prose element overrides. Keeping them in CSS prevents this
-               * component from needing to know about prose internals.
-               */}
               <div
                 className="article-prose"
                 dangerouslySetInnerHTML={{ __html: parsedHtml }}
               />
             </div>
 
-            {/* Right: sticky TOC + author — order-1 on mobile, order-2 on desktop */}
+            {/* Right: sticky TOC + author */}
             <div className="order-1 mb-8 w-full shrink-0 lg:sticky lg:top-[120px] lg:order-2 lg:mb-0 lg:h-fit lg:w-[292px] lg:self-start">
               <NewsTOC headings={headings} author={author} />
             </div>
@@ -290,39 +281,41 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <div className="bg-brand-partners-border my-12 h-px w-full" />
 
           {/* ── Prev / Next navigation ───────────────────────────────── */}
-          <div className="flex w-full items-center justify-between gap-4 py-6">
-            {/* Previous */}
-            <Link
-              href={`/news/${prevArticle.slug}`}
-              className="group flex items-center gap-3 text-right focus-visible:outline-none"
-            >
-              <NavArrow direction="prev" label="Previous article" />
-              <div className="flex flex-col text-right">
-                <span className="font-heading text-brand-dark text-base leading-6 font-medium">
-                  Previous
-                </span>
-                <span className="font-heading text-brand-dark/70 group-hover:text-brand-active hidden text-sm transition-colors md:line-clamp-2 md:max-w-[240px]">
-                  {prevArticle.title}
-                </span>
-              </div>
-            </Link>
+          {prevArticle && nextArticle && (
+            <div className="flex w-full items-center justify-between gap-4 py-6">
+              {/* Previous */}
+              <Link
+                href={`/news/${prevArticle.slug}`}
+                className="group flex items-center gap-3 text-right focus-visible:outline-none"
+              >
+                <NavArrow direction="prev" label="Previous article" />
+                <div className="flex flex-col text-right">
+                  <span className="font-heading text-brand-dark text-base leading-6 font-medium">
+                    Previous
+                  </span>
+                  <span className="font-heading text-brand-dark/70 group-hover:text-brand-active hidden text-sm transition-colors md:line-clamp-2 md:max-w-[240px]">
+                    {prevArticle.title}
+                  </span>
+                </div>
+              </Link>
 
-            {/* Next */}
-            <Link
-              href={`/news/${nextArticle.slug}`}
-              className="group flex items-center justify-end gap-3 text-right focus-visible:outline-none"
-            >
-              <div className="flex flex-col text-left">
-                <span className="font-heading text-brand-dark text-base leading-6 font-medium">
-                  Next
-                </span>
-                <span className="font-heading text-brand-dark/70 group-hover:text-brand-active hidden text-sm transition-colors md:line-clamp-2 md:max-w-[240px]">
-                  {nextArticle.title}
-                </span>
-              </div>
-              <NavArrow direction="next" label="Next article" />
-            </Link>
-          </div>
+              {/* Next */}
+              <Link
+                href={`/news/${nextArticle.slug}`}
+                className="group flex items-center justify-end gap-3 text-right focus-visible:outline-none"
+              >
+                <div className="flex flex-col text-left">
+                  <span className="font-heading text-brand-dark text-base leading-6 font-medium">
+                    Next
+                  </span>
+                  <span className="font-heading text-brand-dark/70 group-hover:text-brand-active hidden text-sm transition-colors md:line-clamp-2 md:max-w-[240px]">
+                    {nextArticle.title}
+                  </span>
+                </div>
+                <NavArrow direction="next" label="Next article" />
+              </Link>
+            </div>
+          )}
         </div>
       </article>
 

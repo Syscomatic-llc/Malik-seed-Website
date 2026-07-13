@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Inter_Tight, Inter, Anton } from "next/font/google";
+import { Inter_Tight, Inter, Anton, Stack_Sans_Notch } from "next/font/google";
 import "./globals.css";
+import "lenis/dist/lenis.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import { homepageApi } from "@/lib/api";
+import LenisProvider from "@/components/LenisProvider";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -21,6 +23,12 @@ const anton = Anton({
   subsets: ["latin"],
   variable: "--font-anton",
   weight: ["400"],
+});
+
+const stackSansNotch = Stack_Sans_Notch({
+  subsets: ["latin"],
+  variable: "--font-stack-sans-notch",
+  weight: ["200", "300", "400", "500", "600", "700"],
 });
 
 export const viewport: Viewport = {
@@ -80,13 +88,15 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${interTight.variable} ${inter.variable} ${anton.variable} h-full antialiased`}
+      className={`${interTight.variable} ${inter.variable} ${anton.variable} ${stackSansNotch.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <Navbar brands={brands} />
-        <main className="relative flex-grow">{children}</main>
-        <Footer />
+        <LenisProvider>
+          <Navbar brands={brands} />
+          <main className="relative flex-grow">{children}</main>
+          <Footer />
+        </LenisProvider>
       </body>
     </html>
   );

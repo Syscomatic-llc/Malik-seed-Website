@@ -51,7 +51,10 @@ export default function BrandYouTube({
         {/* Images Grid */}
         <div className="mt-[40px] w-full md:mt-[56px]">
           {/* Mobile: Horizontal scroll carousel */}
-          <div className="flex snap-x snap-mandatory scrollbar-none flex-row gap-4 overflow-x-auto scroll-smooth pb-2 md:hidden">
+          <div
+            className="flex snap-x snap-mandatory scrollbar-none flex-row gap-4 overflow-x-auto scroll-smooth pb-2 md:hidden"
+            data-lenis-prevent
+          >
             {images.map((img, i) => (
               <div
                 key={i}

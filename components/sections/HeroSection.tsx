@@ -404,7 +404,6 @@ export default function HeroSection({
         scrollText: data.scrollText,
       }
     : data;
-  console.log("ctasource", ctaSource);
   return (
     <section
       id="hero"
