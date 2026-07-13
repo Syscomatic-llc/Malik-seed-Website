@@ -6,6 +6,7 @@ import { useApplicationStore } from "@/store/applicationStore";
 import { Home, Compass } from "lucide-react";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { hasWrittenAssessment } from "@/data/questions-data";
+import NextImage from "next/image";
 
 export default function ApplicationSubmittedPage() {
   const router = useRouter();
@@ -45,10 +46,12 @@ export default function ApplicationSubmittedPage() {
         <div className="flex w-full max-w-[736px] flex-col items-start gap-12 py-4">
           {/* Header Block (Spinner & Texts) */}
           <div className="flex w-full flex-col items-start gap-8">
-            <img
+            <NextImage
               src="/images/careers/uiw_loading.svg"
               className="text-brand-accent h-12 w-12"
               alt="Loading"
+              width={48}
+              height={48}
             />
 
             <div className="flex w-full flex-col items-start gap-4">

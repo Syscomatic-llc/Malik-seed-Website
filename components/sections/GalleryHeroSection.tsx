@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import Image from "next/image";
+import NextImage from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SectionBadge } from "@/components/ui/SectionBadge";
@@ -216,7 +216,7 @@ const GalleryHeroSection = ({
                 className="font-heading inline-flex items-center gap-2 rounded-[60px] bg-[#195236] px-6 py-2.5 text-sm font-medium text-[#F2F7F1] transition-all duration-200 hover:bg-[#153e28] active:scale-95 xl:px-8 xl:py-3 xl:text-base"
               >
                 <span>View Gallery</span>
-                <Image
+                <NextImage
                   src="/arrow.svg"
                   alt="view gallery"
                   width={16}

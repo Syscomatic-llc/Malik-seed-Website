@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import NextImage from "next/image";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { Metadata } from "next";
 import type { NewsArticle } from "@/data/news-data";
@@ -209,7 +209,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               href="/news"
               className="font-heading group inline-flex items-center gap-2 text-base leading-6 font-medium text-[#0B3124] focus-visible:outline-none"
             >
-              <Image
+              <NextImage
                 src={ASSETS.backArrow}
                 alt=""
                 aria-hidden="true"
@@ -364,7 +364,7 @@ function NavArrow({
       aria-label={label}
       className="bg-brand-active hover:bg-brand-primary-hover flex h-8 w-8 shrink-0 items-center justify-center rounded-full shadow-sm transition-all duration-300 active:scale-95 md:h-10 md:w-10"
     >
-      <Image
+      <NextImage
         src="/arrow.svg"
         alt=""
         width={16}
