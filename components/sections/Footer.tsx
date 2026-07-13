@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "@/components/ui/OptimizedImage";
+import NextImage from "next/image";
 import { footerData, FooterLink, SocialLink } from "@/data/sections-data";
 import { contactApi, homepageApi } from "@/lib/api";
 
@@ -224,7 +225,7 @@ export default async function Footer() {
 
         {/* Global Brand Wordmark */}
         <div className="mt-12 flex w-full justify-center lg:mt-24">
-          <Image
+          <NextImage
             src={footerData.wordmark}
             alt="Malik Seeds Wordmark"
             width={1225}
