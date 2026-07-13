@@ -23,7 +23,13 @@ type Dimensions = {
   radius: number;
 };
 
-export default function BrandCardBorder({ isDark = true }: { isDark?: boolean }) {
+export default function BrandCardBorder({
+  isDark = true,
+  strokeColor,
+}: {
+  isDark?: boolean;
+  strokeColor?: string;
+}) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState<Dimensions | null>(null);
@@ -88,13 +94,13 @@ export default function BrandCardBorder({ isDark = true }: { isDark?: boolean })
             className="brand-border-path"
             d={paths.right}
             vectorEffect="non-scaling-stroke"
-            style={{ stroke: isDark ? "#a9e179" : "#195236" }}
+            style={{ stroke: strokeColor || (isDark ? "#a9e179" : "#195236") }}
           />
           <path
             className="brand-border-path"
             d={paths.left}
             vectorEffect="non-scaling-stroke"
-            style={{ stroke: isDark ? "#a9e179" : "#195236" }}
+            style={{ stroke: strokeColor || (isDark ? "#a9e179" : "#195236") }}
           />
         </svg>
       )}

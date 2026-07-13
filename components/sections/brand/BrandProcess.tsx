@@ -117,7 +117,16 @@ export default function BrandProcess({
                     </p>
                   </div>
                 </div>
-                <BrandCardBorder isDark={variant === "dark"} />
+                <BrandCardBorder
+                  isDark={variant === "dark"}
+                  strokeColor={
+                    step.tag
+                      ? "#a9e179"
+                      : variant === "dark"
+                        ? "#a9e179"
+                        : "#195236"
+                  }
+                />
               </div>
             ))}
           </div>
