@@ -245,19 +245,21 @@ export default function ContactHeroSection({
                   </div>
 
                   {/* Icon List — Phone & Email with 60x60 base SVGs rendered at 30x30 */}
-                  <div className="relative flex w-full flex-col items-start gap-3.5">
+                  <div className="relative flex w-full flex-col gap-3.5">
                     {/* Phone link */}
                     <div className="relative flex w-full items-center gap-3">
-                      <Image
-                        src="/images/contact/phone.svg"
-                        alt="Phone Icon"
-                        width={30}
-                        height={30}
-                        className="shrink-0"
-                      />
+                      <div className="h-[30px] w-[30px] shrink-0">
+                        <Image
+                          src="/images/contact/phone.svg"
+                          alt="Phone Icon"
+                          width={30}
+                          height={30}
+                          className="shrink-0"
+                        />
+                      </div>
                       <a
                         href={`tel:${info?.phone_primary || OFFICE_DETAILS.phone.href.replace("tel:", "")}`}
-                        className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none"
+                        className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none inline-flex flex-wrap items-center gap-x-1.5"
                       >
                         <span className="opacity-80">
                           {OFFICE_DETAILS.phone.label}
@@ -270,16 +272,18 @@ export default function ContactHeroSection({
 
                     {/* Email link */}
                     <div className="relative flex w-full items-center gap-3">
-                      <Image
-                        src="/images/contact/email.svg"
-                        alt="Email Icon"
-                        width={30}
-                        height={30}
-                        className="shrink-0"
-                      />
+                      <div className="h-[30px] w-[30px] shrink-0">
+                        <Image
+                          src="/images/contact/email.svg"
+                          alt="Email Icon"
+                          width={30}
+                          height={30}
+                          className="shrink-0"
+                        />
+                      </div>
                       <a
                         href={`mailto:${info?.email_primary || OFFICE_DETAILS.email.href.replace("mailto:", "")}`}
-                        className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none"
+                        className="text-brand-dark text-[16px] leading-[19.2px] font-normal hover:underline focus:outline-none inline-flex flex-wrap items-center gap-x-1.5"
                       >
                         <span className="opacity-80">
                           {OFFICE_DETAILS.email.label}
