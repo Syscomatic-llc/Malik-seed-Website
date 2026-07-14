@@ -34,7 +34,7 @@ export default function NotFound() {
         </div>
 
         {/* Call to Actions */}
-        <div className="mt-2 flex w-full flex-col justify-center gap-4 sm:flex-row">
+        <div className="mt-2 flex w-full flex-col justify-center items-center gap-4 sm:flex-row">
           <ActionButton
             label="Return Home"
             href="/"
