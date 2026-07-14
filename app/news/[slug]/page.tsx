@@ -182,7 +182,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       </div>
     );
   }
-  console.log(article.contentHtml,"content html")
   const { headings, parsedHtml } = parseHeadings(article.contentHtml);
   const author = article.author ?? DEFAULT_AUTHOR;
 

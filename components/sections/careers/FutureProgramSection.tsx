@@ -4,15 +4,25 @@ import { memo, useRef, useState } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import type { futureProgramData } from "@/data/career-data";
+import { hiringApi } from "@/lib/api";
 import { z } from "zod";
 
-// Zod validation schema for PDF file upload
+// Zod validation schema for CV upload (PDF, DOC, DOCX)
 const cvSchema = z.object({
   file: z
     .instanceof(File, { message: "Please select a file." })
-    .refine((file) => file.type === "application/pdf", {
-      message: "Only PDF files are allowed.",
-    })
+    .refine(
+      (file) =>
+        file.type === "application/pdf" ||
+        file.type === "application/msword" ||
+        file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+        file.name.toLowerCase().endsWith(".pdf") ||
+        file.name.toLowerCase().endsWith(".doc") ||
+        file.name.toLowerCase().endsWith(".docx"),
+      {
+        message: "Only PDF, DOC, and DOCX files are allowed.",
+      }
+    )
     .refine((file) => file.size <= 5 * 1024 * 1024, {
       message: "File size must not exceed 5MB.",
     }),
@@ -24,24 +34,50 @@ export default memo(function FutureProgramSection({
   data: typeof futureProgramData;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleButtonClick = () => {
-    fileInputRef.current?.click();
+    if (isSubmitting) return;
+    if (!file) {
+      fileInputRef.current?.click();
+    } else {
+      handleUpload();
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
 
-    const result = cvSchema.safeParse({ file });
+    const result = cvSchema.safeParse({ file: selectedFile });
     if (!result.success) {
       setError(result.error.issues[0]?.message || "Invalid file.");
-      setSuccess(null);
+      setFile(null);
     } else {
       setError(null);
-      setSuccess(`CV "${file.name}" uploaded successfully!`);
+      setFile(selectedFile);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file || isSubmitting) return;
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      await hiringApi.uploadResume(formData);
+      setIsSubmitted(true);
+      setFile(null);
+    } catch (err: any) {
+      console.error("Failed to upload CV:", err);
+      setError(err?.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -99,15 +135,17 @@ export default memo(function FutureProgramSection({
           <input
             type="file"
             ref={fileInputRef}
-            accept=".pdf"
+            accept=".pdf,.doc,.docx"
             onChange={handleFileChange}
+            disabled={isSubmitting}
             className="hidden"
-            aria-label="Upload your CV (PDF only)"
+            aria-label="Upload your CV (PDF, DOC, DOCX)"
           />
           <button
             type="button"
             onClick={handleButtonClick}
-            className="font-inter inline-flex h-[46px] cursor-pointer items-center justify-center gap-2 rounded-full bg-[#A9E179] px-6 text-[16px] font-medium text-[#0D1A14] transition-all hover:bg-[#A9E179]/90 focus:ring-2 focus:ring-[#A9E179] focus:outline-none active:scale-95"
+            disabled={isSubmitting}
+            className="font-inter inline-flex h-[46px] cursor-pointer items-center justify-center gap-2 rounded-full bg-[#A9E179] px-6 text-[16px] font-medium text-[#0D1A14] transition-all hover:bg-[#A9E179]/90 focus:ring-2 focus:ring-[#A9E179] focus:outline-none active:scale-95 disabled:pointer-events-none disabled:opacity-50"
           >
             <svg
               width="20"
@@ -124,10 +162,15 @@ export default memo(function FutureProgramSection({
               <polyline points="17 8 12 3 7 8" />
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
-            <span>{data.cta.label}</span>
+            <span>{isSubmitting ? "Submitting..." : file ? "Submit CV" : data.cta.label}</span>
           </button>
 
           {/* Validation Messages */}
+          {file && !isSubmitting && (
+            <p className="font-inter mt-1 text-[14px] text-brand-light-green">
+              Selected file: <strong>{file.name}</strong>
+            </p>
+          )}
           {error && (
             <p
               className="font-inter mt-1 text-[14px] text-red-400"
@@ -136,16 +179,63 @@ export default memo(function FutureProgramSection({
               {error}
             </p>
           )}
-          {success && (
-            <p
-              className="font-inter mt-1 text-[14px] text-green-400"
-              role="status"
-            >
-              {success}
-            </p>
-          )}
         </div>
       </div>
+
+      {/* Success Modal Overlay */}
+      {isSubmitted && (
+        <div
+          className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm duration-200"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="flp-success-modal-title"
+          aria-describedby="flp-success-modal-desc"
+        >
+          <div className="bg-[#0D1A14] border border-[#E4E7EC]/10 animate-in zoom-in-95 mx-4 flex w-full max-w-md flex-col items-center gap-6 rounded-3xl p-8 text-center shadow-2xl duration-200">
+            {/* Green Circle Checkmark Icon */}
+            <div className="bg-[#A9E179] text-[#0D1A14] flex h-16 w-16 shrink-0 items-center justify-center rounded-full shadow-md">
+              <svg
+                className="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={3}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            {/* Modal Content */}
+            <div className="flex flex-col gap-2">
+              <h2
+                id="flp-success-modal-title"
+                className="text-[20px] font-medium tracking-tight text-white"
+              >
+                CV Uploaded Successfully!
+              </h2>
+              <p
+                id="flp-success-modal-desc"
+                className="text-[14px] text-gray-400"
+              >
+                Thank you for your interest in Malik Seeds. We have received your CV/Resume and our team will review it.
+              </p>
+            </div>
+
+            {/* Dismiss Button */}
+            <button
+              onClick={() => setIsSubmitted(false)}
+              className="bg-[#A9E179] text-[#0D1A14] hover:bg-[#A9E179]/90 w-full cursor-pointer rounded-full px-6 py-2.5 font-medium transition-all duration-150 select-none focus:outline-none focus:ring-2 focus:ring-[#A9E179] active:scale-95"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 });
