@@ -73,19 +73,10 @@ function TestimonialCard({
         heightClass,
         isResetting
           ? "transition-none"
-          : "transition-[height,box-shadow] duration-500 ease-out"
+          : "transition-[height,box-shadow] duration-500 ease-in-out"
       )}
     >
-      {/* Zoom scale binds automatically to active state */}
-      <div
-        className={cn(
-          "absolute inset-0",
-          isResetting
-            ? "transition-none"
-            : "transition-transform duration-500 ease-out",
-          isActive ? "scale-[1.02]" : "scale-100"
-        )}
-      >
+      <div className="absolute inset-0">
         <OptimizedImage
           src={testimonial.image}
           alt={testimonial.name}
@@ -221,7 +212,7 @@ export default function TestimonialsSection({
     }
   }, [touchStart, touchEnd, next, prev, isTransitioning]);
 
-  // Handle jump wrapping after transition finishes (400ms duration)
+  // Handle jump wrapping after transition finishes (500ms duration)
   useEffect(() => {
     if (!isTransitioning) return;
 
@@ -247,7 +238,7 @@ export default function TestimonialsSection({
       } else {
         setIsTransitioning(false);
       }
-    }, 400);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [activeIndex, isTransitioning, LOOP_RESET_LIMIT, LOOP_SET_START, TESTIMONIALS_COUNT]);
@@ -280,7 +271,7 @@ export default function TestimonialsSection({
                 className={cn(
                   "flex items-center gap-6 overflow-visible",
                   isTransitionEnabled
-                    ? "transition-transform duration-[400ms] ease-out"
+                    ? "transition-transform duration-[500ms] ease-in-out"
                     : "transition-none"
                 )}
                 style={{
@@ -322,7 +313,7 @@ export default function TestimonialsSection({
                 className={cn(
                   "flex items-center gap-4 overflow-visible",
                   isTransitionEnabled
-                    ? "transition-transform duration-[400ms] ease-out"
+                    ? "transition-transform duration-[500ms] ease-in-out"
                     : "transition-none"
                 )}
                 style={{
@@ -359,7 +350,7 @@ export default function TestimonialsSection({
           <button
             onClick={prev}
             aria-label="Previous testimonial"
-            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
+            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md"
           >
             <NextImage
               src="/arrow.svg"
@@ -372,7 +363,7 @@ export default function TestimonialsSection({
           <button
             onClick={next}
             aria-label="Next testimonial"
-            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
+            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md"
           >
             <NextImage src="/arrow.svg" alt="Next" width={24} height={24} />
           </button>
