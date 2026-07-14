@@ -365,30 +365,34 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
               [aboutData.stats[0], aboutData.stats[1]],
               [aboutData.stats[2], aboutData.stats[3]],
               [aboutData.stats[4]],
-            ].map((row, rowIndex) => (
-              <Fragment key={rowIndex}>
-                {rowIndex > 0 && (
-                  <div className="bg-brand-partners-border h-[1px] w-[72px]" />
-                )}
-                <div className="flex w-full flex-row gap-[16px]">
-                  {row.map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="flex h-[125px] flex-1 flex-col items-center justify-center gap-[8px] rounded-[24px] px-3"
-                    >
-                      <span className="text-stat-number text-brand-active">
-                        {stat.prefix}
-                        <CountUp to={stat.toValue} />
-                        {stat.suffix}
-                      </span>
-                      <span className="font-inter text-brand-dark text-center text-[14px] leading-[21px]">
-                        {stat.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </Fragment>
-            ))}
+            ].map((row, rowIndex) => {
+              const validRow = row.filter(Boolean);
+              if (validRow.length === 0) return null;
+              return (
+                <Fragment key={rowIndex}>
+                  {rowIndex > 0 && (
+                    <div className="bg-brand-partners-border h-[1px] w-[72px]" />
+                  )}
+                  <div className="flex w-full flex-row gap-[16px]">
+                    {validRow.map((stat) => (
+                      <div
+                        key={stat.label}
+                        className="flex h-[125px] flex-1 flex-col items-center justify-center gap-[8px] rounded-[24px] px-3"
+                      >
+                        <span className="text-stat-number text-brand-active">
+                          {stat.prefix}
+                          <CountUp to={stat.toValue} />
+                          {stat.suffix}
+                        </span>
+                        <span className="font-inter text-brand-dark text-center text-[14px] leading-[21px]">
+                          {stat.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </Fragment>
+              );
+            })}
           </div>
         </div>
       </div>

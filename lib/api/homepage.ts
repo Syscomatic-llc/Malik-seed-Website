@@ -1,6 +1,7 @@
 import { apiGet, RequestOptions } from "./client";
 import {
   ApiHeroSlide,
+  ApiCtaButton,
   ApiAbout,
   ApiService,
   ApiTestimonial,
@@ -13,7 +14,7 @@ import {
 
 export const homepageApi = {
   getHero(options?: RequestOptions) {
-    return apiGet<ApiHeroSlide[]>("/api/v1/homepage/hero", options);
+    return apiGet<ApiHeroSlide[] | { slides: ApiHeroSlide[]; cta_buttons?: ApiCtaButton[] }>("/api/v1/homepage/hero", options);
   },
   getAbout(options?: RequestOptions) {
     return apiGet<ApiAbout>("/api/v1/homepage/about", options);

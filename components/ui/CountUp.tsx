@@ -21,19 +21,22 @@ export default function CountUp({
     stiffness: 100,
   });
 
-  const isInView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (ref.current) {
-      ref.current.textContent = String(from);
-    }
-  }, [from]);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   useEffect(() => {
     if (isInView) {
-      motionValue.set(to);
+      motionValue.set(from);
+      const raf = requestAnimationFrame(() => {
+        motionValue.set(to);
+      });
+      return () => cancelAnimationFrame(raf);
+    } else {
+      motionValue.set(from);
+      if (ref.current) {
+        ref.current.textContent = String(from);
+      }
     }
-  }, [isInView, motionValue, to]);
+  }, [isInView, motionValue, to, from]);
 
   useEffect(() => {
     const unsubscribe = springValue.on("change", (latest: number) => {

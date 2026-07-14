@@ -7,7 +7,7 @@ import ActionButton from "@/components/ActionButton";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import Link from "next/link";
 import { heroData, HeroSlide, HeroData } from "@/data/sections-data";
-import { ApiHeroSlide } from "@/lib/api";
+import { ApiHeroSlide, ApiCtaButton } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -283,7 +283,9 @@ export const ScrollIndicator = memo(function ScrollIndicator({
         >
           {scrollText}
         </span>
-        <ArrowIcon direction="down" size={20} className="text-brand-bg" />
+        <span className="animate-bounce inline-block">
+          <ArrowIcon direction="down" size={20} className="text-brand-bg" />
+        </span>
       </div>
 
       {/* Mobile */}
@@ -298,7 +300,9 @@ export const ScrollIndicator = memo(function ScrollIndicator({
         >
           {scrollText}
         </span>
-        <ArrowIcon direction="down" size={16} className="text-brand-bg" />
+        <span className="animate-bounce inline-block">
+          <ArrowIcon direction="down" size={16} className="text-brand-bg" />
+        </span>
       </Link>
     </>
   );
@@ -310,7 +314,7 @@ export const ScrollIndicator = memo(function ScrollIndicator({
 
 export interface HeroSectionProps {
   data?: HeroData;
-  apiData?: ApiHeroSlide[];
+  apiData?: ApiHeroSlide[] | { slides: ApiHeroSlide[]; cta_buttons?: ApiCtaButton[] };
 }
 
 /**
@@ -318,12 +322,15 @@ export interface HeroSectionProps {
  * Falls back to static data if the API returned nothing.
  */
 function buildSlides(
-  apiData: ApiHeroSlide[] | undefined,
+  apiData: ApiHeroSlide[] | { slides: ApiHeroSlide[] } | undefined,
   fallback: HeroSlide[]
 ): HeroSlide[] {
-  if (!Array.isArray(apiData) || apiData.length === 0) return fallback;
+  if (!apiData) return fallback;
 
-  return apiData.map((slide) => ({
+  const slides = Array.isArray(apiData) ? apiData : apiData.slides;
+  if (!Array.isArray(slides) || slides.length === 0) return fallback;
+
+  return slides.map((slide) => ({
     src: resolveImageUrl(slide.background_image),
     alt: slide.title || "hero image",
   }));
@@ -375,34 +382,61 @@ export default function HeroSection({
     return () => clearTimeout(timer);
   }, []);
 
+  const slidesArray = useMemo(() => {
+    if (!apiData) return null;
+    return Array.isArray(apiData) ? apiData : apiData.slides;
+  }, [apiData]);
+
   const { currentIndex } = useAutoSlide({
     count: finalSlides.length,
-    interval: Array.isArray(apiData) && apiData.length > 0 ? 3000 : data.intervalMs,
+    interval: Array.isArray(slidesArray) && slidesArray.length > 0 ? 3000 : data.intervalMs,
   });
 
   const activeSlide =
-    Array.isArray(apiData) && apiData.length > 0 ? apiData[currentIndex] : null;
+    Array.isArray(slidesArray) && slidesArray.length > 0 ? slidesArray[currentIndex] : null;
 
-  const ctaSource =
-    Array.isArray(apiData) && apiData.length > 0 ? apiData[apiData.length - 1] : null;
+  // Resolve the primary CTA from the new format (cta_buttons array) or the old format (on slide)
+  const apiPrimaryCta = useMemo(() => {
+    if (!apiData) return null;
+    if (!Array.isArray(apiData) && apiData.cta_buttons) {
+      const primaryBtn = apiData.cta_buttons.find((btn) => btn.type === "primary") || apiData.cta_buttons[0];
+      if (primaryBtn) {
+        return {
+          label: primaryBtn.text,
+          href: primaryBtn.link,
+        };
+      }
+    } else if (Array.isArray(apiData) && apiData.length > 0) {
+      const ctaSource = apiData[apiData.length - 1];
+      if (ctaSource?.primary_cta_text) {
+        return {
+          label: ctaSource.primary_cta_text,
+          href: ctaSource.primary_cta_link,
+        };
+      }
+    }
+    return null;
+  }, [apiData]);
 
   const finalData: HeroData = activeSlide
     ? {
-        slides: finalSlides,
-        intervalMs: 3000,
-        titleDesktop: activeSlide.title || "",
-        titleMobile: activeSlide.title || "",
-        subtitle: activeSlide.subtitle || "",
-        ctaProducts: {
-          label: ctaSource?.primary_cta_text || "",
-          href: ctaSource?.primary_cta_link || "",
-        },
-        ctaAbout: {
-          label: ctaSource?.secondary_cta_text || "",
-          href: ctaSource?.secondary_cta_link || "",
-        },
-        scrollText: data.scrollText,
-      }
+      slides: finalSlides,
+      intervalMs: 3000,
+      titleDesktop: activeSlide.title || "",
+      titleMobile: activeSlide.title || "",
+      // Subtitle is hardcoded as requested by the user
+      subtitle: data.subtitle,
+      ctaProducts: {
+        label: apiPrimaryCta?.label || data.ctaProducts.label,
+        href: apiPrimaryCta?.href || data.ctaProducts.href,
+      },
+      // Secondary CTA (About button) is hardcoded as requested by the user
+      ctaAbout: {
+        label: data.ctaAbout.label,
+        href: data.ctaAbout.href,
+      },
+      scrollText: data.scrollText,
+    }
     : data;
   return (
     <section

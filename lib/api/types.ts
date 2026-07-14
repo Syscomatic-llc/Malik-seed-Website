@@ -1,15 +1,21 @@
+export interface ApiCtaButton {
+  type: string;
+  text: string;
+  link: string;
+}
+
 export interface ApiHeroSlide {
   id: number;
   title: string;
-  subtitle: string;
-  description: string;
+  subtitle?: string | null;
+  description?: string | null;
   background_image: string;
-  mobile_image: string | null;
-  background_video: string | null;
-  primary_cta_text: string;
-  primary_cta_link: string;
-  secondary_cta_text: string;
-  secondary_cta_link: string;
+  mobile_image?: string | null;
+  background_video?: string | null;
+  primary_cta_text?: string | null;
+  primary_cta_link?: string | null;
+  secondary_cta_text?: string | null;
+  secondary_cta_link?: string | null;
   sort_order: number;
   is_active: boolean;
   created_at: string;
@@ -125,7 +131,7 @@ export interface ApiCtaBanner {
 }
 
 export interface ApiHomepageData {
-  hero: ApiHeroSlide[];
+  hero: ApiHeroSlide[] | { slides: ApiHeroSlide[]; cta_buttons?: ApiCtaButton[] };
   about: ApiAbout;
   services: ApiService[];
   brands: unknown[];
