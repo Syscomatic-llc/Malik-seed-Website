@@ -41,6 +41,7 @@ const TestimonialCard = memo(function TestimonialCard({
   testimonial: EmployeeTestimonial;
   isActive: boolean;
 }) {
+  console.log(testimonial)
   return (
     <article
       className={cn(
@@ -79,7 +80,7 @@ const TestimonialCard = memo(function TestimonialCard({
             {testimonial.name}
           </cite>
           <span className="font-inter-tight text-[14px] leading-[24px] text-[#0D1A14]/70 md:text-[16px]">
-            {testimonial.role}
+            {testimonial.designation}, {testimonial.department}
           </span>
         </footer>
       </div>

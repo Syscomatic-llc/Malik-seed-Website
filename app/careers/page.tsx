@@ -61,7 +61,8 @@ export default async function CareersPage() {
         ? apiTestimonials.map((t) => ({
             id: t.id,
             name: t.name,
-            role: t.designation,
+            designation: t.designation,
+            department: t.department,
             quote: t.content,
             avatar: t.avatar_url ? resolveImageUrl(t.avatar_url) : undefined,
           }))

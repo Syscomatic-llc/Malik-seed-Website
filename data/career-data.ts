@@ -487,9 +487,11 @@ export const futureProgramData = {
 export interface EmployeeTestimonial {
   id: number;
   name: string;
-  role: string;
+  designation: string;
   quote: string;
   avatar?: string;
+  department: string;
+
 }
 
 export const employeeTestimonialsData = {
@@ -499,7 +501,8 @@ export const employeeTestimonialsData = {
     {
       id: 1,
       name: "Tahmina Hasan",
-      role: "Manager, Business Affairs",
+      designation: "Manager",
+      department: "Business Affairs",
       quote:
         "I work closely with international partners and managing global communications. Malik Seeds fosters a culture of accountability, collaboration, and continuous improvement, empowering individuals to take ownership and deliver results. The supportive environment has consistently encouraged me to take initiative and keep learning.",
       avatar: "/images/testimonials/testimonial_1.png",
@@ -507,7 +510,8 @@ export const employeeTestimonialsData = {
     {
       id: 2,
       name: "Biswajit Bhowmik",
-      role: "System Engineer",
+      designation: "System Engineer",
+      department: "IT",
       quote:
         "As a System Engineer, I’ve had the opportunity to contribute to software development projects, managing enterprise-wide IT operations and grow my technical skills in an innovative environment. I’m proud to be part of my team that drives the company’s success.",
       avatar: "/images/testimonials/testimonial_2.png",
@@ -515,7 +519,8 @@ export const employeeTestimonialsData = {
     {
       id: 3,
       name: "Nadia Islam",
-      role: "Product Development Lead",
+      designation: "Product Development Lead",
+      department: "Product Development",
       quote:
         "The Future Leader Program gave me a real shot at building something meaningful. The mentorship and exposure you get here is unmatched in the industry.",
       avatar: "/images/testimonials/testimonial_3.png",
