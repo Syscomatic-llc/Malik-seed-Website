@@ -15,7 +15,6 @@ const DEFAULT_TEXT =
 
 export default function AboutMissionTwo({ apiData }: AboutMissionTwoProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [started, setStarted] = useState(false);
   const [displayedCount, setDisplayedCount] = useState(0);
 
   const missionText = apiData?.vision_description || DEFAULT_TEXT;
@@ -23,44 +22,52 @@ export default function AboutMissionTwo({ apiData }: AboutMissionTwoProps) {
     ? resolveImageUrl(apiData.image_url)
     : "/images/about/maliks_farm_new_3_1.png";
 
-  // Trigger once when section is ≥ 30 % visible
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
 
+    const handleScroll = () => {
+      const rect = el.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Start revealing when the top of the text section enters the bottom 85% of viewport
+      const start = viewportHeight * 0.85;
+      // Complete the reveal when the top of the text reaches the top 35% of viewport
+      const end = viewportHeight * 0.35;
+
+      let progress = (start - rect.top) / (start - end);
+      progress = Math.max(0, Math.min(1, progress));
+
+      const count = Math.floor(progress * missionText.length);
+      setDisplayedCount(count);
+    };
+
+    // Run initial calculation
+    handleScroll();
+
+    // Use IntersectionObserver to optimize performance, only listening to scroll when component is near
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setStarted(true);
-          observer.disconnect();
+          window.addEventListener("scroll", handleScroll, { passive: true });
+          window.addEventListener("resize", handleScroll, { passive: true });
+          handleScroll();
+        } else {
+          window.removeEventListener("scroll", handleScroll);
+          window.removeEventListener("resize", handleScroll);
         }
       },
-      { threshold: 0.3 }
+      { rootMargin: "150px 0px" }
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
-  // Typing effect — duration-based: always finishes in ~1.2 s desktop / ~0.8 s mobile
-  useEffect(() => {
-    if (!started) return;
-
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const targetMs = isMobile ? 800 : 1200;
-    const delay = Math.max(4, Math.round(targetMs / missionText.length));
-
-    let frame: ReturnType<typeof setTimeout>;
-
-    const type = (index: number) => {
-      if (index > missionText.length) return;
-      setDisplayedCount(index);
-      frame = setTimeout(() => type(index + 1), delay);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
-
-    type(0);
-    return () => clearTimeout(frame);
-  }, [started, missionText]);
+  }, [missionText]);
 
   return (
     <section
@@ -82,11 +89,11 @@ export default function AboutMissionTwo({ apiData }: AboutMissionTwoProps) {
               <span
                 key={i}
                 aria-hidden="true"
-                className={
+                className={`transition-colors duration-200 ${
                   i < displayedCount
                     ? "text-brand-light-green"
-                    : "text-brand-light-green/50"
-                }
+                    : "text-brand-light-green/20"
+                }`}
               >
                 {char}
               </span>

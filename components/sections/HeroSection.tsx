@@ -14,6 +14,59 @@ import { resolveImageUrl } from "@/lib/utils";
 // Sub-components
 // ---------------------------------------------------------------------------
 
+/** Smooth transitioning title component */
+const FadingTitle = memo(function FadingTitle({
+  text,
+  className,
+  isMobile = false,
+}: {
+  text: string;
+  className?: string;
+  isMobile?: boolean;
+}) {
+  const [displayText, setDisplayText] = useState(text);
+  const [opacity, setOpacity] = useState(1);
+  const [translateY, setTranslateY] = useState(0);
+
+  useEffect(() => {
+    if (text !== displayText) {
+      setOpacity(0);
+      setTranslateY(8); // slide down slightly
+
+      const timer = setTimeout(() => {
+        setDisplayText(text);
+        setOpacity(1);
+        setTranslateY(0);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [text, displayText]);
+
+  return (
+    <h1
+      className={className}
+      style={{
+        opacity: opacity,
+        transform: `translateY(${translateY}px)`,
+        transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+        willChange: "opacity, transform",
+      }}
+    >
+      {!isMobile ? (
+        (displayText || "").split("\n").map((line, idx) => (
+          <Fragment key={idx}>
+            {idx > 0 && <br />}
+            {line}
+          </Fragment>
+        ))
+      ) : (
+        displayText
+      )}
+    </h1>
+  );
+});
+
 /** Background image slideshow */
 const HeroSlideshow = memo(function HeroSlideshow({
   slides,
@@ -160,14 +213,10 @@ const HeroContentDesktop = memo(function HeroContentDesktop({
     >
       {/* Frame 2147229465 — text stack */}
       <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
-        <h1 className="text-display text-brand-bg w-full text-center">
-          {(data.titleDesktop || "").split("\n").map((line, idx) => (
-            <Fragment key={idx}>
-              {idx > 0 && <br />}
-              {line}
-            </Fragment>
-          ))}
-        </h1>
+        <FadingTitle
+          text={data.titleDesktop || ""}
+          className="text-display text-brand-bg w-full text-center"
+        />
         {data.subtitle && (
           <p
             className="text-brand-bg text-center text-[16px] leading-[24px] font-semibold lg:text-[18px] lg:leading-[27px]"
@@ -222,9 +271,11 @@ const HeroContentMobile = memo(function HeroContentMobile({
     >
       {/* Text block: col, gap:8, items-center */}
       <div className="flex flex-col items-center gap-2">
-        <h1 className="text-h2-title text-brand-bg w-full text-center font-semibold">
-          {data.titleMobile || ""}
-        </h1>
+        <FadingTitle
+          text={data.titleMobile || ""}
+          className="text-h2-title text-brand-bg w-full text-center font-semibold"
+          isMobile
+        />
         {data.subtitle && (
           <p
             className="text-brand-bg text-center text-[14px] leading-[20px] font-semibold sm:text-[16px] sm:leading-[24px]"

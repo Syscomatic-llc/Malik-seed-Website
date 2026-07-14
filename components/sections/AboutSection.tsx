@@ -125,46 +125,54 @@ interface TypingTextProps {
 
 function TypingText({ text, className = "" }: TypingTextProps) {
   const ref = useRef<HTMLParagraphElement>(null);
-  const [started, setStarted] = useState(false);
   const [displayedCount, setDisplayedCount] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
+    const handleScroll = () => {
+      const rect = el.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Start revealing when the top of the text enters the bottom 85% of viewport
+      const start = viewportHeight * 0.85;
+      // Complete the reveal when the top of the text reaches the top 25% of viewport
+      const end = viewportHeight * 0.25;
+
+      let progress = (start - rect.top) / (start - end);
+      progress = Math.max(0, Math.min(1, progress));
+
+      const count = Math.floor(progress * text.length);
+      setDisplayedCount(count);
+    };
+
+    // Run initial calculation
+    handleScroll();
+
+    // Use IntersectionObserver to optimize performance, only listening to scroll when component is near
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setStarted(true);
-          observer.disconnect();
+          window.addEventListener("scroll", handleScroll, { passive: true });
+          window.addEventListener("resize", handleScroll, { passive: true });
+          handleScroll();
+        } else {
+          window.removeEventListener("scroll", handleScroll);
+          window.removeEventListener("resize", handleScroll);
         }
       },
-      { threshold: 0.3 }
+      { rootMargin: "150px 0px" }
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  // Typing effect — duration-based: always finishes in ~1.2 s desktop / ~0.8 s mobile
-  useEffect(() => {
-    if (!started) return;
 
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const targetMs = isMobile ? 800 : 1200;
-    const delay = Math.max(4, Math.round(targetMs / text.length));
-
-    let frame: ReturnType<typeof setTimeout>;
-
-    const type = (index: number) => {
-      if (index > text.length) return;
-      setDisplayedCount(index);
-      frame = setTimeout(() => type(index + 1), delay);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
-
-    type(0);
-    return () => clearTimeout(frame);
-  }, [started, text]);
-
+  }, [text]);
 
   return (
     <p ref={ref} aria-label={text} className={className}>
@@ -177,7 +185,9 @@ function TypingText({ text, className = "" }: TypingTextProps) {
         <span
           key={i}
           aria-hidden="true"
-          className={i < displayedCount ? "text-brand-dark" : "text-brand-dark/40"}
+          className={`transition-colors duration-200 ${
+            i < displayedCount ? "text-brand-dark" : "text-brand-dark/20"
+          }`}
         >
           {char}
         </span>
