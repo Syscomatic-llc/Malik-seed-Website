@@ -25,8 +25,8 @@ interface GalleryHeroSectionProps {
 // ---------------------------------------------------------------------------
 // Production-Grade Static Configurations (Architectural Cleanliness)
 // ---------------------------------------------------------------------------
-const INITIAL_VISIBLE = 10; // same slice for all breakpoints (SSR-safe)
-const MOBILE_INITIAL_VISIBLE = 5; // CSS-only cutoff for small screens
+const INITIAL_VISIBLE = 9; // aligned to multiple of 3 for grid completeness
+const MOBILE_INITIAL_VISIBLE = 6; // aligned to multiple of 3 for mobile grid completeness
 const LOAD_MORE_STEP = 6;
 const ANIMATION_DELAY_MS = 800;
 const COUNT_PARAM = "count"; // URL query param that persists "load more" progress
@@ -88,26 +88,6 @@ export const FALLBACK_GALLERY_IMAGES: readonly GalleryImage[] = [
   },
 ] as const;
 
-// O(1) Pre-compiled responsive grid layouts matching Figma specs (xl breakpoint for widescreen desktop)
-const DESKTOP_WIDTH_CLASSES: readonly string[] = [
-  "xl:w-[calc(63.15%-12px)]", // Index 0: Large
-  "xl:w-[calc(36.85%-12px)]", // Index 1: Medium
-  "xl:w-[calc(33.33%-16px)]", // Index 2: Small
-  "xl:w-[calc(33.33%-16px)]", // Index 3: Small
-  "xl:w-[calc(33.33%-16px)]", // Index 4: Small
-  "xl:w-[calc(36.85%-12px)]", // Index 5: Medium
-  "xl:w-[calc(63.15%-12px)]", // Index 6: Large
-  "xl:w-[calc(33.33%-16px)]", // Index 7: Small
-  "xl:w-[calc(33.33%-16px)]", // Index 8: Small
-  "xl:w-[calc(33.33%-16px)]", // Index 9: Small
-] as const;
-
-const MOBILE_SPAN_CLASSES: readonly string[] = [
-  "col-span-1 h-[180px] sm:h-[240px] md:h-[320px]", // Index 0: Half width (responsively scaled for iPad/tablets)
-  "col-span-1 h-[180px] sm:h-[240px] md:h-[320px]", // Index 1: Half width (responsively scaled for iPad/tablets)
-  "col-span-2 h-[220px] sm:h-[300px] md:h-[420px]", // Index 2: Full width (responsively scaled for iPad/tablets)
-] as const;
-
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -135,7 +115,7 @@ const GalleryHeroSection = ({
   const [isLoading, setIsLoading] = useState(false);
 
   // Derived, not separate state — this guarantees it's always consistent
-  // with visibleCount, including right after a reload restores a count > 10.
+  // with visibleCount, including right after a reload restores a count > 12.
   const hasExpanded = visibleCount > INITIAL_VISIBLE;
 
   const visibleImages = initialImages.slice(0, visibleCount);
@@ -160,9 +140,9 @@ const GalleryHeroSection = ({
     }, ANIMATION_DELAY_MS);
   };
 
-  // About-page variant: always show exactly 5 images + a "View Gallery" link
+  // About-page variant: always show exactly 6 images + a "View Gallery" link
   if (!isHero) {
-    const previewImages = initialImages.slice(0, 5);
+    const previewImages = initialImages.slice(0, 6);
     return (
       <section className="w-full bg-[#F2F7F1] pt-10 pb-20 md:pt-16 md:pb-[80px] xl:pt-[100px] xl:pb-[120px]">
         <div className="mx-auto flex w-full max-w-[1242px] flex-col items-center gap-12 px-4 sm:px-6 md:px-8 xl:gap-16 xl:px-0">
@@ -183,26 +163,22 @@ const GalleryHeroSection = ({
             </h2>
           </div>
 
-          {/* 5-image bento preview grid */}
+          {/* 3-column square preview grid */}
           <div className="flex w-full flex-col items-center gap-12 xl:gap-[48px]">
-            <div className="grid w-full grid-cols-2 gap-4 md:gap-6 xl:flex xl:flex-wrap xl:justify-start">
+            <div className="grid w-full grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
               {previewImages.map((image, index) => {
-                const widthClass =
-                  DESKTOP_WIDTH_CLASSES[index % DESKTOP_WIDTH_CLASSES.length];
-                const mobileClass =
-                  MOBILE_SPAN_CLASSES[index % MOBILE_SPAN_CLASSES.length];
                 return (
                   <div
                     key={image.id}
-                    className={`${mobileClass} ${widthClass} group relative overflow-hidden rounded-[16px] bg-neutral-100 xl:h-[450px] xl:rounded-[24px]`}
+                    className="aspect-square group relative overflow-hidden rounded-[16px] bg-neutral-100 xl:rounded-[24px]"
                   >
                     <OptimizedImage
                       src={image.src}
                       alt={image.alt}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 768px"
-                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                      priority={index < 4}
+                      sizes="(max-width: 768px) 33vw, (max-width: 1024px) 33vw, 400px"
+                      className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+                      priority={index < 3}
                     />
                   </div>
                 );
@@ -230,7 +206,7 @@ const GalleryHeroSection = ({
     );
   }
 
-  // Gallery-page variant: full bento with load-more
+  // Gallery-page variant: full 3-column grid with load-more
   return (
     <section className="w-full bg-[#F2F7F1] pt-[100px] pb-20 xl:pt-[180px] xl:pb-[120px]">
       <div className="mx-auto flex w-full max-w-[1242px] flex-col items-center gap-12 px-4 sm:px-6 md:px-8 xl:gap-16 xl:px-0">
@@ -249,33 +225,29 @@ const GalleryHeroSection = ({
           </h1>
         </div>
 
-        {/* Bento gallery grid */}
+        {/* 3-column square grid */}
         <div className="flex w-full flex-col items-center gap-12 xl:gap-[48px]">
-          <div className="grid w-full grid-cols-2 gap-4 md:gap-6 xl:flex xl:flex-wrap xl:justify-start">
+          <div className="grid w-full grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {visibleImages.map((image, index) => {
-              const widthClass =
-                DESKTOP_WIDTH_CLASSES[index % DESKTOP_WIDTH_CLASSES.length];
-              const mobileClass =
-                MOBILE_SPAN_CLASSES[index % MOBILE_SPAN_CLASSES.length];
               const mobileHideClass =
                 !hasExpanded &&
                 index >= MOBILE_INITIAL_VISIBLE &&
                 index < INITIAL_VISIBLE
-                  ? "hidden xl:flex"
+                  ? "hidden xl:block"
                   : "";
 
               return (
                 <div
                   key={image.id}
-                  className={`${mobileClass} ${widthClass} ${mobileHideClass} group relative overflow-hidden rounded-[16px] bg-neutral-100 xl:h-[450px] xl:rounded-[24px]`}
+                  className={`${mobileHideClass} aspect-square group relative overflow-hidden rounded-[16px] bg-neutral-100 xl:rounded-[24px]`}
                 >
                   <OptimizedImage
                     src={image.src}
                     alt={image.alt}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 768px"
+                    sizes="(max-width: 768px) 33vw, (max-width: 1024px) 33vw, 400px"
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                    priority={index < 4}
+                    priority={index < 3}
                   />
                 </div>
               );

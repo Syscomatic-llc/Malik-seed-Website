@@ -99,7 +99,7 @@ export const hiringApi = {
   },
 
   uploadResume(formData: FormData, options?: RequestOptions) {
-    return apiPostMultipart<{ url: string }>("/api/v1/hiring/upload/resume", formData, options);
+    return apiPostMultipart<{ url: string }>("/api/v1/hiring/upload-cv", formData, options);
   },
 };
 

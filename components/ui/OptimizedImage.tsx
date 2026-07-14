@@ -39,6 +39,7 @@ export default function OptimizedImage({
   });
 
   const [error, setError] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
 
   // Sync state if src changes
   useEffect(() => {
@@ -66,7 +67,12 @@ export default function OptimizedImage({
     placeholder === "blur" && blurDataURL ? "blur" : undefined;
 
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <div 
+      className="relative h-full w-full overflow-hidden"
+      onTouchStart={() => setIsTouched(true)}
+      onTouchEnd={() => setIsTouched(false)}
+      onTouchCancel={() => setIsTouched(false)}
+    >
       {/* Premium Skeleton/Pulse loader */}
       {loading && (
         <div className="bg-brand-bg/50 dark:bg-brand-dark/20 absolute inset-0 z-10 flex animate-pulse items-center justify-center">
@@ -83,9 +89,9 @@ export default function OptimizedImage({
         blurDataURL={blurDataURL}
         onError={handleError}
         unoptimized={isProxied}
-        className={`${className} transition-opacity duration-500 ${
+        className={`${className} transition-all duration-500 ${
           loading ? "opacity-0" : "opacity-100"
-        }`}
+        } ${isTouched ? "scale-105" : ""}`}
         style={style}
       />
     </div>
