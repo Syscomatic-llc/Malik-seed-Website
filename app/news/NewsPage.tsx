@@ -6,6 +6,7 @@ const COUNT_PARAM = "count";
 const ALL_CATEGORY = "All News";
 
 import { useState, useEffect, useTransition, useMemo, useCallback } from "react";
+import { motion } from "motion/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import {
@@ -184,14 +185,21 @@ export default function NewsPage({ apiData }: NewsPageProps) {
                     role="tab"
                     aria-selected={isSelected}
                     onClick={() => handleCategoryChange(category)}
-                    className={`h-[41px] shrink-0 cursor-pointer rounded-[10px] px-6 text-[14px] leading-[21px] font-medium transition-all duration-200 md:h-[46px] md:text-[16px] md:leading-[24px] ${
+                    className={`relative h-[41px] shrink-0 cursor-pointer rounded-[10px] px-6 text-[14px] leading-[21px] font-medium transition-colors duration-200 md:h-[46px] md:text-[16px] md:leading-[24px] ${
                       isSelected
-                        ? "bg-[#0F3221] text-white"
+                        ? "text-white"
                         : "border border-[#F2F4F7] bg-white text-[#195236] hover:bg-[#F9FAFB]"
                     }`}
                     style={{ fontFamily: "var(--font-inter-tight)" }}
                   >
-                    {category}
+                    {isSelected && (
+                      <motion.div
+                        layoutId="activeNewsCategory"
+                        className="absolute inset-0 rounded-[10px] bg-[#0F3221]"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{category}</span>
                   </button>
                 );
               })}

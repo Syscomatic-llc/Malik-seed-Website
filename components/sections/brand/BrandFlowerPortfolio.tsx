@@ -4,6 +4,7 @@ import { useState } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 
 interface FlowerSegment {
   id: string;
@@ -81,20 +82,30 @@ export default function BrandFlowerPortfolio() {
           <div
             className="flex max-w-full scrollbar-none gap-[8px] overflow-x-auto rounded-[16px] bg-[#112019] p-[8px]"
           >
-            {SEGMENTS.map((seg) => (
-              <button
-                key={seg.id}
-                onClick={() => setActiveTab(seg.id)}
-                className={cn(
-                  "h-[39px] cursor-pointer rounded-[10px] px-4 py-[9px] font-sans text-[14px] leading-[21px] font-medium whitespace-nowrap transition-colors duration-300 ease-in-out md:h-[48px] md:px-4 md:py-3 md:text-[16px] md:leading-[24px]",
-                  activeTab === seg.id
-                    ? "bg-[#A9E179] text-[#0D1A14]"
-                    : "bg-[#0D291C] text-[#F2F7F1] hover:bg-[#0f3424]"
-                )}
-              >
-                {seg.name}
-              </button>
-            ))}
+            {SEGMENTS.map((seg) => {
+              const isActive = activeTab === seg.id;
+              return (
+                <button
+                  key={seg.id}
+                  onClick={() => setActiveTab(seg.id)}
+                  className={cn(
+                    "relative h-[39px] cursor-pointer rounded-[10px] px-4 py-[9px] font-sans text-[14px] leading-[21px] font-medium whitespace-nowrap transition-colors duration-300 ease-in-out md:h-[48px] md:px-4 md:py-3 md:text-[16px] md:leading-[24px]",
+                    isActive
+                      ? "text-[#0D1A14]"
+                      : "text-[#F2F7F1] hover:bg-[#0D291C]/50"
+                  )}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeFlowerTab"
+                      className="absolute inset-0 rounded-[10px] bg-[#A9E179]"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{seg.name}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 

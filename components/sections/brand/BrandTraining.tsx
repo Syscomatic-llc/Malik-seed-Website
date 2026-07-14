@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { motion } from "motion/react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import NextImage from "next/image";
@@ -220,20 +221,30 @@ export default function BrandTraining({
           {/* Interactive Program Tabs */}
           <div className="flex w-full flex-col items-center gap-8">
             <div className="flex w-full max-w-[851px] flex-col items-center justify-between gap-2 rounded-[16px] bg-[#112019] p-2 md:flex-row">
-              {maliksFarmData.training.programs.map((prog) => (
-                <button
-                  key={prog.id}
-                  onClick={() => setActiveTab(prog.id)}
-                  className={cn(
-                    "flex h-[39px] w-full items-center justify-center rounded-[10px] px-4 py-2 text-center font-sans text-[14px] whitespace-nowrap transition-colors duration-300 ease-in-out select-none md:h-auto md:flex-1 md:py-3.5 md:text-[16px]",
-                    activeTab === prog.id
-                      ? "bg-[#A9E179] font-medium text-[#0D1A14]"
-                      : "bg-[#0D291C] text-[#F2F7F1] hover:bg-white/5 hover:text-white md:bg-transparent md:text-white/70"
-                  )}
-                >
-                  {prog.title}
-                </button>
-              ))}
+              {maliksFarmData.training.programs.map((prog) => {
+                const isActive = activeTab === prog.id;
+                return (
+                  <button
+                    key={prog.id}
+                    onClick={() => setActiveTab(prog.id)}
+                    className={cn(
+                      "relative flex h-[39px] w-full items-center justify-center rounded-[10px] px-4 py-2 text-center font-sans text-[14px] whitespace-nowrap transition-colors duration-300 ease-in-out select-none md:h-auto md:flex-1 md:py-3.5 md:text-[16px]",
+                      isActive
+                        ? "font-medium text-[#0D1A14]"
+                        : "bg-[#0D291C] text-[#F2F7F1] hover:bg-white/5 hover:text-white md:bg-transparent md:text-white/70"
+                    )}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeTrainingTab"
+                        className="absolute inset-0 rounded-[10px] bg-[#A9E179]"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{prog.title}</span>
+                  </button>
+                );
+              })}
             </div>
             {/* Active Tab Image Frame */}
             <div className="group relative h-[350px] w-full max-w-[1030px] overflow-hidden rounded-[20px] bg-[#112019] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:aspect-[1030/475] md:h-auto md:rounded-[24px]">
