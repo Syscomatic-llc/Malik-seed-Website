@@ -41,7 +41,6 @@ const TestimonialCard = memo(function TestimonialCard({
   testimonial: EmployeeTestimonial;
   isActive: boolean;
 }) {
-  console.log(testimonial)
   return (
     <article
       className={cn(

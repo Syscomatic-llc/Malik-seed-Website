@@ -18,9 +18,9 @@ export async function generateMetadata({
   const { id } = await params;
   let position = null;
   try {
-    const apiPosition = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
-    if (apiPosition) {
-      position = mapApiPositionToJobPosition(apiPosition);
+    const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+    if (res && res.position) {
+      position = mapApiPositionToJobPosition(res.position);
     }
   } catch (err) {
     console.error(`Failed to fetch metadata for apply layout job ${id}:`, err);
@@ -46,9 +46,9 @@ export default async function ApplyLayout({
   const { id } = await params;
   let position = null;
   try {
-    const apiPosition = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
-    if (apiPosition) {
-      position = mapApiPositionToJobPosition(apiPosition);
+    const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+    if (res && res.position) {
+      position = mapApiPositionToJobPosition(res.position);
     }
   } catch (err) {
     console.error(`Failed to fetch job details for apply layout ${id}:`, err);

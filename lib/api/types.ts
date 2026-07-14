@@ -414,6 +414,12 @@ export interface ApiJobPosition {
   updated_at: string | null;
 }
 
+export interface ApiJobPositionDetailResponse {
+  position: ApiJobPosition;
+  assessment_questions: any[];
+}
+
+
 export interface ApiHiringBenefit {
   id: number;
   title: string;

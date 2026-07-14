@@ -46,9 +46,9 @@ export async function generateMetadata({
   
   let position = null;
   try {
-    const apiPosition = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
-    if (apiPosition) {
-      position = mapApiPositionToJobPosition(apiPosition);
+    const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+    if (res && res.position) {
+      position = mapApiPositionToJobPosition(res.position);
     }
   } catch (err) {
     console.error(`Failed to fetch metadata for job ${id}:`, err);
@@ -80,9 +80,9 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
   
   let position = null;
   try {
-    const apiPosition = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
-    if (apiPosition) {
-      position = mapApiPositionToJobPosition(apiPosition);
+    const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+    if (res && res.position) {
+      position = mapApiPositionToJobPosition(res.position);
     }
   } catch (err) {
     console.error(`Failed to fetch job details for ${id}:`, err);

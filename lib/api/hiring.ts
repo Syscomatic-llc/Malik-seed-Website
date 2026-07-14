@@ -6,6 +6,7 @@ import {
 } from "./client";
 import {
   ApiJobPosition,
+  ApiJobPositionDetailResponse,
   ApiHiringBenefit,
   ApiHiringTestimonial,
   ApiHiringPageContent,
@@ -28,7 +29,7 @@ export const hiringApi = {
   },
 
   getPositionById(positionId: number, options?: RequestOptions) {
-    return apiGet<ApiJobPosition>(`/api/v1/hiring/positions/${positionId}`, options);
+    return apiGet<ApiJobPositionDetailResponse>(`/api/v1/hiring/positions/${positionId}`, options);
   },
 
   getBenefits(options?: RequestOptions) {
