@@ -105,7 +105,7 @@ function buildProducts(apiData?: ApiService[]): ProductItem[] {
       href: s.link,
     }));
   }
-  return staticProductsData.items;
+  return [];
 }
 
 export default function ProductsSection({

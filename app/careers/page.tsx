@@ -52,38 +52,29 @@ export default async function CareersPage() {
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
-  const resolvedPositions =
-    sortedApiPositions.length > 0
-      ? sortedApiPositions.map(mapApiPositionToJobPosition)
-      : openPositionsData.positions;
+  const resolvedPositions = sortedApiPositions.map(mapApiPositionToJobPosition);
 
   const resolvedTestimonialsData = {
     ...employeeTestimonialsData,
-    testimonials:
-      apiTestimonials && apiTestimonials.length > 0
-        ? apiTestimonials.map((t) => ({
-            id: t.id,
-            name: t.name,
-            designation: t.designation,
-            department: t.department,
-            quote: t.content,
-            avatar: t.avatar_url ? resolveImageUrl(t.avatar_url) : undefined,
-          }))
-        : employeeTestimonialsData.testimonials,
+    testimonials: apiTestimonials.map((t) => ({
+      id: t.id,
+      name: t.name,
+      designation: t.designation,
+      department: t.department,
+      quote: t.content,
+      avatar: t.avatar_url ? resolveImageUrl(t.avatar_url) : undefined,
+    })),
   };
 
   const sortedApiBenefits = [...apiBenefits].sort((a, b) => a.sort_order - b.sort_order);
 
   const resolvedStandardsData = {
-    standards:
-      sortedApiBenefits.length > 0
-        ? sortedApiBenefits.map((b) => ({
-            number: b.sort_order,
-            title: b.title,
-            description: b.description || "",
-            icon: b.icon,
-          }))
-        : talentStandardsData.standards,
+    standards: sortedApiBenefits.map((b) => ({
+      number: b.sort_order,
+      title: b.title,
+      description: b.description || "",
+      icon: b.icon,
+    })),
   };
 
   return (

@@ -136,7 +136,7 @@ export interface TestimonialsSectionProps {
  * Uses only API data — no mixing with static images.
  */
 function buildTestimonials(apiData?: ApiTestimonial[]): TestimonialItem[] {
-  if (!Array.isArray(apiData) || apiData.length === 0) return testimonialsData.items;
+  if (!Array.isArray(apiData) || apiData.length === 0) return [];
 
   return apiData.map((t) => ({
     id: t.id,

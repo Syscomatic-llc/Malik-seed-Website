@@ -73,23 +73,22 @@ export interface NewsSectionProps {
 }
 
 export default function NewsSection({ apiData }: NewsSectionProps) {
-  const newsData =
-    Array.isArray(apiData) && apiData.length > 0
-      ? {
-          badge: staticNewsData.badge,
-          title: staticNewsData.title,
-          items: apiData.map((a) => ({
-            id: a.id,
-            slug: a.slug || a.article_slug || `article-${a.id}`,
-            category: a.category || "General",
-            date:
-              a.display_date ||
-              formatDate(a.published_at || a.publish_date || a.created_at),
-            title: a.title,
-            image: resolveImageUrl(a.featured_image || a.image_url),
-          })),
-        }
-      : staticNewsData;
+  const newsData = {
+    badge: staticNewsData.badge,
+    title: staticNewsData.title,
+    items: Array.isArray(apiData)
+      ? apiData.map((a) => ({
+          id: a.id,
+          slug: a.slug || a.article_slug || `article-${a.id}`,
+          category: a.category || "General",
+          date:
+            a.display_date ||
+            formatDate(a.published_at || a.publish_date || a.created_at),
+          title: a.title,
+          image: resolveImageUrl(a.featured_image || a.image_url),
+        }))
+      : [],
+  };
   const [activeIdx, setActiveIdx] = useState(0);
   const maxIdx = Math.max(0, newsData.items.length - 2);
 

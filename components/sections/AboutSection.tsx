@@ -57,21 +57,23 @@ function buildStats(apiStats: ApiAboutStat[]) {
  * data for any missing fields.
  */
 function buildAboutData(apiData?: ApiAbout) {
-  // Plain full description — no highlight/muted split
-  const fullStaticDesc =
-    staticAboutData.introDesktop.highlight + staticAboutData.introDesktop.muted;
-
   if (!apiData) {
-    const introDesktopText = fullStaticDesc;
-    const introMobileText =
-      fullStaticDesc.length > 132
-        ? fullStaticDesc.substring(0, 132) + "..."
-        : fullStaticDesc;
-
     return {
-      ...staticAboutData,
-      introDesktopText,
-      introMobileText,
+      badge: "",
+      introDesktopText: "",
+      introMobileText: "",
+      cta: {
+        label: "",
+        href: "",
+      },
+      stats: [],
+      images: {
+        teamBanner: "",
+        about1: "",
+        about2: "",
+        about1Mobile: "",
+        about2Mobile: "",
+      },
     };
   }
 
@@ -82,35 +84,27 @@ function buildAboutData(apiData?: ApiAbout) {
   const teamBanner = resolveImageUrl(apiData.image_url);
 
   const gallery = apiData.gallery_images ?? [];
-  const about1 = gallery[0]
-    ? resolveImageUrl(gallery[0])
-    : staticAboutData.images.about1;
-  const about2 = gallery[1]
-    ? resolveImageUrl(gallery[1])
-    : staticAboutData.images.about2;
+  const about1 = gallery[0] ? resolveImageUrl(gallery[0]) : "";
+  const about2 = gallery[1] ? resolveImageUrl(gallery[1]) : "";
 
   const introMobileText =
     desc.length > 132 ? desc.substring(0, 132) + "..." : desc;
 
   return {
-    badge: apiData.title || "About Malik Seeds",
+    badge: apiData.title || "",
     introDesktopText: desc,
     introMobileText,
     cta: {
-      label: apiData.cta_text || "Learn More",
-      href: apiData.cta_link || "/our-story",
+      label: apiData.cta_text || "",
+      href: apiData.cta_link || "",
     },
-    stats: parsedStats.length > 0 ? parsedStats : staticAboutData.stats,
+    stats: parsedStats,
     images: {
       teamBanner,
       about1,
       about2,
-      about1Mobile: gallery[0]
-        ? resolveImageUrl(gallery[0])
-        : staticAboutData.images.about1Mobile,
-      about2Mobile: gallery[1]
-        ? resolveImageUrl(gallery[1])
-        : staticAboutData.images.about2Mobile,
+      about1Mobile: gallery[0] ? resolveImageUrl(gallery[0]) : "",
+      about2Mobile: gallery[1] ? resolveImageUrl(gallery[1]) : "",
     },
   };
 }

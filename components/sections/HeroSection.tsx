@@ -373,13 +373,12 @@ export interface HeroSectionProps {
  * Falls back to static data if the API returned nothing.
  */
 function buildSlides(
-  apiData: ApiHeroSlide[] | { slides: ApiHeroSlide[] } | undefined,
-  fallback: HeroSlide[]
+  apiData: ApiHeroSlide[] | { slides: ApiHeroSlide[] } | undefined
 ): HeroSlide[] {
-  if (!apiData) return fallback;
+  if (!apiData) return [];
 
   const slides = Array.isArray(apiData) ? apiData : apiData.slides;
-  if (!Array.isArray(slides) || slides.length === 0) return fallback;
+  if (!Array.isArray(slides) || slides.length === 0) return [];
 
   return slides.map((slide) => ({
     src: resolveImageUrl(slide.background_image),
@@ -395,8 +394,8 @@ export default function HeroSection({
   const [showOverlay, setShowOverlay] = useState(true);
 
   const finalSlides = useMemo(
-    () => buildSlides(apiData, data.slides),
-    [apiData, data.slides]
+    () => buildSlides(apiData),
+    [apiData]
   );
 
   // Preload all slideshow images immediately in the browser cache

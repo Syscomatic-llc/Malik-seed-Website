@@ -22,8 +22,8 @@ const GLOWS = [
  */
 function buildTimelineItems(
   apiData?: ApiTimelineItem[]
-): TimelineItem[] | undefined {
-  if (!Array.isArray(apiData) || apiData.length === 0) return undefined;
+): TimelineItem[] {
+  if (!Array.isArray(apiData) || apiData.length === 0) return [];
 
   return apiData.map((item, index) => {
     const glow =
@@ -49,7 +49,7 @@ export default function TimelineSection({
   const resolvedItems = buildTimelineItems(apiData);
 
   // Show first 3 on homepage; full list on /about#timeline
-  const items = (resolvedItems ?? propItems ?? timelineItems).slice(0, 3);
+  const items = (resolvedItems.length > 0 ? resolvedItems : (propItems ?? [])).slice(0, 3);
 
   return (
     <section className="bg-brand-dark relative overflow-hidden text-white">

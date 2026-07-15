@@ -92,7 +92,7 @@ export const FALLBACK_GALLERY_IMAGES: readonly GalleryImage[] = [
 // Component
 // ---------------------------------------------------------------------------
 const GalleryHeroSection = ({
-  initialImages = FALLBACK_GALLERY_IMAGES,
+  initialImages = [],
   isHero = true,
 }: GalleryHeroSectionProps) => {
   const router = useRouter();

@@ -36,7 +36,7 @@ export default memo(function PartnersSection({
         src: resolveImageUrl(item.logo_url),
       }));
     }
-    return partners || partnersData.items;
+    return partners || [];
   }, [partners, apiData]);
 
   // Dynamically split unique partners down the middle and duplicate the list for infinite loops

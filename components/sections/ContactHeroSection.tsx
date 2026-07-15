@@ -43,9 +43,11 @@ const getBorderClass = (hasError: boolean) =>
 export default function ContactHeroSection({
   apiData,
 }: {
-  apiData: ApiContactInfo | null;
+  apiData: ApiContactInfo;
 }) {
   const info = apiData;
+
+  const subjectOptions = ["Choose an option", ...info.subject_options];
 
   // Unique accessible IDs
   const nameId = useId();
@@ -465,7 +467,7 @@ export default function ContactHeroSection({
                         !!errors.subject
                       )}`}
                     >
-                      {SUBJECT_OPTIONS.map((option, index) => (
+                      {subjectOptions.map((option, index) => (
                         <option
                           key={option}
                           value={index === 0 ? "" : option}
