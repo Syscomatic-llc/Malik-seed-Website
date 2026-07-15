@@ -125,17 +125,12 @@ export async function generateMetadata({
   const { slug } = await params;
 
   try {
-    const apiData = await newsApi.getNews({ revalidate: 60 });
-    if (apiData?.articles) {
-      const found = apiData.articles.find(
-        (a) => (a.slug || a.article_slug || `article-${a.id}`) === slug
-      );
-      if (found) {
-        return {
-          title: `${found.title} - ${SITE_NAME}`,
-          description: found.excerpt,
-        };
-      }
+    const found = await newsApi.getArticleBySlug(slug, { revalidate: 60 });
+    if (found) {
+      return {
+        title: `${found.title} - ${SITE_NAME}`,
+        description: found.excerpt,
+      };
     }
   } catch (err) {
     console.error("Failed to fetch article metadata from API:", err);
@@ -151,10 +146,26 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   let allArticles: NewsArticle[] = [];
 
   try {
-    const apiData = await newsApi.getNews({ revalidate: 60 });
+    const [apiArticle, apiData] = await Promise.all([
+      newsApi.getArticleBySlug(slug, { revalidate: 60 }).catch((err) => {
+        console.error("Failed to fetch single article by slug:", err);
+        return null;
+      }),
+      newsApi.getNews({ revalidate: 60 }).catch((err) => {
+        console.error("Failed to fetch all articles for navigation:", err);
+        return null;
+      }),
+    ]);
+
+    if (apiArticle) {
+      article = mapApiArticleToNewsArticle(apiArticle);
+    }
+
     if (apiData?.articles) {
       allArticles = apiData.articles.map(mapApiArticleToNewsArticle);
-      article = allArticles.find((a) => a.slug === slug) ?? null;
+      if (!article) {
+        article = allArticles.find((a) => a.slug === slug) ?? null;
+      }
     }
   } catch (err) {
     console.error("Failed to fetch article details from API:", err);
