@@ -104,7 +104,7 @@ function buildProducts(apiData?: (ApiService | ApiBrand)[]): ProductItem[] {
           category: item.name,
           name: item.name,
           description: item.description || item.tagline || "",
-          image: resolveImageUrl(item.image_url || ""),
+          image: resolveImageUrl(item.logo_url || item.image_url || ""),
           href: `/our-brands/${item.slug}`,
         };
       } else {
