@@ -87,6 +87,7 @@ export const careerManifestoData = {
 // ── Section 4: Open Positions ────────────────────────────────────────────────
 export interface JobPosition {
   id: number;
+  slug?: string;
   title: string;
   description: string;
   tags: string[];
@@ -109,6 +110,7 @@ export const openPositionsData = {
   positions: [
     {
       id: 1,
+      slug: "senior-agronomist",
       title: "Senior Agronomist",
       description: "Experienced Agronomist to lead crop performance trials.",
       tags: ["Onsite", "Full time", "Bogura"],

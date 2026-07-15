@@ -32,6 +32,10 @@ export const hiringApi = {
     return apiGet<ApiJobPositionDetailResponse>(`/api/v1/hiring/positions/${positionId}`, options);
   },
 
+  getPositionBySlug(slug: string, options?: RequestOptions) {
+    return apiGet<ApiJobPositionDetailResponse>(`/api/v1/hiring/positions/slug/${slug}`, options);
+  },
+
   getBenefits(options?: RequestOptions) {
     return apiGet<ApiHiringBenefit[]>("/api/v1/hiring/benefits", options);
   },
@@ -133,8 +137,13 @@ export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
 
   return {
     id: item.id,
+    slug: item.slug,
     title: item.title,
-    description: item.short_description || item.description,
+    description: (item.short_description || item.description || "")
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/\u00a0/g, " ")
+      .trim(),
     tags,
     salary: item.salary_range
       ? `${item.salary_range} ${item.salary_currency}`

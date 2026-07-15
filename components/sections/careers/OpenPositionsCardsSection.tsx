@@ -44,7 +44,7 @@ const PositionCard = memo(function PositionCard({
       <div className="flex flex-col gap-6 md:gap-8">
         <div className="h-px w-full bg-[#CED2DA]" />
         <ActionButton
-          href={`/careers/${position.id}`}
+          href={`/careers/${position.slug || position.id}`}
           label="View Details"
           variant="dark"
           className="h-[46px] w-[165px] text-[16px]"

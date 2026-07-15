@@ -21,20 +21,42 @@ interface JobDetailsPageProps {
 
 const SITE_NAME = "Malik Seeds";
 
+function cleanHtml(html: string): string {
+  if (!html) return "";
+  
+  let cleaned = html
+    .replace(/&nbsp;/g, " ")
+    .replace(/\u00a0/g, " ");
+
+  // Identify paragraphs starting with an emoji and convert them to Figma benefit pills
+  const emojiRegex = /<p>\s*([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF])\s*([\s\S]*?)<\/p>/gi;
+  cleaned = cleaned.replace(emojiRegex, (match, emoji, text) => {
+    const cleanText = text.trim();
+    return `<span class="job-benefit-pill"><span class="job-benefit-emoji">${emoji}</span><span class="job-benefit-text">${cleanText}</span></span>`;
+  });
+
+  return cleaned;
+}
+
+function isHtmlContent(str: string): boolean {
+  if (!str) return false;
+  return /<[a-z][\s\S]*>/i.test(str);
+}
+
 /** Statically pre-generate dynamic routes for all job positions at build time. */
 export async function generateStaticParams() {
   try {
     const apiPositions = await hiringApi.getPositions(undefined, { revalidate: 60 });
     if (apiPositions && apiPositions.length > 0) {
       return apiPositions.map((pos) => ({
-        id: pos.id.toString(),
+        id: pos.slug || pos.id.toString(),
       }));
     }
   } catch (err) {
     console.error("Failed to generate static params for careers:", err);
   }
   return openPositionsData.positions.map((pos) => ({
-    id: pos.id.toString(),
+    id: pos.slug || pos.id.toString(),
   }));
 }
 
@@ -45,10 +67,18 @@ export async function generateMetadata({
   const { id } = await params;
   
   let position = null;
+  const isNumeric = /^\d+$/.test(id);
   try {
-    const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
-    if (res && res.position) {
-      position = mapApiPositionToJobPosition(res.position);
+    if (isNumeric) {
+      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+      if (res && res.position) {
+        position = mapApiPositionToJobPosition(res.position);
+      }
+    } else {
+      const res = await hiringApi.getPositionBySlug(id, { revalidate: 60 });
+      if (res && res.position) {
+        position = mapApiPositionToJobPosition(res.position);
+      }
     }
   } catch (err) {
     console.error(`Failed to fetch metadata for job ${id}:`, err);
@@ -56,7 +86,7 @@ export async function generateMetadata({
 
   if (!position) {
     position = openPositionsData.positions.find(
-      (pos) => pos.id.toString() === id
+      (pos) => pos.id.toString() === id || pos.slug === id
     );
   }
 
@@ -79,10 +109,18 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
   const { id } = await params;
   
   let position = null;
+  const isNumeric = /^\d+$/.test(id);
   try {
-    const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
-    if (res && res.position) {
-      position = mapApiPositionToJobPosition(res.position);
+    if (isNumeric) {
+      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+      if (res && res.position) {
+        position = mapApiPositionToJobPosition(res.position);
+      }
+    } else {
+      const res = await hiringApi.getPositionBySlug(id, { revalidate: 60 });
+      if (res && res.position) {
+        position = mapApiPositionToJobPosition(res.position);
+      }
     }
   } catch (err) {
     console.error(`Failed to fetch job details for ${id}:`, err);
@@ -90,13 +128,15 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
 
   if (!position) {
     position = openPositionsData.positions.find(
-      (pos) => pos.id.toString() === id
+      (pos) => pos.id.toString() === id || pos.slug === id
     );
   }
 
   if (!position) {
     notFound();
   }
+
+  const isHtml = isHtmlContent(position.fullDescription || "");
 
   return (
     <div className="min-h-screen bg-[#F2F7F1]">
@@ -208,110 +248,154 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
       >
         <div className="mx-auto w-full max-w-[1030px] px-4 lg:px-0">
           <div className="flex flex-col gap-12 lg:gap-16">
-            {/* Full description / intro */}
-            {position.fullDescription && (
-              <p className="font-inter text-[16px] leading-[24px] text-[#0D1A14] lg:text-[18px] lg:leading-[27px]">
-                {position.fullDescription}
-              </p>
-            )}
-
-            {/* Grid for two column lists if desired, otherwise standard single column stacked layout as in figma */}
-            <div className="flex max-w-[800px] flex-col gap-12 lg:gap-14">
-              {/* What You'll Do */}
-              {position.whatYoullDo && position.whatYoullDo.length > 0 && (
-                <div className="flex flex-col gap-4">
-                  <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
-                    What You’ll Do
-                  </h2>
-                  <ul className="font-inter flex list-disc flex-col gap-3 pl-5 text-[16px] leading-[24px] text-[#0D1A14]/80">
-                    {position.whatYoullDo.map((item, index) => (
-                      <li key={index} className="pl-1">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* What We're Looking For */}
-              {position.whatWereLookingFor &&
-                position.whatWereLookingFor.length > 0 && (
-                  <div className="flex flex-col gap-4">
-                    <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
-                      What We’re Looking For
-                    </h2>
-                    <ul className="font-inter flex list-disc flex-col gap-3 pl-5 text-[16px] leading-[24px] text-[#0D1A14]/80">
-                      {position.whatWereLookingFor.map((item, index) => (
-                        <li key={index} className="pl-1">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+            {isHtml ? (
+              <div className="flex max-w-[800px] flex-col gap-12 lg:gap-14">
+                {position.fullDescription && (
+                  <div
+                    className="job-prose"
+                    dangerouslySetInnerHTML={{
+                      __html: cleanHtml(position.fullDescription),
+                    }}
+                  />
                 )}
 
-              {/* Skills & Competencies */}
-              {position.skillsAndCompetencies &&
-                position.skillsAndCompetencies.length > 0 && (
-                  <div className="flex flex-col gap-4">
+                {/* Basics & Benefits */}
+                {position.benefitsList && position.benefitsList.length > 0 && (
+                  <div className="flex flex-col gap-6">
                     <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
-                      Skills & Competencies
+                      Basics & Benefits
                     </h2>
-                    <ul className="font-inter flex list-disc flex-col gap-3 pl-5 text-[16px] leading-[24px] text-[#0D1A14]/80">
-                      {position.skillsAndCompetencies.map((item, index) => (
-                        <li key={index} className="pl-1">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-              {/* Why Join Malik Seeds? */}
-              {position.whyJoin && position.whyJoin.length > 0 && (
-                <div className="flex flex-col gap-4">
-                  <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
-                    Why Join Malik Seeds?
-                  </h2>
-                  <ul className="font-inter flex list-disc flex-col gap-3 pl-5 text-[16px] leading-[24px] text-[#0D1A14]/80">
-                    {position.whyJoin.map((item, index) => (
-                      <li key={index} className="pl-1">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Basics & Benefits */}
-              {position.benefitsList && position.benefitsList.length > 0 && (
-                <div className="flex flex-col gap-6">
-                  <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
-                    Basics & Benefits
-                  </h2>
-                  <div className="flex flex-wrap gap-3">
-                    {position.benefitsList.map((benefit, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-2 rounded-[40px] border border-[#E4E7EC] bg-[#F9FAFB] px-3 py-2 lg:gap-[10px] lg:px-4 lg:py-2"
-                      >
-                        <span className="font-inter text-[14px] leading-[21px] text-[#0D1A14] lg:text-[16px] lg:leading-[24px]">
-                          {benefit.text}
-                        </span>
-                        <div className="relative h-[14px] w-[14px] shrink-0 lg:h-[18px] lg:w-[18px]">
-                          <OptimizedImage
-                            src={`/images/careers/${benefit.icon}`}
-                            alt=""
-                            fill
-                            className="object-contain"
-                          />
+                    <div className="flex flex-wrap gap-3">
+                      {position.benefitsList.map((benefit, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 rounded-[40px] border border-[#E4E7EC] bg-[#F9FAFB] px-3 py-2 lg:gap-[10px] lg:px-4 lg:py-2"
+                        >
+                          <span className="font-inter text-[14px] leading-[21px] text-[#0D1A14] lg:text-[16px] lg:leading-[24px]">
+                            {benefit.text}
+                          </span>
+                          <div className="relative h-[14px] w-[14px] shrink-0 lg:h-[18px] lg:w-[18px]">
+                            <OptimizedImage
+                              src={`/images/careers/${benefit.icon}`}
+                              alt=""
+                              fill
+                              className="object-contain"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
+                )}
+              </div>
+            ) : (
+              <>
+                {/* Full description / intro */}
+                {position.fullDescription && (
+                  <p className="font-inter text-[16px] leading-[24px] text-[#0D1A14] lg:text-[18px] lg:leading-[27px]">
+                    {position.fullDescription}
+                  </p>
+                )}
+
+                {/* Grid for two column lists if desired, otherwise standard single column stacked layout as in figma */}
+                <div className="flex max-w-[800px] flex-col gap-12 lg:gap-14">
+                  {/* What You'll Do */}
+                  {position.whatYoullDo && position.whatYoullDo.length > 0 && (
+                    <div className="flex flex-col gap-4">
+                      <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
+                        What You’ll Do
+                      </h2>
+                      <ul className="font-inter flex list-disc flex-col gap-3 pl-5 text-[16px] leading-[24px] text-[#0D1A14]/80">
+                        {position.whatYoullDo.map((item, index) => (
+                          <li key={index} className="pl-1">
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* What We're Looking For */}
+                  {position.whatWereLookingFor &&
+                    position.whatWereLookingFor.length > 0 && (
+                      <div className="flex flex-col gap-4">
+                        <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
+                          What We’re Looking For
+                        </h2>
+                        <ul className="font-inter flex list-disc flex-col gap-3 pl-5 text-[16px] leading-[24px] text-[#0D1A14]/80">
+                          {position.whatWereLookingFor.map((item, index) => (
+                            <li key={index} className="pl-1">
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                  {/* Skills & Competencies */}
+                  {position.skillsAndCompetencies &&
+                    position.skillsAndCompetencies.length > 0 && (
+                      <div className="flex flex-col gap-4">
+                        <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
+                          Skills & Competencies
+                        </h2>
+                        <ul className="font-inter flex list-disc flex-col gap-3 pl-5 text-[16px] leading-[24px] text-[#0D1A14]/80">
+                          {position.skillsAndCompetencies.map((item, index) => (
+                            <li key={index} className="pl-1">
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                  {/* Why Join Malik Seeds? */}
+                  {position.whyJoin && position.whyJoin.length > 0 && (
+                    <div className="flex flex-col gap-4">
+                      <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
+                        Why Join Malik Seeds?
+                      </h2>
+                      <ul className="font-inter flex list-disc flex-col gap-3 pl-5 text-[16px] leading-[24px] text-[#0D1A14]/80">
+                        {position.whyJoin.map((item, index) => (
+                          <li key={index} className="pl-1">
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Basics & Benefits */}
+                  {position.benefitsList && position.benefitsList.length > 0 && (
+                    <div className="flex flex-col gap-6">
+                      <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
+                        Basics & Benefits
+                      </h2>
+                      <div className="flex flex-wrap gap-3">
+                        {position.benefitsList.map((benefit, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 rounded-[40px] border border-[#E4E7EC] bg-[#F9FAFB] px-3 py-2 lg:gap-[10px] lg:px-4 lg:py-2"
+                          >
+                            <span className="font-inter text-[14px] leading-[21px] text-[#0D1A14] lg:text-[16px] lg:leading-[24px]">
+                              {benefit.text}
+                            </span>
+                            <div className="relative h-[14px] w-[14px] shrink-0 lg:h-[18px] lg:w-[18px]">
+                              <OptimizedImage
+                                src={`/images/careers/${benefit.icon}`}
+                                alt=""
+                                fill
+                                className="object-contain"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </>
+            )}
 
             {/* Separator line */}
             <hr className="my-4 w-full border-t border-[#CED2DA]" />

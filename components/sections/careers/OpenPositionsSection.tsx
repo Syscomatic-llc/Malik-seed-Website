@@ -50,7 +50,7 @@ const JobRow = memo(function JobRow({ position }: { position: JobPosition }) {
 
       {/* CTA Button */}
       <ActionButton
-        href={`/careers/${position.id}`}
+        href={`/careers/${position.slug || position.id}`}
         label="View Details"
         variant="dark"
         className="h-[41px] w-[130px] text-[14px] lg:h-[46px] lg:w-[165px] lg:text-[16px]"

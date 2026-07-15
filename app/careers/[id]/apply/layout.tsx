@@ -17,10 +17,18 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   let position = null;
+  const isNumeric = /^\d+$/.test(id);
   try {
-    const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
-    if (res && res.position) {
-      position = mapApiPositionToJobPosition(res.position);
+    if (isNumeric) {
+      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+      if (res && res.position) {
+        position = mapApiPositionToJobPosition(res.position);
+      }
+    } else {
+      const res = await hiringApi.getPositionBySlug(id, { revalidate: 60 });
+      if (res && res.position) {
+        position = mapApiPositionToJobPosition(res.position);
+      }
     }
   } catch (err) {
     console.error(`Failed to fetch metadata for apply layout job ${id}:`, err);
@@ -28,7 +36,7 @@ export async function generateMetadata({
 
   if (!position) {
     position = openPositionsData.positions.find(
-      (pos) => pos.id.toString() === id
+      (pos) => pos.id.toString() === id || pos.slug === id
     );
   }
 
@@ -45,10 +53,18 @@ export default async function ApplyLayout({
 }: ApplyLayoutProps) {
   const { id } = await params;
   let position = null;
+  const isNumeric = /^\d+$/.test(id);
   try {
-    const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
-    if (res && res.position) {
-      position = mapApiPositionToJobPosition(res.position);
+    if (isNumeric) {
+      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+      if (res && res.position) {
+        position = mapApiPositionToJobPosition(res.position);
+      }
+    } else {
+      const res = await hiringApi.getPositionBySlug(id, { revalidate: 60 });
+      if (res && res.position) {
+        position = mapApiPositionToJobPosition(res.position);
+      }
     }
   } catch (err) {
     console.error(`Failed to fetch job details for apply layout ${id}:`, err);
@@ -56,7 +72,7 @@ export default async function ApplyLayout({
 
   if (!position) {
     position = openPositionsData.positions.find(
-      (pos) => pos.id.toString() === id
+      (pos) => pos.id.toString() === id || pos.slug === id
     );
   }
 
