@@ -50,29 +50,34 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     return [];
   });
 
-  // Handle client-side mount loading when URL specifies a higher count
+  // Sync visible count with URL count param when it changes
   useEffect(() => {
     const initialCount = getInitialCount();
-    if (initialCount > INITIAL_VISIBLE) {
-      setIsSimulatingLoad(true);
-      newsApi
-        .getArticles({
-          category: activeCategory === ALL_CATEGORY ? undefined : activeCategory,
-          limit: initialCount,
-        })
-        .then((apiArticles) => {
-          if (apiArticles && apiArticles.length > 0) {
-            setLoadedArticles(apiArticles.map(mapApiArticleToNewsArticle));
-          }
-        })
-        .catch((err) => {
-          console.error("Failed to fetch initial articles:", err);
-        })
-        .finally(() => {
-          setIsSimulatingLoad(false);
-        });
+    if (initialCount !== visibleCount) {
+      setVisibleCount(initialCount);
+      
+      // If the URL specifies more articles than currently loaded, fetch them
+      if (initialCount > loadedArticles.length) {
+        setIsSimulatingLoad(true);
+        newsApi
+          .getArticles({
+            category: activeCategory === ALL_CATEGORY ? undefined : activeCategory,
+            limit: initialCount,
+          })
+          .then((apiArticles) => {
+            if (apiArticles && apiArticles.length > 0) {
+              setLoadedArticles(apiArticles.map(mapApiArticleToNewsArticle));
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to fetch articles for updated count:", err);
+          })
+          .finally(() => {
+            setIsSimulatingLoad(false);
+          });
+      }
     }
-  }, []);
+  }, [getInitialCount, activeCategory, visibleCount, loadedArticles.length]);
 
   const displayedArticles = useMemo<NewsArticle[]>(
     () => loadedArticles.slice(0, visibleCount),
@@ -90,7 +95,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
       setActiveCategory(category);
       const fetchLimit = INITIAL_VISIBLE;
       setIsSimulatingLoad(true);
-
+  
       newsApi
         .getArticles({
           category: category === ALL_CATEGORY ? undefined : category,
