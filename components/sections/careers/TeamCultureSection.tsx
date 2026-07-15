@@ -44,7 +44,7 @@ export default memo(function TeamCultureSection({
                   alt={wide.alt}
                   fill
                   sizes="(min-width: 1280px) 768px, 100vw"
-                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                  className="object-cover object-bottom transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
               {/* Narrow image */}

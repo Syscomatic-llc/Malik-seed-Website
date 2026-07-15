@@ -41,7 +41,7 @@ const SEGMENTS: FlowerSegment[] = [
       "Impatiens (Excellent shade performers)",
       "Pansy & Viola (Perfect for cooler seasons)",
     ],
-    image: "/images/brand/gypsy_1.png",
+    image: "/images/brand/gypsy_1.jpg",
   },
   {
     id: "pot-flower",

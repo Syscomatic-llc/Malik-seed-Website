@@ -46,7 +46,7 @@ A major part of the codebase uses the Next.js responsive image layout (`fill` pr
 | Figma Section / Element | Figma Image Name / ID | Figma Size (W × H) | Codebase Component / File | Codebase Size / Container | Comparison Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Hero Image Slides** | R&D Crop Images | `563 × 422` px / `630 × 420` px / `543 × 501` px | [AboutHero.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/AboutHero.tsx) | `md:aspect-[548/420] md:w-[42vw]` | Approximates Figma layout with a fluid width and standard aspect ratio. |
-| **Mission Section 2** | `Malik's Farm New 3 1` | `1128 × 635` px | [AboutMissionTwo.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/AboutMissionTwo.tsx) | `aspect-[1128/635] w-full` | **Pixel-perfect Match**. Replicates the exact aspect ratio of the 1128x635 image wrapper. |
+| **Mission Section 2** | `Malik's Farm New 3 1` | `1128 × 635` px | [AboutMissionTwo.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/AboutMissionTwo.tsx) | `md:aspect-[1128/532] w-full` | **Different Aspect Ratio**. Figma specs 1128×635, but the codebase implements `aspect-[1128/532]` on desktop (and `aspect-[310/200]` on mobile) to fit container proportions. |
 | **History Timeline Items** | Timeline Card Images | Width: `503` to `660` px<br>Height: `372` px | [TimelineStory.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/TimelineStory.tsx) | `aspect-[503/372] max-w-[503px]` | Standardized to a uniform width (`503px`) and height (`372px`) in code to ensure grid consistency across articles. |
 
 ---
