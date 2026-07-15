@@ -67,8 +67,6 @@ export default memo(function TalentStandardsSection({
   data,
 }: {
   data: {
-    badge: string;
-    title: string;
     standards: Array<{
       number: number;
       title: string;
@@ -92,10 +90,10 @@ export default memo(function TalentStandardsSection({
         {/* Header: centered badge + title */}
         <div className="mb-[32px] flex flex-col items-center gap-8 md:mb-[64px]">
           <SectionBadge variant="outline" showDot dotSize="6px">
-            {data.badge}
+            {talentStandardsData.badge}
           </SectionBadge>
           <h2 className="font-inter-tight text-brand-dark text-center text-[32px] leading-[1.2] font-medium tracking-tight md:text-[48px] md:leading-[58px]">
-            {data.title}
+            {talentStandardsData.title}
           </h2>
         </div>
 

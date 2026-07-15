@@ -75,8 +75,6 @@ export default async function CareersPage() {
   const sortedApiBenefits = [...apiBenefits].sort((a, b) => a.sort_order - b.sort_order);
 
   const resolvedStandardsData = {
-    badge: sortedApiBenefits.length > 0 ? "Employee Benefits" : talentStandardsData.badge,
-    title: sortedApiBenefits.length > 0 ? "Why Join Us" : talentStandardsData.title,
     standards:
       sortedApiBenefits.length > 0
         ? sortedApiBenefits.map((b) => ({
