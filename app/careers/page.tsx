@@ -15,7 +15,7 @@ import {
   futureProgramData,
   employeeTestimonialsData,
 } from "@/data/career-data";
-import { hiringApi, mapApiPositionToJobPosition, ApiJobPosition, ApiHiringTestimonial } from "@/lib/api";
+import { hiringApi, mapApiPositionToJobPosition, ApiJobPosition, ApiHiringTestimonial, ApiHiringBenefit } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -33,14 +33,17 @@ export const metadata: Metadata = {
 export default async function CareersPage() {
   let apiPositions: ApiJobPosition[] = [];
   let apiTestimonials: ApiHiringTestimonial[] = [];
+  let apiBenefits: ApiHiringBenefit[] = [];
 
   try {
-    const [positionsRes, testimonialsRes] = await Promise.all([
+    const [positionsRes, testimonialsRes, benefitsRes] = await Promise.all([
       hiringApi.getPositions(undefined, { revalidate: 60 }),
       hiringApi.getTestimonials({ revalidate: 60 }),
+      hiringApi.getBenefits({ revalidate: 60 }),
     ]);
     apiPositions = positionsRes || [];
     apiTestimonials = testimonialsRes || [];
+    apiBenefits = benefitsRes || [];
   } catch (err) {
     console.error("Failed to fetch hiring content:", err);
   }
@@ -69,10 +72,26 @@ export default async function CareersPage() {
         : employeeTestimonialsData.testimonials,
   };
 
+  const sortedApiBenefits = [...apiBenefits].sort((a, b) => a.sort_order - b.sort_order);
+
+  const resolvedStandardsData = {
+    badge: sortedApiBenefits.length > 0 ? "Employee Benefits" : talentStandardsData.badge,
+    title: sortedApiBenefits.length > 0 ? "Why Join Us" : talentStandardsData.title,
+    standards:
+      sortedApiBenefits.length > 0
+        ? sortedApiBenefits.map((b) => ({
+            number: b.sort_order,
+            title: b.title,
+            description: b.description || "",
+            icon: b.icon,
+          }))
+        : talentStandardsData.standards,
+  };
+
   return (
     <div className="min-h-screen bg-[#F2F7F1]">
       <CareerHero data={careerHeroData} />
-      <TalentStandardsSection data={talentStandardsData} />
+      <TalentStandardsSection data={resolvedStandardsData} />
       <CareerManifestoSection data={careerManifestoData} />
       <OpenPositionsCardsSection
         data={{

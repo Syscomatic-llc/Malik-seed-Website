@@ -13,18 +13,20 @@ import type { talentStandardsData, TalentStandard } from "@/data/career-data";
 //            title 20px Inter Tight 500, description 16px Inter
 // ────────────────────────────────────────────────────────────────────────────
 
+interface StandardCardProps {
+  standard: TalentStandard & { icon?: string | null };
+}
+
 const StandardCard = memo(function StandardCard({
   standard,
-}: {
-  standard: TalentStandard;
-}) {
+}: StandardCardProps) {
   return (
     <div
       className={[
         "group flex flex-col items-start justify-between gap-8 rounded-[24px] border p-8 md:items-center",
         "w-full sm:w-[calc(50%-8px)] lg:w-[342px] lg:flex-shrink-0",
-        "min-h-[216px] transition-colors duration-200",
-        "border-brand-border bg-brand-neutral-light hover:bg-[#0F3221]",
+        "min-h-[216px] transition-all duration-300 ease-in-out hover:shadow-lg",
+        "border-brand-border bg-brand-neutral-light hover:bg-[#0F3221] hover:border-[#0F3221]",
       ].join(" ")}
       style={{ padding: "32px 32px" }}
     >
@@ -43,7 +45,7 @@ const StandardCard = memo(function StandardCard({
         <h3
           className={[
             "font-inter-tight text-brand-dark w-full text-left text-[20px] leading-[24px] font-medium",
-            "transition-colors duration-200 group-hover:text-brand-bg md:text-center",
+            "transition-colors duration-300 ease-in-out group-hover:text-brand-bg md:text-center",
           ].join(" ")}
         >
           {standard.title}
@@ -51,7 +53,7 @@ const StandardCard = memo(function StandardCard({
         <p
           className={[
             "font-inter text-brand-dark w-full text-left text-[16px] leading-[24px]",
-            "transition-colors duration-200 group-hover:text-brand-bg md:text-center",
+            "transition-colors duration-300 ease-in-out group-hover:text-brand-bg md:text-center",
           ].join(" ")}
         >
           {standard.description}
@@ -64,7 +66,17 @@ const StandardCard = memo(function StandardCard({
 export default memo(function TalentStandardsSection({
   data,
 }: {
-  data: typeof talentStandardsData;
+  data: {
+    badge: string;
+    title: string;
+    standards: Array<{
+      number: number;
+      title: string;
+      description: string;
+      icon?: string | null;
+      dark?: boolean;
+    }>;
+  };
 }) {
   const { standards } = data;
   const row1 = standards.slice(0, 3); // cards 1-3
