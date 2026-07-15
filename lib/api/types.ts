@@ -467,6 +467,29 @@ export interface ApiHiringData {
   testimonials: ApiHiringTestimonial[];
 }
 
+export interface ApiBrand {
+  id: number;
+  name: string;
+  slug: string;
+  category: string;
+  tagline: string;
+  description: string;
+  long_description: string | null;
+  logo_url: string | null;
+  image_url: string | null;
+  hero_image: string | null;
+  gallery_images: string[];
+  features: string[];
+  stats: any[];
+  link: string | null;
+  is_active: boolean;
+  is_featured: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string | null;
+}
+
+
 
 
 

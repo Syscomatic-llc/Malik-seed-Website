@@ -2,7 +2,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { productsData as staticProductsData } from "@/data/sections-data";
-import { ApiService } from "@/lib/api";
+import { ApiService, ApiBrand } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
 type Direction = "horizontal" | "vertical";
@@ -19,7 +19,7 @@ interface ProductItem {
 
 interface ProductsSectionProps {
   direction?: Direction;
-  apiData?: ApiService[];
+  apiData?: (ApiService | ApiBrand)[];
 }
 
 // ─── Shared card inner content ────────────────────────────────────────────────
@@ -94,18 +94,33 @@ function CardContent({
  * Map API services to the internal ProductItem shape.
  * If API data is missing, falls back to static data.
  */
-function buildProducts(apiData?: ApiService[]): ProductItem[] {
+function buildProducts(apiData?: (ApiService | ApiBrand)[]): ProductItem[] {
   if (Array.isArray(apiData) && apiData.length > 0) {
-    return apiData.map((s) => ({
-      id: s.id,
-      category: s.title,
-      name: s.title,
-      description: s.description,
-      image: resolveImageUrl(s.image_url),
-      href: s.link,
-    }));
+    return apiData.map((item) => {
+      // Check if it is ApiBrand by verifying if 'name' property exists
+      if ("name" in item) {
+        return {
+          id: item.id,
+          category: item.name,
+          name: item.name,
+          description: item.description || item.tagline || "",
+          image: resolveImageUrl(item.image_url || ""),
+          href: `/our-brands/${item.slug}`,
+        };
+      } else {
+        // It is ApiService
+        return {
+          id: item.id,
+          category: item.title,
+          name: item.title,
+          description: item.description || "",
+          image: resolveImageUrl(item.image_url || ""),
+          href: item.link || "",
+        };
+      }
+    });
   }
-  return [];
+  return staticProductsData.items;
 }
 
 export default function ProductsSection({

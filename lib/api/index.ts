@@ -6,6 +6,7 @@ export * from "./contact";
 export * from "./gallery";
 export * from "./about";
 export * from "./hiring";
+export * from "./brands";
 
 
 

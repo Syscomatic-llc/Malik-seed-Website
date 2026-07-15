@@ -1,6 +1,7 @@
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import ProductsSection from "@/components/sections/ProductsSection";
+import { brandsApi } from "@/lib/api";
 
 export const metadata = {
   title: "Our Brands - Malik Seeds",
@@ -8,7 +9,17 @@ export const metadata = {
     "We are committed to delivering high-performance hybrid seed varieties. Discover our six major brands and their missions.",
 };
 
-export default function BrandsPage() {
+export default async function BrandsPage() {
+  let apiBrands = null;
+  try {
+    apiBrands = await brandsApi.getBrands(null, { revalidate: 60 });
+    if (apiBrands && apiBrands.length > 0) {
+      apiBrands.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+    }
+  } catch (err) {
+    console.error("Failed to fetch brands from API:", err);
+  }
+
   return (
     <div className="min-h-screen bg-[#F2F7F1]">
       {/* ── Page Hero Section ────────────────────────────────────────── */}
@@ -44,7 +55,7 @@ export default function BrandsPage() {
           </h2>
 
           {/* Brands Grid */}
-          <ProductsSection />
+          <ProductsSection apiData={apiBrands || undefined} />
         </div>
       </section>
 
