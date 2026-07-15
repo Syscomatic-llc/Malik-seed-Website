@@ -15,8 +15,8 @@ export default function AboutMissionOne({ apiData }: AboutMissionOneProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [displayedCount, setDisplayedCount] = useState(0);
 
-  const badgeText = apiData?.title || "OUR VISION";
-  const missionText = apiData?.description || DEFAULT_TEXT;
+  const badgeText = apiData?.vision_title || "";
+  const visionText = apiData?.vision_description || "";
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -34,7 +34,7 @@ export default function AboutMissionOne({ apiData }: AboutMissionOneProps) {
       let progress = (start - rect.top) / (start - end);
       progress = Math.max(0, Math.min(1, progress));
 
-      const count = Math.floor(progress * missionText.length);
+      const count = Math.floor(progress * visionText.length);
       setDisplayedCount(count);
     };
 
@@ -63,13 +63,13 @@ export default function AboutMissionOne({ apiData }: AboutMissionOneProps) {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
-  }, [missionText]);
+  }, [visionText]);
 
   return (
     <section
       ref={sectionRef}
       className="bg-brand-bg w-full pb-10 md:pb-[80px]"
-      id="mission"
+      id="vision"
     >
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
         <div className="bg-brand-dark flex w-full flex-col items-start justify-between gap-6 overflow-hidden rounded-[20px] p-6 md:gap-8 md:rounded-[32px] md:p-[56px]">
@@ -78,10 +78,10 @@ export default function AboutMissionOne({ apiData }: AboutMissionOneProps) {
           </SectionBadge>
 
           <h2
-            aria-label={missionText}
+            aria-label={visionText}
             className="max-w-[1111px] font-sans text-[24px] leading-[29px] font-medium tracking-tight md:text-[40px] md:leading-[50px] xl:text-[48px] xl:leading-[58px]"
           >
-            {missionText.split("").map((char, i) => (
+            {visionText.split("").map((char, i) => (
               <span
                 key={i}
                 aria-hidden="true"

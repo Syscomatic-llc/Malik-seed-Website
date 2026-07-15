@@ -17,7 +17,8 @@ export default function AboutMissionTwo({ apiData }: AboutMissionTwoProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [displayedCount, setDisplayedCount] = useState(0);
 
-  const missionText = apiData?.vision_description || DEFAULT_TEXT;
+  const badgeText = apiData?.title || "OUR MISSION";
+  const missionText = apiData?.description || DEFAULT_TEXT;
   const bannerImage = apiData?.image_url
     ? resolveImageUrl(apiData.image_url)
     : "/images/about/maliks_farm_new_3_1.png";
@@ -73,12 +74,12 @@ export default function AboutMissionTwo({ apiData }: AboutMissionTwoProps) {
     <section
       ref={sectionRef}
       className="bg-brand-bg w-full pt-[100px] pb-12 md:pb-[100px]"
-      id="vision"
+      id="mission"
     >
       <div className="mx-auto max-w-[1440px] px-4 md:px-[100px]">
         <div className="bg-brand-dark flex w-full flex-col items-start gap-8 overflow-hidden rounded-[24px] p-6 md:gap-16 md:rounded-[32px] md:p-[56px]">
           <SectionBadge variant="dark" showDot>
-            OUR MISSION
+            {badgeText}
           </SectionBadge>
 
           <h2

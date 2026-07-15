@@ -340,6 +340,7 @@ export interface ApiOurStoryMission {
   id: number;
   title: string;
   description: string;
+  vision_title?: string | null;
   vision_description: string | null;
   image_url: string | null;
   icon: string | null;
