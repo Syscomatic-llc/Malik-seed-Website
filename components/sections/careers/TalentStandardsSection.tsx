@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import type { talentStandardsData, TalentStandard } from "@/data/career-data";
+import { talentStandardsData, TalentStandard } from "@/data/career-data";
 
 // ── TalentStandardsSection: Section 2 ───────────────────────────────────────
 // Figma node 2424:13820 — 1440×835, bg #F2F7F1
