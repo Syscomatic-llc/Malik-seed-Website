@@ -797,8 +797,8 @@ export default function TimelineStory({
         };
       });
     }
-    return [];
-  }, [apiData]);
+    return items;
+  }, [apiData, items]);
 
   // One shared, spring-smoothed scroll value drives every row's dashed-line
   // reveal (each sliced to its own pixel-accurate range) and the single
