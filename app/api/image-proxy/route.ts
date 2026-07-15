@@ -32,17 +32,34 @@ function getCacheKey(url: string, width: number, quality: number) {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const src = searchParams.get("url");
+  const relativePath = searchParams.get("path");
   const widthParam = searchParams.get("w");
   const qualityParam = searchParams.get("q");
 
-  if (!src) {
-    return NextResponse.json({ error: "Missing url" }, { status: 400 });
+  let imageUrl = "";
+
+  if (relativePath) {
+    const backendUrl = process.env.API_BACKEND_URL || "";
+    let baseOrigin = "";
+    try {
+      baseOrigin = new URL(backendUrl).origin;
+    } catch {
+      baseOrigin = backendUrl;
+    }
+    const cleanPath = relativePath.startsWith("/") ? relativePath.slice(1) : relativePath;
+    imageUrl = `${baseOrigin}/${cleanPath}`;
+  } else if (src) {
+    imageUrl = src;
+  }
+
+  if (!imageUrl) {
+    return NextResponse.json({ error: "Missing url or path" }, { status: 400 });
   }
 
   // Parse and validate URL
   let parsedUrl: URL;
   try {
-    parsedUrl = new URL(src);
+    parsedUrl = new URL(imageUrl);
   } catch {
     return NextResponse.json({ error: "Invalid url" }, { status: 400 });
   }
@@ -61,7 +78,7 @@ export async function GET(req: NextRequest) {
 
   // Check disk cache
   await fs.mkdir(CACHE_DIR, { recursive: true });
-  const key = getCacheKey(src, width, quality);
+  const key = getCacheKey(imageUrl, width, quality);
   const cachePath = path.join(CACHE_DIR, `${key}.webp`);
 
   try {
@@ -81,7 +98,7 @@ export async function GET(req: NextRequest) {
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   try {
-    const upstream = await fetch(src, { signal: controller.signal });
+    const upstream = await fetch(imageUrl, { signal: controller.signal });
     clearTimeout(timeout);
 
     if (!upstream.ok) {

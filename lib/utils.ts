@@ -5,8 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const API_ORIGIN = "https://apimalikseed.syscomatic.cloud";
-
 /**
  * Returns true when `cleanPath` (no leading slash) points to a file/folder
  * inside /public that should be served directly by Next.js.
@@ -20,13 +18,18 @@ function isLocalStaticAsset(cleanPath: string): boolean {
   );
 }
 
-/** Build a `/api/image-proxy?url=…&w=…&q=…` URL. */
+/** Build a `/api/image-proxy?path=…&w=…&q=…` URL. */
 function buildProxyUrl(
-  originUrl: string,
+  pathOrUrl: string,
   width?: number,
   quality?: number
 ): string {
-  const params = new URLSearchParams({ url: originUrl });
+  const params = new URLSearchParams();
+  if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://") || pathOrUrl.startsWith("data:")) {
+    params.set("url", pathOrUrl);
+  } else {
+    params.set("path", pathOrUrl);
+  }
   if (width) params.set("w", String(width));
   if (quality) params.set("q", String(quality));
   return `/api/image-proxy?${params.toString()}`;
@@ -38,7 +41,7 @@ function buildProxyUrl(
  * 1. Empty/undefined paths → returned as-is.
  * 2. Already proxied URLs → returned as-is.
  * 3. Absolute URLs (http/https/data) → returned as-is, except API origin URLs
- *    which are routed through the local `/api/image-proxy` endpoint.
+ *    which are routed through the local `/api/image-proxy` endpoint by path.
  * 4. Local static paths (e.g. `/images/hero/hero-bg.png`) → returned with leading slash.
  * 5. API-origin paths (e.g. `uploads/homepage/image.png`) → routed through the local
  *    `/api/image-proxy` endpoint so the image is fetched once, resized, and disk-cached.
@@ -64,10 +67,24 @@ export function resolveImageUrl(
     path.startsWith("https://") ||
     path.startsWith("data:")
   ) {
-    // If the full URL points at the CMS backend origin, proxy it.
-    if (path.startsWith(API_ORIGIN)) {
-      return buildProxyUrl(path, width, quality);
+    // If the full URL points at the CMS backend origin, proxy it by relative path.
+    const uploadsIndex = path.indexOf("/uploads/");
+    if (uploadsIndex !== -1) {
+      const relativePath = path.slice(uploadsIndex + 1);
+      return buildProxyUrl(relativePath, width, quality);
     }
+
+    const publicBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    if (publicBaseUrl) {
+      try {
+        const origin = new URL(publicBaseUrl).origin;
+        if (path.startsWith(origin)) {
+          const relativePath = path.slice(origin.length);
+          return buildProxyUrl(relativePath, width, quality);
+        }
+      } catch {}
+    }
+
     return path;
   }
 
@@ -79,6 +96,5 @@ export function resolveImageUrl(
   }
 
   // Everything else is a CMS-hosted media path — proxy it.
-  const fullUrl = `${API_ORIGIN}/${cleanPath}`;
-  return buildProxyUrl(fullUrl, width, quality);
+  return buildProxyUrl(cleanPath, width, quality);
 }
