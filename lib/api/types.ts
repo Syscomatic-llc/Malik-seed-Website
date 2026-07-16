@@ -508,7 +508,7 @@ export interface ApiSiteSettings {
   logo_url: string | null;
   google_analytics_id: string | null;
   google_search_console_verification: string | null;
-  maintenance_mode: boolean;
+  maintenance_mode?: boolean | null;
 }
 
 

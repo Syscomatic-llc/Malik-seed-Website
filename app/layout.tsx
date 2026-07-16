@@ -43,9 +43,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = settings.siteName;
   const tagLine = settings.siteTagline;
   const description = settings.siteDescription;
+  const fullTitle = tagLine ? `${title} - ${tagLine}` : title;
 
   return {
-    title: tagLine ? `${title} - ${tagLine}` : title,
+    title: fullTitle,
     description: description,
     verification: settings.googleSearchConsoleVerification
       ? { google: settings.googleSearchConsoleVerification }
@@ -72,6 +73,27 @@ export async function generateMetadata(): Promise<Metadata> {
         },
       ],
       shortcut: "/favicons/favicon.ico",
+    },
+    openGraph: {
+      title: fullTitle,
+      description: description,
+      url: "https://malik-seed-website.vercel.app",
+      siteName: title,
+      images: [
+        {
+          url: settings.logoUrl || "https://malik-seed-website.vercel.app/favicons/apple-touch-icon.png",
+          width: 800,
+          height: 800,
+          alt: title,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description: description,
+      images: [settings.logoUrl || "https://malik-seed-website.vercel.app/favicons/apple-touch-icon.png"],
     },
   };
 }
@@ -126,7 +148,7 @@ export default async function RootLayout({
           </>
         )}
         <LenisProvider>
-          <Navbar brands={brands} />
+          <Navbar brands={brands} logoUrl={settings?.logoUrl} />
           <main className="relative flex-grow">{children}</main>
           <Footer />
         </LenisProvider>
