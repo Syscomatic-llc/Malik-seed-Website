@@ -3,7 +3,7 @@ import { ApiSiteSettings, SiteSettings } from "./types";
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   siteName: "Malik Seeds",
-  siteTagline: "Helping Farmers Grow with Confidence",
+  siteTagline: "Helping Farmers Grow with Confidence Since 1969",
   siteDescription: "Malik Seeds has been empowering farmers with high-quality seed varieties since 1969. Discover our products, success stories, and agricultural innovations.",
   logoUrl: "",
   googleAnalyticsId: "",
@@ -26,8 +26,8 @@ function normalizeLogoUrl(url: string | null): string {
   if (url.startsWith("http://") || url.startsWith("https://")) {
     return url;
   }
-  // The API_BACKEND_URL or NEXT_PUBLIC_API_BASE_URL can serve as the root origin
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BACKEND_URL || "https://apimalikseed.syscomatic.cloud";
+  // The API_BACKEND_URL can serve as the root origin; fallback to production origin to prevent build crashes if missing
+  const base = process.env.API_BACKEND_URL || "https://apimalikseed.syscomatic.cloud/api/v1";
   // Remove /api/v1 from the end of the base URL to point to the host root
   const rootOrigin = base.replace(/\/api\/v1\/?$/, "");
   return `${rootOrigin}${url.startsWith("/") ? "" : "/"}${url}`;
