@@ -102,6 +102,7 @@ export interface JobPosition {
   skillsAndCompetencies?: string[];
   whyJoin?: string[];
   benefitsList?: { text: string; icon: string }[];
+  detailsPdfUrl?: string;
 }
 
 export const openPositionsData = {

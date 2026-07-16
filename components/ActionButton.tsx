@@ -15,6 +15,7 @@ interface ActionButtonProps {
   iconSize?: number;
   target?: string;
   rel?: string;
+  download?: boolean | string;
   showYoutubeIcon?: boolean;
   customIcon?: React.ReactNode;
   customIconPosition?: "left" | "right";
@@ -42,6 +43,7 @@ export default function ActionButton({
   iconSize = 20,
   target,
   rel,
+  download,
   showYoutubeIcon,
   customIcon,
   customIconPosition = "left",
@@ -52,6 +54,7 @@ export default function ActionButton({
       onClick={onClick}
       target={target}
       rel={rel}
+      download={download}
       className={cn("inline-flex w-fit focus:outline-none", containerClassName)}
     >
       <button

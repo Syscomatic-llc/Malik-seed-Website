@@ -414,6 +414,7 @@ export interface ApiJobPosition {
   application_deadline: string | null;
   created_at: string;
   updated_at: string | null;
+  details_pdf_url: string | null;
 }
 
 export interface ApiJobPositionDetailResponse {

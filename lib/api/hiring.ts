@@ -109,6 +109,24 @@ export const hiringApi = {
 
 /* --- Mapping helpers to bridge API data to Career-data structure --- */
 
+export function normalizeFileUrl(url: string | null): string | undefined {
+  if (!url) return undefined;
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    const backendUrl = process.env.API_BACKEND_URL;
+    if (backendUrl) {
+      try {
+        const backendHost = new URL(backendUrl).hostname;
+        const urlObj = new URL(url);
+        if (urlObj.hostname === backendHost) {
+          return `/api/file-proxy?path=${encodeURIComponent(urlObj.pathname + urlObj.search)}`;
+        }
+      } catch {}
+    }
+    return url;
+  }
+  return `/api/file-proxy?path=${encodeURIComponent(url)}`;
+}
+
 export function getBenefitIcon(text: string): string {
   const t = text.toLowerCase();
   if (t.includes("salary") || t.includes("pay") || t.includes("compensation")) return "briefcase-01.svg";
@@ -165,5 +183,6 @@ export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
       text: b,
       icon: getBenefitIcon(b),
     })),
+    detailsPdfUrl: normalizeFileUrl(item.details_pdf_url),
   };
 }

@@ -12,7 +12,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import ActionButton from "@/components/ActionButton";
-import CVDropSection from "@/components/sections/careers/CVDropSection";
 import { hiringApi, mapApiPositionToJobPosition } from "@/lib/api";
 
 interface JobDetailsPageProps {
@@ -399,6 +398,51 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
 
             {/* Separator line */}
             <hr className="my-4 w-full border-t border-[#CED2DA]" />
+
+            {/* Job Details PDF Download */}
+            {position.detailsPdfUrl && (
+              <div className="my-6 flex flex-col gap-4 rounded-xl border border-[#CED2DA] bg-white p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
+                <div className="flex items-start gap-4 sm:items-center">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#DCF3C7]/30 text-[#195236]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                      <path d="M9 15h6" />
+                      <path d="M9 11h6" />
+                    </svg>
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-inter-tight font-medium text-[#0D1A14] text-[16px] sm:text-[18px]">
+                      Detailed Job Description
+                    </h4>
+                    <p className="font-inter text-xs sm:text-sm text-[#0D1A14]/60">
+                      Download the full job specifications and details in PDF format.
+                    </p>
+                  </div>
+                </div>
+                <ActionButton
+                  href={position.detailsPdfUrl}
+                  label="Download PDF"
+                  variant="secondary"
+                  className="h-[40px] px-5 text-[14px] border border-[#CED2DA] w-full md:w-auto justify-center"
+                  containerClassName="w-full md:w-auto"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download={true}
+                  showArrow={false}
+                />
+              </div>
+            )}
 
             {/* Ready to apply call to action */}
             <div className="flex w-full flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
