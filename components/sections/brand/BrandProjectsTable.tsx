@@ -4,6 +4,7 @@ import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Project {
   title: string;
@@ -123,8 +124,92 @@ const PROJECTS: Project[] = [
   },
 ];
 
+function PaginationControls({
+  currentPage,
+  totalPages,
+  startIndex,
+  itemsPerPage,
+  totalItems,
+  onPageChange,
+  className,
+}: {
+  currentPage: number;
+  totalPages: number;
+  startIndex: number;
+  itemsPerPage: number;
+  totalItems: number;
+  onPageChange: (page: number) => void;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex flex-col items-center justify-center gap-3 bg-white select-none", className)}>
+      <div className="flex items-center gap-2">
+        {/* Previous page button */}
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
+          aria-label="Previous page"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+
+        {/* Page buttons */}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => onPageChange(page)}
+            className={cn(
+              "flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-all cursor-pointer",
+              currentPage === page
+                ? "bg-[#0F3221] text-[#F2F7F1] font-semibold"
+                : "border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60"
+            )}
+          >
+            {page}
+          </button>
+        ))}
+
+        {/* Next page button */}
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
+          aria-label="Next page"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="text-[14px] font-sans text-[#0D1A14]/70">
+        Showing <span className="font-medium text-[#0D1A14]">{startIndex + 1}</span> to{" "}
+        <span className="font-medium text-[#0D1A14]">
+          {Math.min(startIndex + itemsPerPage, totalItems)}
+        </span>{" "}
+        of <span className="font-medium text-[#0D1A14]">{totalItems}</span> projects
+      </div>
+    </div>
+  );
+}
+
 export default function BrandProjectsTable() {
+  const ITEMS_PER_PAGE = 5;
+  const [currentPage, setCurrentPage] = useState(1);
   const [expandedIdx, setExpandedIdx] = useState<number | null>(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const totalPages = Math.ceil(PROJECTS.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedProjects = PROJECTS.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setCurrentPage(page);
+      setExpandedIdx(0);
+      setIsLoading(false);
+    }, 300);
+  };
 
   return (
     <section className="w-full bg-[#F2F7F1] px-4 py-[48px] md:px-8 md:py-[100px] lg:px-[100px]">
@@ -150,8 +235,17 @@ export default function BrandProjectsTable() {
           </div>
 
           {/* Body Rows */}
-          <div className="flex w-full flex-col">
-            {PROJECTS.map((project, idx) => (
+          <div className="relative flex w-full flex-col min-h-[300px]">
+            {/* Loading Overlay */}
+            {isLoading && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/70 backdrop-blur-[1px] transition-all duration-200">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#0F3221]/20 border-t-[#0F3221]" />
+                  <span className="text-sm font-sans font-medium text-[#0F3221]/70 animate-pulse">Loading...</span>
+                </div>
+              </div>
+            )}
+            {paginatedProjects.map((project, idx) => (
               <div
                 key={idx}
                 className={cn(
@@ -179,6 +273,18 @@ export default function BrandProjectsTable() {
               </div>
             ))}
           </div>
+
+          {/* Pagination Controls */}
+          <div className="w-full border-t border-[#F2F4F7]" />
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            startIndex={startIndex}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalItems={PROJECTS.length}
+            onPageChange={handlePageChange}
+            className="px-8 py-5"
+          />
         </div>
 
         {/* Mobile Accordion View (below lg) */}
@@ -189,8 +295,17 @@ export default function BrandProjectsTable() {
           </div>
 
           {/* Body Rows */}
-          <div className="flex w-full flex-col">
-            {PROJECTS.map((project, idx) => {
+          <div className="relative flex w-full flex-col min-h-[300px]">
+            {/* Loading Overlay */}
+            {isLoading && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/70 backdrop-blur-[1px] transition-all duration-200">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#0F3221]/20 border-t-[#0F3221]" />
+                  <span className="text-sm font-sans font-medium text-[#0F3221]/70 animate-pulse">Loading...</span>
+                </div>
+              </div>
+            )}
+            {paginatedProjects.map((project, idx) => {
               const isExpanded = expandedIdx === idx;
               return (
                 <div
@@ -276,6 +391,18 @@ export default function BrandProjectsTable() {
               );
             })}
           </div>
+
+          {/* Pagination Controls */}
+          <div className="w-full border-t border-[#F2F4F7]" />
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            startIndex={startIndex}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalItems={PROJECTS.length}
+            onPageChange={handlePageChange}
+            className="flex-col sm:flex-row gap-4 px-6 py-4"
+          />
         </div>
       </div>
     </section>
