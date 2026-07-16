@@ -40,10 +40,35 @@ export const viewport: Viewport = {
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await settingsApi.getSettings({ revalidate: 300 });
-  const title = settings.siteName;
+  const title = settings.siteName || "Malik Seeds";
   const tagLine = settings.siteTagline;
-  const description = settings.siteDescription;
-  const fullTitle = tagLine ? `${title} - ${tagLine}` : title;
+
+  // Cap the title length dynamically to stay in the 60-character sweet spot
+  let fullTitle = tagLine ? `${title} - ${tagLine}` : title;
+  if (fullTitle.length > 60) {
+    const maxTagLineLength = 60 - title.length - 3; // -3 for " - "
+    if (maxTagLineLength > 5) {
+      fullTitle = `${title} - ${tagLine.slice(0, maxTagLineLength - 3)}...`;
+    } else {
+      fullTitle = title.slice(0, 60);
+    }
+  }
+
+  // Ensure description is optimal (between 120 and 160 characters for best SERP CTR)
+  let description = settings.siteDescription || "";
+  const optimalMax = 160;
+  const secondaryFallback = "Discover our high-yield hybrid seed varieties, success stories, and agricultural innovations empowering farmers since 1969.";
+
+  if (description.length < 80) {
+    if (description.length === 0) {
+      description = secondaryFallback;
+    } else {
+      const combined = `${description.trim()} ${secondaryFallback}`;
+      description = combined.length <= optimalMax ? combined : combined.slice(0, optimalMax - 3) + "...";
+    }
+  } else if (description.length > optimalMax) {
+    description = description.slice(0, optimalMax - 3) + "...";
+  }
 
   return {
     title: fullTitle,
@@ -81,9 +106,9 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: title,
       images: [
         {
-          url: settings.logoUrl || "https://malik-seed-website.vercel.app/favicons/apple-touch-icon.png",
-          width: 800,
-          height: 800,
+          url: "https://malik-seed-website.vercel.app/og-image.png",
+          width: 1200,
+          height: 630,
           alt: title,
         },
       ],
@@ -93,7 +118,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: fullTitle,
       description: description,
-      images: [settings.logoUrl || "https://malik-seed-website.vercel.app/favicons/apple-touch-icon.png"],
+      images: ["https://malik-seed-website.vercel.app/og-image.png"],
     },
   };
 }
@@ -148,7 +173,7 @@ export default async function RootLayout({
           </>
         )}
         <LenisProvider>
-          <Navbar brands={brands} logoUrl={settings?.logoUrl} />
+          <Navbar brands={brands} />
           <main className="relative flex-grow">{children}</main>
           <Footer />
         </LenisProvider>

@@ -3,7 +3,7 @@ import { ApiSiteSettings, SiteSettings } from "./types";
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   siteName: "Malik Seeds",
-  siteTagline: "Helping Farmers Grow with Confidence Since 1969",
+  siteTagline: "Helping Farmers Grow with Confidence",
   siteDescription: "Malik Seeds has been empowering farmers with high-quality seed varieties since 1969. Discover our products, success stories, and agricultural innovations.",
   logoUrl: "",
   googleAnalyticsId: "",
