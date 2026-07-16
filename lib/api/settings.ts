@@ -26,8 +26,12 @@ function normalizeLogoUrl(url: string | null): string {
   if (url.startsWith("http://") || url.startsWith("https://")) {
     return url;
   }
-  // The API_BACKEND_URL can serve as the root origin; fallback to production origin to prevent build crashes if missing
-  const base = process.env.API_BACKEND_URL || "https://apimalikseed.syscomatic.cloud/api/v1";
+  // Strictly use the env file variable.
+  const base = process.env.API_BACKEND_URL;
+  if (!base) {
+    // Return relative URL as fallback instead of crashing the build
+    return url;
+  }
   // Remove /api/v1 from the end of the base URL to point to the host root
   const rootOrigin = base.replace(/\/api\/v1\/?$/, "");
   return `${rootOrigin}${url.startsWith("/") ? "" : "/"}${url}`;
