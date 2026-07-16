@@ -106,7 +106,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: title,
       images: [
         {
-          url: "https://malik-seed-website.vercel.app/og-image.png",
+          url: settings.logoUrl || "https://malik-seed-website.vercel.app/og-image.png",
           width: 1200,
           height: 630,
           alt: title,
@@ -118,7 +118,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: fullTitle,
       description: description,
-      images: ["https://malik-seed-website.vercel.app/og-image.png"],
+      images: [settings.logoUrl || "https://malik-seed-website.vercel.app/og-image.png"],
     },
   };
 }
