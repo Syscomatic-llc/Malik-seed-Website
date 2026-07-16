@@ -12,7 +12,8 @@ export const metadata = {
 export default async function NewsRoute() {
   let apiData = null;
   try {
-    apiData = await newsApi.getAll({ revalidate: 60 });
+    // Large payload (>2MB) cannot be cached by Next.js. Disable cache to silence build warnings.
+    apiData = await newsApi.getAll({ revalidate: 0 });
   } catch (err) {
     console.error("Failed to fetch news from API:", err);
   }
