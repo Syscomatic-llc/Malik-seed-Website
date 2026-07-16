@@ -3,9 +3,10 @@ import { Inter_Tight, Inter, Anton, Stack_Sans_Notch } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
-import { homepageApi } from "@/lib/api";
+import { homepageApi, settingsApi } from "@/lib/api";
 import LenisProvider from "@/components/LenisProvider";
 import "lenis/dist/lenis.css";
+import Script from "next/script";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -37,34 +38,43 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export const metadata: Metadata = {
-  title: "Malik Seeds - Helping Farmers Grow with Confidence",
-  description:
-    "Malik Seeds has been empowering farmers with high-quality seed varieties since 1969. Discover our products, success stories, and agricultural innovations.",
-  manifest: "/favicons/site.webmanifest",
-  icons: {
-    icon: [
-      {
-        url: "/favicons/favicon-16x16.png",
-        sizes: "16x16",
-        type: "image/png",
-      },
-      {
-        url: "/favicons/favicon-32x32.png",
-        sizes: "32x32",
-        type: "image/png",
-      },
-    ],
-    apple: [
-      {
-        url: "/favicons/apple-touch-icon.png",
-        sizes: "180x180",
-        type: "image/png",
-      },
-    ],
-    shortcut: "/favicons/favicon.ico",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await settingsApi.getSettings({ revalidate: 300 });
+  const title = settings.siteName;
+  const tagLine = settings.siteTagline;
+  const description = settings.siteDescription;
+
+  return {
+    title: tagLine ? `${title} - ${tagLine}` : title,
+    description: description,
+    verification: settings.googleSearchConsoleVerification
+      ? { google: settings.googleSearchConsoleVerification }
+      : undefined,
+    manifest: "/favicons/site.webmanifest",
+    icons: {
+      icon: [
+        {
+          url: settings.logoUrl || "/favicons/favicon-16x16.png",
+          sizes: "16x16",
+          type: "image/png",
+        },
+        {
+          url: "/favicons/favicon-32x32.png",
+          sizes: "32x32",
+          type: "image/png",
+        },
+      ],
+      apple: [
+        {
+          url: "/favicons/apple-touch-icon.png",
+          sizes: "180x180",
+          type: "image/png",
+        },
+      ],
+      shortcut: "/favicons/favicon.ico",
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -85,6 +95,13 @@ export default async function RootLayout({
     console.error("Failed to fetch navbar brands on server:", err);
   }
 
+  let settings = null;
+  try {
+    settings = await settingsApi.getSettings({ revalidate: 300 });
+  } catch (err) {
+    console.error("Failed to load settings in RootLayout:", err);
+  }
+
   return (
     <html
       lang="en"
@@ -92,6 +109,22 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
+        {settings?.googleAnalyticsId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${settings.googleAnalyticsId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${settings.googleAnalyticsId}');
+              `}
+            </Script>
+          </>
+        )}
         <LenisProvider>
           <Navbar brands={brands} />
           <main className="relative flex-grow">{children}</main>

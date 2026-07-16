@@ -7,6 +7,7 @@ export * from "./gallery";
 export * from "./about";
 export * from "./hiring";
 export * from "./brands";
+export * from "./settings";
 
 
 

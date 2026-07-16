@@ -489,6 +489,28 @@ export interface ApiBrand {
   updated_at: string | null;
 }
 
+export interface SiteSettings {
+  siteName: string;
+  siteTagline: string;
+  siteDescription: string;
+  logoUrl: string;
+  googleAnalyticsId: string;
+  googleSearchConsoleVerification: string;
+  maintenanceMode: boolean;
+}
+
+export interface ApiSiteSettings {
+  id: number;
+  site_name: string;
+  site_tagline: string | null;
+  site_description: string | null;
+  logo_url: string | null;
+  google_analytics_id: string | null;
+  google_search_console_verification: string | null;
+  maintenance_mode: boolean;
+}
+
+
 
 
 
