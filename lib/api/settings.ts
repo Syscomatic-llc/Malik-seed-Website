@@ -27,9 +27,9 @@ function normalizeLogoUrl(url: string | null): string {
     return url;
   }
   // The API_BACKEND_URL or NEXT_PUBLIC_API_BASE_URL can serve as the root origin
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BACKEND_URL;
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BACKEND_URL || "https://apimalikseed.syscomatic.cloud";
   // Remove /api/v1 from the end of the base URL to point to the host root
-  const rootOrigin = base?.replace(/\/api\/v1\/?$/, "");
+  const rootOrigin = base.replace(/\/api\/v1\/?$/, "");
   return `${rootOrigin}${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
