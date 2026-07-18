@@ -773,4 +773,23 @@
   animation: blink 0.8s step-start infinite;
 }
 
+/* ── iPad Pro Specific UI Optimizations (834px to 1366px touch-only viewports) ── */
+@media only screen and (min-width: 834px) and (max-width: 1366px) {
+  /* Ensure smooth scrolling and tap feedback on iPad Pro dimensions */
+  a, button, input, select, textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent stuck hover/active backgrounds on touch-only operations */
+  @media (hover: none) {
+    a:hover,
+    button:hover,
+    [role="button"]:hover {
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+
 
