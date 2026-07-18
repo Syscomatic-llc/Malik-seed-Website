@@ -23,7 +23,7 @@ const FooterLinkColumn = ({
   title: string;
   links: FooterLink[];
 }) => (
-  <div className="flex w-44.75 shrink-0 flex-col gap-4 lg:w-54">
+  <div className="flex w-44.75 shrink-0 flex-col gap-4 xl:w-54">
     <h3 className={TYPOGRAPHY.title}>{title}</h3>
     <ul className="flex flex-col gap-3 md:gap-4">
       {links.map((link) => (
@@ -154,9 +154,9 @@ export default async function Footer() {
     >
       <div className="mx-auto max-w-full px-4 md:px-25">
         {/* Top Content Layout */}
-        <div className="flex w-full flex-col items-start justify-between gap-10 lg:flex-row lg:gap-0">
+        <div className="flex w-full flex-col items-start justify-between gap-10 xl:flex-row xl:gap-0">
           {/* Left Block: Identity & Mission */}
-          <div className="flex w-full shrink-0 flex-col lg:w-102.25">
+          <div className="flex w-full shrink-0 flex-col xl:w-102.25">
             <Link href="/" className="inline-block">
               <OptimizedImage
                 src={footerData.logo}
@@ -172,7 +172,7 @@ export default async function Footer() {
               {contactInfo?.footer_description || footerData.mission}
             </p>
 
-            <div className="mt-8 flex flex-col gap-4 lg:mt-16.75">
+            <div className="mt-8 flex flex-col gap-4 xl:mt-16.75">
               <span className={TYPOGRAPHY.label}>
                 {footerData.followUsText}
               </span>
@@ -185,9 +185,9 @@ export default async function Footer() {
           </div>
 
           {/* Right Block: Sitemap & Contact */}
-          <div className="mt-10 flex w-full flex-col items-start justify-between gap-10 lg:mt-0 lg:ml-auto lg:w-183.25 lg:flex-row lg:gap-10">
+          <div className="mt-10 flex w-full flex-col items-start justify-between gap-10 xl:mt-0 xl:ml-auto xl:w-183.25 xl:flex-row xl:gap-10">
             {/* Navigation Grid */}
-            <div className="flex w-full max-w-100 justify-between lg:contents lg:max-w-none">
+            <div className="flex w-full max-w-100 justify-between xl:contents xl:max-w-none">
               <FooterLinkColumn
                 title="Company"
                 links={footerData.links.company}
@@ -199,7 +199,7 @@ export default async function Footer() {
             </div>
 
             {/* Contact Information */}
-            <address className="flex w-full shrink-0 flex-col gap-6 not-italic md:gap-8 lg:mt-0 lg:w-54">
+            <address className="flex w-full shrink-0 flex-col gap-6 not-italic md:gap-8 xl:mt-0 xl:w-54">
               <div className="flex flex-col gap-2 md:gap-4">
                 <h4 className={TYPOGRAPHY.label}>Contact</h4>
                 <a
@@ -224,7 +224,7 @@ export default async function Footer() {
         </div>
 
         {/* Global Brand Wordmark */}
-        <div className="mt-12 flex w-full justify-center lg:mt-24">
+        <div className="mt-12 flex w-full justify-center xl:mt-24">
           <NextImage
             src={footerData.wordmark}
             alt="Malik Seeds Wordmark"

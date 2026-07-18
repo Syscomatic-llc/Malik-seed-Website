@@ -511,7 +511,7 @@ export default function Navbar({ brands: initialBrands = [] }: NavbarProps) {
   }, [initialBrands]);
 
   return (
-    <header className="absolute top-6 z-50 w-full px-4 lg:px-[100px]">
+    <header className="absolute top-6 z-50 w-full px-4 lg:px-6 xl:px-[100px]">
       <div className="mx-auto w-full max-w-[1240px]">
         {/* Desktop pill — 1024px and above */}
         <div className="hidden lg:block">

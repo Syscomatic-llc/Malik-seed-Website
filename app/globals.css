@@ -851,10 +851,12 @@
     line-height: 24px !important;
   }
 
-  /* Scale down timeline card glow overlay images */
+  /* Scale down timeline card glow overlay images and maintain aspect ratio */
   .timeline-desktop-container div.pointer-events-none.absolute.z-0 {
-    width: 180px !important;
-    height: 160px !important;
+    width: 200px !important;
+    height: auto !important;
+    aspect-ratio: 252 / 186 !important;
+    top: 30px !important;
   }
 }
 
