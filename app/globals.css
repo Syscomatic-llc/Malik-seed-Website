@@ -791,5 +791,43 @@
   }
 }
 
+/* ── Timeline Story Responsiveness Custom Breakpoints ── */
+/* Mobile (below 768px) */
+@media (max-width: 767px) {
+  .timeline-tablet,
+  .timeline-desktop {
+    display: none !important;
+  }
+}
+
+/* Smaller Tablets (768px to 833px) */
+@media (min-width: 768px) and (max-width: 833px) {
+  .timeline-tablet {
+    display: flex !important;
+  }
+  .timeline-desktop {
+    display: none !important;
+  }
+}
+
+/* iPad Pro Portrait & Desktop (834px and above) */
+@media (min-width: 834px) {
+  .timeline-tablet {
+    display: none !important;
+  }
+  .timeline-desktop {
+    display: flex !important;
+  }
+}
+
+/* Adjust padding on smaller desktop/iPad Pro screens to give layout breathing room */
+@media (min-width: 834px) and (max-width: 1070px) {
+  .timeline-desktop-container {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+
 
 

@@ -815,8 +815,8 @@ export default function TimelineStory({
   return (
     <section className="bg-brand-dark w-full overflow-hidden" id="timeline">
       {/* ===== Desktop View (lg+) — two-column alternating, single shared spine ===== */}
-      <div className="hidden flex-col justify-end bg-white lg:flex">
-        <div className="bg-brand-dark self-stretch px-[99px] pt-[100px]">
+      <div className="timeline-desktop flex-col justify-end bg-white">
+        <div className="timeline-desktop-container bg-brand-dark self-stretch px-[99px] pt-[100px]">
           <div className="mx-auto flex max-w-[1242px] flex-col items-center self-stretch">
             {/* ── Header ── */}
             <div className="mb-[63px] ml-[1px] flex flex-col items-start gap-8 self-start">
@@ -868,7 +868,7 @@ export default function TimelineStory({
       </div>
 
       {/* ===== Tablet View (md → lg) — single-column with left spine ===== */}
-      <div className="hidden flex-col bg-white md:flex lg:hidden">
+      <div className="timeline-tablet flex-col bg-white">
         <div className="bg-brand-dark self-stretch px-6 pt-[80px] sm:px-10">
           <div className="mx-auto flex max-w-[700px] flex-col items-start">
             {/* ── Header ── */}
