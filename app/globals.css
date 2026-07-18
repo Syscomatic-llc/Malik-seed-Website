@@ -826,6 +826,30 @@
     padding-left: 24px !important;
     padding-right: 24px !important;
   }
+
+  /* Scale down timeline header title */
+  .timeline-desktop-container span.text-5xl {
+    font-size: 38px !important;
+    line-height: 46px !important;
+  }
+
+  /* Scale down timeline row year labels */
+  .timeline-desktop-container span.font-anton.text-5xl {
+    font-size: 38px !important;
+    line-height: 46px !important;
+  }
+
+  /* Scale down timeline card titles */
+  .timeline-desktop-container h3 {
+    font-size: 32px !important;
+    line-height: 38px !important;
+  }
+
+  /* Scale down timeline card description paragraphs */
+  .timeline-desktop-container p {
+    font-size: 16px !important;
+    line-height: 24px !important;
+  }
 }
 
 

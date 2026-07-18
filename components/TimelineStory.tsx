@@ -419,7 +419,7 @@ function ContentCard({
       />
 
       {/* Text content — vertically centered inside the card */}
-      <div className="absolute top-1/2 left-[32px] z-10 flex max-w-[410px] -translate-y-1/2 flex-col gap-4">
+      <div className="absolute top-1/2 left-[32px] right-[32px] z-10 flex -translate-y-1/2 flex-col gap-4">
         <h3
           className="font-anton text-brand-bg text-[44px] leading-[53px] whitespace-pre-line"
           style={{ fontFamily: "var(--font-anton)" }}
