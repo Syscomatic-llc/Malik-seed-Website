@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
 import { shouldAutoGradeAssessment } from "@/data/questions-data";
+import { openPositionsData } from "@/data/career-data";
 import { gradeMcqAssessment } from "@/lib/assessment-grading";
 import type { McqGradingResult } from "@/lib/assessment-grading";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
@@ -23,7 +24,11 @@ export default function AssessmentResultPage() {
   const [hydrated, setHydrated] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
   const [grading, setGrading] = useState<McqGradingResult | null>(null);
-  const positionId = parseInt(id as string);
+  
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug === id
+  );
+  const positionId = position ? position.id : parseInt(id as string);
 
   useEffect(() => {
     setHydrated(true);

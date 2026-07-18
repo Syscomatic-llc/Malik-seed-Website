@@ -7,6 +7,7 @@ import {
   longAnswerQuestionsData,
   assessmentConfigs,
 } from "@/data/questions-data";
+import { openPositionsData } from "@/data/career-data";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
@@ -25,7 +26,10 @@ export default function LongAnswersPage() {
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const positionId = parseInt(id as string);
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug === id
+  );
+  const positionId = position ? position.id : parseInt(id as string);
   const questions = longAnswerQuestionsData[positionId] || [];
   const config = assessmentConfig ?? assessmentConfigs[positionId];
 
@@ -180,7 +184,7 @@ export default function LongAnswersPage() {
                   className={cn(
                     "font-inter min-h-[300px] w-full resize-none bg-white p-6 text-[14px] leading-[21px] text-[#414E62] placeholder:text-[#414E62]/40 focus:outline-none",
                     completedStages["long_answers"] &&
-                      "cursor-not-allowed bg-gray-50 text-gray-500"
+                    "cursor-not-allowed bg-gray-50 text-gray-500"
                   )}
                 />
               </div>

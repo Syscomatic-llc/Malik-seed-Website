@@ -18,11 +18,11 @@ export default function StartPage() {
   const { name, email, isOtpVerified, startAssessment } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [agreed, setAgreed] = useState(false);
-  const [backendConfig, setBackendConfig] =
-    useState<PositionAssessmentConfig | null>(null);
-  const [loadingConfig, setLoadingConfig] = useState(true);
 
-  const positionId = parseInt(id as string);
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug === id
+  );
+  const positionId = position ? position.id : parseInt(id as string);
 
   useEffect(() => {
     setHydrated(true);
@@ -35,24 +35,7 @@ export default function StartPage() {
     }
   }, [email, isOtpVerified, hydrated, id, router]);
 
-  useEffect(() => {
-    if (positionId) {
-      setLoadingConfig(true);
-      fetch(`/api/assessment-config/${positionId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (!data.error) {
-            setBackendConfig(data);
-          }
-          setLoadingConfig(false);
-        })
-        .catch(() => {
-          setLoadingConfig(false);
-        });
-    }
-  }, [positionId]);
-
-  if (!hydrated || !isOtpVerified || loadingConfig) {
+  if (!hydrated || !isOtpVerified) {
     return (
       <div className="animate-pulse space-y-4 py-4">
         <div className="h-6 w-1/3 rounded bg-gray-200"></div>
@@ -62,10 +45,7 @@ export default function StartPage() {
     );
   }
 
-  const position = openPositionsData.positions.find(
-    (pos) => pos.id === positionId
-  );
-  const config = backendConfig ?? assessmentConfigs[positionId];
+  const config = assessmentConfigs[positionId];
 
   if (!position || !config) {
     return (

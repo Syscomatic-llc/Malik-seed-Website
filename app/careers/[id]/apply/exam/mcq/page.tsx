@@ -8,6 +8,7 @@ import {
   assessmentConfigs,
   getAssessmentTypes,
 } from "@/data/questions-data";
+import { openPositionsData } from "@/data/career-data";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { cn } from "@/lib/utils";
 import { z } from "zod";
@@ -31,7 +32,10 @@ export default function MCQAssessmentPage() {
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const positionId = parseInt(id as string);
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug === id
+  );
+  const positionId = position ? position.id : parseInt(id as string);
   const questions = mcqQuestionsData[positionId] || [];
   const config = assessmentConfig ?? assessmentConfigs[positionId];
 
@@ -138,8 +142,8 @@ export default function MCQAssessmentPage() {
                           ? "cursor-not-allowed opacity-80"
                           : "cursor-pointer",
                         isDevEnvironment() &&
-                          isCorrectOption &&
-                          "rounded-lg bg-[#00BA00]/5 ring-1 ring-[#00BA00]/30"
+                        isCorrectOption &&
+                        "rounded-lg bg-[#00BA00]/5 ring-1 ring-[#00BA00]/30"
                       )}
                     >
                       {/* Circular radio indicator */}

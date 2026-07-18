@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Upload, FileText, Trash2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { hiringApi } from "@/lib/api";
 
 const HEARD_ABOUT_OPTIONS = [
   "Company Website",
@@ -171,12 +170,8 @@ export default function AdditionalInfoPage() {
 
     try {
       if (cvFileObject) {
-        const formData = new FormData();
-        formData.append("file", cvFileObject);
-        const uploadRes = await hiringApi.uploadResume(formData);
-        if (uploadRes && uploadRes.url) {
-          cvUrl = uploadRes.url;
-        }
+        // Create local object URL for client preview/storage
+        cvUrl = URL.createObjectURL(cvFileObject);
       }
 
       // Update local store
@@ -197,8 +192,8 @@ export default function AdditionalInfoPage() {
 
       router.push(`/careers/${id}/apply/submitted`);
     } catch (err: any) {
-      console.error("Failed to upload resume / submit application:", err);
-      setError(err?.message || "An error occurred during resume upload. Please try again.");
+      console.error("Failed to submit application:", err);
+      setError(err?.message || "An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -9,6 +9,7 @@ import {
   longAnswerQuestionsData,
   assessmentConfigs,
 } from "@/data/questions-data";
+import { openPositionsData } from "@/data/career-data";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -40,7 +41,10 @@ export default function ReviewPage() {
   const [hydrated, setHydrated] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
-  const positionId = parseInt(id as string);
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug === id
+  );
+  const positionId = position ? position.id : parseInt(id as string);
   const config = assessmentConfig ?? assessmentConfigs[positionId];
   const types =
     config?.assessmentTypes ?? (config ? [config.assessmentType] : []);

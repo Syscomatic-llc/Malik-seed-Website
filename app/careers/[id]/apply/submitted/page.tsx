@@ -6,6 +6,7 @@ import { useApplicationStore } from "@/store/applicationStore";
 import { Home, Compass } from "lucide-react";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { hasWrittenAssessment } from "@/data/questions-data";
+import { openPositionsData } from "@/data/career-data";
 import NextImage from "next/image";
 
 export default function ApplicationSubmittedPage() {
@@ -15,7 +16,10 @@ export default function ApplicationSubmittedPage() {
   const [hydrated, setHydrated] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
-  const positionId = parseInt(id as string);
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug === id
+  );
+  const positionId = position ? position.id : parseInt(id as string);
   const hasWritten = hasWrittenAssessment(positionId);
 
   useEffect(() => {

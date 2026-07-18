@@ -7,6 +7,7 @@ import {
   assessmentConfigs,
   shouldAutoGradeAssessment,
 } from "@/data/questions-data";
+import { openPositionsData } from "@/data/career-data";
 
 export default function AssessmentLoadingPage() {
   const router = useRouter();
@@ -31,7 +32,10 @@ export default function AssessmentLoadingPage() {
 
       // Simulate grading evaluation time (3 seconds)
       const timer = setTimeout(() => {
-        const positionId = parseInt(id as string);
+        const position = openPositionsData.positions.find(
+          (pos) => pos.id.toString() === id || pos.slug === id
+        );
+        const positionId = position ? position.id : parseInt(id as string);
         const autoGrade = shouldAutoGradeAssessment(positionId);
 
         if (autoGrade) {

@@ -11,6 +11,7 @@ import {
   hasMultipleExamTypes,
   shouldAutoGradeAssessment,
 } from "@/data/questions-data";
+import { openPositionsData } from "@/data/career-data";
 import { cn } from "@/lib/utils";
 
 interface ExamLayoutProps {
@@ -21,7 +22,11 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   const router = useRouter();
   const { id } = useParams();
   const pathname = usePathname();
-  const positionId = parseInt(id as string);
+  
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug === id
+  );
+  const positionId = position ? position.id : parseInt(id as string);
   const {
     isOtpVerified,
     isStarted,
