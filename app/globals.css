@@ -850,6 +850,12 @@
     font-size: 16px !important;
     line-height: 24px !important;
   }
+
+  /* Scale down timeline card glow overlay images */
+  .timeline-desktop-container div.h-\[186px\].w-\[252px\] {
+    width: 160px !important;
+    height: 120px !important;
+  }
 }
 
 
