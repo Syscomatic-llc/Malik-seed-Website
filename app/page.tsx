@@ -6,7 +6,12 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import PartnersSection from "@/components/sections/PartnersSection";
 import NewsSection from "@/components/sections/NewsSection";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
-import { homepageApi, newsApi } from "@/lib/api";
+import { homepageApi, newsApi, getPageMetadata } from "@/lib/api";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata("/", {}, { revalidate: 60 });
+}
 
 export default async function Home() {
   let apiData = null;

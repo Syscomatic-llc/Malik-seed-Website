@@ -6,11 +6,16 @@ import BrandCards from "@/components/sections/brand/BrandCards";
 import BrandProjectsTable from "@/components/sections/brand/BrandProjectsTable";
 import { innovationDevelopmentData } from "@/data/brands/innovation-development";
 import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/api";
 
-export const metadata: Metadata = {
-  title: innovationDevelopmentData.meta.title,
-  description: innovationDevelopmentData.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: innovationDevelopmentData.meta.title,
+    description: innovationDevelopmentData.meta.description,
+  };
+  return getPageMetadata("/our-brands/innovation-development", fallback, { revalidate: 60 });
+}
+
 
 export default function InnovationDevelopmentPage() {
   return (

@@ -8,6 +8,8 @@ export * from "./about";
 export * from "./hiring";
 export * from "./brands";
 export * from "./settings";
+export * from "./seo";
+
 
 
 

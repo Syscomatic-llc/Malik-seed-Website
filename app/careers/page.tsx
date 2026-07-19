@@ -15,20 +15,24 @@ import {
   futureProgramData,
   employeeTestimonialsData,
 } from "@/data/career-data";
-import { hiringApi, mapApiPositionToJobPosition, ApiJobPosition, ApiHiringTestimonial, ApiHiringBenefit } from "@/lib/api";
+import { hiringApi, mapApiPositionToJobPosition, ApiJobPosition, ApiHiringTestimonial, ApiHiringBenefit, getPageMetadata } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Careers - Malik Seeds",
-  description:
-    "Join Malik Seeds and help build the future of agriculture in Bangladesh. Explore open positions and apply to join our team.",
-  openGraph: {
-    title: "Careers at Malik Seeds",
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: "Careers - Malik Seeds",
     description:
-      "We are assembling a team of builders with high agency. Explore our open roles and drop your CV.",
-    type: "website",
-  },
-};
+      "Join Malik Seeds and help build the future of agriculture in Bangladesh. Explore open positions and apply to join our team.",
+    openGraph: {
+      title: "Careers at Malik Seeds",
+      description:
+        "We are assembling a team of builders with high agency. Explore our open roles and drop your CV.",
+      type: "website",
+    },
+  };
+  return getPageMetadata("/careers", fallback, { revalidate: 60 });
+}
+
 
 export default async function CareersPage() {
   let apiPositions: ApiJobPosition[] = [];

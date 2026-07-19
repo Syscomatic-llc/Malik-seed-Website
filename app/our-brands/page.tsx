@@ -1,13 +1,18 @@
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import ProductsSection from "@/components/sections/ProductsSection";
-import { brandsApi } from "@/lib/api";
+import { brandsApi, getPageMetadata } from "@/lib/api";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Our Brands - Malik Seeds",
-  description:
-    "We are committed to delivering high-performance hybrid seed varieties. Discover our six major brands and their missions.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: "Our Brands - Malik Seeds",
+    description:
+      "We are committed to delivering high-performance hybrid seed varieties. Discover our six major brands and their missions.",
+  };
+  return getPageMetadata("/our-brands", fallback, { revalidate: 60 });
+}
+
 
 export default async function BrandsPage() {
   let apiBrands = null;

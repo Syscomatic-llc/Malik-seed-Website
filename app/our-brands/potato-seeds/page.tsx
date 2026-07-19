@@ -6,11 +6,16 @@ import BrandCards from "@/components/sections/brand/BrandCards";
 import BrandYouTube from "@/components/sections/brand/BrandYouTube";
 import { potatoSeedData } from "@/data/brands/potato-seed";
 import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/api";
 
-export const metadata: Metadata = {
-  title: potatoSeedData.meta.title,
-  description: potatoSeedData.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: potatoSeedData.meta.title,
+    description: potatoSeedData.meta.description,
+  };
+  return getPageMetadata("/our-brands/potato-seeds", fallback, { revalidate: 60 });
+}
+
 
 export default function PotatoSeedPage() {
   return (

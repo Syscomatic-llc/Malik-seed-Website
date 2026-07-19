@@ -12,7 +12,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import ActionButton from "@/components/ActionButton";
-import { hiringApi, mapApiPositionToJobPosition } from "@/lib/api";
+import { hiringApi, mapApiPositionToJobPosition, getPageMetadata } from "@/lib/api";
 
 interface JobDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -90,18 +90,22 @@ export async function generateMetadata({
   }
 
   if (!position) {
-    return { title: `Position Not Found - ${SITE_NAME}` };
+    return getPageMetadata(`/careers/${id}`, { title: `Position Not Found - ${SITE_NAME}` }, { revalidate: 60 });
   }
 
-  return {
+  const cleanDescription = cleanHtml(position.description);
+
+  const fallback: Metadata = {
     title: `${position.title} - ${SITE_NAME}`,
-    description: position.description,
+    description: cleanDescription,
     openGraph: {
       title: `${position.title} at ${SITE_NAME}`,
-      description: position.description,
+      description: cleanDescription,
       type: "website",
     },
   };
+
+  return getPageMetadata(`/careers/${id}`, fallback, { revalidate: 60 });
 }
 
 export default async function JobDetailsPage({ params }: JobDetailsPageProps) {

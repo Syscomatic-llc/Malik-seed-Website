@@ -7,14 +7,19 @@ import AboutMissionTwo from "@/components/sections/AboutMissionTwo";
 import GalleryHeroSection from "@/components/sections/GalleryHeroSection";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import { timelineItems } from "@/data/sections-data";
-import { galleryApi, aboutpageApi } from "@/lib/api";
+import { galleryApi, aboutpageApi, getPageMetadata } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Our Story - Malik Seeds",
-  description:
-    "Discover the historical journey of A.R. Malik, our mission, core brand values, and agricultural milestones from 1962 to today.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: "Our Story - Malik Seeds",
+    description:
+      "Discover the historical journey of A.R. Malik, our mission, core brand values, and agricultural milestones from 1962 to today.",
+  };
+  return getPageMetadata("/about", fallback, { revalidate: 60 });
+}
+
 
 export default async function AboutPage() {
   let ourStoryData = null;

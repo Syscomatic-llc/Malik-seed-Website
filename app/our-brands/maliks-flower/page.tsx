@@ -6,11 +6,16 @@ import BrandFlowerPortfolio from "@/components/sections/brand/BrandFlowerPortfol
 import BrandSplit from "@/components/sections/brand/BrandSplit";
 import { maliksFlowerData } from "@/data/brands/maliks-flower";
 import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/api";
 
-export const metadata: Metadata = {
-  title: maliksFlowerData.meta.title,
-  description: maliksFlowerData.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: maliksFlowerData.meta.title,
+    description: maliksFlowerData.meta.description,
+  };
+  return getPageMetadata("/our-brands/maliks-flower", fallback, { revalidate: 60 });
+}
+
 
 export default function MaliksFlowerPage() {
   return (

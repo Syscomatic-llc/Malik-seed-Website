@@ -1,13 +1,18 @@
 import { Suspense } from "react";
 import GalleryHeroSection from "@/components/sections/GalleryHeroSection";
-import { galleryApi } from "@/lib/api";
+import { galleryApi, getPageMetadata } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Our Gallery - Malik Seeds",
-  description:
-    "Explore the visual journey of Malik Seeds. Browse photos of our field activities, research and development, farmer training programs, and product showcase.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: "Our Gallery - Malik Seeds",
+    description:
+      "Explore the visual journey of Malik Seeds. Browse photos of our field activities, research and development, farmer training programs, and product showcase.",
+  };
+  return getPageMetadata("/our-gallery", fallback, { revalidate: 60 });
+}
+
 
 export default async function OurGalleryPage() {
   let galleryData = null;

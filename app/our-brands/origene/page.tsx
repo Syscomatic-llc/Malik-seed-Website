@@ -7,11 +7,16 @@ import { origeneData } from "@/data/brands/origene";
 import { Metadata } from "next";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
+import { getPageMetadata } from "@/lib/api";
 
-export const metadata: Metadata = {
-  title: origeneData.meta.title,
-  description: origeneData.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: origeneData.meta.title,
+    description: origeneData.meta.description,
+  };
+  return getPageMetadata("/our-brands/origene", fallback, { revalidate: 60 });
+}
+
 
 export default function OrigenePage() {
   return (

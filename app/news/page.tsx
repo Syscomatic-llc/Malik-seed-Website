@@ -1,13 +1,18 @@
 import { Suspense } from "react";
 import NewsPage from "./NewsPage";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
-import { newsApi } from "@/lib/api";
+import { newsApi, getPageMetadata } from "@/lib/api";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "News & Updates | Malik Seed",
-  description:
-    "Stay up to date with the latest research, farmer stories, partnerships, and innovations from Malik Seed.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: "News & Updates | Malik Seed",
+    description:
+      "Stay up to date with the latest research, farmer stories, partnerships, and innovations from Malik Seed.",
+  };
+  return getPageMetadata("/news", fallback, { revalidate: 60 });
+}
+
 
 export default async function NewsRoute() {
   let apiData = null;

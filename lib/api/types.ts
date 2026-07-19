@@ -511,6 +511,19 @@ export interface ApiSiteSettings {
   maintenance_mode?: boolean | null;
 }
 
+export interface ApiPageSeo {
+  id: number;
+  page_path: string;
+  title: string;
+  meta_title: string;
+  meta_description: string;
+  meta_keywords?: string | null;
+  og_image?: string | null;
+  og_title?: string | null;
+  og_description?: string | null;
+}
+
+
 
 
 

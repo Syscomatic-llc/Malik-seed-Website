@@ -9,8 +9,9 @@ import ShareBar from "@/components/ShareBar";
 import NewsTOC from "@/components/NewsTOC";
 import NewsCard from "@/components/NewsCard";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { newsApi } from "@/lib/api";
+import { newsApi, getPageMetadata } from "@/lib/api";
 import { mapApiArticleToNewsArticle } from "@/lib/news-mapper";
+
 
 // ---------------------------------------------------------------------------
 // Route-level constants — single source of truth for every hardcoded value.
@@ -123,11 +124,12 @@ export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
+  let fallback: Metadata = { title: `Article Not Found - ${SITE_NAME}` };
 
   try {
     const found = await newsApi.getArticleBySlug(slug, { revalidate: 60 });
     if (found) {
-      return {
+      fallback = {
         title: `${found.title} - ${SITE_NAME}`,
         description: found.excerpt,
       };
@@ -136,7 +138,7 @@ export async function generateMetadata({
     console.error("Failed to fetch article metadata from API:", err);
   }
 
-  return { title: `Article Not Found - ${SITE_NAME}` };
+  return getPageMetadata(`/news/${slug}`, fallback, { revalidate: 60 });
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {

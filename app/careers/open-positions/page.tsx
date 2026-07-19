@@ -2,13 +2,17 @@ import type { Metadata } from "next";
 import OpenPositionsSection from "@/components/sections/careers/OpenPositionsSection";
 import CVDropSection from "@/components/sections/careers/CVDropSection";
 import { openPositionsData } from "@/data/career-data";
-import { hiringApi, mapApiPositionToJobPosition, ApiJobPosition } from "@/lib/api";
+import { hiringApi, mapApiPositionToJobPosition, ApiJobPosition, getPageMetadata } from "@/lib/api";
 
-export const metadata: Metadata = {
-  title: "Open Positions - Malik Seeds",
-  description:
-    "Explore open roles and career opportunities at Malik Seeds. Join our team and shape the future of agriculture.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: "Open Positions - Malik Seeds",
+    description:
+      "Explore open roles and career opportunities at Malik Seeds. Join our team and shape the future of agriculture.",
+  };
+  return getPageMetadata("/careers/open-positions", fallback, { revalidate: 60 });
+}
+
 
 export default async function OpenPositionsPage() {
   let apiPositions: ApiJobPosition[] = [];

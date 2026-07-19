@@ -6,11 +6,16 @@ import BrandCropPortfolio from "@/components/sections/brand/BrandCropPortfolio";
 import BrandYouTube from "@/components/sections/brand/BrandYouTube";
 import { vegetableSeedsData } from "@/data/brands/vegetable-seeds";
 import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/api";
 
-export const metadata: Metadata = {
-  title: vegetableSeedsData.meta.title,
-  description: vegetableSeedsData.meta.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: vegetableSeedsData.meta.title,
+    description: vegetableSeedsData.meta.description,
+  };
+  return getPageMetadata("/our-brands/vegetable-seeds", fallback, { revalidate: 60 });
+}
+
 
 export default function VegetableSeedsPage() {
   return (
