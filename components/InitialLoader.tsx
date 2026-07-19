@@ -116,39 +116,43 @@ const MALIK_FULL_LOGO_PATHS: LogoPathConfig[] = [
 ];
 
 export default function InitialLoader() {
-  const [isVisible, setIsVisible] = useState(true);
-  const [shouldRender, setShouldRender] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    // 1. Listen for the custom "hero-images-loaded" event
-    const handleHeroLoaded = () => {
-      // Begin fadeout transition
+    // Check if user has already seen the premium loader in this session
+    const hasSeen = sessionStorage.getItem("hasSeenPremiumLoader");
+    if (hasSeen) {
+      setShouldRender(false);
       setIsVisible(false);
-    };
+      return;
+    }
 
-    window.addEventListener("hero-images-loaded", handleHeroLoaded);
+    // Otherwise, render and show it
+    setShouldRender(true);
+    setIsVisible(true);
 
-    // 2. Safety timeout fallback: if images fail to load or take too long,
-    // fade out the loading overlay after 3.5 seconds to prevent being stuck.
-    const fallbackTimer = setTimeout(() => {
+    // Let the premium signature drawing animation complete fully without any barrier.
+    // Reveal duration is ~5.6 seconds, so we set a timer for 5.8s to fade it out nicely.
+    const completeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 3500);
+      sessionStorage.setItem("hasSeenPremiumLoader", "true");
+    }, 5800);
 
     return () => {
-      window.removeEventListener("hero-images-loaded", handleHeroLoaded);
-      clearTimeout(fallbackTimer);
+      clearTimeout(completeTimer);
     };
   }, []);
 
   // When fadeout animation completes, completely unmount from the DOM
   useEffect(() => {
-    if (!isVisible) {
+    if (shouldRender && !isVisible) {
       const unmountTimer = setTimeout(() => {
         setShouldRender(false);
       }, 500); // matches the transition-duration
       return () => clearTimeout(unmountTimer);
     }
-  }, [isVisible]);
+  }, [isVisible, shouldRender]);
 
   if (!shouldRender) return null;
 

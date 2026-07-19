@@ -400,10 +400,6 @@ export default function HeroSection({
   // Preload all slideshow images immediately in the browser cache
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (finalSlides.length === 0) {
-        window.dispatchEvent(new CustomEvent("hero-images-loaded"));
-        return;
-      }
       finalSlides.forEach((slide) => {
         const img = new window.Image();
         img.src = slide.src;
@@ -417,16 +413,6 @@ export default function HeroSection({
       });
     }
   }, [finalSlides]);
-
-  // Dispatch "hero-images-loaded" event once all slides are loaded
-  useEffect(() => {
-    if (finalSlides.length > 0) {
-      const allLoaded = finalSlides.every((slide) => loadedImages[slide.src]);
-      if (allLoaded) {
-        window.dispatchEvent(new CustomEvent("hero-images-loaded"));
-      }
-    }
-  }, [loadedImages, finalSlides]);
 
   const slidesArray = useMemo(() => {
     if (!apiData) return null;
