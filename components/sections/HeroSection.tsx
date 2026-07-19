@@ -391,7 +391,6 @@ export default function HeroSection({
   apiData,
 }: HeroSectionProps) {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
-  const [showOverlay, setShowOverlay] = useState(true);
 
   const finalSlides = useMemo(
     () => buildSlides(apiData),
@@ -414,23 +413,6 @@ export default function HeroSection({
       });
     }
   }, [finalSlides]);
-
-  // Check if all slides are loaded
-  const allLoaded = finalSlides.every((slide) => loadedImages[slide.src]);
-
-  useEffect(() => {
-    if (allLoaded) {
-      setShowOverlay(false);
-    }
-  }, [allLoaded]);
-
-  // Timeout safety fallback (3 seconds max)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const slidesArray = useMemo(() => {
     if (!apiData) return null;
@@ -500,23 +482,7 @@ export default function HeroSection({
       <HeroContentMobile data={finalData} />
       <ScrollIndicator scrollText={finalData.scrollText} />
 
-      {/* Premium loading overlay matching brand styles */}
-      {showOverlay && (
-        <div
-          className="absolute inset-0 z-50 flex flex-col items-center justify-center transition-opacity duration-700 ease-out"
-          style={{ backgroundColor: "#050d07" }}
-        >
-          <div className="relative flex flex-col items-center gap-4">
-            <div className="h-12 w-12 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
-            <span
-              className="text-[12px] font-medium tracking-[0.2em] text-emerald-500/80 uppercase"
-              style={{ fontFamily: "var(--font-inter)" }}
-            >
-              Loading Experience
-            </span>
-          </div>
-        </div>
-      )}
+
     </section>
   );
 }

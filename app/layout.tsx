@@ -7,6 +7,10 @@ import { homepageApi, settingsApi } from "@/lib/api";
 import LenisProvider from "@/components/LenisProvider";
 import "lenis/dist/lenis.css";
 import Script from "next/script";
+import RootLoading from "./loading";
+
+// Set to true to force show the loading screen on all pages for customization and styling
+const FORCE_SHOW_LOADING = false;
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -173,6 +177,7 @@ export default async function RootLayout({
           </>
         )}
         <LenisProvider>
+          {FORCE_SHOW_LOADING && <RootLoading />}
           <Navbar brands={brands} />
           <main className="relative flex-grow">{children}</main>
           <Footer />
