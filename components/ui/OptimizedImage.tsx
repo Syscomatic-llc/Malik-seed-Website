@@ -14,7 +14,7 @@ export interface OptimizedImageProps extends Omit<ImageProps, "src"> {
 
 export default function OptimizedImage({
   src,
-  alt = "image",
+  alt = "",
   fallbackSrc = "/not-found.png",
   className = "",
   style,
