@@ -57,7 +57,7 @@ export default function RootLoading() {
           className="flex items-center text-[13px] md:text-[14px] tracking-[0.25em] font-semibold text-white/70 uppercase select-none"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
-          Cultivating Experience
+          Loading Experience
           <span className="inline-flex gap-1 ml-2.5 items-center h-2">
             {[0, 1, 2].map((i) => (
               <span

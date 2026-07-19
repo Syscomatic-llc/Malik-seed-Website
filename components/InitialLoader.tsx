@@ -172,7 +172,7 @@ export default function InitialLoader() {
         viewBox="0 0 340 45"
         width={300}
         height={40}
-        labelText="Cultivating Experience"
+        labelText="Loading Experience"
       />
     </div>
   );
