@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import {
   assessmentConfigs,
+  type AssessmentType,
   type PositionAssessmentConfig,
   type MCQQuestion,
   type ShortAnswerQuestion,
@@ -372,28 +373,35 @@ export const useApplicationStore = create<ApplicationState>()(
             placeholder: q.placeholder || undefined,
           }));
 
-          // Build config
-          const assessmentTypes: any[] = [];
+          // Build active assessment stage list
+          const assessmentTypes: AssessmentType[] = [];
           if (mcq.length > 0) assessmentTypes.push("mcq");
           if (short.length > 0) assessmentTypes.push("short_answers");
           if (long.length > 0) assessmentTypes.push("long_answers");
+
+          // Build per-stage time limits (only for active stages)
+          const stageTimeLimits: Record<string, number> = Object.fromEntries(
+            assessmentTypes.map((type) => {
+              let apiMinutes: number | undefined;
+              if (type === "mcq") apiMinutes = data.mcq_duration;
+              else if (type === "short_answers") apiMinutes = data.short_answer_duration;
+              else if (type === "long_answers") apiMinutes = data.long_answer_duration;
+              // Fallback: split total duration equally among stages
+              const fallback = Math.round((data.duration ?? 30) / (assessmentTypes.length || 1));
+              return [type, apiMinutes ?? fallback];
+            })
+          );
+
+          // Total time = sum of all active stage limits (accurate even when per-stage durations differ)
+          const totalTimeLimitMinutes =
+            Object.values(stageTimeLimits).reduce((sum, m) => sum + m, 0) || (data.duration ?? 30);
 
           const config: PositionAssessmentConfig = {
             positionId: realId,
             assessmentType: assessmentTypes[0] ?? "mcq",
             assessmentTypes,
-            timeLimitMinutes: data.duration ?? 30,
-            stageTimeLimits: Object.fromEntries(
-              assessmentTypes.map((type) => {
-                let apiMinutes: number | undefined;
-                if (type === "mcq") apiMinutes = data.mcq_duration;
-                else if (type === "short_answers") apiMinutes = data.short_answer_duration;
-                else if (type === "long_answers") apiMinutes = data.long_answer_duration;
-                // Fall back: divide total duration equally among stages
-                const fallback = Math.round((data.duration ?? 30) / (assessmentTypes.length || 1));
-                return [type, apiMinutes ?? fallback];
-              })
-            ),
+            timeLimitMinutes: totalTimeLimitMinutes,
+            stageTimeLimits,
             totalQuestions: data.total_questions ?? (mcq.length + short.length + long.length),
             passingScorePercent: data.passing_score ?? 70,
             title: `${realTitle} Screening`,
