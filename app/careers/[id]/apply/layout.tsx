@@ -58,7 +58,6 @@ export default async function ApplyLayout({
 }: ApplyLayoutProps) {
   const { id } = await params;
   const position = await getPosition(id);
-
   if (!position) {
     notFound();
   }

@@ -383,11 +383,17 @@ export const useApplicationStore = create<ApplicationState>()(
             assessmentType: assessmentTypes[0] ?? "mcq",
             assessmentTypes,
             timeLimitMinutes: data.duration ?? 30,
-            stageTimeLimits: {
-              mcq: data.mcq_duration ?? 30,
-              short_answers: data.short_answer_duration ?? 30,
-              long_answers: data.long_answer_duration ?? 30,
-            },
+            stageTimeLimits: Object.fromEntries(
+              assessmentTypes.map((type) => {
+                let apiMinutes: number | undefined;
+                if (type === "mcq") apiMinutes = data.mcq_duration;
+                else if (type === "short_answers") apiMinutes = data.short_answer_duration;
+                else if (type === "long_answers") apiMinutes = data.long_answer_duration;
+                // Fall back: divide total duration equally among stages
+                const fallback = Math.round((data.duration ?? 30) / (assessmentTypes.length || 1));
+                return [type, apiMinutes ?? fallback];
+              })
+            ),
             totalQuestions: data.total_questions ?? (mcq.length + short.length + long.length),
             passingScorePercent: data.passing_score ?? 70,
             title: `${realTitle} Screening`,

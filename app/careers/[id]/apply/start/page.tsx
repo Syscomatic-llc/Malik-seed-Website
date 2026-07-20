@@ -71,7 +71,6 @@ export default function StartPage() {
   const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (resolvedPositionId !== null && !config && !assessmentLoadError);
   const isConnectionError = assessmentLoadError && assessmentLoadError !== "This position does not require an assessment.";
   const hasValidPosition = !!position || !!storePositionId;
-
   // Case A: Genuinely no assessment required
   if (hasValidPosition && (isNoAssessment || (!config && !isConnectionError))) {
     return (
