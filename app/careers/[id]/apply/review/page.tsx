@@ -35,6 +35,7 @@ export default function ReviewPage() {
     dynamicMcqQuestions,
     dynamicShortQuestions,
     dynamicLongQuestions,
+    completedStages,
   } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
@@ -67,19 +68,19 @@ export default function ReviewPage() {
 
   useEffect(() => {
     if (hydrated && isStarted && !isCompleted) {
-      if (types.includes("mcq")) {
+      if (types.includes("mcq") && !completedStages.mcq) {
         if (mcqQuestions.some((q) => mcqAnswers[q.id] === undefined)) {
           router.replace(`/careers/${id}/apply/exam/mcq`);
           return;
         }
       }
-      if (types.includes("short_answers")) {
+      if (types.includes("short_answers") && !completedStages.short_answers) {
         if (shortQuestions.some((q) => !shortAnswers[q.id]?.trim())) {
           router.replace(`/careers/${id}/apply/exam/short-answers`);
           return;
         }
       }
-      if (types.includes("long_answers")) {
+      if (types.includes("long_answers") && !completedStages.long_answers) {
         if (longQuestions.some((q) => !longAnswers[q.id]?.trim())) {
           router.replace(`/careers/${id}/apply/exam/long-answers`);
           return;
@@ -94,6 +95,7 @@ export default function ReviewPage() {
     mcqAnswers,
     shortAnswers,
     longAnswers,
+    completedStages,
     positionId,
     id,
     router,
