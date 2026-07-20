@@ -41,6 +41,7 @@ export interface ApplicationState {
   isLoadingAssessment: boolean;
   assessmentLoadError: string | null;
   showTimeoutAlert: string | null;
+  transitionCountdown: number | null;
 
   // Additional Info
   phoneNumber: string;
@@ -75,6 +76,8 @@ export interface ApplicationState {
   setAdditionalInfo: (info: Partial<Omit<ApplicationState, "actions">>) => void;
   fetchAssessment: (positionId: string | number, positionTitle: string) => Promise<boolean>;
   setShowTimeoutAlert: (stage: string | null) => void;
+  setTransitionCountdown: (countdown: number | null) => void;
+  finalizeTimeoutStage: (stage: string | null) => void;
   reset: () => void;
 }
 
@@ -106,6 +109,7 @@ export const useApplicationStore = create<ApplicationState>()(
       isLoadingAssessment: false,
       assessmentLoadError: null,
       showTimeoutAlert: null,
+      transitionCountdown: null,
       phoneNumber: "",
       location: "",
       linkedin: "",
@@ -125,6 +129,40 @@ export const useApplicationStore = create<ApplicationState>()(
       setOtpVerified: (isOtpVerified) => set({ isOtpVerified }),
 
       setShowTimeoutAlert: (showTimeoutAlert) => set({ showTimeoutAlert }),
+
+      setTransitionCountdown: (transitionCountdown) => set({ transitionCountdown }),
+
+      finalizeTimeoutStage: (stage) => {
+        if (!stage) return;
+        const stageTimes = get().stageTimeRemaining;
+        const updatedTimes = { ...stageTimes, [stage]: 0 };
+        const updatedCompletedStages = {
+          ...get().completedStages,
+          [stage]: true,
+        };
+        const posId = get().positionId;
+        let nextStageExists = false;
+        if (posId) {
+          const config = get().assessmentConfig ?? assessmentConfigs[posId];
+          const types =
+            config?.assessmentTypes ??
+            (config ? [config.assessmentType] : []);
+          const currentIndex = types.indexOf(stage as any);
+          const nextStage = types[currentIndex + 1];
+          nextStageExists = !!nextStage;
+
+          if (!nextStage) {
+            get().completeAssessment();
+          }
+        }
+        set({
+          stageTimeRemaining: updatedTimes,
+          completedStages: updatedCompletedStages,
+          isTimerRunning: nextStageExists,
+          transitionCountdown: null,
+          showTimeoutAlert: null,
+        });
+      },
 
       startAssessment: (positionId, positionTitle, config) => {
         const types =
@@ -160,31 +198,10 @@ export const useApplicationStore = create<ApplicationState>()(
         const stageTimes = get().stageTimeRemaining;
         const currentRemaining = stageTimes[currentStage] ?? 0;
         if (currentRemaining <= 1) {
-          // Timer finished! Stop timer and finalize based on the active flow.
-          const updatedTimes = { ...stageTimes, [currentStage]: 0 };
-          const updatedCompletedStages = {
-            ...get().completedStages,
-            [currentStage]: true,
-          };
-          const posId = get().positionId;
-          let nextStageExists = false;
-          if (posId) {
-            const config = get().assessmentConfig ?? assessmentConfigs[posId];
-            const types =
-              config?.assessmentTypes ??
-              (config ? [config.assessmentType] : []);
-            const currentIndex = types.indexOf(currentStage as any);
-            const nextStage = types[currentIndex + 1];
-            nextStageExists = !!nextStage;
-
-            if (!nextStage) {
-              get().completeAssessment();
-            }
-          }
+          // Timer finished! Pause the main timer and trigger the 5-second redirect countdown.
           set({
-            stageTimeRemaining: updatedTimes,
-            completedStages: updatedCompletedStages,
-            isTimerRunning: nextStageExists,
+            isTimerRunning: false,
+            transitionCountdown: 5,
             showTimeoutAlert: currentStage,
           });
         } else {
@@ -403,6 +420,7 @@ export const useApplicationStore = create<ApplicationState>()(
           isLoadingAssessment: false,
           assessmentLoadError: null,
           showTimeoutAlert: null,
+          transitionCountdown: null,
         }),
     }),
     {

@@ -44,7 +44,9 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     dynamicShortQuestions,
     dynamicLongQuestions,
     showTimeoutAlert,
-    setShowTimeoutAlert,
+    transitionCountdown,
+    setTransitionCountdown,
+    finalizeTimeoutStage,
   } = useApplicationStore();
 
   const config = assessmentConfig ?? assessmentConfigs[positionId];
@@ -55,15 +57,20 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     setHydrated(true);
   }, []);
 
-  // Auto-dismiss timeout alert banner after 6 seconds
+  // 5-second countdown timer on timeout
   useEffect(() => {
-    if (showTimeoutAlert) {
-      const timer = setTimeout(() => {
-        setShowTimeoutAlert(null);
-      }, 6000);
-      return () => clearTimeout(timer);
+    let timer: NodeJS.Timeout;
+    if (transitionCountdown !== null) {
+      timer = setTimeout(() => {
+        if (transitionCountdown > 1) {
+          setTransitionCountdown(transitionCountdown - 1);
+        } else {
+          finalizeTimeoutStage(showTimeoutAlert);
+        }
+      }, 1000);
     }
-  }, [showTimeoutAlert, setShowTimeoutAlert]);
+    return () => clearTimeout(timer);
+  }, [transitionCountdown, showTimeoutAlert, setTransitionCountdown, finalizeTimeoutStage]);
 
   // Determine current exam page
   const isMCQPage = pathname.endsWith("/mcq");
@@ -151,37 +158,7 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     };
   }, [isTimerRunning, hydrated, tickTimer, completedStages, types]);
 
-  // Auto-advance if stage timer reaches 0
-  useEffect(() => {
-    if (hydrated && isTimerRunning) {
-      const activeStage = types.find((type: string) => !completedStages[type]);
-      if (activeStage) {
-        const remaining = stageTimeRemaining[activeStage] ?? 0;
-        if (remaining === 0) {
-          completeStage(activeStage);
-          const currentIndex = types.indexOf(activeStage);
-          const nextType = types[currentIndex + 1];
-          if (nextType === "short_answers") {
-            router.replace(`/careers/${id}/apply/exam/short-answers`);
-          } else if (nextType === "long_answers") {
-            router.replace(`/careers/${id}/apply/exam/long-answers`);
-          } else {
-            completeAssessment();
-          }
-        }
-      }
-    }
-  }, [
-    stageTimeRemaining,
-    completedStages,
-    hydrated,
-    isTimerRunning,
-    types,
-    id,
-    router,
-    completeAssessment,
-    completeStage,
-  ]);
+  // Auto-advance logic removed in favor of store-level timeout countdown transition
 
   // Redirect on finish
   useEffect(() => {
@@ -316,21 +293,13 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
       <div className="font-inter flex w-full items-center justify-between px-1 text-[16px] leading-6 text-[#0D1A14]">
         <span>Total questions: {questions.length}</span>
         <div className="flex items-center gap-2">
-          {remainingTime <= 60 && remainingTime > 0 && (
-            <span className="font-inter text-[12px] font-bold text-[#FF4242] animate-bounce px-2.5 py-0.5 rounded-full bg-[#FFF2F2] border border-[#FFD0D0] flex items-center gap-1">
-              <span>⚠️</span>
-              <span>Last Minute!</span>
-            </span>
-          )}
           <span className="font-normal">Time remaining:</span>
           <span
             className={cn(
-              "font-mono font-medium transition-all duration-300",
-              remainingTime <= 60
-                ? "text-[20px] font-bold text-[#FF4242] scale-110 drop-shadow-sm"
-                : remainingTime < 180
-                  ? "animate-pulse text-[#FF4242]"
-                  : "text-[#0D1A14]"
+              "font-mono font-medium",
+              remainingTime < 180
+                ? "animate-pulse text-[#FF4242]"
+                : "text-[#0D1A14]"
             )}
           >
             {timeString}
@@ -340,34 +309,39 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
 
       {/* Main Card Content */}
       <div className="w-full rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
-        <div className="relative flex flex-col gap-8">
-          {showTimeoutAlert && (
-            <div className="flex items-center justify-between gap-4 rounded-xl border border-[#FFD0D0] bg-[#FFF2F2] px-6 py-4 text-[#C12727] animate-fade-in shadow-sm">
-              <div className="flex items-center gap-3">
-                <span className="text-xl">⚠️</span>
-                <span className="font-inter text-[14px] font-medium leading-[21px]">
-                  Time's up! Your responses for{" "}
-                  <strong>
-                    {showTimeoutAlert === "mcq"
-                      ? "Technical Knowledge (MCQ)"
-                      : showTimeoutAlert === "short_answers"
-                        ? "Short Answers"
-                        : "Long Answers"}
-                  </strong>{" "}
-                  were saved and submitted automatically.
-                </span>
-              </div>
-              <button
-                onClick={() => setShowTimeoutAlert(null)}
-                className="shrink-0 font-inter text-[13px] font-semibold text-[#C12727] hover:underline"
-              >
-                Dismiss
-              </button>
-            </div>
-          )}
+        <div className="relative flex flex-col gap-12">
           {children}
         </div>
       </div>
+
+      {/* 5-Second Timeout Transition Countdown Overlay */}
+      {transitionCountdown !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-all duration-300">
+          <div className="mx-4 flex w-full max-w-[480px] flex-col items-center gap-6 rounded-[24px] border border-[#E4E7EC] bg-white p-8 text-center shadow-2xl animate-scale-in">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#FFF2F2] text-[#FF4242]">
+              <svg className="h-8 w-8 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="flex flex-col gap-2">
+              <h2 className="text-[24px] font-bold tracking-tight text-[#0D1A14] font-inter-tight">Time's Up!</h2>
+              <p className="text-[15px] leading-[22px] text-[#0D1A14]/70 font-inter">
+                Your responses for <strong>{
+                  showTimeoutAlert === "mcq"
+                    ? "Technical Knowledge (MCQ)"
+                    : showTimeoutAlert === "short_answers"
+                      ? "Short Answers"
+                      : "Long Answers"
+                }</strong> have been saved automatically.
+              </p>
+            </div>
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-[12px] font-semibold text-[#195236]/60 font-inter uppercase tracking-wider">Moving to next stage in</span>
+              <span className="text-[56px] font-bold text-[#195236] font-mono leading-none">{transitionCountdown}</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
