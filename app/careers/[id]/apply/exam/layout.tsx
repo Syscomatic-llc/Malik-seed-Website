@@ -84,7 +84,7 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   useEffect(() => {
     if (hydrated && isStarted && !isCompleted) {
       // Check if trying to access short-answers without completing mcq
-      if (isShortAnswersPage && types.includes("mcq")) {
+      if (isShortAnswersPage && types.includes("mcq") && !completedStages.mcq) {
         const unansweredMcq = mcqQuestions.some((q) => mcqAnswers[q.id] === undefined);
         if (unansweredMcq) {
           router.replace(`/careers/${id}/apply/exam/mcq`);
@@ -94,13 +94,13 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
 
       // Check if trying to access long-answers without completing mcq or short-answers
       if (isLongAnswersPage) {
-        if (types.includes("mcq")) {
+        if (types.includes("mcq") && !completedStages.mcq) {
           if (mcqQuestions.some((q) => mcqAnswers[q.id] === undefined)) {
             router.replace(`/careers/${id}/apply/exam/mcq`);
             return;
           }
         }
-        if (types.includes("short_answers")) {
+        if (types.includes("short_answers") && !completedStages.short_answers) {
           if (shortQuestions.some((q) => !shortAnswers[q.id]?.trim())) {
             router.replace(`/careers/${id}/apply/exam/short-answers`);
             return;
@@ -117,6 +117,7 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     types,
     mcqAnswers,
     shortAnswers,
+    completedStages,
     positionId,
     id,
     router,
