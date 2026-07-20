@@ -8,6 +8,7 @@ import {
   type LongAnswerQuestion,
 } from "@/data/questions-data";
 import { apiGet } from "@/lib/api/client";
+import { openPositionsData } from "@/data/career-data";
 
 export interface ApplicationState {
   // Job context
@@ -74,7 +75,7 @@ export interface ApplicationState {
   completeAssessment: () => void;
   setGradingResult: (score: number, isPassed: boolean) => void;
   setAdditionalInfo: (info: Partial<Omit<ApplicationState, "actions">>) => void;
-  fetchAssessment: (positionId: string | number, positionTitle: string) => Promise<boolean>;
+  fetchAssessment: (slugOrId: string | number) => Promise<boolean>;
   setShowTimeoutAlert: (stage: string | null) => void;
   setTransitionCountdown: (countdown: number | null) => void;
   finalizeTimeoutStage: (stage: string | null) => void;
@@ -283,32 +284,41 @@ export const useApplicationStore = create<ApplicationState>()(
 
       setAdditionalInfo: (info) => set((state) => ({ ...state, ...info })),
 
-      fetchAssessment: async (positionId, positionTitle) => {
+      fetchAssessment: async (slugOrId) => {
         set({ isLoadingAssessment: true, assessmentLoadError: null });
         try {
           // Resolve real backend ID from title or slug
           const positions = await apiGet<any[]>("/api/v1/hiring/positions");
           let realPosition = null;
 
-          if (typeof positionId === "string" && isNaN(Number(positionId))) {
+          const searchStr = String(slugOrId).toLowerCase();
+          const numId = Number(slugOrId);
+
+          if (!isNaN(numId)) {
+            realPosition = positions.find((p: any) => p.id === numId);
+          }
+          if (!realPosition) {
             realPosition = positions.find(
-              (p: any) => p.slug === positionId || p.slug === positionId.toLowerCase()
-            );
-          } else {
-            const targetId = Number(positionId);
-            realPosition = positions.find(
-              (p: any) => p.id === targetId || p.title.toLowerCase() === positionTitle.toLowerCase()
+              (p: any) => p.slug?.toLowerCase() === searchStr || p.title?.toLowerCase() === searchStr
             );
           }
 
+          // Fallback to static mock data if API doesn't have it (or if offline)
           if (!realPosition) {
-            realPosition = positions.find(
-              (p: any) => p.title.toLowerCase() === positionTitle.toLowerCase()
+            const staticPos = openPositionsData.positions.find(
+              (pos) => pos.id.toString() === searchStr || pos.slug === searchStr
             );
+            if (staticPos) {
+              realPosition = {
+                id: staticPos.id,
+                title: staticPos.title,
+                slug: staticPos.slug,
+              };
+            }
           }
 
           if (!realPosition) {
-            console.warn(`Could not resolve backend position for ${positionTitle} (${positionId}).`);
+            console.warn(`Could not resolve backend position for ${slugOrId}.`);
             set({
               isLoadingAssessment: false,
               assessmentLoadError: "This position does not require an assessment.",
@@ -317,6 +327,14 @@ export const useApplicationStore = create<ApplicationState>()(
           }
 
           const realId = realPosition.id;
+          const realTitle = realPosition.title;
+
+          // Save resolved position in the store
+          set({
+            positionId: realId,
+            positionTitle: realTitle,
+          });
+
           const data = await apiGet<any>(`/api/v1/hiring/positions/${realId}/assessment`);
           
           if (!data || !data.has_assessment) {
@@ -372,7 +390,7 @@ export const useApplicationStore = create<ApplicationState>()(
             },
             totalQuestions: data.total_questions ?? (mcq.length + short.length + long.length),
             passingScorePercent: data.passing_score ?? 70,
-            title: `${positionTitle} Screening`,
+            title: `${realTitle} Screening`,
           };
 
           set({
@@ -385,6 +403,26 @@ export const useApplicationStore = create<ApplicationState>()(
           return true;
         } catch (err: any) {
           console.error("Failed to fetch assessment from API:", err);
+
+          // Try to fallback to static mock config if API fails
+          const searchStr = String(slugOrId).toLowerCase();
+          const staticPos = openPositionsData.positions.find(
+            (pos) => pos.id.toString() === searchStr || pos.slug === searchStr
+          );
+          if (staticPos) {
+            const config = assessmentConfigs[staticPos.id];
+            if (config) {
+              set({
+                positionId: staticPos.id,
+                positionTitle: staticPos.title,
+                assessmentConfig: config,
+                isLoadingAssessment: false,
+                assessmentLoadError: null,
+              });
+              return true;
+            }
+          }
+
           set({
             isLoadingAssessment: false,
             assessmentLoadError: err?.message || "Failed to load assessment data",

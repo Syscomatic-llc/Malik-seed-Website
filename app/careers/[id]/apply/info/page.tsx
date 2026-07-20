@@ -21,6 +21,8 @@ export default function PersonalInfoPage() {
     assessmentConfig,
     isLoadingAssessment,
     assessmentLoadError,
+    positionId: storePositionId,
+    positionTitle: storePositionTitle,
   } = useApplicationStore();
 
   const [name, setName] = useState("");
@@ -32,17 +34,16 @@ export default function PersonalInfoPage() {
   const position = openPositionsData.positions.find(
     (pos) => pos.id.toString() === id || pos.slug === id
   );
-  const positionId = position ? position.id : parseInt(id as string);
+  const resolvedPositionId = position ? position.id : (storePositionId || parseInt(id as string));
+  const resolvedPositionTitle = position ? position.title : (storePositionTitle || "selected");
 
   // Sync state with store on hydration and load assessment
   useEffect(() => {
     setName(storeName);
     setEmail(storeEmail);
     setHydrated(true);
-    if (position) {
-      fetchAssessment(positionId, position.title);
-    }
-  }, [storeName, storeEmail, position, positionId, fetchAssessment]);
+    fetchAssessment(id as string);
+  }, [storeName, storeEmail, id, fetchAssessment]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,12 +82,13 @@ export default function PersonalInfoPage() {
     );
   }
 
-  const config = assessmentConfig ?? assessmentConfigs[positionId];
-  const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (position && !config && !assessmentLoadError);
+  const config = assessmentConfig ?? assessmentConfigs[resolvedPositionId];
+  const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (resolvedPositionId !== null && !config && !assessmentLoadError);
   const isConnectionError = assessmentLoadError && assessmentLoadError !== "This position does not require an assessment.";
+  const hasValidPosition = !!position || !!storePositionId;
 
   // Case A: Genuinely no assessment required
-  if (position && (isNoAssessment || (!config && !isConnectionError))) {
+  if (hasValidPosition && (isNoAssessment || (!config && !isConnectionError))) {
     return (
       <div className="mx-auto w-full max-w-[816px] rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10 font-inter">
         <div className="flex w-full flex-col items-start gap-8">
@@ -104,7 +106,7 @@ export default function PersonalInfoPage() {
               No Assessment Active
             </h1>
             <p className="text-[16px] leading-[24px] text-[#0D1A14]/70">
-              There is currently no screening assessment active for the <strong>{position?.title || "selected"}</strong> position. Please check back later.
+              There is currently no screening assessment active for the <strong>{resolvedPositionTitle}</strong> position. Please check back later.
             </p>
           </div>
           <div className="h-[1px] w-full bg-[#E4E7EC]" />
@@ -140,7 +142,7 @@ export default function PersonalInfoPage() {
               Assessment Loading Error
             </h1>
             <p className="text-[16px] leading-[24px] text-[#C12727]/80">
-              We encountered a temporary network issue connecting to the server to load the assessment config for <strong>{position?.title || "this position"}</strong>.
+              We encountered a temporary network issue connecting to the server to load the assessment config for <strong>{resolvedPositionTitle}</strong>.
             </p>
             {assessmentLoadError && (
               <span className="text-[13px] font-mono bg-white/50 border border-[#FFC2C2] px-3 py-1.5 rounded-lg text-[#8C1C1C] break-all">
@@ -152,9 +154,7 @@ export default function PersonalInfoPage() {
           <div className="flex flex-wrap gap-4 w-full">
             <button
               onClick={() => {
-                if (position) {
-                  fetchAssessment(positionId, position.title);
-                }
+                fetchAssessment(id as string);
               }}
               className="flex h-[46px] w-full cursor-pointer items-center justify-center gap-[10px] rounded-[60px] bg-[#C12727] px-6 text-[16px] leading-[19px] font-medium text-white transition-all hover:bg-[#9F1C1C] sm:w-auto"
               style={{ fontFamily: "var(--font-inter-tight)" }}

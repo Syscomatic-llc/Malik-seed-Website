@@ -25,6 +25,8 @@ export default function StartPage() {
     isLoadingAssessment,
     assessmentLoadError,
     skipAssessmentFlow,
+    positionId: storePositionId,
+    positionTitle: storePositionTitle,
   } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -32,7 +34,8 @@ export default function StartPage() {
   const position = openPositionsData.positions.find(
     (pos) => pos.id.toString() === id || pos.slug === id
   );
-  const positionId = position ? position.id : parseInt(id as string);
+  const resolvedPositionId = position ? position.id : (storePositionId || parseInt(id as string));
+  const resolvedPositionTitle = position ? position.title : (storePositionTitle || "selected");
 
   useEffect(() => {
     setHydrated(true);
@@ -41,11 +44,11 @@ export default function StartPage() {
         router.replace(`/careers/${id}/apply/info`);
       } else if (!isOtpVerified) {
         router.replace(`/careers/${id}/apply/otp`);
-      } else if (position) {
-        fetchAssessment(positionId, position.title);
+      } else {
+        fetchAssessment(id as string);
       }
     }
-  }, [email, isOtpVerified, hydrated, id, router, position, positionId, fetchAssessment]);
+  }, [email, isOtpVerified, hydrated, id, router, fetchAssessment]);
 
   if (!hydrated || !isOtpVerified || isLoadingAssessment) {
     return (
@@ -65,12 +68,13 @@ export default function StartPage() {
     );
   }
 
-  const config = assessmentConfig ?? assessmentConfigs[positionId];
-  const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (position && !config && !assessmentLoadError);
+  const config = assessmentConfig ?? assessmentConfigs[resolvedPositionId];
+  const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (resolvedPositionId !== null && !config && !assessmentLoadError);
   const isConnectionError = assessmentLoadError && assessmentLoadError !== "This position does not require an assessment.";
+  const hasValidPosition = !!position || !!storePositionId;
 
   // Case A: Genuinely no assessment required
-  if (position && (isNoAssessment || (!config && !isConnectionError))) {
+  if (hasValidPosition && (isNoAssessment || (!config && !isConnectionError))) {
     return (
       <div className="mx-auto w-full max-w-[816px] rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10 font-inter">
         <div className="flex w-full flex-col items-start gap-8">
@@ -88,7 +92,7 @@ export default function StartPage() {
               No Assessment Required
             </h1>
             <p className="text-[16px] leading-[24px] text-[#0D1A14]/70">
-              No screening exam is currently required for the <strong>{position?.title || "selected"}</strong> position. You can proceed directly to complete the rest of your application details and upload your resume.
+              No screening exam is currently required for the <strong>{resolvedPositionTitle}</strong> position. You can proceed directly to complete the rest of your application details and upload your resume.
             </p>
           </div>
           <div className="h-[1px] w-full bg-[#E4E7EC]" />
@@ -128,7 +132,7 @@ export default function StartPage() {
               Assessment Loading Error
             </h1>
             <p className="text-[16px] leading-[24px] text-[#C12727]/80">
-              We encountered a temporary network issue connecting to the server to load the assessment config for <strong>{position?.title || "this position"}</strong>.
+              We encountered a temporary network issue connecting to the server to load the assessment config for <strong>{resolvedPositionTitle}</strong>.
             </p>
             {assessmentLoadError && (
               <span className="text-[13px] font-mono bg-white/50 border border-[#FFC2C2] px-3 py-1.5 rounded-lg text-[#8C1C1C] break-all">
@@ -140,9 +144,7 @@ export default function StartPage() {
           <div className="flex flex-wrap gap-4 w-full">
             <button
               onClick={() => {
-                if (position) {
-                  fetchAssessment(positionId, position.title);
-                }
+                fetchAssessment(id as string);
               }}
               className="flex h-[46px] w-full cursor-pointer items-center justify-center gap-[10px] rounded-[60px] bg-[#C12727] px-6 text-[16px] leading-[19px] font-medium text-white transition-all hover:bg-[#9F1C1C] sm:w-auto"
               style={{ fontFamily: "var(--font-inter-tight)" }}
@@ -163,7 +165,7 @@ export default function StartPage() {
   }
 
   // Fallback for completely invalid position IDs
-  if (!position || !config) {
+  if (!hasValidPosition || !config) {
     return (
       <div className="py-10 text-center text-[#FF4242] font-inter">
         Error: Position assessment configuration not found.
@@ -178,7 +180,7 @@ export default function StartPage() {
     if (!agreed) return;
 
     // Start timer and configure state in Zustand
-    startAssessment(positionId, position.title, config);
+    startAssessment(resolvedPositionId, resolvedPositionTitle, config);
 
     // Redirect to the first configured stage for this position
     const firstType = config.assessmentTypes?.[0] ?? config.assessmentType;
@@ -193,10 +195,10 @@ export default function StartPage() {
 
   // Agronomy detail mapping or generic detail mapping to match Figma's wording style:
   const getJobDetailParagraph = () => {
-    if (positionId === 1) {
-      return `The next step in our hiring process is an initial screening assessment for the ${position.title} role. This helps us understand your agronomy expertise, trial planning ability, and problem-solving approach in real field conditions.`;
+    if (resolvedPositionId === 1) {
+      return `The next step in our hiring process is an initial screening assessment for the ${resolvedPositionTitle} role. This helps us understand your agronomy expertise, trial planning ability, and problem-solving approach in real field conditions.`;
     }
-    return `The next step in our hiring process is an initial screening assessment for the ${position.title} role. This helps us understand your industry expertise, practical reasoning, and problem-solving approach in real field conditions.`;
+    return `The next step in our hiring process is an initial screening assessment for the ${resolvedPositionTitle} role. This helps us understand your industry expertise, practical reasoning, and problem-solving approach in real field conditions.`;
   };
 
   return (
