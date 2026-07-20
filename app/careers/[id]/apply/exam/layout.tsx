@@ -57,21 +57,6 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     setHydrated(true);
   }, []);
 
-  // 5-second countdown timer on timeout
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (transitionCountdown !== null) {
-      timer = setTimeout(() => {
-        if (transitionCountdown > 1) {
-          setTransitionCountdown(transitionCountdown - 1);
-        } else {
-          finalizeTimeoutStage(showTimeoutAlert);
-        }
-      }, 1000);
-    }
-    return () => clearTimeout(timer);
-  }, [transitionCountdown, showTimeoutAlert, setTransitionCountdown, finalizeTimeoutStage]);
-
   // Determine current exam page
   const isMCQPage = pathname.endsWith("/mcq");
   const isShortAnswersPage = pathname.endsWith("/short-answers");
@@ -87,6 +72,41 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   const shortQuestions = dynamicShortQuestions.length > 0 ? dynamicShortQuestions : (shortAnswerQuestionsData[positionId] || []);
   const longQuestions = dynamicLongQuestions.length > 0 ? dynamicLongQuestions : (longAnswerQuestionsData[positionId] || []);
   const types = config.assessmentTypes ?? [config.assessmentType];
+
+  // 5-second countdown timer on timeout
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (transitionCountdown !== null) {
+      timer = setTimeout(() => {
+        if (transitionCountdown > 1) {
+          setTransitionCountdown(transitionCountdown - 1);
+        } else {
+          // Resolve next stage before clearing showTimeoutAlert
+          const currentIndex = types.indexOf(showTimeoutAlert as any);
+          const nextType = types[currentIndex + 1];
+
+          // Finalize store state
+          finalizeTimeoutStage(showTimeoutAlert);
+
+          // Perform navigation
+          if (nextType === "short_answers") {
+            router.replace(`/careers/${id}/apply/exam/short-answers`);
+          } else if (nextType === "long_answers") {
+            router.replace(`/careers/${id}/apply/exam/long-answers`);
+          }
+        }
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [
+    transitionCountdown,
+    showTimeoutAlert,
+    setTransitionCountdown,
+    finalizeTimeoutStage,
+    types,
+    id,
+    router,
+  ]);
 
   // Validation redirect
   useEffect(() => {
