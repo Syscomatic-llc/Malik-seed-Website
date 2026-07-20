@@ -66,11 +66,13 @@ export default function StartPage() {
   }
 
   const config = assessmentConfig ?? assessmentConfigs[positionId];
+  const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (position && !config && !assessmentLoadError);
+  const isConnectionError = assessmentLoadError && assessmentLoadError !== "This position does not require an assessment.";
 
-  // If the position exists, but has no assessment configuration, show "No Assessment Required" card.
-  if (position && !config) {
+  // Case A: Genuinely no assessment required
+  if (position && (isNoAssessment || (!config && !isConnectionError))) {
     return (
-      <div className="mx-auto w-full max-w-[816px] rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
+      <div className="mx-auto w-full max-w-[816px] rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10 font-inter">
         <div className="flex w-full flex-col items-start gap-8">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F7F1] text-[#195236]">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -85,10 +87,7 @@ export default function StartPage() {
             >
               No Assessment Required
             </h1>
-            <p
-              className="text-[16px] leading-[24px] text-[#0D1A14]/70"
-              style={{ fontFamily: "var(--font-inter)" }}
-            >
+            <p className="text-[16px] leading-[24px] text-[#0D1A14]/70">
               No screening exam is currently required for the <strong>{position?.title || "selected"}</strong> position. You can proceed directly to complete the rest of your application details and upload your resume.
             </p>
           </div>
@@ -104,6 +103,60 @@ export default function StartPage() {
             <span>Proceed to Application Details</span>
             <ArrowRight size={20} className="text-white" />
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Case B: Backend connection/loading issue (System connection error)
+  if (isConnectionError && !config) {
+    return (
+      <div className="mx-auto w-full max-w-[816px] rounded-[24px] border border-[#FFD0D0] bg-[#FFF2F2] p-6 shadow-sm md:p-10 font-inter">
+        <div className="flex w-full flex-col items-start gap-8">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FFD0D0] text-[#C12727]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </div>
+          <div className="flex flex-col gap-3">
+            <h1
+              className="text-[24px] leading-[29px] font-semibold tracking-tight text-[#C12727]"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
+              Assessment Loading Error
+            </h1>
+            <p className="text-[16px] leading-[24px] text-[#C12727]/80">
+              We encountered a temporary network issue connecting to the server to load the assessment config for <strong>{position?.title || "this position"}</strong>.
+            </p>
+            {assessmentLoadError && (
+              <span className="text-[13px] font-mono bg-white/50 border border-[#FFC2C2] px-3 py-1.5 rounded-lg text-[#8C1C1C] break-all">
+                Details: {assessmentLoadError}
+              </span>
+            )}
+          </div>
+          <div className="h-[1px] w-full bg-[#FFC2C2]" />
+          <div className="flex flex-wrap gap-4 w-full">
+            <button
+              onClick={() => {
+                if (position) {
+                  fetchAssessment(positionId, position.title);
+                }
+              }}
+              className="flex h-[46px] w-full cursor-pointer items-center justify-center gap-[10px] rounded-[60px] bg-[#C12727] px-6 text-[16px] leading-[19px] font-medium text-white transition-all hover:bg-[#9F1C1C] sm:w-auto"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
+              <span>Retry Connection</span>
+            </button>
+            <button
+              onClick={() => router.push("/careers")}
+              className="flex h-[46px] w-full cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border border-[#C12727] px-6 text-[16px] leading-[19px] font-medium text-[#C12727] transition-all hover:bg-white sm:w-auto"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
+              <span>Back to Open Positions</span>
+            </button>
+          </div>
         </div>
       </div>
     );
