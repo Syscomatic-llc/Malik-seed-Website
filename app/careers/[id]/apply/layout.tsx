@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { openPositionsData } from "@/data/career-data";
+import { openPositionsData, type JobPosition } from "@/data/career-data";
+import { hiringApi, mapApiPositionToJobPosition } from "@/lib/api";
 import ApplyHeader from "./ApplyHeader";
 import DevNav from "./DevNav";
 
@@ -9,15 +10,40 @@ interface ApplyLayoutProps {
   params: Promise<{ id: string }>;
 }
 
+async function getPosition(id: string): Promise<JobPosition | null> {
+  // 1. Try to parse ID and fetch by ID
+  const numId = parseInt(id);
+  if (!isNaN(numId)) {
+    try {
+      const res = await hiringApi.getPositionById(numId, { revalidate: 60 });
+      if (res && res.position) {
+        return mapApiPositionToJobPosition(res.position);
+      }
+    } catch {}
+  }
+
+  // 2. Try to fetch by slug
+  try {
+    const res = await hiringApi.getPositionBySlug(id, { revalidate: 60 });
+    if (res && res.position) {
+      return mapApiPositionToJobPosition(res.position);
+    }
+  } catch {}
+
+  // 3. Fallback to static mock data
+  const staticPos = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug === id
+  );
+  return staticPos ?? null;
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const position = openPositionsData.positions.find(
-    (pos) => pos.id.toString() === id || pos.slug === id
-  );
+  const position = await getPosition(id);
 
   if (!position) return { title: "Apply - Malik Seeds" };
   return {
@@ -31,9 +57,7 @@ export default async function ApplyLayout({
   params,
 }: ApplyLayoutProps) {
   const { id } = await params;
-  const position = openPositionsData.positions.find(
-    (pos) => pos.id.toString() === id || pos.slug === id
-  );
+  const position = await getPosition(id);
 
   if (!position) {
     notFound();
