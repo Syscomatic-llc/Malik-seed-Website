@@ -65,14 +65,15 @@ export default function StartPage() {
     );
   }
 
-  const hasNoExam = assessmentLoadError === "This position does not require an assessment.";
+  const config = assessmentConfig ?? assessmentConfigs[positionId];
 
-  if (hasNoExam) {
+  // If the position exists, but has no assessment configuration, show "No Assessment Required" card.
+  if (position && !config) {
     return (
       <div className="mx-auto w-full max-w-[816px] rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
         <div className="flex w-full flex-col items-start gap-8">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F7F1] text-[#195236]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
               <polyline points="22 4 12 14.01 9 11.01" />
             </svg>
@@ -108,8 +109,7 @@ export default function StartPage() {
     );
   }
 
-  const config = assessmentConfig ?? assessmentConfigs[positionId];
-
+  // Fallback for completely invalid position IDs
   if (!position || !config) {
     return (
       <div className="py-10 text-center text-[#FF4242] font-inter">
