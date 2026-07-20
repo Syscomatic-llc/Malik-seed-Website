@@ -40,6 +40,7 @@ export interface ApplicationState {
   dynamicLongQuestions: LongAnswerQuestion[];
   isLoadingAssessment: boolean;
   assessmentLoadError: string | null;
+  showTimeoutAlert: string | null;
 
   // Additional Info
   phoneNumber: string;
@@ -73,6 +74,7 @@ export interface ApplicationState {
   setGradingResult: (score: number, isPassed: boolean) => void;
   setAdditionalInfo: (info: Partial<Omit<ApplicationState, "actions">>) => void;
   fetchAssessment: (positionId: string | number, positionTitle: string) => Promise<boolean>;
+  setShowTimeoutAlert: (stage: string | null) => void;
   reset: () => void;
 }
 
@@ -103,6 +105,7 @@ export const useApplicationStore = create<ApplicationState>()(
       dynamicLongQuestions: [],
       isLoadingAssessment: false,
       assessmentLoadError: null,
+      showTimeoutAlert: null,
       phoneNumber: "",
       location: "",
       linkedin: "",
@@ -120,6 +123,8 @@ export const useApplicationStore = create<ApplicationState>()(
       setPersonalInfo: (name, email) => set({ name, email }),
 
       setOtpVerified: (isOtpVerified) => set({ isOtpVerified }),
+
+      setShowTimeoutAlert: (showTimeoutAlert) => set({ showTimeoutAlert }),
 
       startAssessment: (positionId, positionTitle, config) => {
         const types =
@@ -180,6 +185,7 @@ export const useApplicationStore = create<ApplicationState>()(
             stageTimeRemaining: updatedTimes,
             completedStages: updatedCompletedStages,
             isTimerRunning: nextStageExists,
+            showTimeoutAlert: currentStage,
           });
         } else {
           set({
@@ -396,6 +402,7 @@ export const useApplicationStore = create<ApplicationState>()(
           dynamicLongQuestions: [],
           isLoadingAssessment: false,
           assessmentLoadError: null,
+          showTimeoutAlert: null,
         }),
     }),
     {

@@ -43,6 +43,8 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     dynamicMcqQuestions,
     dynamicShortQuestions,
     dynamicLongQuestions,
+    showTimeoutAlert,
+    setShowTimeoutAlert,
   } = useApplicationStore();
 
   const config = assessmentConfig ?? assessmentConfigs[positionId];
@@ -52,6 +54,16 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   useEffect(() => {
     setHydrated(true);
   }, []);
+
+  // Auto-dismiss timeout alert banner after 6 seconds
+  useEffect(() => {
+    if (showTimeoutAlert) {
+      const timer = setTimeout(() => {
+        setShowTimeoutAlert(null);
+      }, 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [showTimeoutAlert, setShowTimeoutAlert]);
 
   // Determine current exam page
   const isMCQPage = pathname.endsWith("/mcq");
@@ -304,13 +316,21 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
       <div className="font-inter flex w-full items-center justify-between px-1 text-[16px] leading-6 text-[#0D1A14]">
         <span>Total questions: {questions.length}</span>
         <div className="flex items-center gap-2">
+          {remainingTime <= 60 && remainingTime > 0 && (
+            <span className="font-inter text-[12px] font-bold text-[#FF4242] animate-bounce px-2.5 py-0.5 rounded-full bg-[#FFF2F2] border border-[#FFD0D0] flex items-center gap-1">
+              <span>⚠️</span>
+              <span>Last Minute!</span>
+            </span>
+          )}
           <span className="font-normal">Time remaining:</span>
           <span
             className={cn(
-              "font-mono font-medium",
-              remainingTime < 180
-                ? "animate-pulse text-[#FF4242]"
-                : "text-[#0D1A14]"
+              "font-mono font-medium transition-all duration-300",
+              remainingTime <= 60
+                ? "text-[20px] font-bold text-[#FF4242] scale-110 drop-shadow-sm"
+                : remainingTime < 180
+                  ? "animate-pulse text-[#FF4242]"
+                  : "text-[#0D1A14]"
             )}
           >
             {timeString}
@@ -320,7 +340,33 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
 
       {/* Main Card Content */}
       <div className="w-full rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
-        <div className="relative flex flex-col gap-12">{children}</div>
+        <div className="relative flex flex-col gap-8">
+          {showTimeoutAlert && (
+            <div className="flex items-center justify-between gap-4 rounded-xl border border-[#FFD0D0] bg-[#FFF2F2] px-6 py-4 text-[#C12727] animate-fade-in shadow-sm">
+              <div className="flex items-center gap-3">
+                <span className="text-xl">⚠️</span>
+                <span className="font-inter text-[14px] font-medium leading-[21px]">
+                  Time's up! Your responses for{" "}
+                  <strong>
+                    {showTimeoutAlert === "mcq"
+                      ? "Technical Knowledge (MCQ)"
+                      : showTimeoutAlert === "short_answers"
+                        ? "Short Answers"
+                        : "Long Answers"}
+                  </strong>{" "}
+                  were saved and submitted automatically.
+                </span>
+              </div>
+              <button
+                onClick={() => setShowTimeoutAlert(null)}
+                className="shrink-0 font-inter text-[13px] font-semibold text-[#C12727] hover:underline"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
+          {children}
+        </div>
       </div>
     </div>
   );
