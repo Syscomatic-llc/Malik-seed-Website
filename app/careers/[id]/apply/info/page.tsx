@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { openPositionsData } from "@/data/career-data";
-import { assessmentConfigs } from "@/data/questions-data";
 
 export default function PersonalInfoPage() {
   const router = useRouter();
@@ -82,7 +81,7 @@ export default function PersonalInfoPage() {
     );
   }
 
-  const config = assessmentConfig ?? assessmentConfigs[resolvedPositionId];
+  const config = assessmentConfig;
   const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (resolvedPositionId !== null && !config && !assessmentLoadError);
   const isConnectionError = assessmentLoadError && assessmentLoadError !== "This position does not require an assessment.";
   const hasValidPosition = !!position || !!storePositionId;

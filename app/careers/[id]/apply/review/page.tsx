@@ -3,12 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
-import {
-  mcqQuestionsData,
-  shortAnswerQuestionsData,
-  longAnswerQuestionsData,
-  assessmentConfigs,
-} from "@/data/questions-data";
 import { openPositionsData } from "@/data/career-data";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -44,13 +38,13 @@ export default function ReviewPage() {
     (pos) => pos.id.toString() === id || pos.slug === id
   );
   const positionId = position ? position.id : parseInt(id as string);
-  const config = assessmentConfig ?? assessmentConfigs[positionId];
+  const config = assessmentConfig;
   const types =
     config?.assessmentTypes ?? (config ? [config.assessmentType] : []);
 
-  const mcqQuestions = dynamicMcqQuestions.length > 0 ? dynamicMcqQuestions : (mcqQuestionsData[positionId] || []);
-  const shortQuestions = dynamicShortQuestions.length > 0 ? dynamicShortQuestions : (shortAnswerQuestionsData[positionId] || []);
-  const longQuestions = dynamicLongQuestions.length > 0 ? dynamicLongQuestions : (longAnswerQuestionsData[positionId] || []);
+  const mcqQuestions = dynamicMcqQuestions;
+  const shortQuestions = dynamicShortQuestions;
+  const longQuestions = dynamicLongQuestions;
 
   useEffect(() => {
     setHydrated(true);

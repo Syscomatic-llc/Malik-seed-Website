@@ -3,10 +3,6 @@
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
-import {
-  shortAnswerQuestionsData,
-  assessmentConfigs,
-} from "@/data/questions-data";
 import { openPositionsData } from "@/data/career-data";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { z } from "zod";
@@ -31,8 +27,8 @@ export default function ShortAnswersPage() {
     (pos) => pos.id.toString() === id || pos.slug === id
   );
   const positionId = position ? position.id : parseInt(id as string);
-  const questions = dynamicShortQuestions.length > 0 ? dynamicShortQuestions : (shortAnswerQuestionsData[positionId] || []);
-  const config = assessmentConfig ?? assessmentConfigs[positionId];
+  const questions = dynamicShortQuestions;
+  const config = assessmentConfig;
 
   if (!config || questions.length === 0) {
     return (

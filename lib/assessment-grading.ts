@@ -1,6 +1,4 @@
 import {
-  assessmentConfigs,
-  mcqQuestionsData,
   shouldAutoGradeAssessment,
   type MCQQuestion,
   type PositionAssessmentConfig,
@@ -39,8 +37,8 @@ export function gradeMcqAssessment(
   dynamicQuestions?: MCQQuestion[],
   dynamicConfig?: PositionAssessmentConfig
 ): McqGradingResult | null {
-  const config = dynamicConfig ?? assessmentConfigs[positionId];
-  const questions = (dynamicQuestions && dynamicQuestions.length > 0) ? dynamicQuestions : (mcqQuestionsData[positionId] || []);
+  const config = dynamicConfig;
+  const questions = dynamicQuestions || [];
   if (!config || questions.length === 0) return null;
 
   const types = config.assessmentTypes ?? [config.assessmentType];

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useApplicationStore } from "@/store/applicationStore";
-import { assessmentConfigs, mcqQuestionsData } from "@/data/questions-data";
+// Static mocks fallbacks removed to ensure no mock data leaks
 import { gradeMcqAssessment } from "@/lib/assessment-grading";
 
 const PAGES = [
@@ -29,7 +29,7 @@ export default function DevNav({ positionId }: { positionId: string }) {
   if (process.env.NODE_ENV !== "development") return null;
 
   const seedMcqAnswers = (numId: number, pass: boolean) => {
-    const questions = store.dynamicMcqQuestions.length > 0 ? store.dynamicMcqQuestions : (mcqQuestionsData[numId] || []);
+    const questions = store.dynamicMcqQuestions;
     questions.forEach((q) => {
       if (pass) {
         store.setMCQAnswer(q.id, q.correctAnswer);
@@ -48,8 +48,8 @@ export default function DevNav({ positionId }: { positionId: string }) {
   };
 
   const seedStateAndNavigate = (path: string) => {
-    const numId = parseInt(positionId);
-    const config = assessmentConfigs[numId];
+    const numId = store.positionId || parseInt(positionId);
+    const config = store.assessmentConfig;
 
     store.setPersonalInfo("Dev User", "dev@test.com");
     store.setOtpVerified(true);
@@ -69,8 +69,8 @@ export default function DevNav({ positionId }: { positionId: string }) {
     ) {
       store.startAssessment(
         numId,
-        "Dev Position",
-        config ?? { timeLimitMinutes: 30, assessmentType: "mcq" }
+        store.positionTitle || "Dev Position",
+        config ?? { timeLimitMinutes: 30, assessmentType: "mcq", totalQuestions: 5, passingScorePercent: 70, positionId: numId, title: "Dev Screening" }
       );
     }
 

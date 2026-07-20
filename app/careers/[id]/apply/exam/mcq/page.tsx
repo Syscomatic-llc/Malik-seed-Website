@@ -3,10 +3,6 @@
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
-import {
-  mcqQuestionsData,
-  assessmentConfigs,
-} from "@/data/questions-data";
 import { openPositionsData } from "@/data/career-data";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { cn } from "@/lib/utils";
@@ -36,8 +32,8 @@ export default function MCQAssessmentPage() {
     (pos) => pos.id.toString() === id || pos.slug === id
   );
   const positionId = position ? position.id : parseInt(id as string);
-  const questions = dynamicMcqQuestions.length > 0 ? dynamicMcqQuestions : (mcqQuestionsData[positionId] || []);
-  const config = assessmentConfig ?? assessmentConfigs[positionId];
+  const questions = dynamicMcqQuestions;
+  const config = assessmentConfig;
 
   if (!config || questions.length === 0) {
     return (

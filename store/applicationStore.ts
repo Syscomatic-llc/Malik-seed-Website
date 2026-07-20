@@ -404,25 +404,6 @@ export const useApplicationStore = create<ApplicationState>()(
         } catch (err: any) {
           console.error("Failed to fetch assessment from API:", err);
 
-          // Try to fallback to static mock config if API fails
-          const searchStr = String(slugOrId).toLowerCase();
-          const staticPos = openPositionsData.positions.find(
-            (pos) => pos.id.toString() === searchStr || pos.slug === searchStr
-          );
-          if (staticPos) {
-            const config = assessmentConfigs[staticPos.id];
-            if (config) {
-              set({
-                positionId: staticPos.id,
-                positionTitle: staticPos.title,
-                assessmentConfig: config,
-                isLoadingAssessment: false,
-                assessmentLoadError: null,
-              });
-              return true;
-            }
-          }
-
           set({
             isLoadingAssessment: false,
             assessmentLoadError: err?.message || "Failed to load assessment data",

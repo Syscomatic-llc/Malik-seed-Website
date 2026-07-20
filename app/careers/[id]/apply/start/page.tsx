@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
 import {
-  assessmentConfigs,
   type PositionAssessmentConfig,
 } from "@/data/questions-data";
 import { getInitialExamRoute } from "@/data/questions-data";
@@ -68,7 +67,7 @@ export default function StartPage() {
     );
   }
 
-  const config = assessmentConfig ?? assessmentConfigs[resolvedPositionId];
+  const config = assessmentConfig;
   const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (resolvedPositionId !== null && !config && !assessmentLoadError);
   const isConnectionError = assessmentLoadError && assessmentLoadError !== "This position does not require an assessment.";
   const hasValidPosition = !!position || !!storePositionId;

@@ -4,10 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams, usePathname } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
 import {
-  mcqQuestionsData,
-  shortAnswerQuestionsData,
-  longAnswerQuestionsData,
-  assessmentConfigs,
   shouldAutoGradeAssessment,
 } from "@/data/questions-data";
 import { openPositionsData } from "@/data/career-data";
@@ -49,7 +45,7 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     finalizeTimeoutStage,
   } = useApplicationStore();
 
-  const config = assessmentConfig ?? assessmentConfigs[positionId];
+  const config = assessmentConfig;
 
   const [hydrated, setHydrated] = useState(false);
 
@@ -68,10 +64,10 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   else if (isLongAnswersPage) currentStage = "long_answers";
 
   // Load questions based on active sub-page
-  const mcqQuestions = dynamicMcqQuestions.length > 0 ? dynamicMcqQuestions : (mcqQuestionsData[positionId] || []);
-  const shortQuestions = dynamicShortQuestions.length > 0 ? dynamicShortQuestions : (shortAnswerQuestionsData[positionId] || []);
-  const longQuestions = dynamicLongQuestions.length > 0 ? dynamicLongQuestions : (longAnswerQuestionsData[positionId] || []);
-  const types = config.assessmentTypes ?? [config.assessmentType];
+  const mcqQuestions = dynamicMcqQuestions;
+  const shortQuestions = dynamicShortQuestions;
+  const longQuestions = dynamicLongQuestions;
+  const types = config?.assessmentTypes ?? (config ? [config.assessmentType] : []);
 
   // 5-second countdown timer on timeout
   useEffect(() => {
