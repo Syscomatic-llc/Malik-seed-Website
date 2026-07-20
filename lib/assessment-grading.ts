@@ -2,6 +2,8 @@ import {
   assessmentConfigs,
   mcqQuestionsData,
   shouldAutoGradeAssessment,
+  type MCQQuestion,
+  type PositionAssessmentConfig,
 } from "@/data/questions-data";
 
 export interface McqQuestionBreakdown {
@@ -33,13 +35,17 @@ function formatOptionLabel(index: number, options: string[]): string {
 
 export function gradeMcqAssessment(
   positionId: number,
-  mcqAnswers: Record<string, number>
+  mcqAnswers: Record<string, number>,
+  dynamicQuestions?: MCQQuestion[],
+  dynamicConfig?: PositionAssessmentConfig
 ): McqGradingResult | null {
-  if (!shouldAutoGradeAssessment(positionId)) return null;
-
-  const config = assessmentConfigs[positionId];
-  const questions = mcqQuestionsData[positionId] || [];
+  const config = dynamicConfig ?? assessmentConfigs[positionId];
+  const questions = (dynamicQuestions && dynamicQuestions.length > 0) ? dynamicQuestions : (mcqQuestionsData[positionId] || []);
   if (!config || questions.length === 0) return null;
+
+  const types = config.assessmentTypes ?? [config.assessmentType];
+  const isAutoGrade = types.length === 1 && types[0] === "mcq";
+  if (!isAutoGrade) return null;
 
   let correctCount = 0;
   const breakdown: McqQuestionBreakdown[] = questions.map((q) => {

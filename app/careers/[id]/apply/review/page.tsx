@@ -13,12 +13,7 @@ import { openPositionsData } from "@/data/career-data";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  getAssessmentTypes,
-  hasWrittenAssessment,
-  hasShortAnswersAssessment,
-  hasLongAnswersAssessment,
-} from "@/data/questions-data";
+// Static helpers removed in favor of dynamic config checks
 import {
   McqDevAnswerKey,
   McqDevReviewBadge,
@@ -37,6 +32,9 @@ export default function ReviewPage() {
     longAnswers,
     completeAssessment,
     assessmentConfig,
+    dynamicMcqQuestions,
+    dynamicShortQuestions,
+    dynamicLongQuestions,
   } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
@@ -48,6 +46,10 @@ export default function ReviewPage() {
   const config = assessmentConfig ?? assessmentConfigs[positionId];
   const types =
     config?.assessmentTypes ?? (config ? [config.assessmentType] : []);
+
+  const mcqQuestions = dynamicMcqQuestions.length > 0 ? dynamicMcqQuestions : (mcqQuestionsData[positionId] || []);
+  const shortQuestions = dynamicShortQuestions.length > 0 ? dynamicShortQuestions : (shortAnswerQuestionsData[positionId] || []);
+  const longQuestions = dynamicLongQuestions.length > 0 ? dynamicLongQuestions : (longAnswerQuestionsData[positionId] || []);
 
   useEffect(() => {
     setHydrated(true);
@@ -66,22 +68,19 @@ export default function ReviewPage() {
   useEffect(() => {
     if (hydrated && isStarted && !isCompleted) {
       if (types.includes("mcq")) {
-        const mcqs = mcqQuestionsData[positionId] || [];
-        if (mcqs.some((q) => mcqAnswers[q.id] === undefined)) {
+        if (mcqQuestions.some((q) => mcqAnswers[q.id] === undefined)) {
           router.replace(`/careers/${id}/apply/exam/mcq`);
           return;
         }
       }
       if (types.includes("short_answers")) {
-        const shortQs = shortAnswerQuestionsData[positionId] || [];
-        if (shortQs.some((q) => !shortAnswers[q.id]?.trim())) {
+        if (shortQuestions.some((q) => !shortAnswers[q.id]?.trim())) {
           router.replace(`/careers/${id}/apply/exam/short-answers`);
           return;
         }
       }
       if (types.includes("long_answers")) {
-        const longQs = longAnswerQuestionsData[positionId] || [];
-        if (longQs.some((q) => !longAnswers[q.id]?.trim())) {
+        if (longQuestions.some((q) => !longAnswers[q.id]?.trim())) {
           router.replace(`/careers/${id}/apply/exam/long-answers`);
           return;
         }
@@ -98,6 +97,9 @@ export default function ReviewPage() {
     positionId,
     id,
     router,
+    mcqQuestions,
+    shortQuestions,
+    longQuestions,
   ]);
 
   if (!hydrated || !isStarted) {
@@ -113,13 +115,9 @@ export default function ReviewPage() {
   }
 
   const showMcqReview = types.includes("mcq");
-  const hasShortAnswers = hasShortAnswersAssessment(positionId);
-  const hasLongAnswers = hasLongAnswersAssessment(positionId);
-  const hasWritten = hasWrittenAssessment(positionId);
-
-  const mcqQuestions = mcqQuestionsData[positionId] || [];
-  const shortQuestions = shortAnswerQuestionsData[positionId] || [];
-  const longQuestions = longAnswerQuestionsData[positionId] || [];
+  const hasShortAnswers = types.includes("short_answers");
+  const hasLongAnswers = types.includes("long_answers");
+  const hasWritten = hasShortAnswers || hasLongAnswers;
 
   const optionPrefixes = ["A. ", "B. ", "C. ", "D. "];
   const submitRoute = hasWritten
@@ -219,7 +217,14 @@ export default function ReviewPage() {
                           </div>
                           <span className="font-inter text-[16px] leading-[24px] font-normal text-[#0D1A14]">
                             {optionPrefixes[optIdx]}
-                            {opt}
+                            {(() => {
+                              const prefix = `${["A", "B", "C", "D"][optIdx]}.`;
+                              const trimmed = opt.trim();
+                              if (trimmed.toUpperCase().startsWith(prefix)) {
+                                return trimmed.slice(prefix.length).trim();
+                              }
+                              return opt;
+                            })()}
                           </span>
                         </div>
                       );
@@ -258,6 +263,11 @@ export default function ReviewPage() {
                     <span className="font-inter text-[14px] font-semibold text-[#667085]">
                       Question {index + 1}:
                     </span>
+                    {q.question && !q.question.toLowerCase().startsWith("question") && (
+                      <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
+                        {q.question}
+                      </h3>
+                    )}
                     {q.description && (
                       <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
                         {q.description}
@@ -299,6 +309,11 @@ export default function ReviewPage() {
                     <span className="font-inter text-[14px] font-semibold text-[#667085]">
                       Question {index + 1}:
                     </span>
+                    {q.question && !q.question.toLowerCase().startsWith("question") && (
+                      <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
+                        {q.question}
+                      </h3>
+                    )}
                     {q.description && (
                       <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
                         {q.description}

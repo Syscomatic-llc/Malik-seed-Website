@@ -8,7 +8,6 @@ import {
   shortAnswerQuestionsData,
   longAnswerQuestionsData,
   assessmentConfigs,
-  hasMultipleExamTypes,
   shouldAutoGradeAssessment,
 } from "@/data/questions-data";
 import { openPositionsData } from "@/data/career-data";
@@ -41,6 +40,9 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     completedStages,
     completeStage,
     assessmentConfig,
+    dynamicMcqQuestions,
+    dynamicShortQuestions,
+    dynamicLongQuestions,
   } = useApplicationStore();
 
   const config = assessmentConfig ?? assessmentConfigs[positionId];
@@ -62,9 +64,9 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   else if (isLongAnswersPage) currentStage = "long_answers";
 
   // Load questions based on active sub-page
-  const mcqQuestions = mcqQuestionsData[positionId] || [];
-  const shortQuestions = shortAnswerQuestionsData[positionId] || [];
-  const longQuestions = longAnswerQuestionsData[positionId] || [];
+  const mcqQuestions = dynamicMcqQuestions.length > 0 ? dynamicMcqQuestions : (mcqQuestionsData[positionId] || []);
+  const shortQuestions = dynamicShortQuestions.length > 0 ? dynamicShortQuestions : (shortAnswerQuestionsData[positionId] || []);
+  const longQuestions = dynamicLongQuestions.length > 0 ? dynamicLongQuestions : (longAnswerQuestionsData[positionId] || []);
   const types = config.assessmentTypes ?? [config.assessmentType];
 
   // Validation redirect
@@ -83,8 +85,7 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     if (hydrated && isStarted && !isCompleted) {
       // Check if trying to access short-answers without completing mcq
       if (isShortAnswersPage && types.includes("mcq")) {
-        const mcqs = mcqQuestionsData[positionId] || [];
-        const unansweredMcq = mcqs.some((q) => mcqAnswers[q.id] === undefined);
+        const unansweredMcq = mcqQuestions.some((q) => mcqAnswers[q.id] === undefined);
         if (unansweredMcq) {
           router.replace(`/careers/${id}/apply/exam/mcq`);
           return;
@@ -94,15 +95,13 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
       // Check if trying to access long-answers without completing mcq or short-answers
       if (isLongAnswersPage) {
         if (types.includes("mcq")) {
-          const mcqs = mcqQuestionsData[positionId] || [];
-          if (mcqs.some((q) => mcqAnswers[q.id] === undefined)) {
+          if (mcqQuestions.some((q) => mcqAnswers[q.id] === undefined)) {
             router.replace(`/careers/${id}/apply/exam/mcq`);
             return;
           }
         }
         if (types.includes("short_answers")) {
-          const shortQs = shortAnswerQuestionsData[positionId] || [];
-          if (shortQs.some((q) => !shortAnswers[q.id]?.trim())) {
+          if (shortQuestions.some((q) => !shortAnswers[q.id]?.trim())) {
             router.replace(`/careers/${id}/apply/exam/short-answers`);
             return;
           }
@@ -121,6 +120,8 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
     positionId,
     id,
     router,
+    mcqQuestions,
+    shortQuestions,
   ]);
 
   // Timer loop
@@ -172,12 +173,11 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   // Redirect on finish
   useEffect(() => {
     if (isCompleted && hydrated) {
-      const nextRoute = shouldAutoGradeAssessment(positionId)
-        ? "/loading"
-        : "/submitted";
+      const isAutoGrade = types.length === 1 && types[0] === "mcq";
+      const nextRoute = isAutoGrade ? "/loading" : "/submitted";
       router.replace(`/careers/${id}/apply${nextRoute}`);
     }
-  }, [isCompleted, hydrated, id, router, positionId]);
+  }, [isCompleted, hydrated, id, router, types]);
 
   if (!hydrated || !isStarted || isCompleted) {
     return (
@@ -215,12 +215,12 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   const seconds = remainingTime % 60;
   const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 
-  const hasMultipleExamTypesState = hasMultipleExamTypes(positionId);
+  const showStepper = types.length >= 2;
 
   return (
     <div className="flex w-full flex-col gap-6">
       {/* Category Stepper Header */}
-      {hasMultipleExamTypesState && (
+      {showStepper && (
         <div className="flex w-full items-start justify-between gap-1 p-4 sm:p-6">
           {types.map((type: string, idx: number) => {
             const isStepActive =

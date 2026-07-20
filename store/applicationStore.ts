@@ -3,7 +3,11 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import {
   assessmentConfigs,
   type PositionAssessmentConfig,
+  type MCQQuestion,
+  type ShortAnswerQuestion,
+  type LongAnswerQuestion,
 } from "@/data/questions-data";
+import { apiGet } from "@/lib/api/client";
 
 export interface ApplicationState {
   // Job context
@@ -29,6 +33,13 @@ export interface ApplicationState {
   isGraded: boolean;
   assessmentConfig: PositionAssessmentConfig | null;
   completedStages: Record<string, boolean>; // stage -> completed flag
+
+  // Dynamic Questions & Config
+  dynamicMcqQuestions: MCQQuestion[];
+  dynamicShortQuestions: ShortAnswerQuestion[];
+  dynamicLongQuestions: LongAnswerQuestion[];
+  isLoadingAssessment: boolean;
+  assessmentLoadError: string | null;
 
   // Additional Info
   phoneNumber: string;
@@ -61,6 +72,7 @@ export interface ApplicationState {
   completeAssessment: () => void;
   setGradingResult: (score: number, isPassed: boolean) => void;
   setAdditionalInfo: (info: Partial<Omit<ApplicationState, "actions">>) => void;
+  fetchAssessment: (positionId: string | number, positionTitle: string) => Promise<boolean>;
   reset: () => void;
 }
 
@@ -86,6 +98,11 @@ export const useApplicationStore = create<ApplicationState>()(
       isGraded: false,
       assessmentConfig: null,
       completedStages: {},
+      dynamicMcqQuestions: [],
+      dynamicShortQuestions: [],
+      dynamicLongQuestions: [],
+      isLoadingAssessment: false,
+      assessmentLoadError: null,
       phoneNumber: "",
       location: "",
       linkedin: "",
@@ -232,6 +249,116 @@ export const useApplicationStore = create<ApplicationState>()(
 
       setAdditionalInfo: (info) => set((state) => ({ ...state, ...info })),
 
+      fetchAssessment: async (positionId, positionTitle) => {
+        set({ isLoadingAssessment: true, assessmentLoadError: null });
+        try {
+          // Resolve real backend ID from title or slug
+          const positions = await apiGet<any[]>("/api/v1/hiring/positions");
+          let realPosition = null;
+
+          if (typeof positionId === "string" && isNaN(Number(positionId))) {
+            realPosition = positions.find(
+              (p: any) => p.slug === positionId || p.slug === positionId.toLowerCase()
+            );
+          } else {
+            const targetId = Number(positionId);
+            realPosition = positions.find(
+              (p: any) => p.id === targetId || p.title.toLowerCase() === positionTitle.toLowerCase()
+            );
+          }
+
+          if (!realPosition) {
+            realPosition = positions.find(
+              (p: any) => p.title.toLowerCase() === positionTitle.toLowerCase()
+            );
+          }
+
+          if (!realPosition) {
+            console.warn(`Could not resolve backend position for ${positionTitle} (${positionId}).`);
+            set({
+              isLoadingAssessment: false,
+              assessmentLoadError: "This position does not require an assessment.",
+            });
+            return false;
+          }
+
+          const realId = realPosition.id;
+          const data = await apiGet<any>(`/api/v1/hiring/positions/${realId}/assessment`);
+          
+          if (!data || !data.has_assessment) {
+            console.warn(`Position ID ${realId} does not require an assessment.`);
+            set({
+              isLoadingAssessment: false,
+              assessmentLoadError: "This position does not require an assessment.",
+            });
+            return false;
+          }
+
+          const letterToIndex: Record<string, number> = { A: 0, B: 1, C: 2, D: 3 };
+          
+          // Map MCQ questions
+          const mcq = (data.mcq_questions || []).map((q: any) => ({
+            id: String(q.id),
+            question: q.question,
+            options: q.options || [],
+            correctAnswer: letterToIndex[q.correct_answer?.trim().toUpperCase()] ?? 0,
+          }));
+
+          // Map Short Answer questions
+          const short = (data.short_answer_questions || []).map((q: any) => ({
+            id: String(q.id),
+            question: q.question,
+            description: q.description || undefined,
+            placeholder: q.placeholder || undefined,
+          }));
+
+          // Map Long Answer questions
+          const long = (data.long_answer_questions || []).map((q: any) => ({
+            id: String(q.id),
+            question: q.question,
+            description: q.description || undefined,
+            placeholder: q.placeholder || undefined,
+          }));
+
+          // Build config
+          const assessmentTypes: any[] = [];
+          if (mcq.length > 0) assessmentTypes.push("mcq");
+          if (short.length > 0) assessmentTypes.push("short_answers");
+          if (long.length > 0) assessmentTypes.push("long_answers");
+
+          const config: PositionAssessmentConfig = {
+            positionId: realId,
+            assessmentType: assessmentTypes[0] ?? "mcq",
+            assessmentTypes,
+            timeLimitMinutes: data.duration ?? 30,
+            stageTimeLimits: {
+              mcq: data.mcq_duration ?? 30,
+              short_answers: data.short_answer_duration ?? 30,
+              long_answers: data.long_answer_duration ?? 30,
+            },
+            totalQuestions: data.total_questions ?? (mcq.length + short.length + long.length),
+            passingScorePercent: data.passing_score ?? 70,
+            title: `${positionTitle} Screening`,
+          };
+
+          set({
+            dynamicMcqQuestions: mcq,
+            dynamicShortQuestions: short,
+            dynamicLongQuestions: long,
+            assessmentConfig: config,
+            isLoadingAssessment: false,
+          });
+          return true;
+        } catch (err: any) {
+          console.error("Failed to fetch assessment from API:", err);
+          set({
+            isLoadingAssessment: false,
+            assessmentLoadError: err?.message || "Failed to load assessment data",
+          });
+          return false;
+        }
+      },
+
       reset: () =>
         set({
           positionId: null,
@@ -264,6 +391,11 @@ export const useApplicationStore = create<ApplicationState>()(
           cvFileSize: 0,
           cvUrl: "",
           coverLetter: "",
+          dynamicMcqQuestions: [],
+          dynamicShortQuestions: [],
+          dynamicLongQuestions: [],
+          isLoadingAssessment: false,
+          assessmentLoadError: null,
         }),
     }),
     {

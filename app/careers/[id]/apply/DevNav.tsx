@@ -29,7 +29,7 @@ export default function DevNav({ positionId }: { positionId: string }) {
   if (process.env.NODE_ENV !== "development") return null;
 
   const seedMcqAnswers = (numId: number, pass: boolean) => {
-    const questions = mcqQuestionsData[numId] || [];
+    const questions = store.dynamicMcqQuestions.length > 0 ? store.dynamicMcqQuestions : (mcqQuestionsData[numId] || []);
     questions.forEach((q) => {
       if (pass) {
         store.setMCQAnswer(q.id, q.correctAnswer);
@@ -41,7 +41,7 @@ export default function DevNav({ positionId }: { positionId: string }) {
   };
 
   const applyGradingFromAnswers = (numId: number) => {
-    const result = gradeMcqAssessment(numId, store.mcqAnswers);
+    const result = gradeMcqAssessment(numId, store.mcqAnswers, store.dynamicMcqQuestions, store.assessmentConfig ?? undefined);
     if (result) {
       store.setGradingResult(result.score, result.isPassed);
     }

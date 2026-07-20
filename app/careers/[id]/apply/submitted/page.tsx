@@ -12,7 +12,7 @@ import NextImage from "next/image";
 export default function ApplicationSubmittedPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { isOtpVerified, isCompleted, reset } = useApplicationStore();
+  const { isOtpVerified, isCompleted, reset, assessmentConfig } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
@@ -20,7 +20,14 @@ export default function ApplicationSubmittedPage() {
     (pos) => pos.id.toString() === id || pos.slug === id
   );
   const positionId = position ? position.id : parseInt(id as string);
-  const hasWritten = hasWrittenAssessment(positionId);
+  
+  let hasWritten = false;
+  if (assessmentConfig) {
+    const types = assessmentConfig.assessmentTypes ?? [assessmentConfig.assessmentType];
+    hasWritten = types.includes("short_answers") || types.includes("long_answers");
+  } else {
+    hasWritten = hasWrittenAssessment(positionId);
+  }
 
   useEffect(() => {
     setHydrated(true);
@@ -35,6 +42,18 @@ export default function ApplicationSubmittedPage() {
       }
     }
   }, [isOtpVerified, isCompleted, hydrated, id, router, isLeaving]);
+
+  const handleReturnHome = () => {
+    setIsLeaving(true);
+    reset(); // Clear store state on completion
+    router.push("/");
+  };
+
+  const handleExploreBrands = () => {
+    setIsLeaving(true);
+    reset(); // Clear store state on completion
+    router.push("/our-brands");
+  };
 
   if (!hydrated || (!isCompleted && !isLeaving)) {
     return (
@@ -69,23 +88,20 @@ export default function ApplicationSubmittedPage() {
                 className="w-full text-[16px] leading-[24px] text-[#0D1A14]/70"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
-                Thank you for completing the Malik Seeds technical assessment.
-                Your responses have been recorded and our team is reviewing it
-                now.
+                Thank you for completing the Malik Seeds technical assessment. Your responses have been successfully recorded. Since this position requires evaluation for written answers, our hiring team will review your submission and contact you via email regarding the next steps.
               </p>
               <p
                 className="w-full text-[14px] leading-[21px] font-medium text-[#0D1A14]"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
-                Please wait while we review your assessment. Keep this browser
-                open.
+                You may now safely close this window or use the options below to return home.
               </p>
             </div>
           </div>
-
+ 
           {/* Divider Line */}
           <div className="h-[1px] w-full bg-[#E4E7EC]" />
-
+ 
           {/* Action Row */}
           <div className="flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
             <button
@@ -100,23 +116,23 @@ export default function ApplicationSubmittedPage() {
               />
               <span>Review Your Responses</span>
             </button>
+            <button
+              onClick={handleReturnHome}
+              className="flex h-[46px] w-full cursor-pointer items-center justify-center gap-[10px] rounded-[60px] bg-[#195236] px-6 text-[16px] leading-[19px] font-medium text-[#F2F7F1] transition-all hover:bg-[#153e28] sm:w-auto"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
+              <span>Return Home</span>
+              <ArrowIcon
+                direction="right"
+                size={20}
+                className="text-white"
+              />
+            </button>
           </div>
         </div>
       </div>
     );
   }
-
-  const handleReturnHome = () => {
-    setIsLeaving(true);
-    reset(); // Clear store state on completion
-    router.push("/");
-  };
-
-  const handleExploreBrands = () => {
-    setIsLeaving(true);
-    reset(); // Clear store state on completion
-    router.push("/our-brands");
-  };
 
   return (
     <div className="mx-auto w-full max-w-[816px] rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">

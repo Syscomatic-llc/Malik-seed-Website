@@ -6,7 +6,6 @@ import { useApplicationStore } from "@/store/applicationStore";
 import {
   mcqQuestionsData,
   assessmentConfigs,
-  getAssessmentTypes,
 } from "@/data/questions-data";
 import { openPositionsData } from "@/data/career-data";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
@@ -27,6 +26,7 @@ export default function MCQAssessmentPage() {
     completedStages,
     completeStage,
     assessmentConfig,
+    dynamicMcqQuestions,
   } = useApplicationStore();
 
   const [showErrorPopup, setShowErrorPopup] = useState(false);
@@ -36,7 +36,7 @@ export default function MCQAssessmentPage() {
     (pos) => pos.id.toString() === id || pos.slug === id
   );
   const positionId = position ? position.id : parseInt(id as string);
-  const questions = mcqQuestionsData[positionId] || [];
+  const questions = dynamicMcqQuestions.length > 0 ? dynamicMcqQuestions : (mcqQuestionsData[positionId] || []);
   const config = assessmentConfig ?? assessmentConfigs[positionId];
 
   if (!config || questions.length === 0) {
@@ -48,7 +48,7 @@ export default function MCQAssessmentPage() {
   }
 
   const handleNext = () => {
-    const types = getAssessmentTypes(positionId);
+    const types = config.assessmentTypes ?? [config.assessmentType];
     const currentIndex = types.indexOf("mcq");
     const nextType = types[currentIndex + 1];
 
@@ -161,7 +161,14 @@ export default function MCQAssessmentPage() {
                       </div>
                       <span className="font-inter text-[16px] leading-[24px] font-normal text-[#0D1A14]">
                         {optionPrefixes[optIdx]}
-                        {opt}
+                        {(() => {
+                          const prefix = `${["A", "B", "C", "D"][optIdx]}.`;
+                          const trimmed = opt.trim();
+                          if (trimmed.toUpperCase().startsWith(prefix)) {
+                            return trimmed.slice(prefix.length).trim();
+                          }
+                          return opt;
+                        })()}
                       </span>
                       <McqDevOptionHighlight
                         question={q}

@@ -15,7 +15,16 @@ import { cn } from "@/lib/utils";
 export default function StartPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { name, email, isOtpVerified, startAssessment } = useApplicationStore();
+  const {
+    name,
+    email,
+    isOtpVerified,
+    startAssessment,
+    fetchAssessment,
+    assessmentConfig,
+    isLoadingAssessment,
+    assessmentLoadError,
+  } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
@@ -31,26 +40,39 @@ export default function StartPage() {
         router.replace(`/careers/${id}/apply/info`);
       } else if (!isOtpVerified) {
         router.replace(`/careers/${id}/apply/otp`);
+      } else if (position) {
+        fetchAssessment(positionId, position.title);
       }
     }
-  }, [email, isOtpVerified, hydrated, id, router]);
+  }, [email, isOtpVerified, hydrated, id, router, position, positionId, fetchAssessment]);
 
-  if (!hydrated || !isOtpVerified) {
+  if (!hydrated || !isOtpVerified || isLoadingAssessment) {
     return (
-      <div className="animate-pulse space-y-4 py-4">
-        <div className="h-6 w-1/3 rounded bg-gray-200"></div>
-        <div className="h-20 w-full rounded bg-gray-200"></div>
-        <div className="h-10 w-full rounded bg-gray-200"></div>
+      <div className="animate-pulse space-y-6 py-10 px-6 bg-white border border-[#E4E7EC] rounded-[24px] shadow-sm">
+        <div className="h-6 w-1/4 rounded bg-gray-200"></div>
+        <div className="space-y-3">
+          <div className="h-4 w-full rounded bg-gray-200"></div>
+          <div className="h-4 w-5/6 rounded bg-gray-200"></div>
+        </div>
+        <div className="space-y-2 pt-4">
+          <div className="h-5 w-1/3 rounded bg-gray-200"></div>
+          <div className="h-5 w-1/4 rounded bg-gray-200"></div>
+          <div className="h-5 w-1/5 rounded bg-gray-200"></div>
+        </div>
+        <div className="h-10 w-full rounded bg-gray-200 mt-6"></div>
       </div>
     );
   }
 
-  const config = assessmentConfigs[positionId];
+  const config = assessmentConfig ?? assessmentConfigs[positionId];
 
   if (!position || !config) {
     return (
-      <div className="py-10 text-center text-[#FF4242]">
+      <div className="py-10 text-center text-[#FF4242] font-inter">
         Error: Position assessment configuration not found.
+        {assessmentLoadError && (
+          <p className="mt-2 text-sm text-gray-500">{assessmentLoadError}</p>
+        )}
       </div>
     );
   }
@@ -62,7 +84,14 @@ export default function StartPage() {
     startAssessment(positionId, position.title, config);
 
     // Redirect to the first configured stage for this position
-    router.push(`/careers/${id}/apply${getInitialExamRoute(positionId)}`);
+    const firstType = config.assessmentTypes?.[0] ?? config.assessmentType;
+    let initialRoute = "/exam/mcq";
+    if (firstType === "short_answers") {
+      initialRoute = "/exam/short-answers";
+    } else if (firstType === "long_answers") {
+      initialRoute = "/exam/long-answers";
+    }
+    router.push(`/careers/${id}/apply${initialRoute}`);
   };
 
   // Agronomy detail mapping or generic detail mapping to match Figma's wording style:

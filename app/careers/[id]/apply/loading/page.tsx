@@ -12,7 +12,7 @@ import { openPositionsData } from "@/data/career-data";
 export default function AssessmentLoadingPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { isOtpVerified, isCompleted, isPassed } = useApplicationStore();
+  const { isOtpVerified, isCompleted, isPassed, assessmentConfig } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -36,7 +36,14 @@ export default function AssessmentLoadingPage() {
           (pos) => pos.id.toString() === id || pos.slug === id
         );
         const positionId = position ? position.id : parseInt(id as string);
-        const autoGrade = shouldAutoGradeAssessment(positionId);
+        
+        let autoGrade = false;
+        if (assessmentConfig) {
+          const types = assessmentConfig.assessmentTypes ?? [assessmentConfig.assessmentType];
+          autoGrade = types.length === 1 && types[0] === "mcq";
+        } else {
+          autoGrade = shouldAutoGradeAssessment(positionId);
+        }
 
         if (autoGrade) {
           // MCQ: always go to result page first (result handles pass/fail branching)
@@ -49,7 +56,7 @@ export default function AssessmentLoadingPage() {
 
       return () => clearTimeout(timer);
     }
-  }, [isOtpVerified, isCompleted, isPassed, hydrated, id, router]);
+  }, [isOtpVerified, isCompleted, isPassed, hydrated, id, router, assessmentConfig]);
 
   return (
     <div className="flex min-h-[400px] w-full items-center justify-center rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">

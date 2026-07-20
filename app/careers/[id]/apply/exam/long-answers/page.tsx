@@ -21,6 +21,7 @@ export default function LongAnswersPage() {
     completedStages,
     completeStage,
     assessmentConfig,
+    dynamicLongQuestions,
   } = useApplicationStore();
 
   const [showErrorPopup, setShowErrorPopup] = useState(false);
@@ -30,7 +31,7 @@ export default function LongAnswersPage() {
     (pos) => pos.id.toString() === id || pos.slug === id
   );
   const positionId = position ? position.id : parseInt(id as string);
-  const questions = longAnswerQuestionsData[positionId] || [];
+  const questions = dynamicLongQuestions.length > 0 ? dynamicLongQuestions : (longAnswerQuestionsData[positionId] || []);
   const config = assessmentConfig ?? assessmentConfigs[positionId];
 
   if (!config || questions.length === 0) {
@@ -125,6 +126,14 @@ export default function LongAnswersPage() {
                   Question {questionIndex}:{" "}
                   <span className="ml-0.5 font-semibold text-[#FF4242]">*</span>
                 </span>
+                {q.question && !q.question.toLowerCase().startsWith("question") && (
+                  <p
+                    className="text-[16px] leading-[24px] text-[#0D1A14]"
+                    style={{ fontFamily: "var(--font-inter-tight)" }}
+                  >
+                    {q.question}
+                  </p>
+                )}
                 {q.description && (
                   <p
                     className="text-[16px] leading-[24px] text-[#0D1A14]"
@@ -175,7 +184,6 @@ export default function LongAnswersPage() {
                 </div>
                 {/* Textarea input field */}
                 <textarea
-                  placeholder="Type your response here..."
                   value={answerText}
                   disabled={completedStages["long_answers"]}
                   onChange={(e) =>

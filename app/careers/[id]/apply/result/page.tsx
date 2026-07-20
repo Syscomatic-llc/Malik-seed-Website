@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
-import { shouldAutoGradeAssessment } from "@/data/questions-data";
+import { shouldAutoGradeAssessment, assessmentConfigs } from "@/data/questions-data";
 import { openPositionsData } from "@/data/career-data";
 import { gradeMcqAssessment } from "@/lib/assessment-grading";
 import type { McqGradingResult } from "@/lib/assessment-grading";
@@ -20,6 +20,8 @@ export default function AssessmentResultPage() {
     mcqAnswers,
     setGradingResult,
     reset,
+    dynamicMcqQuestions,
+    assessmentConfig,
   } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
@@ -35,11 +37,16 @@ export default function AssessmentResultPage() {
   }, []);
 
   // Grade MCQ assessments here (single place for result logic + dev debugging)
+  const config = assessmentConfig ?? assessmentConfigs[positionId];
+  const types = config ? (config.assessmentTypes ?? [config.assessmentType]) : [];
+  const isAutoGrade = types.length === 1 && types[0] === "mcq";
+
+  // Grade MCQ assessments here (single place for result logic + dev debugging)
   useEffect(() => {
-    if (!hydrated || !isCompleted || !shouldAutoGradeAssessment(positionId))
+    if (!hydrated || !isCompleted || !isAutoGrade)
       return;
 
-    const result = gradeMcqAssessment(positionId, mcqAnswers);
+    const result = gradeMcqAssessment(positionId, mcqAnswers, dynamicMcqQuestions, config ?? undefined);
     if (!result) return;
 
     setGrading(result);
@@ -54,6 +61,9 @@ export default function AssessmentResultPage() {
     mcqAnswers,
     isGraded,
     setGradingResult,
+    dynamicMcqQuestions,
+    config,
+    isAutoGrade,
   ]);
 
   useEffect(() => {
@@ -62,11 +72,11 @@ export default function AssessmentResultPage() {
         router.replace(`/careers/${id}/apply/otp`);
       } else if (!isCompleted) {
         router.replace(`/careers/${id}/apply/start`);
-      } else if (!shouldAutoGradeAssessment(positionId)) {
+      } else if (!isAutoGrade) {
         router.replace(`/careers/${id}/apply/submitted`);
       }
     }
-  }, [isOtpVerified, isCompleted, hydrated, id, router, positionId, isLeaving]);
+  }, [isOtpVerified, isCompleted, hydrated, id, router, positionId, isLeaving, isAutoGrade]);
 
   const showPass = isGraded ? isPassed : (grading?.isPassed ?? false);
 
@@ -78,7 +88,7 @@ export default function AssessmentResultPage() {
     );
   }
 
-  if (shouldAutoGradeAssessment(positionId) && !isGraded && !grading) {
+  if (isAutoGrade && !isGraded && !grading) {
     return (
       <div className="font-inter py-10 text-center text-[#0D1A14]/70">
         Evaluating your responses...
