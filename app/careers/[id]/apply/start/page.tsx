@@ -89,23 +89,19 @@ export default function StartPage() {
               className="text-[24px] leading-[29px] font-medium tracking-tight text-[#0D1A14]"
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
-              No Assessment Required
+              No Assessment Active
             </h1>
             <p className="text-[16px] leading-[24px] text-[#0D1A14]/70">
-              No screening exam is currently required for the <strong>{resolvedPositionTitle}</strong> position. You can proceed directly to complete the rest of your application details and upload your resume.
+              There is currently no screening assessment active for the <strong>{resolvedPositionTitle}</strong> position. Please check back later.
             </p>
           </div>
           <div className="h-[1px] w-full bg-[#E4E7EC]" />
           <button
-            onClick={() => {
-              skipAssessmentFlow();
-              router.push(`/careers/${id}/apply/additional-info`);
-            }}
+            onClick={() => router.push("/careers")}
             className="flex h-[46px] w-full cursor-pointer items-center justify-center gap-[10px] rounded-[60px] bg-[#195236] px-6 text-[16px] leading-[19px] font-medium text-[#F2F7F1] transition-all hover:bg-[#153e28] sm:w-auto"
             style={{ fontFamily: "var(--font-inter-tight)" }}
           >
-            <span>Proceed to Application Details</span>
-            <ArrowRight size={20} className="text-white" />
+            <span>Back to Open Positions</span>
           </button>
         </div>
       </div>
