@@ -24,6 +24,7 @@ export default function StartPage() {
     assessmentConfig,
     isLoadingAssessment,
     assessmentLoadError,
+    skipAssessmentFlow,
   } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -60,6 +61,49 @@ export default function StartPage() {
           <div className="h-5 w-1/5 rounded bg-gray-200"></div>
         </div>
         <div className="h-10 w-full rounded bg-gray-200 mt-6"></div>
+      </div>
+    );
+  }
+
+  const hasNoExam = assessmentLoadError === "This position does not require an assessment.";
+
+  if (hasNoExam) {
+    return (
+      <div className="mx-auto w-full max-w-[816px] rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
+        <div className="flex w-full flex-col items-start gap-8">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F7F1] text-[#195236]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+          </div>
+          <div className="flex flex-col gap-3">
+            <h1
+              className="text-[24px] leading-[29px] font-medium tracking-tight text-[#0D1A14]"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
+              No Assessment Required
+            </h1>
+            <p
+              className="text-[16px] leading-[24px] text-[#0D1A14]/70"
+              style={{ fontFamily: "var(--font-inter)" }}
+            >
+              No screening exam is currently required for the <strong>{position?.title || "selected"}</strong> position. You can proceed directly to complete the rest of your application details and upload your resume.
+            </p>
+          </div>
+          <div className="h-[1px] w-full bg-[#E4E7EC]" />
+          <button
+            onClick={() => {
+              skipAssessmentFlow();
+              router.push(`/careers/${id}/apply/additional-info`);
+            }}
+            className="flex h-[46px] w-full cursor-pointer items-center justify-center gap-[10px] rounded-[60px] bg-[#195236] px-6 text-[16px] leading-[19px] font-medium text-[#F2F7F1] transition-all hover:bg-[#153e28] sm:w-auto"
+            style={{ fontFamily: "var(--font-inter-tight)" }}
+          >
+            <span>Proceed to Application Details</span>
+            <ArrowRight size={20} className="text-white" />
+          </button>
+        </div>
       </div>
     );
   }

@@ -78,6 +78,7 @@ export interface ApplicationState {
   setShowTimeoutAlert: (stage: string | null) => void;
   setTransitionCountdown: (countdown: number | null) => void;
   finalizeTimeoutStage: (stage: string | null) => void;
+  skipAssessmentFlow: () => void;
   reset: () => void;
 }
 
@@ -131,6 +132,16 @@ export const useApplicationStore = create<ApplicationState>()(
       setShowTimeoutAlert: (showTimeoutAlert) => set({ showTimeoutAlert }),
 
       setTransitionCountdown: (transitionCountdown) => set({ transitionCountdown }),
+
+      skipAssessmentFlow: () => {
+        set({
+          isStarted: true,
+          isCompleted: true,
+          isPassed: true,
+          isGraded: true,
+          score: 100,
+        });
+      },
 
       finalizeTimeoutStage: (stage) => {
         if (!stage) return;
