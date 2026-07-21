@@ -334,7 +334,7 @@ function TimelineSpine({
 /** Image panel — 503 × 372, rounded‑[32px], overflow hidden */
 function ImagePanel({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="group relative aspect-[503/372] w-full max-w-[503px] shrink-0 overflow-hidden rounded-[32px] bg-[#E4E7EC]">
+    <div className="group relative aspect-[503/372] w-full max-w-[503px] shrink-0 overflow-hidden rounded-[32px] isolate [transform:translate3d(0,0,0)]">
       {src && (
         <OptimizedImage
           src={src}
@@ -354,6 +354,8 @@ function ImagePanel({ src, alt }: { src: string; alt: string }) {
  * inward from all four borders, creating a curved rectangular fade that respects
  * the container's border-radius.
  */
+const GLOW_MASK_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='b' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeGaussianBlur stdDeviation='8'/%3E%3C/filter%3E%3C/defs%3E%3Crect x='6' y='6' width='88' height='88' rx='16' fill='white' filter='url(%23b)'/%3E%3C/svg%3E")`;
+
 function GlowOverlay({
   src,
   className,
@@ -368,26 +370,24 @@ function GlowOverlay({
   return (
     <div
       className={cn(
-        "pointer-events-none absolute z-0 [transform:translate3d(0,0,0)] overflow-hidden",
+        "pointer-events-none absolute z-0 isolate [transform:translate3d(0,0,0)] overflow-hidden",
         className
       )}
       style={{
-        maskImage:
-          "linear-gradient(to bottom, transparent, black 24px, black calc(100% - 24px), transparent), linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
-        WebkitMaskImage:
-          "linear-gradient(to bottom, transparent, black 24px, black calc(100% - 24px), transparent), linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
-        maskComposite: "intersect",
-        WebkitMaskComposite: "source-in",
+        maskImage: GLOW_MASK_SVG,
+        WebkitMaskImage: GLOW_MASK_SVG,
+        maskSize: "100% 100%",
+        WebkitMaskSize: "100% 100%",
         ...style,
       }}
       aria-hidden="true"
     >
-      <div className="absolute inset-0 scale-110 [transform:translate3d(0,0,0)] blur-[4px]">
+      <div className="absolute inset-0 scale-105 [transform:translate3d(0,0,0)] blur-[2px]">
         <OptimizedImage
           src={src}
           alt=""
           fill
-          className="object-cover opacity-70 mix-blend-screen"
+          className="object-cover opacity-85 mix-blend-screen"
           sizes="(max-width: 768px) 140px, 252px"
         />
       </div>
@@ -831,7 +831,7 @@ function TabletTimelineRow({
           {item.year}
         </motion.span>
         {/* Image */}
-        <div className="group relative aspect-[503/372] w-full overflow-hidden rounded-[24px] bg-[#E4E7EC]">
+        <div className="group relative aspect-[503/372] w-full overflow-hidden rounded-[24px] isolate [transform:translate3d(0,0,0)]">
           {item.image && (
             <OptimizedImage
               src={item.image}
@@ -1103,7 +1103,7 @@ export default function TimelineStory({
 
                   const imageEl = (
                     <div
-                      className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] bg-[#F2F4F7] ${isEven ? "top-0" : "top-[392px]"
+                      className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] isolate [transform:translate3d(0,0,0)] ${isEven ? "top-0" : "top-[392px]"
                         }`}
                     >
                       {item.image && (

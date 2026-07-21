@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { apiGet, RequestOptions } from "./client";
+import { settingsApi } from "./settings";
 import { ApiPageSeo } from "./types";
 
 /**
@@ -42,53 +43,87 @@ export const seoApi = {
 
 /**
  * Resolves the final Next.js Metadata object by merging custom CMS SEO data with fallbacks.
+ * Ensures openGraph.siteName is always included for social preview cards (Discord, Twitter, etc.).
  */
 export async function getPageMetadata(
   pagePath: string,
   fallback: Metadata,
   options?: RequestOptions
 ): Promise<Metadata> {
-  const seoData = await seoApi.getPageSeo(pagePath, options);
-  if (!seoData) {
-    return fallback;
-  }
+  const [seoData, settings] = await Promise.all([
+    seoApi.getPageSeo(pagePath, options),
+    settingsApi.getSettings(options).catch(() => null),
+  ]);
 
-  const resolvedFallbackTitle = typeof fallback.title === "string" 
-    ? fallback.title 
-    : (fallback.title as any)?.absolute || (fallback.title as any)?.default || "";
+  const siteName =
+    (fallback.openGraph as any)?.siteName ||
+    settings?.siteName ||
+    "Malik Seeds";
 
-  const title = seoData.meta_title || seoData.title || resolvedFallbackTitle || "";
-  const description = seoData.meta_description || (fallback.description as string) || "";
-  
+  const siteTagline = settings?.siteTagline || "";
+  const defaultRootTitle = siteTagline ? `${siteName} - ${siteTagline}` : siteName;
+  const defaultRootDescription = settings?.siteDescription || "";
+
+  const resolvedFallbackTitle =
+    typeof fallback.title === "string"
+      ? fallback.title
+      : (fallback.title as any)?.absolute ||
+        (fallback.title as any)?.default ||
+        "";
+
+  const isRootPage = pagePath === "/";
+
+  const title =
+    seoData?.meta_title ||
+    seoData?.title ||
+    resolvedFallbackTitle ||
+    (isRootPage ? defaultRootTitle : siteName);
+
+  const description =
+    seoData?.meta_description ||
+    (fallback.description as string) ||
+    (isRootPage ? defaultRootDescription : "");
+
   // Format keywords: support string (split/clean) or keep as array if fallback has it
   let keywords: string | string[] = fallback.keywords || "";
-  if (seoData.meta_keywords) {
+  if (seoData?.meta_keywords) {
     keywords = seoData.meta_keywords
       .split(",")
       .map((k) => k.trim())
       .filter((k) => k.length > 0);
   }
 
-  const ogTitle = seoData.og_title || title;
-  const ogDescription = seoData.og_description || description;
-  const ogImageUrl = seoData.og_image ? normalizeImageUrl(seoData.og_image) : "";
+  const ogTitle =
+    seoData?.og_title || (fallback.openGraph as any)?.title || title;
+  const ogDescription =
+    seoData?.og_description ||
+    (fallback.openGraph as any)?.description ||
+    description;
+
+  const defaultOgImage = settings?.logoUrl || "";
+  const ogImageUrl = seoData?.og_image
+    ? normalizeImageUrl(seoData.og_image)
+    : (Array.isArray((fallback.openGraph as any)?.images)
+        ? (fallback.openGraph as any).images[0]?.url || (fallback.openGraph as any).images[0]
+        : defaultOgImage);
 
   // Deeply merge fallback metadata to retain viewport, manifest, icons, etc.
   const resolvedMetadata: Metadata = {
     ...fallback,
     title,
-    description,
+    description: description || undefined,
     keywords,
     openGraph: {
+      siteName,
       ...fallback.openGraph,
       title: ogTitle,
-      description: ogDescription,
+      description: ogDescription || undefined,
       type: (fallback.openGraph as any)?.type || "website",
     },
     twitter: {
       ...fallback.twitter,
       title: ogTitle,
-      description: ogDescription,
+      description: ogDescription || undefined,
       card: (fallback.twitter as any)?.card || "summary_large_image",
     },
   };

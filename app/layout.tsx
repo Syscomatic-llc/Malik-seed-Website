@@ -57,19 +57,9 @@ export async function generateMetadata(): Promise<Metadata> {
     }
   }
 
-  // Ensure description is optimal (between 120 and 160 characters for best SERP CTR)
   let description = settings.siteDescription || "";
   const optimalMax = 160;
-  const secondaryFallback = "Discover our high-yield hybrid seed varieties, success stories, and agricultural innovations empowering farmers since 1969.";
-
-  if (description.length < 80) {
-    if (description.length === 0) {
-      description = secondaryFallback;
-    } else {
-      const combined = `${description.trim()} ${secondaryFallback}`;
-      description = combined.length <= optimalMax ? combined : combined.slice(0, optimalMax - 3) + "...";
-    }
-  } else if (description.length > optimalMax) {
+  if (description.length > optimalMax) {
     description = description.slice(0, optimalMax - 3) + "...";
   }
 
@@ -116,12 +106,6 @@ export async function generateMetadata(): Promise<Metadata> {
         },
       ],
       type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: fullTitle,
-      description: description,
-      images: [settings.logoUrl || "https://malik-seed-website.vercel.app/og-image.png"],
     },
   };
 }

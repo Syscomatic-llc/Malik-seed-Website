@@ -4,6 +4,11 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Page Not Found - Malik Seeds",
   description: "The page you are looking for does not exist or has been moved.",
+  openGraph: {
+    title: "Page Not Found - Malik Seeds",
+    description: "The page you are looking for does not exist or has been moved.",
+    siteName: "Malik Seeds",
+  },
 };
 
 export default function NotFound() {

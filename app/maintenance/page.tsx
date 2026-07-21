@@ -10,6 +10,11 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Maintenance Mode - Malik Seeds",
   description: "We are currently undergoing scheduled maintenance. We'll be back online shortly.",
+  openGraph: {
+    title: "Maintenance Mode - Malik Seeds",
+    description: "We are currently undergoing scheduled maintenance. We'll be back online shortly.",
+    siteName: "Malik Seeds",
+  },
   robots: {
     index: false,
     follow: false,
