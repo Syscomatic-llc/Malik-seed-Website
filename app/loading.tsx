@@ -1,32 +1,19 @@
-"use client";
-
-import { useState, useEffect } from "react";
-
 /**
  * app/loading.tsx — Next.js root Suspense fallback.
  *
- * STRATEGY:
- * - First visit  → InitialLoader (in layout.tsx, z-9999) already covers the
- *                  screen with the signature animation. This returns null so
- *                  the two loaders never conflict.
- * - Return visits / reloads / navigations → InitialLoader is suppressed by
- *                  sessionStorage. This file shows a lightweight static logo
- *                  so the user has visual feedback while the page streams in.
+ * STRATEGY: Always render the static logo at z-[9998].
  *
- * We start with show=false (matches server render, no hydration mismatch),
- * then flip inside useEffect once we can read sessionStorage.
+ * - First visit  → InitialLoader (layout.tsx, z-[9999]) immediately overlays
+ *                  this at a higher z-index, so the user only ever sees the
+ *                  signature animation. No blank screen, no visible conflict.
+ *
+ * - Reload / navigation → InitialLoader is suppressed by sessionStorage;
+ *                  this shows instantly with no useEffect latency gap.
+ *
+ * This is a Server Component (no "use client") — renders immediately as
+ * part of the streamed HTML, so there is zero blank-screen window.
  */
 export default function RootLoading() {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    if (sessionStorage.getItem("hasSeenPremiumLoader")) {
-      setShow(true);
-    }
-  }, []);
-
-  if (!show) return null;
-
   return (
     <div className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-[#0D1A14] px-4 text-white">
       {/* Background glows */}
@@ -35,7 +22,7 @@ export default function RootLoading() {
 
       <style dangerouslySetInnerHTML={{
         __html: `
-          @keyframes dotsBounce {
+          @keyframes routeLoaderDots {
             0%, 100% { transform: translateY(0); }
             50%       { transform: translateY(-4px); }
           }
@@ -43,7 +30,7 @@ export default function RootLoading() {
       }} />
 
       <div className="relative z-10 flex flex-col items-center justify-center">
-        {/* Static full logo — no draw animation needed for subsequent visits */}
+        {/* Static full logo — no draw animation, renders instantly */}
         <div className="relative mb-3" style={{ width: 300, height: 40 }}>
           <svg width="300" height="40" viewBox="0 0 340 45" fill="none" xmlns="http://www.w3.org/2000/svg">
             {/* Leaf — green paths */}
@@ -87,7 +74,7 @@ export default function RootLoading() {
                 key={i}
                 className="h-1.5 w-1.5 rounded-full bg-[#96D76E]"
                 style={{
-                  animation: "dotsBounce 1.4s ease-in-out infinite",
+                  animation: "routeLoaderDots 1.4s ease-in-out infinite",
                   animationDelay: `${i * 150}ms`,
                 }}
               />
