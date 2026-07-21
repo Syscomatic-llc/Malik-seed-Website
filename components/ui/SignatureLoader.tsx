@@ -25,10 +25,10 @@ export default function SignatureLoader({
   height = 45,
   labelText = "Loading",
 }: SignatureLoaderProps) {
-  // Stagger reveal by 150ms per path
-  const staggerMs = 150;
-  const drawDurationMs = 1300;
-  const fillDurationMs = 1000;
+  // Stagger reveal by 100ms per path
+  const staggerMs = 100;
+  const drawDurationMs = 1000;
+  const fillDurationMs = 800;
 
   // Calculate when all animations finish drawing and filling
   const totalRevealDurationMs = useMemo(() => {
@@ -111,13 +111,13 @@ export default function SignatureLoader({
         .sig-loader-path {
           stroke-dasharray: 400;
           stroke-dashoffset: 400;
-          animation: drawPath 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
-                     fillPath 1.0s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
+          animation: drawPath 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+                     fillPath 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
         }
 
         .sig-loader-fade {
           opacity: 0;
-          animation: fadeInPath 1.0s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
+          animation: fadeInPath 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
         }
 
         .sig-loader-glow {

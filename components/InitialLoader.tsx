@@ -135,10 +135,10 @@ export default function InitialLoader() {
     sessionStorage.setItem("hasSeenPremiumLoader", "true");
 
     // Let the premium signature drawing animation complete fully without any barrier.
-    // Reveal duration is ~5.6 seconds, so we set a timer for 5.8s to fade it out nicely.
+    // Reveal duration is ~4.2 seconds, so we set a timer for 4s to fade it out nicely.
     const completeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 5800);
+    }, 4000);
 
     return () => {
       clearTimeout(completeTimer);
