@@ -655,8 +655,8 @@ function useGlobalMobileProgress(
   });
 
   return useSpring(progress, {
-    stiffness: 40,
-    damping: 15,
+    stiffness: 100,
+    damping: 22,
   });
 }
 
@@ -674,43 +674,64 @@ function useGlobalMobileProgress(
  */
 function GlobalMobileLine({
   smoothProgress,
+  firstBadgeWidth = 148,
+  contentWidth = 0,
 }: {
   smoothProgress: import("motion/react").MotionValue<number>;
+  firstBadgeWidth?: number;
+  contentWidth?: number;
 }) {
   const widthVal = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
+
+  const leftOffset = 183 + firstBadgeWidth / 2 + 10;
+
+  /**
+   * Fraction [0,1] of the line container where the last year's horizontal
+   * centre sits — mirrors desktop's "lastEnd" clamp in GlobalTimelineDot.
+   *
+   * line container: left=leftOffset, right=0 → width = contentWidth - leftOffset
+   * last year centre from container left = contentWidth - 183 - leftOffset
+   * fraction = (contentWidth - 183 - leftOffset) / (contentWidth - leftOffset)
+   */
+  const lastYearFraction =
+    contentWidth > leftOffset + 184
+      ? Math.min(1, (contentWidth - 183 - leftOffset) / (contentWidth - leftOffset))
+      : 0.88; // sensible fallback before first measurement
+
+  // Dot position: travels from 0% → lastYearFraction%, then stays clamped
+  // there (same as desktop dotTop which clamps at lastEnd%).
+  const dotLeft = useTransform(
+    smoothProgress,
+    [0, lastYearFraction, 1],
+    ["0%", `${lastYearFraction * 100}%`, `${lastYearFraction * 100}%`]
+  );
+
+  // Dot opacity: held at 1 across the whole journey, then fades to 0 as the
+  // dot arrives at the last year centre — mirrors GlobalTimelineDot's fade.
+  const fadeStart = Math.max(0, lastYearFraction - 0.08);
+  const dotOpacity = useTransform(
+    smoothProgress,
+    [0, fadeStart, lastYearFraction, 1],
+    [1, 1, 0, 0]
+  );
 
   return (
     <div
       className="pointer-events-none absolute z-0 h-[1px]"
-      style={{ top: 320, left: 260, right: 260 }}
+      style={{ top: 320, left: leftOffset, right: 0 }}
     >
-      {/* Faint background dashes, continuous across the whole track */}
-      <div className="absolute inset-0 overflow-hidden opacity-20">
-        <svg
-          className="h-[1px] w-full"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <line
-            x1="0"
-            y1="0.5"
-            x2="100%"
-            y2="0.5"
-            stroke="var(--brand-bg)"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeDasharray="3 4"
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
-      </div>
-
-      {/* Animated active dashed reveal */}
-      <motion.div
-        style={{ width: widthVal }}
-        className="absolute top-0 left-0 bottom-0 z-10 origin-left overflow-hidden"
+      {/* ── Line layers wrapped in a fade-out mask (matches desktop TimelineLineLast gradient) ── */}
+      <div
+        className="absolute inset-0"
+        style={{
+          maskImage:
+            "linear-gradient(to right, black calc(100% - 150px), transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to right, black calc(100% - 150px), transparent)",
+        }}
       >
-        <div className="h-[1px] w-[10000px]">
+        {/* Faint background dashes, continuous across the whole track */}
+        <div className="absolute inset-0 overflow-hidden opacity-20">
           <svg
             className="h-[1px] w-full"
             fill="none"
@@ -729,11 +750,39 @@ function GlobalMobileLine({
             />
           </svg>
         </div>
-      </motion.div>
 
-      {/* Traveling dot */}
+        {/* Animated active dashed reveal */}
+        <motion.div
+          style={{ width: widthVal }}
+          className="absolute top-0 left-0 bottom-0 z-10 origin-left overflow-hidden"
+        >
+          <div className="h-[1px] w-[10000px]">
+            <svg
+              className="h-[1px] w-full"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                x1="0"
+                y1="0.5"
+                x2="100%"
+                y2="0.5"
+                stroke="var(--brand-bg)"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeDasharray="3 4"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Traveling dot — sits outside the mask wrapper so it isn't clipped.
+          Position is clamped to the last year centre; opacity fades to 0 on
+          arrival — exact same contract as the desktop GlobalTimelineDot. */}
       <motion.div
-        style={{ left: widthVal }}
+        style={{ left: dotLeft, opacity: dotOpacity }}
         className="absolute top-0 z-20 h-[16px] w-[16px] -translate-x-1/2 -translate-y-1/2"
       >
         <OptimizedImage
@@ -870,6 +919,33 @@ export default function TimelineStory({
   const tabletSmoothProgress = useGlobalSpineProgress(tabletTimelineRef);
   const mobileSmoothProgress = useGlobalMobileProgress(mobileRef);
 
+  const firstMobileBadgeRef = useRef<HTMLDivElement>(null);
+  const lastMobileBadgeRef = useRef<HTMLDivElement>(null);
+  const [mobileBadgeWidths, setMobileBadgeWidths] = useState<{
+    first: number;
+    last: number;
+  }>({
+    first: 148,
+    last: 148,
+  });
+  // Total pixel width of the horizontal scroll content — used by GlobalMobileLine
+  // to compute lastYearFraction so the dot stops exactly at the last year centre.
+  const [mobileContentWidth, setMobileContentWidth] = useState(0);
+
+  useEffect(() => {
+    const updateWidths = () => {
+      const firstW = firstMobileBadgeRef.current?.offsetWidth || 148;
+      const lastW = lastMobileBadgeRef.current?.offsetWidth || 148;
+      setMobileBadgeWidths({ first: firstW, last: lastW });
+      // scrollWidth of the overflow container = total content width
+      setMobileContentWidth(mobileRef.current?.scrollWidth ?? 0);
+    };
+
+    updateWidths();
+    window.addEventListener("resize", updateWidths);
+    return () => window.removeEventListener("resize", updateWidths);
+  }, [resolvedItems]);
+
   return (
     <section className="bg-brand-dark w-full overflow-hidden" id="timeline">
       {/* ===== Desktop View (lg+) — two-column alternating, single shared spine ===== */}
@@ -994,7 +1070,11 @@ export default function TimelineStory({
             className="flex w-full snap-x snap-mandatory scrollbar-none flex-row overflow-x-auto px-6 pb-8"
           >
             <div className="relative flex flex-row gap-[80px]">
-              <GlobalMobileLine smoothProgress={mobileSmoothProgress} />
+              <GlobalMobileLine
+                smoothProgress={mobileSmoothProgress}
+                firstBadgeWidth={mobileBadgeWidths.first}
+                contentWidth={mobileContentWidth}
+              />
 
               {(() => {
                 const mobilePoints = resolvedItems.map(
@@ -1002,6 +1082,14 @@ export default function TimelineStory({
                 );
                 return resolvedItems.map((item, idx) => {
                   const isEven = idx % 2 === 0;
+                  const isFirst = idx === 0;
+                  const isLast = idx === resolvedItems.length - 1;
+                  const badgeRef = isFirst
+                    ? firstMobileBadgeRef
+                    : isLast
+                      ? lastMobileBadgeRef
+                      : undefined;
+
                   // Every year gets a glow now — prefer the dedicated glow
                   // image, fall back to the item's main photo so nobody
                   // renders blank.
@@ -1071,7 +1159,10 @@ export default function TimelineStory({
 
                   const yearEl = (
                     <div className="pointer-events-none absolute top-[296px] left-0 z-30 flex h-[48px] w-full items-center justify-center">
-                      <div className="bg-brand-dark relative z-30 flex h-full items-center select-none px-[24px]">
+                      <div
+                        ref={badgeRef}
+                        className="bg-brand-dark relative z-30 flex h-full items-center select-none px-[24px]"
+                      >
                         <motion.span
                           className="font-anton text-brand-light-green text-center text-[40px] leading-[48px]"
                           style={{ fontFamily: "var(--font-anton)", opacity: yearOpacity }}
