@@ -68,13 +68,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Host not allowed" }, { status: 403 });
   }
 
-  // Determine width and quality
+  // High-fidelity image settings for maximum photo sharpness & detail (quality 90, up to 1920px)
   const width = widthParam
     ? Math.min(1920, Math.max(16, parseInt(widthParam, 10)))
     : 1200;
   const quality = qualityParam
     ? Math.min(100, Math.max(10, parseInt(qualityParam, 10)))
-    : 75;
+    : 90;
 
   // Check disk cache
   await fs.mkdir(CACHE_DIR, { recursive: true });
@@ -86,7 +86,7 @@ export async function GET(req: NextRequest) {
     return new NextResponse(cached, {
       headers: {
         "Content-Type": "image/webp",
-        "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, immutable`,
+        "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, immutable`,
         "X-Image-Proxy-Cache": "HIT",
       },
     });
@@ -116,7 +116,7 @@ export async function GET(req: NextRequest) {
     try {
       optimized = await sharp(buffer)
         .resize({ width, withoutEnlargement: true })
-        .webp({ quality })
+        .webp({ quality, effort: 4 })
         .toBuffer();
     } catch (sharpError) {
       console.error(
@@ -142,7 +142,7 @@ export async function GET(req: NextRequest) {
     return new NextResponse(new Uint8Array(optimized), {
       headers: {
         "Content-Type": "image/webp",
-        "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, immutable`,
+        "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, immutable`,
         "X-Image-Proxy-Cache": "MISS",
       },
     });
