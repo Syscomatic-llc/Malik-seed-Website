@@ -1,18 +1,3 @@
-/**
- * app/loading.tsx — Next.js root Suspense fallback.
- *
- * STRATEGY: Always render the static logo at z-[9998].
- *
- * - First visit  → InitialLoader (layout.tsx, z-[9999]) immediately overlays
- *                  this at a higher z-index, so the user only ever sees the
- *                  signature animation. No blank screen, no visible conflict.
- *
- * - Reload / navigation → InitialLoader is suppressed by sessionStorage;
- *                  this shows instantly with no useEffect latency gap.
- *
- * This is a Server Component (no "use client") — renders immediately as
- * part of the streamed HTML, so there is zero blank-screen window.
- */
 export default function RootLoading() {
   return (
     <div className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-[#0D1A14] px-4 text-white">
