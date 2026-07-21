@@ -340,7 +340,7 @@ function ImagePanel({ src, alt }: { src: string; alt: string }) {
           src={src}
           alt={alt}
           fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-cover scale-[1.04] transition-transform duration-700 ease-out group-hover:scale-110"
           sizes="(max-width: 1280px) 45vw, 503px"
         />
       )}
@@ -354,8 +354,6 @@ function ImagePanel({ src, alt }: { src: string; alt: string }) {
  * inward from all four borders, creating a curved rectangular fade that respects
  * the container's border-radius.
  */
-const GLOW_MASK_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='b' x='-25%25' y='-25%25' width='150%25' height='150%25'%3E%3CfeGaussianBlur stdDeviation='8'/%3E%3C/filter%3E%3C/defs%3E%3Crect x='6' y='6' width='88' height='88' rx='16' fill='white' filter='url(%23b)'/%3E%3C/svg%3E")`;
-
 function GlowOverlay({
   src,
   className,
@@ -370,24 +368,26 @@ function GlowOverlay({
   return (
     <div
       className={cn(
-        "pointer-events-none absolute z-0 isolate [transform:translate3d(0,0,0)] overflow-hidden",
+        "pointer-events-none absolute z-0 [transform:translate3d(0,0,0)] overflow-hidden",
         className
       )}
       style={{
-        maskImage: GLOW_MASK_SVG,
-        WebkitMaskImage: GLOW_MASK_SVG,
-        maskSize: "100% 100%",
-        WebkitMaskSize: "100% 100%",
+        maskImage:
+          "linear-gradient(to bottom, transparent, black 24px, black calc(100% - 24px), transparent), linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
+        WebkitMaskImage:
+          "linear-gradient(to bottom, transparent, black 24px, black calc(100% - 24px), transparent), linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
+        maskComposite: "intersect",
+        WebkitMaskComposite: "source-in",
         ...style,
       }}
       aria-hidden="true"
     >
-      <div className="absolute inset-0 scale-105 [transform:translate3d(0,0,0)] blur-[2px]">
+      <div className="absolute inset-0 scale-110 [transform:translate3d(0,0,0)] blur-[4px]">
         <OptimizedImage
           src={src}
           alt=""
           fill
-          className="object-cover opacity-85 mix-blend-screen"
+          className="object-cover opacity-70 mix-blend-screen"
           sizes="(max-width: 768px) 140px, 252px"
         />
       </div>
@@ -837,7 +837,7 @@ function TabletTimelineRow({
               src={item.image}
               alt={item.title}
               fill
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              className="object-cover scale-[1.04] transition-transform duration-700 ease-out group-hover:scale-110"
               sizes="(max-width: 1024px) 55vw, 503px"
             />
           )}
@@ -1111,7 +1111,7 @@ export default function TimelineStory({
                           src={item.image}
                           alt={item.title}
                           fill
-                          className="object-cover"
+                          className="object-cover scale-[1.04]"
                           sizes="310px"
                         />
                       )}
