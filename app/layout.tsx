@@ -158,6 +158,13 @@ export default async function RootLayout({
       className={`${interTight.variable} ${inter.variable} ${anton.variable} ${stackSansNotch.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem('hasSeenPremiumLoader')){document.documentElement.classList.add('has-seen-loader');}}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col">
         {settings?.googleAnalyticsId && (
           <>

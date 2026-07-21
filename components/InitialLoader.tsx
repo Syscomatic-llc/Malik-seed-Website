@@ -116,8 +116,8 @@ const MALIK_FULL_LOGO_PATHS: LogoPathConfig[] = [
 ];
 
 export default function InitialLoader() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [shouldRender, setShouldRender] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [shouldRender, setShouldRender] = useState(true);
 
   useEffect(() => {
     // Check if user has already seen the premium loader in this session
@@ -128,9 +128,6 @@ export default function InitialLoader() {
       return;
     }
 
-    // Render and show initial loader
-    setShouldRender(true);
-    setIsVisible(true);
     // Mark as active immediately for the session
     sessionStorage.setItem("hasSeenPremiumLoader", "true");
 
@@ -159,7 +156,7 @@ export default function InitialLoader() {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0D1A14] px-4 text-white transition-opacity duration-500 cubic-bezier(0.4, 0, 0.2, 1) ${
+      className={`initial-loader fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0D1A14] px-4 text-white transition-opacity duration-500 cubic-bezier(0.4, 0, 0.2, 1) ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
