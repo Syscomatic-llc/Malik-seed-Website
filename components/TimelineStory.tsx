@@ -2,7 +2,7 @@
 
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import NextImage from "next/image";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { TimelineItem } from "@/data/sections-data";
 import { SectionBadge } from "./ui/SectionBadge";
@@ -626,11 +626,35 @@ function GlobalTabletLine({
 function useGlobalMobileProgress(
   containerRef: React.RefObject<HTMLDivElement | null>
 ) {
-  const { scrollXProgress } = useScroll({
+  const { scrollX } = useScroll({
     container: containerRef,
   });
 
-  return useSpring(scrollXProgress, {
+  const [scrollRange, setScrollRange] = useState<[number, number]>([0, 1]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const updateRange = () => {
+      const W = el.clientWidth;
+      const scrollWidth = el.scrollWidth;
+      const C0 = 24 + 183; // 24px left padding + 183px (half of 366px card)
+      const startScroll = Math.max(0, C0 - W / 2);
+      const endScroll = Math.max(startScroll + 1, scrollWidth - W);
+      setScrollRange([startScroll, endScroll]);
+    };
+
+    updateRange();
+    window.addEventListener("resize", updateRange);
+    return () => window.removeEventListener("resize", updateRange);
+  }, [containerRef]);
+
+  const progress = useTransform(scrollX, scrollRange, [0, 1], {
+    clamp: true,
+  });
+
+  return useSpring(progress, {
     stiffness: 40,
     damping: 15,
   });
@@ -658,25 +682,59 @@ function GlobalMobileLine({
   return (
     <div
       className="pointer-events-none absolute z-0 h-[1px]"
-      style={{ top: 320, left: 183, right: 183 }}
+      style={{ top: 320, left: 260, right: 260 }}
     >
       {/* Faint background dashes, continuous across the whole track */}
-      <div className="border-brand-bg absolute inset-0 overflow-hidden border-t border-dashed opacity-20" />
+      <div className="absolute inset-0 overflow-hidden opacity-20">
+        <svg
+          className="h-[1px] w-full"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <line
+            x1="0"
+            y1="0.5"
+            x2="100%"
+            y2="0.5"
+            stroke="var(--brand-bg)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeDasharray="3 4"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+      </div>
 
-      {/* Animated dashed reveal */}
+      {/* Animated active dashed reveal */}
       <motion.div
         style={{ width: widthVal }}
-        className="absolute top-0 left-0 h-full origin-left overflow-hidden"
+        className="absolute top-0 left-0 bottom-0 z-10 origin-left overflow-hidden"
       >
-        <div className="border-brand-bg h-full w-full border-t border-dashed" />
+        <div className="h-[1px] w-[10000px]">
+          <svg
+            className="h-[1px] w-full"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <line
+              x1="0"
+              y1="0.5"
+              x2="100%"
+              y2="0.5"
+              stroke="var(--brand-bg)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeDasharray="3 4"
+              vectorEffect="non-scaling-stroke"
+            />
+          </svg>
+        </div>
       </motion.div>
 
-      {/* Traveling dot — no z-index set (implicitly below the year badge's
-          z-30), so it ducks behind each year and re-emerges after it,
-          exactly like the desktop and tablet spines. */}
+      {/* Traveling dot */}
       <motion.div
         style={{ left: widthVal }}
-        className="absolute top-1/2 h-[16px] w-[16px] -translate-x-1/2 -translate-y-1/2"
+        className="absolute top-0 z-20 h-[16px] w-[16px] -translate-x-1/2 -translate-y-1/2"
       >
         <OptimizedImage
           src="/images/timeline/Ellipse.svg"
@@ -957,9 +1015,8 @@ export default function TimelineStory({
 
                   const imageEl = (
                     <div
-                      className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] bg-[#F2F4F7] ${
-                        isEven ? "top-0" : "top-[392px]"
-                      }`}
+                      className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] bg-[#F2F4F7] ${isEven ? "top-0" : "top-[392px]"
+                        }`}
                     >
                       {item.image && (
                         <OptimizedImage
@@ -1025,17 +1082,18 @@ export default function TimelineStory({
                     </div>
                   );
 
-                return (
-                  <div
-                    key={item.year}
-                    className="relative h-[632px] w-[366px] shrink-0 snap-center"
-                  >
-                    {imageEl}
-                    {yearEl}
-                    {textEl}
-                  </div>
-                );
-              })})()}
+                  return (
+                    <div
+                      key={item.year}
+                      className="relative h-[632px] w-[366px] shrink-0 snap-center"
+                    >
+                      {imageEl}
+                      {yearEl}
+                      {textEl}
+                    </div>
+                  );
+                })
+              })()}
             </div>
           </div>
         </div>

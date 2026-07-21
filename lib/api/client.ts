@@ -72,9 +72,15 @@ async function request<T>(
 
   const url = `${baseUrl}${cleanPath}${buildQuery(options?.params)}`;
 
+  const fetchCache =
+    options?.cache ??
+    (options?.revalidate === 0 || options?.revalidate === false
+      ? "no-store"
+      : undefined);
+
   const res = await fetch(url, {
     ...init,
-    cache: options?.cache,
+    cache: fetchCache,
     signal: options?.signal,
     next:
       options?.revalidate !== undefined

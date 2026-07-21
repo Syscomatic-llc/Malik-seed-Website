@@ -5,6 +5,8 @@ import { Metadata } from "next";
 import { settingsApi } from "@/lib/api";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Maintenance Mode - Malik Seeds",
   description: "We are currently undergoing scheduled maintenance. We'll be back online shortly.",
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
 
 export default async function MaintenancePage() {
   // If maintenance mode is not active, block access to this page by redirecting to home
-  const settings = await settingsApi.getSettings({ revalidate: 0 });
+  const settings = await settingsApi.getSettings({ cache: "no-store", revalidate: 0 });
   if (!settings.maintenanceMode) {
     redirect("/");
   }
