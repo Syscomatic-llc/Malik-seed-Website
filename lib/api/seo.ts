@@ -73,36 +73,38 @@ export async function getPageMetadata(
 
   const isRootPage = pagePath === "/";
 
-  const title =
-    seoData?.meta_title ||
-    seoData?.title ||
-    resolvedFallbackTitle ||
-    (isRootPage ? defaultRootTitle : siteName);
+  // Determine Title, Description, and Keywords based on whether CMS SEO data exists
+  const title = seoData
+    ? (seoData.meta_title || seoData.title || (isRootPage ? defaultRootTitle : siteName))
+    : (resolvedFallbackTitle || (isRootPage ? defaultRootTitle : siteName));
 
-  const description =
-    seoData?.meta_description ||
-    (fallback.description as string) ||
-    (isRootPage ? defaultRootDescription : "");
+  const description = seoData
+    ? (seoData.meta_description || (isRootPage ? defaultRootDescription : undefined))
+    : ((fallback.description as string) || (isRootPage ? defaultRootDescription : undefined));
 
-  // Format keywords: support string (split/clean) or keep as array if fallback has it
-  let keywords: string | string[] = fallback.keywords || "";
-  if (seoData?.meta_keywords) {
-    keywords = seoData.meta_keywords
-      .split(",")
-      .map((k) => k.trim())
-      .filter((k) => k.length > 0);
+  let keywords: string | string[] | undefined = undefined;
+  if (seoData) {
+    if (seoData.meta_keywords) {
+      keywords = seoData.meta_keywords
+        .split(",")
+        .map((k) => k.trim())
+        .filter((k) => k.length > 0);
+    }
+  } else {
+    keywords = fallback.keywords || undefined;
   }
 
-  const ogTitle =
-    seoData?.og_title || (fallback.openGraph as any)?.title || title;
-  const ogDescription =
-    seoData?.og_description ||
-    (fallback.openGraph as any)?.description ||
-    description;
+  const ogTitle = seoData
+    ? (seoData.og_title || title)
+    : ((fallback.openGraph as any)?.title || title);
+
+  const ogDescription = seoData
+    ? (seoData.og_description || description)
+    : ((fallback.openGraph as any)?.description || description);
 
   const defaultOgImage = settings?.logoUrl || "";
-  const ogImageUrl = seoData?.og_image
-    ? normalizeImageUrl(seoData.og_image)
+  const ogImageUrl = seoData
+    ? (seoData.og_image ? normalizeImageUrl(seoData.og_image) : defaultOgImage)
     : (Array.isArray((fallback.openGraph as any)?.images)
         ? (fallback.openGraph as any).images[0]?.url || (fallback.openGraph as any).images[0]
         : defaultOgImage);
@@ -119,12 +121,8 @@ export async function getPageMetadata(
       title: ogTitle,
       description: ogDescription || undefined,
       type: (fallback.openGraph as any)?.type || "website",
-    },
-    twitter: {
-      ...fallback.twitter,
-      title: ogTitle,
-      description: ogDescription || undefined,
-      card: (fallback.twitter as any)?.card || "summary_large_image",
+      // If CMS SEO is configured, override the fallback's openGraph images
+      ...(seoData ? { images: undefined } : {}),
     },
   };
 
@@ -136,9 +134,6 @@ export async function getPageMetadata(
           alt: title,
         },
       ];
-    }
-    if (resolvedMetadata.twitter) {
-      resolvedMetadata.twitter.images = [ogImageUrl];
     }
   }
 

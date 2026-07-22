@@ -138,7 +138,7 @@ export default memo(function CVDropSection() {
                   className="h-6 w-6"
                 />
                 <span className="font-inter text-center text-[16px] leading-6 font-medium text-[#A9E179] md:text-[18px] md:leading-[27px] px-4">
-                  {file ? `Selected: ${file.name}` : "Click or drop your CV here (PDF, DOC, DOCX)"}
+                  {file ? `Selected: ${file.name}` : "Click or drop your CV"}
                 </span>
               </div>
             </div>
