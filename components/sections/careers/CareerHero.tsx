@@ -129,6 +129,8 @@ export default memo(function CareerHero({
                 label={data.ctaSecondary.label}
                 variant="secondary"
                 iconSize={16}
+                target="_blank"
+                rel="noopener noreferrer"
                 containerClassName="w-full lg:w-auto"
                 className="w-full justify-center gap-[6px] !border !border-[rgba(255,255,255,0.1)] !bg-[rgba(255,255,255,0.06)] px-[13px] py-[13px] text-[14px] leading-[120%] !text-[#F2F7F1] hover:!bg-[rgba(255,255,255,0.12)] lg:w-auto lg:gap-[10px] lg:px-6 lg:py-[16px] lg:text-[16px]"
               />
