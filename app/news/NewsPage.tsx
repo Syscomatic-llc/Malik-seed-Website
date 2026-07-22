@@ -28,6 +28,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
   const searchParams = useSearchParams();
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
   const [isSimulatingLoad, setIsSimulatingLoad] = useState(false);
+  const [isCategoryLoading, setIsCategoryLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const categoriesList = useMemo(() => {
@@ -91,13 +92,14 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     return loadedArticles.length >= visibleCount;
   }, [loadedArticles, visibleCount]);
 
-  const isLoading = isPending || isSimulatingLoad;
+  const isLoading = isPending || isSimulatingLoad || isCategoryLoading;
 
   const handleCategoryChange = (category: string) => {
+    if (category === activeCategory && !isCategoryLoading) return;
     startTransition(() => {
       setActiveCategory(category);
       const fetchLimit = INITIAL_VISIBLE;
-      setIsSimulatingLoad(true);
+      setIsCategoryLoading(true);
   
       newsApi
         .getArticles({
@@ -118,7 +120,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
           setVisibleCount(fetchLimit);
         })
         .finally(() => {
-          setIsSimulatingLoad(false);
+          setIsCategoryLoading(false);
         });
 
       const params = new URLSearchParams(searchParams.toString());
@@ -215,9 +217,9 @@ export default function NewsPage({ apiData }: NewsPageProps) {
           </div>
 
           <div className="mt-12 mb-[48px] min-h-[400px] md:mt-16">
-            {isLoading && displayedArticles.length === 0 ? (
+            {isCategoryLoading || isPending ? (
               <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[24px] xl:grid-cols-3 xl:gap-x-[24px] xl:gap-y-[40px]">
-                {[1, 2, 3].map((idx) => (
+                {[1, 2, 3, 4, 5, 6].map((idx) => (
                   <div
                     key={idx}
                     className="flex h-[480px] w-full flex-col rounded-[24px] border border-[#E4E7EC]/50 bg-white p-[16px] pb-[24px]"
@@ -228,6 +230,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
                       <div className="mt-2 h-5 w-2/3 animate-pulse rounded bg-[#E4E7EC]" />
                       <div className="mt-4 h-4 w-full animate-pulse rounded bg-[#F2F4F7]" />
                       <div className="mt-2 h-4 w-11/12 animate-pulse rounded bg-[#F2F4F7]" />
+                      <div className="mt-2 h-4 w-4/5 animate-pulse rounded bg-[#F2F4F7]" />
                       <div className="my-6 w-full border-t border-[#CED2DA]/50" />
                       <div className="h-5 w-[100px] animate-pulse rounded bg-[#E4E7EC]" />
                     </div>
@@ -237,7 +240,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
             ) : displayedArticles.length > 0 ? (
               <div
                 className={`grid grid-cols-1 gap-[20px] transition-opacity duration-300 md:grid-cols-2 md:gap-[24px] xl:grid-cols-3 xl:gap-x-[24px] xl:gap-y-[40px] ${
-                  isLoading ? "opacity-50" : "opacity-100"
+                  isSimulatingLoad ? "opacity-60" : "opacity-100"
                 }`}
               >
                 {displayedArticles.map((article) => (

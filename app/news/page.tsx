@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import NewsPage from "./NewsPage";
+import NewsLoading from "./loading";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import { newsApi, getPageMetadata } from "@/lib/api";
 import type { Metadata } from "next";
@@ -26,7 +27,7 @@ export default async function NewsRoute() {
   }
   return (
     <>
-      <Suspense fallback={null}>
+      <Suspense fallback={<NewsLoading />}>
         <NewsPage apiData={apiData} />
       </Suspense>
       <JoinTeamSection />
