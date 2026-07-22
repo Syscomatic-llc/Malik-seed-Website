@@ -32,7 +32,12 @@ export const newsApi = {
     return apiGet<ApiNewsArticle>(`/api/v1/news/articles/${slug}`, options);
   },
   getCategories(options?: RequestOptions) {
-    return apiGet<ApiNewsCategory[]>("/api/v1/news/categories", options);
+    return apiGet<ApiNewsCategory[]>("/api/v1/news/categories", options).then(
+      (res) =>
+        Array.isArray(res)
+          ? [...res].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+          : []
+    );
   },
   getPressReleases(options?: RequestOptions) {
     return apiGet<ApiPressRelease[]>("/api/v1/news/press-releases", options);
@@ -58,7 +63,12 @@ export const newsApi = {
     } as RequestOptions);
   },
   getAll(options?: RequestOptions) {
-    return apiGet<ApiNewsPageData>("/api/v1/news/", options);
+    return apiGet<ApiNewsPageData>("/api/v1/news/", options).then((res) => {
+      if (res && Array.isArray(res.categories)) {
+        res.categories.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+      }
+      return res;
+    });
   },
   getNews(options?: RequestOptions) {
     return this.getAll(options);

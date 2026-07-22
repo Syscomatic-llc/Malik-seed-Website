@@ -32,7 +32,10 @@ export default function NewsPage({ apiData }: NewsPageProps) {
 
   const categoriesList = useMemo(() => {
     if (!apiData?.categories) return [ALL_CATEGORY];
-    return [ALL_CATEGORY, ...apiData.categories.map((c) => c.name)];
+    const sorted = [...apiData.categories].sort(
+      (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)
+    );
+    return [ALL_CATEGORY, ...sorted.map((c) => c.name)];
   }, [apiData]);
 
   const getInitialCount = useCallback(() => {
