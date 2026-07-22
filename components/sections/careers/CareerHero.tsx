@@ -45,7 +45,7 @@ const TypewriterText = memo(function TypewriterText({
       () => {
         setSubIndex((prev) => prev + (reverse ? -1 : 1));
       },
-      reverse ? 40 : 80
+      reverse ? 25 : 50
     );
 
     return () => clearTimeout(timeout);
