@@ -46,10 +46,14 @@ const SocialIcon = ({ social }: { social: { label: string; href: string } }) => 
         <path d="M9.33268 9.0026H10.9993L11.666 6.33594H9.33268V5.0026C9.33268 4.31594 9.33268 3.66927 10.666 3.66927H11.666V1.42927C11.4487 1.4006 10.628 1.33594 9.76135 1.33594C7.95135 1.33594 6.66602 2.4406 6.66602 4.46927V6.33594H4.66602V9.0026H6.66602V14.6693H9.33268V9.0026Z" fill="currentColor" />
       </svg>
     );
-  } else if (social.label.toLowerCase() === "instagram" || social.label.toLowerCase() === "insta") {
+  } else if (
+    social.label.toLowerCase() === "instagram" ||
+    social.label.toLowerCase() === "insta" ||
+    social.label.toLowerCase() === "linkedin"
+  ) {
     svgIcon = (
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-200 group-hover:scale-110">
-        <path d="M8 5.67C6.71 5.67 5.67 6.72 5.67 8C5.67 9.28 6.72 10.33 8 10.33C9.28 10.33 10.33 9.28 10.33 8C10.33 6.72 9.28 5.67 8 5.67ZM15 8C15 7.03 15 6.08 14.95 5.11C14.9 3.99 14.64 2.99 13.82 2.18C13 1.36 12.01 1.1 10.89 1.05C9.92 1 8.97 1 8 1C7.03 1 6.08 1 5.11 1.05C3.99 1.1 2.99 1.36 2.18 2.18C1.36 3 1.1 3.99 1.05 5.11C1 6.08 1 7.03 1 8C1 8.97 1 9.92 1.05 10.89C1.1 12.01 1.36 13.01 2.18 13.82C3 14.64 3.99 14.9 5.11 14.95C6.08 15 7.03 15 8 15C8.97 15 9.92 15 10.89 14.95C12.01 14.9 13.01 14.64 13.82 13.82C14.64 13 14.9 12.01 14.95 10.89C15.01 9.93 15 8.97 15 8ZM8 11.59C6.01 11.59 4.41 9.99 4.41 8C4.41 6.01 6.01 4.41 8 4.41C9.99 4.41 11.59 6.01 11.59 8C11.59 9.99 9.99 11.59 8 11.59ZM11.74 5.1C11.28 5.1 10.9 4.73 10.9 4.26C10.9 3.79 11.27 3.42 11.74 3.42C12.21 3.42 12.58 3.79 12.58 4.26C12.5825 4.36954 12.5625 4.47842 12.5212 4.57991C12.48 4.6814 12.4183 4.77333 12.34 4.85C12.2633 4.92827 12.1714 4.98997 12.0699 5.03125C11.9684 5.07253 11.8595 5.09253 11.75 5.09L11.74 5.1Z" fill="currentColor" />
+        <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" fill="currentColor" />
       </svg>
     );
   } else if (social.label.toLowerCase() === "youtube") {
@@ -109,21 +113,21 @@ export default async function Footer() {
         href: contactInfo.facebook_url,
       });
     }
-    if (contactInfo.instagram_url) {
-      socials.push({
-        label: "Instagram",
-        href: contactInfo.instagram_url,
-      });
-    }
     if (contactInfo.youtube_url) {
       socials.push({
         label: "YouTube",
         href: contactInfo.youtube_url,
       });
     }
+    if (contactInfo.instagram_url) {
+      socials.push({
+        label: "Instagram",
+        href: contactInfo.instagram_url,
+      });
+    }
   }
 
-  // Fallback only contains Facebook, Instagram, and YouTube
+  // Fallback only contains Facebook, YouTube, and Instagram (which shows LinkedIn logo)
   const displaySocials =
     socials.length > 0
       ? socials
@@ -133,12 +137,12 @@ export default async function Footer() {
           href: "https://facebook.com/malikseeds",
         },
         {
-          label: "Instagram",
-          href: "https://instagram.com/malikseed",
-        },
-        {
           label: "YouTube",
           href: "https://facebook.com/malikseeds",
+        },
+        {
+          label: "Instagram",
+          href: "https://instagram.com/malikseed",
         },
       ];
 

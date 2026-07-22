@@ -17,7 +17,7 @@ export const careerHeroData = {
   },
   ctaSecondary: {
     label: "Life at Malik Seeds",
-    href: "#team-culture",
+    href: "https://www.facebook.com/LifeAtMalikSeeds/",
   },
   teamImage: "/images/careers/Malik Seeds Team.png",
 };
@@ -475,9 +475,9 @@ export const futureProgramData = {
   title: "Future Leader Program",
   paragraphs: [
     "We believe the future of agriculture in Bangladesh will be built by the people we invest in today.",
-    "The Malik Seeds Future Leader Program is our commitment to the next generation. This graduate trainee program is designed to give young professionals a shot at building a career in the agriculture industry.",
-    "We will hire not only in our core business areas like Sales, R&D and Product Development but also in Social Media Marketing, Tech Team, Agri Innovation & Development Projects, AI Projects and many more.",
-    "If you are interested, drop your CV below!",
+    "The Malik Seeds Future Leader Program is a multi-week intensive sales bootcamp for young professionals who are ready to work - not watch. You will be in the field, meeting farmers, visiting dealers and learning about the products that fuel our country's agriculture economy.",
+    "You will see how Bangladesh's most trusted seed company operates from the ground up. This program takes place in Malik's Farm in North Bengal.",
+    "Top performers walk away with a full-time career. If that excites you - drop our CV below."
   ],
   cta: {
     label: "Drop your CV",
