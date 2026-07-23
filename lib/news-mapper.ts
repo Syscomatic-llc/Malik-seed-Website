@@ -491,8 +491,8 @@ export function mapApiArticleToNewsArticle(a: ApiNewsArticle): NewsArticle {
     .replace(/&nbsp;/g, " ")
     .replace(/\u00a0/g, " ");
 
-  // Resolve image URL (checking featured_image first, then falling back to image_url)
-  const imageUrl = resolveImageUrl(a.featured_image || a.image_url);
+  // Resolve image URL (checking featured_image first, then falling back to image_url) in HD
+  const imageUrl = resolveImageUrl(a.featured_image || a.image_url, 1920, 95);
 
   return {
     id: a.id,
@@ -507,7 +507,7 @@ export function mapApiArticleToNewsArticle(a: ApiNewsArticle): NewsArticle {
     author: {
       name: a.author_name || "Research Team",
       role: a.author_title || "Staff Writer",
-      avatar: resolveImageUrl(a.author_avatar) || "",
+      avatar: resolveImageUrl(a.author_avatar, 400, 95) || "",
     },
   };
 }

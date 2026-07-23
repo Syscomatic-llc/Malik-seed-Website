@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { newsApi } from "@/lib/api/newspage";
 import { hiringApi } from "@/lib/api/hiring";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://malik-seed-website.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [

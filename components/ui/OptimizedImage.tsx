@@ -26,9 +26,13 @@ export default function OptimizedImage({
 }: OptimizedImageProps) {
   const resolvedSrc = src ? resolveImageUrl(src) : fallbackSrc;
 
-  // Images routed through our /api/image-proxy are already optimized —
-  // skip Next.js's built-in /_next/image optimizer to avoid double processing.
-  const isProxied = resolvedSrc.startsWith("/api/image-proxy");
+  // Images routed through our /api/image-proxy or SVGs are already optimized/vector graphics —
+  // skip Next.js's built-in /_next/image optimizer to avoid double processing and quality loss.
+  const isProxied =
+    resolvedSrc.startsWith("/api/image-proxy") ||
+    resolvedSrc.startsWith("api/image-proxy");
+  const isSvg =
+    resolvedSrc.endsWith(".svg") || resolvedSrc.includes(".svg?");
 
   // Initialize loading state: skip loading skeleton if already cached in session
   const [loading, setLoading] = useState(() => {
@@ -88,7 +92,7 @@ export default function OptimizedImage({
         placeholder={showPlaceholder}
         blurDataURL={blurDataURL}
         onError={handleError}
-        unoptimized={isProxied}
+        unoptimized={props.unoptimized ?? (isProxied || isSvg)}
         className={`${className} transition-all duration-500 ${
           loading ? "opacity-0" : "opacity-100"
         } ${isTouched ? "scale-105" : ""}`}

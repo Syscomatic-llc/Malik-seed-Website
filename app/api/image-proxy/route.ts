@@ -68,13 +68,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Host not allowed" }, { status: 403 });
   }
 
-  // High-fidelity image settings for maximum photo sharpness & detail (quality 90, up to 1920px)
+  // High-fidelity image settings for maximum photo sharpness & detail (quality 92, up to 1920px)
   const width = widthParam
     ? Math.min(1920, Math.max(16, parseInt(widthParam, 10)))
     : 1200;
   const quality = qualityParam
     ? Math.min(100, Math.max(10, parseInt(qualityParam, 10)))
-    : 90;
+    : 92;
 
   // Check disk cache
   await fs.mkdir(CACHE_DIR, { recursive: true });
@@ -116,7 +116,7 @@ export async function GET(req: NextRequest) {
     try {
       optimized = await sharp(buffer)
         .resize({ width, withoutEnlargement: true })
-        .webp({ quality, effort: 4 })
+        .webp({ quality, effort: 4, smartSubsample: true })
         .toBuffer();
     } catch (sharpError) {
       console.error(

@@ -88,7 +88,7 @@ function buildAboutData(apiData?: ApiAbout) {
   const about2 = gallery[1] ? resolveImageUrl(gallery[1]) : "";
 
   const introMobileText =
-    desc.length > 132 ? desc.substring(0, 132) + "..." : desc;
+    desc.length > 158 ? desc.substring(0, 158) + "..." : desc;
 
   return {
     badge: apiData.title || "",
