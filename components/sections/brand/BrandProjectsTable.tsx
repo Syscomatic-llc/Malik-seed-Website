@@ -124,6 +124,22 @@ const PROJECTS: Project[] = [
   },
 ];
 
+function getPageNumbers(currentPage: number, totalPages: number): (number | string)[] {
+  if (totalPages <= 3) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  if (currentPage <= 2) {
+    return [1, 2, 3, "..."];
+  }
+
+  if (currentPage >= totalPages - 1) {
+    return ["...", totalPages - 2, totalPages - 1, totalPages];
+  }
+
+  return ["...", currentPage - 1, currentPage, currentPage + 1, "..."];
+}
+
 function PaginationControls({
   currentPage,
   totalPages,
@@ -141,52 +157,72 @@ function PaginationControls({
   onPageChange: (page: number) => void;
   className?: string;
 }) {
+  const pageNumbers = getPageNumbers(currentPage, totalPages);
+
   return (
-    <div className={cn("flex flex-col items-center justify-center gap-3 bg-white select-none", className)}>
-      <div className="flex items-center gap-2">
-        {/* Previous page button */}
-        <button
-          onClick={() => onPageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
-          aria-label="Previous page"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-
-        {/* Page buttons */}
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            className={cn(
-              "flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-all cursor-pointer",
-              currentPage === page
-                ? "bg-[#0F3221] text-[#F2F7F1] font-semibold"
-                : "border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60"
-            )}
-          >
-            {page}
-          </button>
-        ))}
-
-        {/* Next page button */}
-        <button
-          onClick={() => onPageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
-          aria-label="Next page"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
-
-      <div className="text-[14px] font-sans text-[#0D1A14]/70">
+    <div
+      className={cn(
+        "flex flex-col items-center justify-between gap-3 bg-white select-none sm:flex-row",
+        className
+      )}
+    >
+      <div className="text-[13px] sm:text-[14px] font-sans text-[#0D1A14]/70 order-2 sm:order-1">
         Showing <span className="font-medium text-[#0D1A14]">{startIndex + 1}</span> to{" "}
         <span className="font-medium text-[#0D1A14]">
           {Math.min(startIndex + itemsPerPage, totalItems)}
         </span>{" "}
         of <span className="font-medium text-[#0D1A14]">{totalItems}</span> projects
+      </div>
+
+      <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
+        {/* Previous page button */}
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
+          aria-label="Previous page"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+
+        {/* Page buttons / Ellipsis */}
+        {pageNumbers.map((page, i) => {
+          if (typeof page === "string") {
+            return (
+              <span
+                key={`ellipsis-${i}`}
+                className="flex h-8 w-6 sm:h-9 sm:w-8 items-center justify-center text-xs sm:text-sm font-medium text-[#0D1A14]/40 select-none"
+              >
+                •••
+              </span>
+            );
+          }
+
+          return (
+            <button
+              key={page}
+              onClick={() => onPageChange(page)}
+              className={cn(
+                "flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer",
+                currentPage === page
+                  ? "bg-[#0F3221] text-[#F2F7F1] font-semibold"
+                  : "border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60"
+              )}
+            >
+              {page}
+            </button>
+          );
+        })}
+
+        {/* Next page button */}
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
+          aria-label="Next page"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
       </div>
     </div>
   );
@@ -362,12 +398,14 @@ export default function BrandProjectsTable() {
 
                       {/* Location with Pin on right */}
                       <div className="flex items-center gap-2">
-                        <OptimizedImage
-                          src={"/location.svg"}
-                          alt="Location"
-                          width={14}
-                          height={14}
-                        />
+                        <div className="h-[14px] w-[14px] shrink-0">
+                          <OptimizedImage
+                            src={"/location.svg"}
+                            alt="Location"
+                            width={14}
+                            height={14}
+                          />
+                        </div>
                         <span className="font-sans text-[14px] leading-[21px] font-[400] text-[#0D1A14]">
                           {project.location}
                         </span>
@@ -401,7 +439,7 @@ export default function BrandProjectsTable() {
             itemsPerPage={ITEMS_PER_PAGE}
             totalItems={PROJECTS.length}
             onPageChange={handlePageChange}
-            className="flex-col sm:flex-row gap-4 px-6 py-4"
+            className="px-6 py-4"
           />
         </div>
       </div>
