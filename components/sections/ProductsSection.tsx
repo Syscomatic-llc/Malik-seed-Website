@@ -80,7 +80,7 @@ function CardContent({
 
           {/* Description — revealed on hover */}
           <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[120px] group-hover:opacity-100">
-            <p className="font-inter text-brand-bg/80 mt-1 text-[14px] leading-[22px] md:text-[16px] md:leading-[24px]">
+            <p className="font-inter text-brand-bg mt-1 text-[14px] leading-[22px] md:text-[16px] md:leading-[24px]">
               {product.description}
             </p>
           </div>

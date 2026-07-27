@@ -26,67 +26,11 @@ interface GalleryHeroSectionProps {
 // Production-Grade Static Configurations (Architectural Cleanliness)
 // ---------------------------------------------------------------------------
 const INITIAL_VISIBLE = 9; // aligned to multiple of 3 for grid completeness
-const MOBILE_INITIAL_VISIBLE = 6; // aligned to multiple of 3 for mobile grid completeness
-const LOAD_MORE_STEP = 6;
+const MOBILE_INITIAL_VISIBLE = 9; // aligned to multiple of 3 for mobile grid completeness
+const LOAD_MORE_STEP = 9;
 const ANIMATION_DELAY_MS = 800;
 const COUNT_PARAM = "count"; // URL query param that persists "load more" progress
 
-// Pixel-perfect image fallback assets mapped from Figma Design Node 2691:17850
-export const FALLBACK_GALLERY_IMAGES: readonly GalleryImage[] = [
-  { id: 1, src: "/images/gallery/061_1.png", alt: "Healthy green crops field" },
-  { id: 2, src: "/images/gallery/055_1.png", alt: "Fresh cabbage head" },
-  { id: 3, src: "/images/gallery/057_2.png", alt: "Farmer examining plants" },
-  { id: 4, src: "/images/gallery/006_1.png", alt: "Rich vegetable harvest" },
-  { id: 5, src: "/images/gallery/009_1.png", alt: "Potato crop cultivation" },
-  {
-    id: 6,
-    src: "/images/gallery/image_29.png",
-    alt: "Cabbage seedlings growing",
-  },
-  {
-    id: 7,
-    src: "/images/gallery/image_32.png",
-    alt: "Harvesting in the greenhouse",
-  },
-  {
-    id: 8,
-    src: "/images/gallery/056_1.png",
-    alt: "Selecting seeds for planting",
-  },
-  { id: 9, src: "/images/gallery/070.png", alt: "Happy farming team" },
-  {
-    id: 10,
-    src: "/images/gallery/image_31.png",
-    alt: "Fresh green cabbage fields",
-  },
-  // Back-filled timeline images to demonstrate dynamic load-more functionality
-  {
-    id: 11,
-    src: "/images/timeline/001_(1)_1.png",
-    alt: "Modern agricultural machinery",
-  },
-  { id: 12, src: "/images/timeline/005_1.png", alt: "Field crop inspection" },
-  {
-    id: 13,
-    src: "/images/timeline/distributor_picture_1_1.png",
-    alt: "Seed distribution warehouse",
-  },
-  {
-    id: 14,
-    src: "/images/timeline/field_activities-49_1.png",
-    alt: "Planting season fields",
-  },
-  {
-    id: 15,
-    src: "/images/timeline/malik_seeds_team-4_1.png",
-    alt: "R&D team in the laboratory",
-  },
-  {
-    id: 16,
-    src: "/images/timeline/image_30.png",
-    alt: "High-yield potato harvest",
-  },
-] as const;
 
 // ---------------------------------------------------------------------------
 // Component
