@@ -23,9 +23,9 @@ const StandardCard = memo(function StandardCard({
   return (
     <div
       className={[
-        "group flex flex-col items-start justify-between gap-8 rounded-[24px] border p-8 md:items-center",
+        "group flex flex-col items-start justify-start gap-8 rounded-[24px] border p-8 md:items-center",
         "w-full sm:w-[calc(50%-8px)] lg:w-[342px] lg:flex-shrink-0",
-        "min-h-[216px] transition-all duration-300 ease-in-out hover:shadow-lg",
+        "transition-all duration-300 ease-in-out hover:shadow-lg",
         "border-brand-border bg-brand-neutral-light hover:bg-[#0F3221] hover:border-[#0F3221]",
       ].join(" ")}
       style={{ padding: "32px 32px" }}
