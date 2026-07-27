@@ -31,6 +31,7 @@ const LOAD_MORE_STEP = 9;
 const ANIMATION_DELAY_MS = 800;
 const COUNT_PARAM = "count"; // URL query param that persists "load more" progress
 
+export const FALLBACK_GALLERY_IMAGES: GalleryImage[] = [];
 
 // ---------------------------------------------------------------------------
 // Component

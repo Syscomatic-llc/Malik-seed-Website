@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { resolveImageUrl } from "@/lib/utils";
@@ -7,10 +10,11 @@ interface AboutHeroProps {
   apiData?: ApiOurStoryHero | null;
 }
 
-
 export default function AboutHero({ apiData }: AboutHeroProps) {
   const badgeText = apiData?.title || "Our Story";
-  const titleText = apiData?.subtitle || "Cultivating the Future of Agriculture in Bangladesh";
+  const titleText =
+    apiData?.subtitle ||
+    "Cultivating the Future of Agriculture in Bangladesh";
   const images = apiData?.background_images?.length
     ? apiData.background_images.map((img, i) => ({
         id: i,
@@ -18,6 +22,23 @@ export default function AboutHero({ apiData }: AboutHeroProps) {
         alt: `Our story image ${i + 1}`,
       }))
     : [];
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      const container = scrollRef.current;
+      const secondCard = container.querySelector<HTMLElement>(
+        "div > div:nth-child(2)"
+      );
+      if (secondCard) {
+        const scrollLeft =
+          secondCard.offsetLeft -
+          (container.clientWidth - secondCard.clientWidth) / 2;
+        container.scrollLeft = scrollLeft;
+      }
+    }
+  }, [images]);
 
   return (
     <section className="bg-brand-bg w-full overflow-hidden pt-[120px] pb-12 md:pt-[150px] md:pb-[80px] xl:pt-[180px] xl:pb-[100px]">
@@ -36,13 +57,16 @@ export default function AboutHero({ apiData }: AboutHeroProps) {
         </h1>
       </div>
 
-      {/* 3-image static row — Centered, side images partially overflowing the screen */}
-      <div className="mt-8 flex w-full justify-center overflow-x-hidden md:mt-12">
+      {/* 3-image row — Scrollable & 2nd image centered on mobile (< md), static row on desktop (>= md) */}
+      <div
+        ref={scrollRef}
+        className="mt-8 flex w-full overflow-x-auto scrollbar-none snap-x snap-mandatory py-2 px-[calc(50vw-155px)] md:mt-12 md:justify-center md:overflow-x-hidden md:py-0 md:px-0"
+      >
         <div className="flex shrink-0 items-center justify-center gap-4 md:gap-6">
           {images.map((img, i) => (
             <div
               key={img.id}
-              className="relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm md:aspect-[548/420] md:h-auto md:w-[42vw] md:rounded-[24px]"
+              className="snap-center relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm md:aspect-[548/420] md:h-auto md:w-[42vw] md:rounded-[24px]"
             >
               <OptimizedImage
                 src={img.src}
