@@ -9,7 +9,7 @@ interface NewsCardProps {
 
 export default function NewsCard({ article }: NewsCardProps) {
   return (
-    <Link href={`/news/${article.slug}`} className="group block">
+    <Link href={`/news/${article.slug}`} className="group block w-full">
       <article className="flex h-full w-full flex-col rounded-[24px] border border-[#E4E7EC]/50 bg-white p-[16px] pb-[24px] transition-all duration-300 hover:shadow-md">
         {/* Image */}
         <div className="relative h-[260px] w-full overflow-hidden rounded-[16px] bg-[#F9FAFB]">

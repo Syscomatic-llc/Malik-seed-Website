@@ -10,20 +10,38 @@ export interface GetArticlesParams {
   category?: string;
   featured?: boolean;
   limit?: number;
+  page?: number;
+}
+
+export interface PaginatedArticlesResponse {
+  items: ApiNewsArticle[];
+  total: number;
 }
 
 export const newsApi = {
-  getArticles(params?: GetArticlesParams, options?: RequestOptions) {
+  getArticlesPaginated(params?: GetArticlesParams, options?: RequestOptions): Promise<PaginatedArticlesResponse> {
     const query = new URLSearchParams();
     if (params?.category) query.set("category", params.category);
     if (params?.featured !== undefined)
       query.set("featured", String(params.featured));
     if (params?.limit !== undefined) query.set("limit", String(params.limit));
+    if (params?.page !== undefined) query.set("page", String(params.page));
     const qs = query.toString();
-    return apiGet<{ items: ApiNewsArticle[]; total: number }>(
+    return apiGet<PaginatedArticlesResponse | ApiNewsArticle[]>(
       `/api/v1/news/articles${qs ? `?${qs}` : ""}`,
       options
-    ).then((res) => res?.items || []);
+    ).then((res) => {
+      if (Array.isArray(res)) {
+        return { items: res, total: res.length };
+      }
+      return {
+        items: res?.items || [],
+        total: res?.total ?? (res?.items?.length || 0),
+      };
+    });
+  },
+  getArticles(params?: GetArticlesParams, options?: RequestOptions) {
+    return this.getArticlesPaginated(params, options).then((res) => res.items);
   },
   getFeaturedArticles(options?: RequestOptions) {
     return apiGet<ApiNewsArticle[]>("/api/v1/news/articles/featured", options);

@@ -1,11 +1,10 @@
 "use client";
 
-const INITIAL_VISIBLE = 6;
-const LOAD_MORE_STEP = 6;
-const COUNT_PARAM = "count";
+const ARTICLES_PER_PAGE = 6;
+const PAGE_PARAM = "page";
 const ALL_CATEGORY = "All News";
 
-import { useState, useEffect, useTransition, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "motion/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SectionBadge } from "@/components/ui/SectionBadge";
@@ -13,7 +12,7 @@ import {
   type NewsArticle,
 } from "@/data/news-data";
 import NewsCard from "@/components/NewsCard";
-import LoadmoreButton from "@/components/LoadmoreButton";
+import PaginationControls from "@/components/PaginationControls";
 import { mapApiArticleToNewsArticle } from "@/lib/news-mapper";
 import { ApiNewsPageData } from "@/lib/api/types";
 import { newsApi } from "@/lib/api";
@@ -22,14 +21,21 @@ interface NewsPageProps {
   apiData?: ApiNewsPageData | null;
 }
 
+const CATEGORY_PARAM = "category";
+
 export default function NewsPage({ apiData }: NewsPageProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
-  const [isSimulatingLoad, setIsSimulatingLoad] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
+
   const [isCategoryLoading, setIsCategoryLoading] = useState(false);
-  const [isPending, startTransition] = useTransition();
+
+  const activeCategory = useMemo(() => {
+    const cat = searchParams.get(CATEGORY_PARAM);
+    if (!cat) return ALL_CATEGORY;
+    return cat;
+  }, [searchParams]);
 
   const categoriesList = useMemo(() => {
     if (!apiData?.categories) return [ALL_CATEGORY];
@@ -39,125 +45,118 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     return [ALL_CATEGORY, ...sorted.map((c) => c.name)];
   }, [apiData]);
 
-  const getInitialCount = useCallback(() => {
-    const raw = Number(searchParams.get(COUNT_PARAM));
-    if (!Number.isFinite(raw) || raw <= INITIAL_VISIBLE) return INITIAL_VISIBLE;
+  const currentPage = useMemo(() => {
+    const raw = Number(searchParams.get(PAGE_PARAM));
+    if (!Number.isFinite(raw) || raw < 1) return 1;
     return raw;
   }, [searchParams]);
 
-  const [visibleCount, setVisibleCount] = useState(getInitialCount);
+  const allInitialArticles = useMemo(() => {
+    if (!apiData?.articles) return [];
+    return apiData.articles.map(mapApiArticleToNewsArticle);
+  }, [apiData]);
 
-  const [loadedArticles, setLoadedArticles] = useState<NewsArticle[]>(() => {
-    if (apiData?.articles && apiData.articles.length > 0) {
-      return apiData.articles.map(mapApiArticleToNewsArticle);
-    }
-    return [];
-  });
+  const categoryFilteredArticles = useMemo(() => {
+    if (activeCategory === ALL_CATEGORY) return allInitialArticles;
+    return allInitialArticles.filter(
+      (a) => a.category?.toLowerCase().trim() === activeCategory.toLowerCase().trim()
+    );
+  }, [allInitialArticles, activeCategory]);
 
-  // Sync visible count with URL count param when it changes
+  const [totalArticles, setTotalArticles] = useState<number>(0);
+  const [loadedArticles, setLoadedArticles] = useState<NewsArticle[]>([]);
+
+  const isFirstRender = useRef(true);
+
+  // Single unified fetch effect driven by currentPage and activeCategory
   useEffect(() => {
-    const initialCount = getInitialCount();
-    if (initialCount !== visibleCount) {
-      setVisibleCount(initialCount);
-      
-      // If the URL specifies more articles than currently loaded, fetch them
-      if (initialCount > loadedArticles.length) {
-        setIsSimulatingLoad(true);
-        newsApi
-          .getArticles({
-            category: activeCategory === ALL_CATEGORY ? undefined : activeCategory,
-            limit: initialCount,
-          })
-          .then((apiArticles) => {
-            if (apiArticles && apiArticles.length > 0) {
-              setLoadedArticles(apiArticles.map(mapApiArticleToNewsArticle));
-            }
-          })
-          .catch((err) => {
-            console.error("Failed to fetch articles for updated count:", err);
-          })
-          .finally(() => {
-            setIsSimulatingLoad(false);
-          });
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      if (currentPage === 1 && activeCategory === ALL_CATEGORY && apiData?.articles && apiData.articles.length > 0) {
+        return;
       }
     }
-  }, [getInitialCount, activeCategory, visibleCount, loadedArticles.length]);
 
-  const displayedArticles = useMemo<NewsArticle[]>(
-    () => loadedArticles.slice(0, visibleCount),
-    [loadedArticles, visibleCount]
-  );
+    let isCancelled = false;
+    setIsCategoryLoading(true);
 
-  const hasMore = useMemo(() => {
-    return loadedArticles.length >= visibleCount;
-  }, [loadedArticles, visibleCount]);
+    newsApi
+      .getArticlesPaginated({
+        category: activeCategory === ALL_CATEGORY ? undefined : activeCategory,
+        limit: ARTICLES_PER_PAGE,
+        page: currentPage,
+      })
+      .then((res) => {
+        if (!isCancelled) {
+          setLoadedArticles(res.items.map(mapApiArticleToNewsArticle));
+          setTotalArticles(res.total);
+        }
+      })
+      .catch((err) => {
+        if (!isCancelled) {
+          console.error("Failed to fetch page articles:", err);
+        }
+      })
+      .finally(() => {
+        if (!isCancelled) {
+          setIsCategoryLoading(false);
+        }
+      });
 
-  const isLoading = isPending || isSimulatingLoad || isCategoryLoading;
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentPage, activeCategory, apiData]);
+
+  // Total count for current category (uses API total if fetched, otherwise local category count)
+  const effectiveTotalArticles = useMemo(() => {
+    if (totalArticles > 0) return totalArticles;
+    return categoryFilteredArticles.length;
+  }, [totalArticles, categoryFilteredArticles]);
+
+  const totalPages = Math.max(1, Math.ceil(effectiveTotalArticles / ARTICLES_PER_PAGE));
+
+  // Articles displayed for current page (uses API loadedArticles if available, otherwise local slice)
+  const displayedArticles = useMemo(() => {
+    if (loadedArticles.length > 0) return loadedArticles;
+    const start = (currentPage - 1) * ARTICLES_PER_PAGE;
+    return categoryFilteredArticles.slice(start, start + ARTICLES_PER_PAGE);
+  }, [loadedArticles, categoryFilteredArticles, currentPage]);
 
   const handleCategoryChange = (category: string) => {
     if (category === activeCategory && !isCategoryLoading) return;
-    startTransition(() => {
-      setActiveCategory(category);
-      const fetchLimit = INITIAL_VISIBLE;
-      setIsCategoryLoading(true);
-  
-      newsApi
-        .getArticles({
-          category: category === ALL_CATEGORY ? undefined : category,
-          limit: fetchLimit,
-        })
-        .then((apiArticles) => {
-          if (apiArticles && apiArticles.length > 0) {
-            setLoadedArticles(apiArticles.map(mapApiArticleToNewsArticle));
-          } else {
-            setLoadedArticles([]);
-          }
-          setVisibleCount(fetchLimit);
-        })
-        .catch((err) => {
-          console.error("Failed to fetch articles by category:", err);
-          setLoadedArticles([]);
-          setVisibleCount(fetchLimit);
-        })
-        .finally(() => {
-          setIsCategoryLoading(false);
-        });
-
-      const params = new URLSearchParams(searchParams.toString());
-      params.delete(COUNT_PARAM);
-      router.replace(
-        params.size > 0 ? `${pathname}?${params.toString()}` : pathname,
-        { scroll: false }
-      );
-    });
-  };
-
-  const handleLoadMore = () => {
-    setIsSimulatingLoad(true);
-    const nextLimit = visibleCount + LOAD_MORE_STEP;
-
-    newsApi
-      .getArticles({
-        category: activeCategory === ALL_CATEGORY ? undefined : activeCategory,
-        limit: nextLimit,
-      })
-      .then((apiArticles) => {
-        if (apiArticles && apiArticles.length > 0) {
-          setLoadedArticles(apiArticles.map(mapApiArticleToNewsArticle));
-        }
-        setVisibleCount(nextLimit);
-      })
-      .catch((err) => {
-        console.error("Failed to load more articles:", err);
-        setVisibleCount(nextLimit);
-      })
-      .finally(() => {
-        setIsSimulatingLoad(false);
-      });
 
     const params = new URLSearchParams(searchParams.toString());
-    params.set(COUNT_PARAM, String(nextLimit));
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    params.delete(PAGE_PARAM);
+    if (category === ALL_CATEGORY) {
+      params.delete(CATEGORY_PARAM);
+    } else {
+      params.set(CATEGORY_PARAM, category);
+    }
+
+    router.replace(
+      params.size > 0 ? `${pathname}?${params.toString()}` : pathname,
+      { scroll: false }
+    );
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage === currentPage || isCategoryLoading || newPage < 1 || newPage > totalPages) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (newPage === 1) {
+      params.delete(PAGE_PARAM);
+    } else {
+      params.set(PAGE_PARAM, String(newPage));
+    }
+    router.replace(
+      params.size > 0 ? `${pathname}?${params.toString()}` : pathname,
+      { scroll: false }
+    );
+
+    if (gridRef.current) {
+      gridRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
@@ -216,8 +215,8 @@ export default function NewsPage({ apiData }: NewsPageProps) {
             </div>
           </div>
 
-          <div className="mt-12 mb-[48px] min-h-[400px] md:mt-16">
-            {isCategoryLoading || isPending ? (
+          <div ref={gridRef} className="mt-12 mb-[48px] min-h-[400px] md:mt-16 scroll-mt-[100px]">
+            {isCategoryLoading ? (
               <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[24px] xl:grid-cols-3 xl:gap-x-[24px] xl:gap-y-[40px]">
                 {[1, 2, 3, 4, 5, 6].map((idx) => (
                   <div
@@ -238,11 +237,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
                 ))}
               </div>
             ) : displayedArticles.length > 0 ? (
-              <div
-                className={`grid grid-cols-1 gap-[20px] transition-opacity duration-300 md:grid-cols-2 md:gap-[24px] xl:grid-cols-3 xl:gap-x-[24px] xl:gap-y-[40px] ${
-                  isSimulatingLoad ? "opacity-60" : "opacity-100"
-                }`}
-              >
+              <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[24px] xl:grid-cols-3 xl:gap-x-[24px] xl:gap-y-[40px]">
                 {displayedArticles.map((article) => (
                   <NewsCard key={article.id} article={article} />
                 ))}
@@ -256,10 +251,13 @@ export default function NewsPage({ apiData }: NewsPageProps) {
             )}
           </div>
 
-          {hasMore && (
-            <LoadmoreButton
-              handleLoadMore={handleLoadMore}
-              isLoading={isLoading}
+          {effectiveTotalArticles > ARTICLES_PER_PAGE && (
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              itemsPerPage={ARTICLES_PER_PAGE}
+              totalItems={effectiveTotalArticles}
+              onPageChange={handlePageChange}
             />
           )}
         </div>
