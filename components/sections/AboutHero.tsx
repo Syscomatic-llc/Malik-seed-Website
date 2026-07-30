@@ -82,8 +82,6 @@ function MobileHeroSlider({
   images: { id: number; src: string; alt: string }[];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInteractingRef = useRef(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Duplicate images list for seamless infinite loop (4 sets)
   const displayImages =
@@ -91,25 +89,12 @@ function MobileHeroSlider({
       ? [...images, ...images, ...images, ...images]
       : [];
 
-  const resumeScrolling = (delay = 1000) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      isInteractingRef.current = false;
-    }, delay);
-  };
-
-  const startInteraction = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    isInteractingRef.current = true;
-  };
-
   useEffect(() => {
-    isInteractingRef.current = false;
     let animId: number;
 
     const autoScroll = () => {
       const container = containerRef.current;
-      if (container && !isInteractingRef.current) {
+      if (container) {
         const halfWidth = container.scrollWidth / 2;
         if (halfWidth > 0) {
           container.scrollLeft += 0.55;
@@ -126,38 +111,16 @@ function MobileHeroSlider({
 
     return () => {
       cancelAnimationFrame(animId);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [displayImages.length]);
-
-  const handleScroll = () => {
-    const container = containerRef.current;
-    if (!container) return;
-    const halfWidth = container.scrollWidth / 2;
-    if (halfWidth > 0) {
-      if (container.scrollLeft >= halfWidth) {
-        container.scrollLeft -= halfWidth;
-      } else if (container.scrollLeft <= 0) {
-        container.scrollLeft += halfWidth;
-      }
-    }
-  };
 
   if (displayImages.length === 0) return null;
 
   return (
     <div
       ref={containerRef}
-      onScroll={handleScroll}
-      onTouchStart={startInteraction}
-      onTouchMove={startInteraction}
-      onTouchEnd={() => resumeScrolling(1000)}
-      onTouchCancel={() => resumeScrolling(500)}
-      onPointerDown={startInteraction}
-      onPointerUp={() => resumeScrolling(1000)}
-      onPointerCancel={() => resumeScrolling(500)}
       style={{ WebkitTapHighlightColor: "transparent" }}
-      className="md:hidden mt-8 flex w-full overflow-x-auto scrollbar-none py-2 px-4 select-none touch-pan-x"
+      className="md:hidden mt-8 flex w-full overflow-x-hidden pointer-events-none scrollbar-none py-2 px-4 select-none"
     >
       <div className="flex shrink-0 items-center gap-4">
         {displayImages.map((img, i) => (
