@@ -10,12 +10,19 @@ interface AboutHeroProps {
   apiData?: ApiOurStoryHero | null;
 }
 
+const DEFAULT_HERO_IMAGES = [
+  { id: 0, src: "/images/about/hero-dscf8697.png", alt: "Our story image 1" },
+  { id: 1, src: "/images/about/hero-field-67.png", alt: "Our story image 2" },
+  { id: 2, src: "/images/about/hero-rd-9.png", alt: "Our story image 3" },
+];
+
 export default function AboutHero({ apiData }: AboutHeroProps) {
   const badgeText = apiData?.title || "Our Story";
   const titleText =
     apiData?.subtitle ||
     "Cultivating the Future of Agriculture in Bangladesh";
-  const images = apiData?.background_images?.length
+  
+  const rawImages = apiData?.background_images?.length
     ? apiData.background_images.map((img, i) => ({
         id: i,
         src: resolveImageUrl(img),
@@ -23,22 +30,7 @@ export default function AboutHero({ apiData }: AboutHeroProps) {
       }))
     : [];
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      const container = scrollRef.current;
-      const secondCard = container.querySelector<HTMLElement>(
-        "div > div:nth-child(2)"
-      );
-      if (secondCard) {
-        const scrollLeft =
-          secondCard.offsetLeft -
-          (container.clientWidth - secondCard.clientWidth) / 2;
-        container.scrollLeft = scrollLeft;
-      }
-    }
-  }, [images]);
+  const images = rawImages.length > 0 ? rawImages : DEFAULT_HERO_IMAGES;
 
   return (
     <section className="bg-brand-bg w-full overflow-hidden pt-[120px] pb-12 md:pt-[150px] md:pb-[80px] xl:pt-[180px] xl:pb-[100px]">
@@ -57,29 +49,138 @@ export default function AboutHero({ apiData }: AboutHeroProps) {
         </h1>
       </div>
 
-      {/* 3-image row — Scrollable & 2nd image centered on mobile (< md), static row on desktop (>= md) */}
-      <div
-        ref={scrollRef}
-        className="mt-8 flex w-full overflow-x-auto scrollbar-none snap-x snap-mandatory py-2 px-[calc(50vw-155px)] md:mt-12 md:justify-center md:overflow-x-hidden md:py-0 md:px-0"
-      >
-        <div className="flex shrink-0 items-center justify-center gap-4 md:gap-6">
+      {/* Desktop & Tablet 3-image row — static row on desktop (>= md) */}
+      <div className="hidden md:flex mt-12 w-full justify-center overflow-x-hidden py-0 px-0">
+        <div className="flex shrink-0 items-center justify-center gap-6">
           {images.map((img, i) => (
             <div
-              key={img.id}
-              className="snap-center relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm md:aspect-[548/420] md:h-auto md:w-[42vw] md:rounded-[24px]"
+              key={`desktop-${img.id}-${i}`}
+              className="relative aspect-[548/420] h-auto w-[42vw] shrink-0 overflow-hidden rounded-[24px] bg-white shadow-sm"
             >
               <OptimizedImage
                 src={img.src}
                 alt={img.alt}
                 fill
                 priority={i < 3}
-                sizes="(max-width: 768px) 310px, 42vw"
+                sizes="42vw"
                 className="object-cover transition-transform duration-500 hover:scale-105"
               />
             </div>
           ))}
         </div>
       </div>
+
+      {/* Mobile (< md) — Infinite Scroll Auto Slider */}
+      <MobileHeroSlider images={images} />
     </section>
   );
 }
+
+function MobileHeroSlider({
+  images,
+}: {
+  images: { id: number; src: string; alt: string }[];
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInteractingRef = useRef(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Duplicate images list for seamless infinite loop (4 sets)
+  const displayImages =
+    images.length > 0
+      ? [...images, ...images, ...images, ...images]
+      : [];
+
+  const resumeScrolling = (delay = 1000) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, delay);
+  };
+
+  const startInteraction = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    isInteractingRef.current = true;
+  };
+
+  useEffect(() => {
+    isInteractingRef.current = false;
+    let animId: number;
+
+    const autoScroll = () => {
+      const container = containerRef.current;
+      if (container && !isInteractingRef.current) {
+        const halfWidth = container.scrollWidth / 2;
+        if (halfWidth > 0) {
+          container.scrollLeft += 0.55;
+
+          if (container.scrollLeft >= halfWidth) {
+            container.scrollLeft -= halfWidth;
+          }
+        }
+      }
+      animId = requestAnimationFrame(autoScroll);
+    };
+
+    animId = requestAnimationFrame(autoScroll);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [displayImages.length]);
+
+  const handleScroll = () => {
+    const container = containerRef.current;
+    if (!container) return;
+    const halfWidth = container.scrollWidth / 2;
+    if (halfWidth > 0) {
+      if (container.scrollLeft >= halfWidth) {
+        container.scrollLeft -= halfWidth;
+      } else if (container.scrollLeft <= 0) {
+        container.scrollLeft += halfWidth;
+      }
+    }
+  };
+
+  if (displayImages.length === 0) return null;
+
+  return (
+    <div
+      ref={containerRef}
+      onScroll={handleScroll}
+      onTouchStart={startInteraction}
+      onTouchMove={startInteraction}
+      onTouchEnd={() => resumeScrolling(1000)}
+      onTouchCancel={() => resumeScrolling(500)}
+      onPointerDown={startInteraction}
+      onPointerUp={() => resumeScrolling(1000)}
+      onPointerCancel={() => resumeScrolling(500)}
+      style={{ WebkitTapHighlightColor: "transparent" }}
+      className="md:hidden mt-8 flex w-full overflow-x-auto scrollbar-none py-2 px-4 select-none touch-pan-x"
+    >
+      <div className="flex shrink-0 items-center gap-4">
+        {displayImages.map((img, i) => (
+          <div
+            key={`mobile-${img.id}-${i}`}
+            className="relative h-[240px] w-[310px] shrink-0 overflow-hidden rounded-[20px] bg-white shadow-sm select-none"
+            style={{ WebkitTapHighlightColor: "transparent" }}
+          >
+            <OptimizedImage
+              src={img.src}
+              alt={img.alt}
+              fill
+              priority={i < 3}
+              sizes="310px"
+              className="object-cover select-none pointer-events-none"
+              draggable={false}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+

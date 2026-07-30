@@ -81,6 +81,8 @@ export const origeneData = {
     description: "A look inside the work that makes every claim verifiable.",
     steps: [],
     images: ["/images/brand/dscf8661_1.png", "/images/brand/planted_04_1.png"],
+    buttonText: "Visit our Ecommerce Shop",
+    buttonLink: "/",
   },
   split2: {
     badge: "OUR MISSION",

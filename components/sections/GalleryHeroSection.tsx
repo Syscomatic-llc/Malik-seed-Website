@@ -25,9 +25,9 @@ interface GalleryHeroSectionProps {
 // ---------------------------------------------------------------------------
 // Production-Grade Static Configurations (Architectural Cleanliness)
 // ---------------------------------------------------------------------------
-const INITIAL_VISIBLE = 9; // aligned to multiple of 3 for grid completeness
-const MOBILE_INITIAL_VISIBLE = 9; // aligned to multiple of 3 for mobile grid completeness
-const LOAD_MORE_STEP = 9;
+const INITIAL_VISIBLE = 12; // aligned to multiple of 3 for grid completeness
+const MOBILE_INITIAL_VISIBLE = 10; // aligned to multiple of 3 for mobile grid completeness
+const LOAD_MORE_STEP = 12;
 const ANIMATION_DELAY_MS = 800;
 const COUNT_PARAM = "count"; // URL query param that persists "load more" progress
 

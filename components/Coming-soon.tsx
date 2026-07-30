@@ -1,12 +1,5 @@
 import ActionButton from "@/components/ActionButton";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Coming Soon - Malik Seeds",
-  description:
-    "We are cultivating a new digital experience. This page is currently under development.",
-};
 
 export default function ComingSoonPage() {
   return (

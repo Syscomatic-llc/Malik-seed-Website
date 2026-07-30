@@ -2,6 +2,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
 import BrandCardBorder from "./BrandCardBorder";
+import ActionButton, { ActionButtonVariant } from "@/components/ActionButton";
 
 interface StepItem {
   number?: string;
@@ -18,6 +19,10 @@ interface BrandProcessProps {
   images?: string[];
   bottomQuote?: string;
   variant?: "default" | "light" | "dark";
+  buttonText?: string;
+  buttonLink?: string;
+  buttonTarget?: string;
+  buttonVariant?: ActionButtonVariant;
 }
 
 export default function BrandProcess({
@@ -28,6 +33,10 @@ export default function BrandProcess({
   images,
   bottomQuote,
   variant = "default",
+  buttonText,
+  buttonLink,
+  buttonTarget,
+  buttonVariant,
 }: BrandProcessProps) {
   const stepCols =
     steps.length === 3
@@ -180,6 +189,38 @@ export default function BrandProcess({
                 />
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Optional Action Button */}
+        {buttonText && buttonLink && (
+          <div className="flex w-full justify-center mt-2 md:mt-4">
+            {(() => {
+              const isValidLink = Boolean(
+                buttonLink &&
+                  buttonLink.trim() !== "" &&
+                  buttonLink !== "/" &&
+                  buttonLink !== "#" &&
+                  buttonLink !== "/coming-soon"
+              );
+              const resolvedHref = isValidLink ? buttonLink : "/coming-soon";
+              const resolvedTarget = isValidLink
+                ? (buttonTarget || (buttonLink.startsWith("/") ? "_self" : "_blank"))
+                : "_self";
+              const resolvedRel = resolvedTarget === "_blank" ? "noopener noreferrer" : undefined;
+
+              return (
+                <ActionButton
+                  href={resolvedHref}
+                  label={buttonText}
+                  variant={buttonVariant || (variant === "dark" ? "primary" : "dark")}
+                  className="h-[46px] gap-[8px] px-4 text-[14px] leading-[17px] md:gap-3 md:px-[24px] md:text-[16px] md:leading-[19px]"
+                  showArrow={true}
+                  target={resolvedTarget}
+                  rel={resolvedRel}
+                />
+              );
+            })()}
           </div>
         )}
       </div>
