@@ -74,9 +74,9 @@ function CardContent({
 
         {/* Title + hover description */}
         <div className="flex flex-col gap-1">
-          <h3 className={`text-brand-bg font-sans ${titleClass}`}>
+          <h2 className={`text-brand-bg font-sans ${titleClass}`}>
             {product.name}
-          </h3>
+          </h2>
 
           {/* Description — revealed on hover */}
           <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out group-hover:max-h-[120px] group-hover:opacity-100">

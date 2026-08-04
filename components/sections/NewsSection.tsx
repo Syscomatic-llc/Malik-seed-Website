@@ -93,35 +93,18 @@ export default function NewsSection({ apiData }: NewsSectionProps) {
   const maxIdx = Math.max(0, newsData.items.length - 2);
 
   const isPausedRef = useRef(false);
-  // Use a timestamp-based approach for smooth, drift-free auto-scroll
-  const lastTickRef = useRef<number>(Date.now());
-  const rafRef = useRef<number | null>(null);
-  const activeIdxRef = useRef(0); // mirror of state for RAF closure
 
-  // Keep ref in sync with state
   useEffect(() => {
-    activeIdxRef.current = activeIdx;
-  }, [activeIdx]);
-
-  const tick = useCallback(() => {
-    const now = Date.now();
-    if (!isPausedRef.current && now - lastTickRef.current >= 4000) {
-      lastTickRef.current = now;
-      setActiveIdx((prev) => (prev >= maxIdx ? 0 : prev + 1));
-    }
-    rafRef.current = requestAnimationFrame(tick);
+    if (maxIdx <= 0) return;
+    const interval = setInterval(() => {
+      if (!isPausedRef.current) {
+        setActiveIdx((prev) => (prev >= maxIdx ? 0 : prev + 1));
+      }
+    }, 4000);
+    return () => clearInterval(interval);
   }, [maxIdx]);
 
-  useEffect(() => {
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [tick]);
-
-  const resetTimer = useCallback(() => {
-    lastTickRef.current = Date.now(); // restart the 4s countdown
-  }, []);
+  const resetTimer = useCallback(() => {}, []);
 
   const handlePrev = useCallback(() => {
     setActiveIdx((prev) => Math.max(0, prev - 1));

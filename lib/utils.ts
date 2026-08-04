@@ -71,7 +71,7 @@ export function resolveImageUrl(
     const uploadsIndex = path.indexOf("/uploads/");
     if (uploadsIndex !== -1) {
       const relativePath = path.slice(uploadsIndex + 1);
-      return buildProxyUrl(relativePath, width || 1920, quality || 95);
+      return buildProxyUrl(relativePath, width || 1920, quality || 75);
     }
 
     const publicBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
@@ -80,7 +80,7 @@ export function resolveImageUrl(
         const origin = new URL(publicBaseUrl).origin;
         if (path.startsWith(origin)) {
           const relativePath = path.slice(origin.length);
-          return buildProxyUrl(relativePath, width || 1920, quality || 95);
+          return buildProxyUrl(relativePath, width || 1920, quality || 75);
         }
       } catch {}
     }
@@ -95,6 +95,6 @@ export function resolveImageUrl(
     return `/${cleanPath}`;
   }
 
-  // Everything else is a CMS-hosted media path — proxy it in HD.
-  return buildProxyUrl(cleanPath, width || 1920, quality || 95);
+  // Everything else is a CMS-hosted media path — proxy it.
+  return buildProxyUrl(cleanPath, width || 1920, quality || 75);
 }

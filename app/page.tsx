@@ -24,7 +24,7 @@ export default async function Home() {
   }
 
   try {
-    newsPageData = await newsApi.getAll({ revalidate: 60 });
+    newsPageData = await newsApi.getArticles({ limit: 6 }, { revalidate: 60 });
   } catch (err) {
     console.error("Failed to fetch news from API:", err);
   }
@@ -50,7 +50,7 @@ export default async function Home() {
       <PartnersSection apiData={apiData?.partners} />
 
       {/* News & Stories Insights */}
-      <NewsSection apiData={newsPageData?.articles} />
+      <NewsSection apiData={Array.isArray(newsPageData) ? newsPageData : undefined} />
 
       {/* Join our Team Career CTA */}
       <JoinTeamSection />

@@ -41,7 +41,15 @@ export const newsApi = {
     });
   },
   getArticles(params?: GetArticlesParams, options?: RequestOptions) {
-    return this.getArticlesPaginated(params, options).then((res) => res.items);
+    return this.getArticlesPaginated(params, options).then((res) =>
+      res.items.map((item) => ({
+        ...item,
+        content: "",
+        body: "",
+        body_html: "",
+        description: "",
+      }))
+    );
   },
   getFeaturedArticles(options?: RequestOptions) {
     return apiGet<ApiNewsArticle[]>("/api/v1/news/articles/featured", options);

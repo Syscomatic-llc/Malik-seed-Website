@@ -1,8 +1,13 @@
 import { MetadataRoute } from "next";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
+const getBaseUrl = () => {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "https://malik-seed-website.vercel.app";
+};
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = getBaseUrl();
   return {
     rules: {
       userAgent: "*",
@@ -13,6 +18,6 @@ export default function robots(): MetadataRoute.Robots {
         "/careers/*/exam/",
       ],
     },
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

@@ -68,13 +68,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Host not allowed" }, { status: 403 });
   }
 
-  // High-fidelity image settings for maximum photo sharpness & detail (quality 92, up to 1920px)
+  // Optimized WebP image settings for high performance and visual fidelity (quality 75, up to 1920px)
   const width = widthParam
     ? Math.min(1920, Math.max(16, parseInt(widthParam, 10)))
     : 1200;
   const quality = qualityParam
     ? Math.min(100, Math.max(10, parseInt(qualityParam, 10)))
-    : 92;
+    : 75;
 
   // Check disk cache
   await fs.mkdir(CACHE_DIR, { recursive: true });

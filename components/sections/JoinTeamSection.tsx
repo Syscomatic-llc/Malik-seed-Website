@@ -34,11 +34,18 @@ export default async function JoinTeamSection({ apiData: initialApiData }: JoinT
             mobile: resolveImageUrl(apiData[0].background_image),
           },
         }
-      : null;
-
-  if (!activeJoinTeamData) {
-    return null;
-  }
+      : {
+          badge: "Join our Team",
+          title: "Grow Your Career\nWith Malik Seeds",
+          cta: {
+            label: "Explore Careers",
+            href: "/careers",
+          },
+          images: {
+            desktop: "/images/team/team-banner.png",
+            mobile: "/images/team/team-banner.png",
+          },
+        };
 
   const joinTeamData = activeJoinTeamData;
   return (
