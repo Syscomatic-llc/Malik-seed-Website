@@ -2,17 +2,24 @@ import { Fragment } from "react";
 import ActionButton from "@/components/ActionButton";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { joinTeamData as staticJoinTeamData } from "@/data/sections-data";
-import { homepageApi } from "@/lib/api";
+import { homepageApi, ApiCtaBanner } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
-export default async function JoinTeamSection() {
-  let apiData = null;
-  try {
-    apiData = await homepageApi.getCtaBanners({ revalidate: 60 });
-  } catch (err) {
-    console.error("Failed to fetch join team section data from API:", err);
+interface JoinTeamSectionProps {
+  apiData?: ApiCtaBanner[];
+}
+
+export default async function JoinTeamSection({ apiData: initialApiData }: JoinTeamSectionProps = {}) {
+  let apiData: ApiCtaBanner[] | null = initialApiData ?? null;
+
+  if (!apiData) {
+    try {
+      apiData = await homepageApi.getCtaBanners({ revalidate: 60 });
+    } catch (err) {
+      console.error("Failed to fetch join team section data from API:", err);
+    }
   }
+
   const activeJoinTeamData =
     Array.isArray(apiData) && apiData.length > 0
       ? {
@@ -27,7 +34,11 @@ export default async function JoinTeamSection() {
             mobile: resolveImageUrl(apiData[0].background_image),
           },
         }
-      : staticJoinTeamData;
+      : null;
+
+  if (!activeJoinTeamData) {
+    return null;
+  }
 
   const joinTeamData = activeJoinTeamData;
   return (

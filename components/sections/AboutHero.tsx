@@ -10,11 +10,6 @@ interface AboutHeroProps {
   apiData?: ApiOurStoryHero | null;
 }
 
-const DEFAULT_HERO_IMAGES = [
-  { id: 0, src: "/images/about/hero-dscf8697.png", alt: "Our story image 1" },
-  { id: 1, src: "/images/about/hero-field-67.png", alt: "Our story image 2" },
-  { id: 2, src: "/images/about/hero-rd-9.png", alt: "Our story image 3" },
-];
 
 export default function AboutHero({ apiData }: AboutHeroProps) {
   const badgeText = apiData?.title || "Our Story";
@@ -30,7 +25,7 @@ export default function AboutHero({ apiData }: AboutHeroProps) {
       }))
     : [];
 
-  const images = rawImages.length > 0 ? rawImages : DEFAULT_HERO_IMAGES;
+  const images = rawImages.length > 0 ? rawImages : [];
 
   return (
     <section className="bg-brand-bg w-full overflow-hidden pt-[120px] pb-12 md:pt-[150px] md:pb-[80px] xl:pt-[180px] xl:pb-[100px]">

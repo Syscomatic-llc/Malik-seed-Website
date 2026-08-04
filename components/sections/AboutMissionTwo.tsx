@@ -21,7 +21,7 @@ export default function AboutMissionTwo({ apiData }: AboutMissionTwoProps) {
   const missionText = apiData?.description || DEFAULT_TEXT;
   const bannerImage = apiData?.image_url
     ? resolveImageUrl(apiData.image_url)
-    : "/images/about/maliks_farm_new_3_1.png";
+    : "";
 
   useEffect(() => {
     const el = sectionRef.current;
