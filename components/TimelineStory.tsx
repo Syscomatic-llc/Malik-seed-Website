@@ -1142,13 +1142,13 @@ export default function TimelineStory({
                         )}
                       >
                         <h3
-                          className="font-anton text-brand-bg text-[32px] leading-[38px] whitespace-pre-line"
+                          className="font-anton text-brand-bg text-[30px] leading-[38px] whitespace-pre-line"
                           style={{ fontFamily: "var(--font-anton)" }}
                         >
                           {item.title}
                         </h3>
                         <p
-                          className="text-brand-bg/95 text-base leading-[24px] whitespace-pre-line"
+                          className="text-brand-bg/95 text-[13px] leading-[19px] text-center whitespace-pre-line"
                           style={{ fontFamily: "var(--font-inter)" }}
                         >
                           {item.description}
