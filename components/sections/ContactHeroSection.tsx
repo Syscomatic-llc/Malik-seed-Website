@@ -226,10 +226,10 @@ export default function ContactHeroSection({
             </div>
 
             {/* Address Card — Figma: 608x274 (desktop) / 358x224 (mobile), bg #DCF3C7 */}
-            <address className="bg-brand-mint-green text-brand-dark relative flex w-full flex-col items-start gap-6 rounded-[20px] p-6 not-italic lg:w-full lg:rounded-[24px] lg:px-8 lg:py-8 xl:h-68.5 xl:w-152 xl:px-10">
-              <div className="relative flex w-full flex-col items-start gap-4 lg:gap-6">
+            <address className="bg-brand-mint-green text-brand-dark relative flex w-full flex-col items-start rounded-[20px] p-6 not-italic lg:w-full lg:rounded-[24px] lg:px-8 lg:py-8 xl:h-[274px] xl:w-[608px] xl:px-[41px] xl:py-8">
+              <div className="relative flex w-full flex-col items-start gap-6">
                 {/* Office Type Label — Figma: 18px (desktop) / 14px (mobile) */}
-                <div className="text-card-label text-brand-dark font-medium tracking-tight uppercase opacity-90">
+                <div className="text-card-label text-brand-dark font-medium tracking-tight opacity-90">
                   {OFFICE_DETAILS.officeLabel}
                 </div>
 
@@ -247,15 +247,15 @@ export default function ContactHeroSection({
                   </div>
 
                   {/* Icon List — Phone & Email with 60x60 base SVGs rendered at 30x30 */}
-                  <div className="relative flex w-full flex-col gap-3.5">
+                  <div className="relative flex w-full flex-col gap-3">
                     {/* Phone link */}
-                    <div className="relative flex w-full items-center gap-3">
-                      <div className="h-[30px] w-[30px] shrink-0">
+                    <div className="relative flex w-full  items-center gap-2.5">
+                      <div className="h-[30px] w-[30px] p-[8px] bg-brand-active justify-center items-center flex rounded-md shrink-0">
                         <OptimizedImage
                           src="/images/contact/phone.svg"
                           alt="Phone Icon"
-                          width={30}
-                          height={30}
+                          width={14}
+                          height={14}
                           className="shrink-0"
                         />
                       </div>
@@ -273,13 +273,13 @@ export default function ContactHeroSection({
                     </div>
 
                     {/* Email link */}
-                    <div className="relative flex w-full items-center gap-3">
-                      <div className="h-[30px] w-[30px] shrink-0">
+                    <div className="relative flex w-full items-center gap-2.5">
+                      <div className="h-[30px] w-[30px] p-[8px] bg-brand-active justify-center items-center flex rounded-md shrink-0">
                         <OptimizedImage
                           src="/images/contact/email.svg"
                           alt="Email Icon"
-                          width={30}
-                          height={30}
+                          width={14}
+                          height={14}
                           className="shrink-0"
                         />
                       </div>
