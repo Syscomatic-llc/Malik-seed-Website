@@ -129,15 +129,18 @@ export default memo(function CVDropSection() {
                 className="hidden"
               />
 
-              <div className="flex flex-col items-center gap-4 transition-transform duration-300 group-hover/drop:scale-105">
+              <div className="flex max-w-full flex-col items-center gap-4 px-4 transition-transform duration-300 group-hover/drop:scale-105">
                 <NextImage
                   src="/images/careers/prime_upload.svg"
                   alt="Upload Icon"
                   width={24}
                   height={24}
-                  className="h-6 w-6"
+                  className="h-6 w-6 shrink-0"
                 />
-                <span className="font-inter text-center text-[16px] leading-6 font-medium text-[#A9E179] md:text-[18px] md:leading-[27px] px-4">
+                <span
+                  title={file ? file.name : undefined}
+                  className="font-inter max-w-full truncate text-center text-[16px] leading-6 font-medium text-[#A9E179] md:text-[18px] md:leading-[27px]"
+                >
                   {file ? `Selected: ${file.name}` : "Click or drop your CV"}
                 </span>
               </div>

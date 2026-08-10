@@ -8,11 +8,14 @@ import { openPositionsData } from "@/data/career-data";
 import { gradeMcqAssessment } from "@/lib/assessment-grading";
 import type { McqGradingResult } from "@/lib/assessment-grading";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
+import { hiringApi } from "@/lib/api";
 
 export default function AssessmentResultPage() {
   const router = useRouter();
   const { id } = useParams();
   const {
+    applicationId,
+    email,
     isOtpVerified,
     isCompleted,
     isPassed,
@@ -53,6 +56,29 @@ export default function AssessmentResultPage() {
 
     if (!isGraded) {
       setGradingResult(result.score, result.isPassed);
+
+      // Submit MCQ assessment answers to backend endpoint
+      const targetAppId = applicationId || (typeof id === "string" ? parseInt(id, 10) : null);
+      if (targetAppId && !isNaN(targetAppId)) {
+        const formattedAnswers: Record<string, string> = {};
+        dynamicMcqQuestions.forEach((q) => {
+          const selectedIdx = mcqAnswers[q.id];
+          if (selectedIdx !== undefined && q.options && q.options[selectedIdx] !== undefined) {
+            formattedAnswers[q.id] = q.options[selectedIdx];
+          } else if (selectedIdx !== undefined) {
+            formattedAnswers[q.id] = String(selectedIdx);
+          }
+        });
+
+        const payload = {
+          email: email || "assess@example.com",
+          answers: formattedAnswers,
+        };
+
+        hiringApi.submitAssessment(targetAppId, payload).catch((err) => {
+          console.warn("submitAssessment API call warning/error during auto-grade:", err);
+        });
+      }
     }
   }, [
     hydrated,
@@ -64,6 +90,9 @@ export default function AssessmentResultPage() {
     dynamicMcqQuestions,
     config,
     isAutoGrade,
+    applicationId,
+    email,
+    id,
   ]);
 
   useEffect(() => {

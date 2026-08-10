@@ -176,27 +176,27 @@ export default function AdditionalInfoPage() {
       // If application_id exists from step 1, submit to the backend API endpoint
       const targetAppId = applicationId || (typeof id === "string" ? parseInt(id, 10) : null);
       if (targetAppId && !isNaN(targetAppId)) {
+        const userEmail = store.email || "";
+        const sourceValue = heardAbout && heardAbout.length > 0 ? heardAbout[0] : "LinkedIn";
+
+        // Construct FormData per FastAPI / OpenAPI multipart specification
         const formData = new FormData();
-        if (cvFileObject) {
-          formData.append("file", cvFileObject);
-          formData.append("cv", cvFileObject);
-          formData.append("cv_file", cvFileObject);
-        }
-        formData.append("phone_number", phoneNumber);
+        formData.append("email", userEmail);
         formData.append("phone", phoneNumber);
-        formData.append("location", location);
-        if (linkedin) {
-          formData.append("linkedin", linkedin);
-          formData.append("linkedin_profile", linkedin);
+        formData.append("current_location", location);
+        formData.append("source", sourceValue);
+
+        if (linkedin && linkedin.trim()) {
+          formData.append("linkedin_url", linkedin.trim());
         }
-        if (portfolio) {
-          formData.append("portfolio", portfolio);
-          formData.append("portfolio_url", portfolio);
+        if (portfolio && portfolio.trim()) {
+          formData.append("portfolio_url", portfolio.trim());
         }
-        if (heardAbout && heardAbout.length > 0) {
-          formData.append("heard_about", heardAbout[0]);
-          formData.append("heard_about_us", heardAbout[0]);
-          formData.append("source", heardAbout[0]);
+
+        if (cvFileObject) {
+          formData.append("resume", cvFileObject, cvFileObject.name);
+        } else if (cvFile?.name) {
+          formData.append("resume", cvFile.name);
         }
 
         try {
@@ -204,6 +204,17 @@ export default function AdditionalInfoPage() {
         } catch (apiErr) {
           console.warn("submitAdditionalInfo API call warning/error:", apiErr);
           // Non-blocking fallback so user experience is smooth even in offline or partial backend environments
+        }
+
+        // Also trigger background upload for stand-alone file storage
+        if (cvFileObject) {
+          try {
+            const uploadData = new FormData();
+            uploadData.append("file", cvFileObject, cvFileObject.name);
+            await hiringApi.uploadResume(uploadData, "general");
+          } catch (uploadErr) {
+            console.warn("uploadResume background upload error:", uploadErr);
+          }
         }
       }
 

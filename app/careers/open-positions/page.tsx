@@ -23,13 +23,17 @@ export default async function OpenPositionsPage() {
   }
 
   const sortedApiPositions = [...apiPositions].sort((a, b) => {
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    return Number(a.id) - Number(b.id);
+  });
+
+  const fallbackSortedPositions = [...openPositionsData.positions].sort((a, b) => {
+    return Number(a.id) - Number(b.id);
   });
 
   const resolvedPositions =
     sortedApiPositions.length > 0
       ? sortedApiPositions.map(mapApiPositionToJobPosition)
-      : openPositionsData.positions;
+      : fallbackSortedPositions;
 
   return (
     <div className="min-h-screen bg-[#F2F7F1] pt-[120px] lg:pt-[160px]">

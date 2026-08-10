@@ -23,6 +23,11 @@ export interface GetPositionsParams {
 
 export type ResumeType = "future_leader" | "general";
 
+export interface AssessmentSubmissionPayload {
+  email: string;
+  answers: Record<string, string>;
+}
+
 export const hiringApi = {
   getPositions(params?: GetPositionsParams, options?: RequestOptions) {
     return apiGet<ApiJobPosition[]>("/api/v1/hiring/positions", {
@@ -66,40 +71,16 @@ export const hiringApi = {
     return apiPostForm<unknown>("/api/v1/hiring/apply/step-1", form, options);
   },
 
-  applyStep2(formData: FormData, options?: RequestOptions) {
-    return apiPostMultipart<unknown>("/api/v1/hiring/apply/step-2", formData, options);
-  },
-
-  applyStep3(
-    form: Record<string, string | number | boolean | undefined | null>,
-    options?: RequestOptions
-  ) {
-    return apiPostForm<unknown>("/api/v1/hiring/apply/step-3", form, options);
-  },
-
-  applyStep4(
-    form: Record<string, string | number | boolean | undefined | null>,
-    options?: RequestOptions
-  ) {
-    return apiPostForm<unknown>("/api/v1/hiring/apply/step-4", form, options);
-  },
-
-  applyStep5(
-    form: Record<string, string | number | boolean | undefined | null>,
-    options?: RequestOptions
-  ) {
-    return apiPostForm<unknown>("/api/v1/hiring/apply/step-5", form, options);
-  },
-
   submitAssessment(
-    payload: {
-      application_id: number | null;
-      position_id: number;
-      assessment_answers: Record<string, unknown>;
-    },
+    applicationId: number,
+    payload: AssessmentSubmissionPayload,
     options?: RequestOptions
   ) {
-    return apiPostJson<unknown>("/api/v1/hiring/apply/step-5", payload, options);
+    return apiPostJson<unknown>(
+      `/api/v1/hiring/apply/${applicationId}/assessment`,
+      payload,
+      options
+    );
   },
 
   submitAdditionalInfo(

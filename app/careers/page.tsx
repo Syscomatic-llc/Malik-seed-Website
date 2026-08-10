@@ -53,7 +53,7 @@ export default async function CareersPage() {
   }
 
   const sortedApiPositions = [...apiPositions].sort((a, b) => {
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    return Number(a.id) - Number(b.id);
   });
 
   const resolvedPositions = sortedApiPositions.map(mapApiPositionToJobPosition);

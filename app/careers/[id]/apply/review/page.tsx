@@ -23,6 +23,7 @@ export default function ReviewPage() {
     isStarted,
     isCompleted,
     applicationId,
+    email,
     mcqAnswers,
     shortAnswers,
     longAnswers,
@@ -469,27 +470,47 @@ export default function ReviewPage() {
               </button>
               <button
                 onClick={() => {
-                  const mergedAnswers: Record<string, any> = {};
-                  Object.entries(mcqAnswers).forEach(([qId, val]) => {
-                    mergedAnswers[qId] = val;
+                  const formattedAnswers: Record<string, string> = {};
+
+                  // Map MCQ selected option indices to option text values
+                  mcqQuestions.forEach((q) => {
+                    const selectedIdx = mcqAnswers[q.id];
+                    if (selectedIdx !== undefined && q.options && q.options[selectedIdx] !== undefined) {
+                      formattedAnswers[q.id] = q.options[selectedIdx];
+                    } else if (selectedIdx !== undefined) {
+                      formattedAnswers[q.id] = String(selectedIdx);
+                    }
                   });
+
+                  // Map short answer strings
                   Object.entries(shortAnswers).forEach(([qId, val]) => {
-                    if (val?.trim()) mergedAnswers[qId] = val.trim();
+                    if (val?.trim()) formattedAnswers[qId] = val.trim();
                   });
+
+                  // Map long answer strings
                   Object.entries(longAnswers).forEach(([qId, val]) => {
-                    if (val?.trim()) mergedAnswers[qId] = val.trim();
+                    if (val?.trim()) formattedAnswers[qId] = val.trim();
                   });
 
                   const payload = {
-                    application_id: applicationId ?? null,
-                    position_id: positionId,
-                    assessment_answers: mergedAnswers,
+                    email: email || "assess@example.com",
+                    answers: formattedAnswers,
                   };
 
-                  console.log("=== SUBMITTING ASSESSMENT PAYLOAD ===", payload);
-                  hiringApi.submitAssessment(payload).catch((err) => {
-                    console.warn("submitAssessment API call failed or offline:", err);
-                  });
+                  console.log(
+                    "=== SUBMITTING ASSESSMENT PAYLOAD ===",
+                    { applicationId, ...payload }
+                  );
+
+                  if (applicationId) {
+                    hiringApi.submitAssessment(applicationId, payload).catch((err) => {
+                      console.warn("submitAssessment API call failed or offline:", err);
+                    });
+                  } else {
+                    console.warn(
+                      "No applicationId present in store; skipping remote submission."
+                    );
+                  }
 
                   setShowConfirmPopup(false);
                   completeAssessment();

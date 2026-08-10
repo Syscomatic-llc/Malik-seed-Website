@@ -35,8 +35,9 @@ export default function PersonalInfoPage() {
   const position = openPositionsData.positions.find(
     (pos) => pos.id.toString() === id || pos.slug === id
   );
-  const resolvedPositionId = position ? position.id : (storePositionId || parseInt(id as string));
-  const resolvedPositionTitle = position ? position.title : (storePositionTitle || "selected");
+  const parsedUrlId = !isNaN(parseInt(id as string, 10)) ? parseInt(id as string, 10) : null;
+  const resolvedPositionId = storePositionId ?? (position ? position.id : parsedUrlId);
+  const resolvedPositionTitle = storePositionTitle || (position ? position.title : "selected");
 
   // Sync state with store on hydration and load assessment
   useEffect(() => {
