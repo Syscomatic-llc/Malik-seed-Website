@@ -1,6 +1,7 @@
 import Link from "next/link";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import NextImage from "next/image";
+import Logo from "@/components/Logo";
 import { footerData, FooterLink, SocialLink } from "@/data/sections-data";
 import { contactApi, homepageApi } from "@/lib/api";
 
@@ -161,16 +162,9 @@ export default async function Footer() {
         <div className="flex w-full flex-col items-start justify-between gap-10 xl:flex-row xl:gap-0">
           {/* Left Block: Identity & Mission */}
           <div className="flex w-full shrink-0 flex-col xl:w-102.25">
-            <Link href="/" className="inline-block">
-              <OptimizedImage
-                src={footerData.logo}
-                alt="Malik Seeds Logo"
-                width={270}
-                height={35}
-                className="h-auto w-55 brightness-0 invert md:w-67.5"
-                priority
-              />
-            </Link>
+            <div className="inline-block">
+              <Logo light={true} showText={true} className="h-auto w-55 md:w-67.5" />
+            </div>
 
             <p className="font-inter text-brand-light-green/70 mt-4 text-[16px] leading-6 font-normal md:mt-6 md:text-[18px] md:leading-6.75">
               {contactInfo?.footer_description || footerData.mission}

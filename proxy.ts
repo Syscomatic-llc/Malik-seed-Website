@@ -4,14 +4,18 @@ import { settingsApi } from "@/lib/api";
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Double-check matching criteria to prevent infinite loops or blocking critical assets
+  // Double-check matching criteria to prevent infinite loops or blocking critical assets & static images
   if (
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
+    pathname.startsWith("/images") ||
+    pathname.startsWith("/favicons") ||
     pathname === "/maintenance" ||
+    pathname.startsWith("/contact") ||
     pathname === "/favicon.ico" ||
     pathname === "/robots.txt" ||
-    pathname === "/sitemap.xml"
+    pathname === "/sitemap.xml" ||
+    /\.(png|jpe?g|svg|webp|ico|gif|css|js|woff2?)$/i.test(pathname)
   ) {
     return NextResponse.next();
   }
@@ -34,6 +38,6 @@ export default async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next|maintenance|favicon\\.ico|robots\\.txt|sitemap\\.xml).*)",
+    "/((?!api|_next|images|favicons|maintenance|contact|favicon\\.ico|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpe?g|svg|webp|ico|gif|css|js|woff2?)$).*)",
   ],
 };
