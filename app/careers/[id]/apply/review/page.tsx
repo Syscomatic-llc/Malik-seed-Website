@@ -6,7 +6,7 @@ import { useApplicationStore } from "@/store/applicationStore";
 import { openPositionsData } from "@/data/career-data";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, isHtmlContent, cleanHtml } from "@/lib/utils";
 // Static helpers removed in favor of dynamic config checks
 import {
   McqDevAnswerKey,
@@ -260,16 +260,47 @@ export default function ReviewPage() {
                       Question {index + 1}:
                     </span>
                     {q.question && !q.question.toLowerCase().startsWith("question") && (
-                      <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
-                        {q.question}
-                      </h3>
+                      isHtmlContent(q.question) ? (
+                        <div
+                          className="exam-prose text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]"
+                          dangerouslySetInnerHTML={{ __html: cleanHtml(q.question) }}
+                        />
+                      ) : (
+                        <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
+                          {q.question}
+                        </h3>
+                      )
                     )}
                     {q.description && (
-                      <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
-                        {q.description}
-                      </h3>
+                      isHtmlContent(q.description) ? (
+                        <div
+                          className="exam-prose text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]"
+                          dangerouslySetInnerHTML={{ __html: cleanHtml(q.description) }}
+                        />
+                      ) : (
+                        <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
+                          {q.description}
+                        </h3>
+                      )
                     )}
                   </div>
+
+                  {q.subBullets && q.subBullets.length > 0 && (
+                    <ul className="list-disc space-y-1.5 pl-6 text-[14px] leading-[21px] text-[#0D1A14]">
+                      {q.subBullets.map((bullet, bulletIdx) => (
+                        <li key={bulletIdx}>
+                          {isHtmlContent(bullet) ? (
+                            <span
+                              className="exam-prose inline"
+                              dangerouslySetInnerHTML={{ __html: cleanHtml(bullet) }}
+                            />
+                          ) : (
+                            bullet
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   <div className="font-inter min-h-[100px] rounded-[12px] border border-[#E4E7EC] bg-[#F9FAFB] p-4 text-[15px] leading-[24px] whitespace-pre-wrap text-[#0D1A14]/80">
                     {answerText ? (
@@ -306,21 +337,44 @@ export default function ReviewPage() {
                       Question {index + 1}:
                     </span>
                     {q.question && !q.question.toLowerCase().startsWith("question") && (
-                      <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
-                        {q.question}
-                      </h3>
+                      isHtmlContent(q.question) ? (
+                        <div
+                          className="exam-prose text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]"
+                          dangerouslySetInnerHTML={{ __html: cleanHtml(q.question) }}
+                        />
+                      ) : (
+                        <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
+                          {q.question}
+                        </h3>
+                      )
                     )}
                     {q.description && (
-                      <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
-                        {q.description}
-                      </h3>
+                      isHtmlContent(q.description) ? (
+                        <div
+                          className="exam-prose text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]"
+                          dangerouslySetInnerHTML={{ __html: cleanHtml(q.description) }}
+                        />
+                      ) : (
+                        <h3 className="font-inter-tight text-[16px] font-semibold text-[#0D1A14] lg:text-[17px]">
+                          {q.description}
+                        </h3>
+                      )
                     )}
                   </div>
 
                   {q.subBullets && q.subBullets.length > 0 && (
-                    <ul className="font-inter flex list-disc flex-col gap-1 pl-5 text-[13px] text-[#0D1A14]/60">
+                    <ul className="list-disc space-y-1.5 pl-6 text-[14px] leading-[21px] text-[#0D1A14]">
                       {q.subBullets.map((bullet, bulletIdx) => (
-                        <li key={bulletIdx}>{bullet}</li>
+                        <li key={bulletIdx}>
+                          {isHtmlContent(bullet) ? (
+                            <span
+                              className="exam-prose inline"
+                              dangerouslySetInnerHTML={{ __html: cleanHtml(bullet) }}
+                            />
+                          ) : (
+                            bullet
+                          )}
+                        </li>
                       ))}
                     </ul>
                   )}

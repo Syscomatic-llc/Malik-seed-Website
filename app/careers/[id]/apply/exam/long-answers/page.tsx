@@ -6,7 +6,7 @@ import { useApplicationStore } from "@/store/applicationStore";
 import { openPositionsData } from "@/data/career-data";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { z } from "zod";
-import { cn } from "@/lib/utils";
+import { cn, isHtmlContent, cleanHtml } from "@/lib/utils";
 
 export default function LongAnswersPage() {
   const router = useRouter();
@@ -123,20 +123,34 @@ export default function LongAnswersPage() {
                   <span className="ml-0.5 font-semibold text-[#FF4242]">*</span>
                 </span>
                 {q.question && !q.question.toLowerCase().startsWith("question") && (
-                  <p
-                    className="text-[16px] leading-[24px] text-[#0D1A14]"
-                    style={{ fontFamily: "var(--font-inter-tight)" }}
-                  >
-                    {q.question}
-                  </p>
+                  isHtmlContent(q.question) ? (
+                    <div
+                      className="exam-prose text-[16px] leading-[24px] text-[#0D1A14]"
+                      dangerouslySetInnerHTML={{ __html: cleanHtml(q.question) }}
+                    />
+                  ) : (
+                    <p
+                      className="text-[16px] leading-[24px] text-[#0D1A14]"
+                      style={{ fontFamily: "var(--font-inter-tight)" }}
+                    >
+                      {q.question}
+                    </p>
+                  )
                 )}
                 {q.description && (
-                  <p
-                    className="text-[16px] leading-[24px] text-[#0D1A14]"
-                    style={{ fontFamily: "var(--font-inter-tight)" }}
-                  >
-                    {q.description}
-                  </p>
+                  isHtmlContent(q.description) ? (
+                    <div
+                      className="exam-prose text-[16px] leading-[24px] text-[#0D1A14]"
+                      dangerouslySetInnerHTML={{ __html: cleanHtml(q.description) }}
+                    />
+                  ) : (
+                    <p
+                      className="text-[16px] leading-[24px] text-[#0D1A14]"
+                      style={{ fontFamily: "var(--font-inter-tight)" }}
+                    >
+                      {q.description}
+                    </p>
+                  )
                 )}
 
                 {/* Detailed descriptions */}
@@ -149,23 +163,39 @@ export default function LongAnswersPage() {
                       Describe in detail how you would:
                     </span>
                     <ul
-                      className="flex list-disc flex-col gap-1 pl-5 text-[14px] leading-[21px] text-[#0D1A14]"
+                      className="list-disc space-y-1.5 pl-6 text-[14px] leading-[21px] text-[#0D1A14]"
                       style={{ fontFamily: "var(--font-inter-tight)" }}
                     >
                       {q.subBullets.map((bullet, bulletIdx) => (
-                        <li key={bulletIdx}>{bullet}</li>
+                        <li key={bulletIdx}>
+                          {isHtmlContent(bullet) ? (
+                            <span
+                              className="exam-prose inline"
+                              dangerouslySetInnerHTML={{ __html: cleanHtml(bullet) }}
+                            />
+                          ) : (
+                            bullet
+                          )}
+                        </li>
                       ))}
                     </ul>
                   </div>
                 )}
 
                 {q.placeholder && (
-                  <p
-                    className="mt-2 text-[14px] leading-[21px] text-[#0D1A14]"
-                    style={{ fontFamily: "var(--font-inter-tight)" }}
-                  >
-                    {q.placeholder}
-                  </p>
+                  isHtmlContent(q.placeholder) ? (
+                    <div
+                      className="exam-prose mt-2 text-[14px] leading-[21px] text-[#0D1A14]"
+                      dangerouslySetInnerHTML={{ __html: cleanHtml(q.placeholder) }}
+                    />
+                  ) : (
+                    <p
+                      className="mt-2 text-[14px] leading-[21px] text-[#0D1A14]"
+                      style={{ fontFamily: "var(--font-inter-tight)" }}
+                    >
+                      {q.placeholder}
+                    </p>
+                  )
                 )}
               </div>
 

@@ -5,6 +5,19 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function isHtmlContent(str?: string | null): boolean {
+  if (!str) return false;
+  return /<[a-z][\s\S]*>/i.test(str);
+}
+
+export function cleanHtml(html?: string | null): string {
+  if (!html) return "";
+  return html
+    .replace(/&nbsp;/g, " ")
+    .replace(/\u00a0/g, " ")
+    .replace(/<p>\s*<\/p>/gi, "");
+}
+
 /**
  * Returns true when `cleanPath` (no leading slash) points to a file/folder
  * inside /public that should be served directly by Next.js.
