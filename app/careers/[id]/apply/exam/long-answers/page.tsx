@@ -109,6 +109,7 @@ export default function LongAnswersPage() {
         {questions.map((q, index) => {
           const answerText = longAnswers[q.id] || "";
           const characterCount = answerText.length;
+          const limit = q.charLimit ?? 2000;
           const questionIndex = index + 1;
 
           return (
@@ -205,15 +206,16 @@ export default function LongAnswersPage() {
                 <div className="flex items-center justify-between border-b border-[#E4E7EC] bg-white px-6 py-4 text-[14px] text-[#414E62]">
                   <span className="font-inter">Your response here</span>
                   <span className="font-inter font-medium text-[#0D1A14]">
-                    {characterCount} / 2000
+                    {characterCount} / {limit}
                   </span>
                 </div>
                 {/* Textarea input field */}
                 <textarea
                   value={answerText}
+                  maxLength={limit}
                   disabled={completedStages["long_answers"]}
                   onChange={(e) =>
-                    setLongAnswer(q.id, e.target.value.slice(0, 2000))
+                    setLongAnswer(q.id, e.target.value.slice(0, limit))
                   }
                   className={cn(
                     "font-inter min-h-[300px] w-full resize-none bg-white p-6 text-[14px] leading-[21px] text-[#414E62] placeholder:text-[#414E62]/40 focus:outline-none",

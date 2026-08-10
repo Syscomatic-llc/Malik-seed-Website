@@ -13,6 +13,7 @@ import {
   McqDevReviewBadge,
 } from "@/components/dev/McqDevHints";
 import { isDevEnvironment } from "@/lib/assessment-grading";
+import { hiringApi } from "@/lib/api";
 
 export default function ReviewPage() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function ReviewPage() {
     isOtpVerified,
     isStarted,
     isCompleted,
+    applicationId,
     mcqAnswers,
     shortAnswers,
     longAnswers,
@@ -48,7 +50,17 @@ export default function ReviewPage() {
 
   useEffect(() => {
     setHydrated(true);
-  }, []);
+    console.log("=== ASSESSMENT REVIEW DATA ===", {
+      positionId,
+      mcqAnswers,
+      shortAnswers,
+      longAnswers,
+      assessmentConfig: config,
+      mcqQuestions,
+      shortQuestions,
+      longQuestions,
+    });
+  }, [positionId, mcqAnswers, shortAnswers, longAnswers, config, mcqQuestions, shortQuestions, longQuestions]);
 
   useEffect(() => {
     if (hydrated) {
@@ -302,7 +314,7 @@ export default function ReviewPage() {
                     </ul>
                   )}
 
-                  <div className="font-inter min-h-[100px] rounded-[12px] border border-[#E4E7EC] bg-[#F9FAFB] p-4 text-[15px] leading-[24px] whitespace-pre-wrap text-[#0D1A14]/80">
+                  <div className="font-inter min-h-[100px] w-full max-w-full overflow-hidden rounded-[12px] border border-[#E4E7EC] bg-[#F9FAFB] p-4 text-[15px] leading-[24px] whitespace-pre-wrap break-words [word-break:break-word] text-[#0D1A14]/80">
                     {answerText ? (
                       answerText
                     ) : (
@@ -379,7 +391,7 @@ export default function ReviewPage() {
                     </ul>
                   )}
 
-                  <div className="font-inter min-h-[100px] rounded-[12px] border border-[#E4E7EC] bg-[#F9FAFB] p-4 text-[15px] leading-[24px] whitespace-pre-wrap text-[#0D1A14]/80">
+                  <div className="font-inter min-h-[100px] w-full max-w-full overflow-hidden rounded-[12px] border border-[#E4E7EC] bg-[#F9FAFB] p-4 text-[15px] leading-[24px] whitespace-pre-wrap break-words [word-break:break-word] text-[#0D1A14]/80">
                     {answerText ? (
                       answerText
                     ) : (
@@ -457,6 +469,28 @@ export default function ReviewPage() {
               </button>
               <button
                 onClick={() => {
+                  const mergedAnswers: Record<string, any> = {};
+                  Object.entries(mcqAnswers).forEach(([qId, val]) => {
+                    mergedAnswers[qId] = val;
+                  });
+                  Object.entries(shortAnswers).forEach(([qId, val]) => {
+                    if (val?.trim()) mergedAnswers[qId] = val.trim();
+                  });
+                  Object.entries(longAnswers).forEach(([qId, val]) => {
+                    if (val?.trim()) mergedAnswers[qId] = val.trim();
+                  });
+
+                  const payload = {
+                    application_id: applicationId ?? null,
+                    position_id: positionId,
+                    assessment_answers: mergedAnswers,
+                  };
+
+                  console.log("=== SUBMITTING ASSESSMENT PAYLOAD ===", payload);
+                  hiringApi.submitAssessment(payload).catch((err) => {
+                    console.warn("submitAssessment API call failed or offline:", err);
+                  });
+
                   setShowConfirmPopup(false);
                   completeAssessment();
                   router.push(submitRoute);

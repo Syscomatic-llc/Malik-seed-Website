@@ -1,6 +1,7 @@
 import {
   apiGet,
   apiPostForm,
+  apiPostJson,
   apiPostMultipart,
   RequestOptions,
 } from "./client";
@@ -88,6 +89,29 @@ export const hiringApi = {
     options?: RequestOptions
   ) {
     return apiPostForm<unknown>("/api/v1/hiring/apply/step-5", form, options);
+  },
+
+  submitAssessment(
+    payload: {
+      application_id: number | null;
+      position_id: number;
+      assessment_answers: Record<string, unknown>;
+    },
+    options?: RequestOptions
+  ) {
+    return apiPostJson<unknown>("/api/v1/hiring/apply/step-5", payload, options);
+  },
+
+  submitAdditionalInfo(
+    applicationId: number,
+    formData: FormData,
+    options?: RequestOptions
+  ) {
+    return apiPostMultipart<unknown>(
+      `/api/v1/hiring/apply/${applicationId}/additional-info`,
+      formData,
+      options
+    );
   },
 
   getApplicationStatus(applicationId: number, email: string, options?: RequestOptions) {

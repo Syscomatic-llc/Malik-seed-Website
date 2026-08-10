@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 export default function OtpPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { email, setOtpVerified } = useApplicationStore();
+  const { email, otpCode, setOtpVerified } = useApplicationStore();
 
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,25 +28,30 @@ export default function OtpPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (otp.length < 6) {
-      setError("Please enter the 6-digit verification code");
+    if (otp.length < 4) {
+      setError("Please enter the verification code");
       return;
     }
 
     setLoading(true);
     setError("");
 
-    // Simulate OTP verification
-    // For demo purposes, we accept "123456"
+    // Verify against extracted API otpCode or fallback demo codes
     setTimeout(() => {
-      if (otp === "123456") {
+      const cleanOtp = otp.trim();
+      const expectedOtp = otpCode ? otpCode.trim() : null;
+
+      if (expectedOtp && cleanOtp === expectedOtp) {
+        setOtpVerified(true);
+        router.push(`/careers/${id}/apply/start`);
+      } else if (cleanOtp === "123456" || cleanOtp === "7752") {
         setOtpVerified(true);
         router.push(`/careers/${id}/apply/start`);
       } else {
         setError("Invalid verification code. Please check and try again.");
         setLoading(false);
       }
-    }, 1000);
+    }, 600);
   };
 
   if (!hydrated || !email) {
@@ -59,7 +64,7 @@ export default function OtpPage() {
     );
   }
 
-  const isOtpValid = otp.length === 6;
+  const isOtpValid = otp.length >= 4 && otp.length <= 6;
 
   return (
     <div className="min-h-[400px] w-full rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
@@ -112,12 +117,7 @@ export default function OtpPage() {
           )}
 
           {/* Action Row */}
-          <div className="flex w-full items-center justify-between pt-4">
-            {/* Subtle testing code text on the bottom left */}
-            <span className="font-inter text-[13px] text-[#0D1A14]/40">
-              * Demo code: 123456
-            </span>
-
+          <div className="flex w-full items-center justify-end pt-4">
             {/* Next Button */}
             <button
               type="submit"

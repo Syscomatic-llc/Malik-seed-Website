@@ -20,6 +20,8 @@ export interface ApplicationState {
   name: string;
   email: string;
   isOtpVerified: boolean;
+  applicationId: number | null;
+  otpCode: string | null;
 
   // Assessment state
   isStarted: boolean;
@@ -61,6 +63,7 @@ export interface ApplicationState {
 
   // Actions
   setPersonalInfo: (name: string, email: string) => void;
+  setStep1Data: (applicationId: number | null, otpCode: string | null) => void;
   setOtpVerified: (verified: boolean) => void;
   startAssessment: (
     positionId: number,
@@ -93,6 +96,8 @@ export const useApplicationStore = create<ApplicationState>()(
       name: "",
       email: "",
       isOtpVerified: false,
+      applicationId: null,
+      otpCode: null,
       isStarted: false,
       isCompleted: false,
       startedAt: null,
@@ -128,6 +133,8 @@ export const useApplicationStore = create<ApplicationState>()(
 
       // Actions
       setPersonalInfo: (name, email) => set({ name, email }),
+
+      setStep1Data: (applicationId, otpCode) => set({ applicationId, otpCode }),
 
       setOtpVerified: (isOtpVerified) => set({ isOtpVerified }),
 
@@ -337,6 +344,7 @@ export const useApplicationStore = create<ApplicationState>()(
           });
 
           const data = await apiGet<any>(`/api/v1/hiring/positions/${realId}/assessment`);
+          console.log("=== ASSESSMENT API DATA ===", data);
           
           if (!data || !data.has_assessment) {
             console.warn(`Position ID ${realId} does not require an assessment.`);
@@ -363,6 +371,7 @@ export const useApplicationStore = create<ApplicationState>()(
             question: q.question,
             description: q.description || undefined,
             placeholder: q.placeholder || undefined,
+            charLimit: q.char_limit ? Number(q.char_limit) : undefined,
           }));
 
           // Map Long Answer questions
@@ -371,6 +380,7 @@ export const useApplicationStore = create<ApplicationState>()(
             question: q.question,
             description: q.description || undefined,
             placeholder: q.placeholder || undefined,
+            charLimit: q.char_limit ? Number(q.char_limit) : undefined,
           }));
 
           // Build active assessment stage list
@@ -433,6 +443,8 @@ export const useApplicationStore = create<ApplicationState>()(
           name: "",
           email: "",
           isOtpVerified: false,
+          applicationId: null,
+          otpCode: null,
           isStarted: false,
           isCompleted: false,
           startedAt: null,

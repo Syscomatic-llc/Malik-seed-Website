@@ -11,6 +11,7 @@ export interface ShortAnswerQuestion {
   description?: string;
   subBullets?: string[];
   placeholder?: string;
+  charLimit?: number;
 }
 
 export interface LongAnswerQuestion {
@@ -19,6 +20,7 @@ export interface LongAnswerQuestion {
   description?: string;
   subBullets?: string[];
   placeholder?: string;
+  charLimit?: number;
 }
 
 export type AssessmentType = "mcq" | "short_answers" | "long_answers";

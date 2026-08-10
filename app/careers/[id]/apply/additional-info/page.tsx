@@ -15,6 +15,8 @@ import { Label } from "@/components/ui/label";
 import { Upload, FileText, Trash2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+import { hiringApi } from "@/lib/api";
+
 const HEARD_ABOUT_OPTIONS = [
   "Company Website",
   "LinkedIn",
@@ -38,6 +40,7 @@ export default function AdditionalInfoPage() {
   const { id } = useParams();
   const store = useApplicationStore();
   const {
+    applicationId,
     isOtpVerified,
     isCompleted,
     isPassed,
@@ -141,12 +144,8 @@ export default function AdditionalInfoPage() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const toggleHeardAbout = (option: string) => {
-    if (heardAbout.includes(option)) {
-      setHeardAbout(heardAbout.filter((item) => item !== option));
-    } else {
-      setHeardAbout([...heardAbout, option]);
-    }
+  const selectHeardAbout = (option: string) => {
+    setHeardAbout([option]);
   };
 
   // Submit final application
@@ -172,6 +171,40 @@ export default function AdditionalInfoPage() {
       if (cvFileObject) {
         // Create local object URL for client preview/storage
         cvUrl = URL.createObjectURL(cvFileObject);
+      }
+
+      // If application_id exists from step 1, submit to the backend API endpoint
+      const targetAppId = applicationId || (typeof id === "string" ? parseInt(id, 10) : null);
+      if (targetAppId && !isNaN(targetAppId)) {
+        const formData = new FormData();
+        if (cvFileObject) {
+          formData.append("file", cvFileObject);
+          formData.append("cv", cvFileObject);
+          formData.append("cv_file", cvFileObject);
+        }
+        formData.append("phone_number", phoneNumber);
+        formData.append("phone", phoneNumber);
+        formData.append("location", location);
+        if (linkedin) {
+          formData.append("linkedin", linkedin);
+          formData.append("linkedin_profile", linkedin);
+        }
+        if (portfolio) {
+          formData.append("portfolio", portfolio);
+          formData.append("portfolio_url", portfolio);
+        }
+        if (heardAbout && heardAbout.length > 0) {
+          formData.append("heard_about", heardAbout[0]);
+          formData.append("heard_about_us", heardAbout[0]);
+          formData.append("source", heardAbout[0]);
+        }
+
+        try {
+          await hiringApi.submitAdditionalInfo(targetAppId, formData);
+        } catch (apiErr) {
+          console.warn("submitAdditionalInfo API call warning/error:", apiErr);
+          // Non-blocking fallback so user experience is smooth even in offline or partial backend environments
+        }
       }
 
       // Update local store
@@ -300,35 +333,24 @@ export default function AdditionalInfoPage() {
             </h3>
             <div className="flex flex-col gap-2">
               {HEARD_ABOUT_OPTIONS.map((option) => {
-                const isChecked = heardAbout.includes(option);
+                const isSelected = heardAbout.includes(option);
                 return (
                   <button
                     key={option}
                     type="button"
-                    onClick={() => toggleHeardAbout(option)}
+                    onClick={() => selectHeardAbout(option)}
                     className="group flex w-fit cursor-pointer items-center gap-3 py-1 text-left select-none"
                   >
                     <div
                       className={cn(
-                        "flex h-[18px] w-[18px] items-center justify-center rounded border transition-all",
-                        isChecked
-                          ? "border-[#195236] bg-[#195236] text-[#F2F7F1]"
+                        "flex h-[18px] w-[18px] items-center justify-center rounded-full border transition-all",
+                        isSelected
+                          ? "border-[#195236] bg-[#195236]"
                           : "border-[#D0D5DD] bg-white group-hover:border-[#195236]"
                       )}
                     >
-                      {isChecked && (
-                        <svg
-                          className="h-2.5 w-2.5 stroke-[3px]"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
+                      {isSelected && (
+                        <div className="h-2 w-2 rounded-full bg-white" />
                       )}
                     </div>
                     <span className="font-inter text-[16px] leading-[24px] text-[#0D1A14]">

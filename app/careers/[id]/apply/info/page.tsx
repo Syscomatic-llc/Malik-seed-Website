@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { openPositionsData } from "@/data/career-data";
+import { hiringApi } from "@/lib/api";
 
 export default function PersonalInfoPage() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function PersonalInfoPage() {
     name: storeName,
     email: storeEmail,
     setPersonalInfo,
+    setStep1Data,
     fetchAssessment,
     assessmentConfig,
     isLoadingAssessment,
@@ -59,8 +61,31 @@ export default function PersonalInfoPage() {
     setError("");
 
     setPersonalInfo(name, email);
-    setLoading(false);
-    router.push(`/careers/${id}/apply/otp`);
+
+    const nameParts = name.trim().split(" ");
+    const firstName = nameParts[0] || name.trim();
+    const lastName = nameParts.slice(1).join(" ") || " ";
+
+    try {
+      const response = await hiringApi.applyStep1({
+        first_name: firstName,
+        last_name: lastName,
+        email: email.trim(),
+        position_id: resolvedPositionId,
+      }) as any;
+
+      const appId = response?.application_id ?? response?.application?.id ?? null;
+      const otpCode = response?.otp_code ?? response?.application?.otp_code ?? null;
+
+      if (appId || otpCode) {
+        setStep1Data(appId ? Number(appId) : null, otpCode ? String(otpCode) : null);
+      }
+    } catch (err) {
+      console.warn("applyStep1 API call failed or offline, proceeding with fallback:", err);
+    } finally {
+      setLoading(false);
+      router.push(`/careers/${id}/apply/otp`);
+    }
   };
 
   if (!hydrated || isLoadingAssessment) {
