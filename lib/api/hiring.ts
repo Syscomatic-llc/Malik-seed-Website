@@ -20,6 +20,8 @@ export interface GetPositionsParams {
   job_type?: string | null;
 }
 
+export type ResumeType = "future_leader" | "general";
+
 export const hiringApi = {
   getPositions(params?: GetPositionsParams, options?: RequestOptions) {
     return apiGet<ApiJobPosition[]>("/api/v1/hiring/positions", {
@@ -102,8 +104,23 @@ export const hiringApi = {
     });
   },
 
-  uploadResume(formData: FormData, options?: RequestOptions) {
-    return apiPostMultipart<{ url: string }>("/api/v1/hiring/upload-cv", formData, options);
+  uploadResume(formData: FormData, resumeType?: ResumeType, options?: RequestOptions) {
+    if (resumeType) {
+      formData.append("resume_types", resumeType);
+      formData.append("resume_type", resumeType);
+    }
+    const fileEntry = formData.get("file");
+    if (fileEntry instanceof File && fileEntry.name) {
+      if (!formData.has("filename")) formData.append("filename", fileEntry.name);
+      if (!formData.has("file_name")) formData.append("file_name", fileEntry.name);
+    }
+    const mergedOptions: RequestOptions = {
+      ...options,
+      params: resumeType
+        ? { ...options?.params, resume_types: resumeType, resume_type: resumeType }
+        : options?.params,
+    };
+    return apiPostMultipart<{ url: string }>("/api/v1/hiring/upload-cv", formData, mergedOptions);
   },
 };
 

@@ -74,15 +74,20 @@ export default memo(function OpenPositionsSection({
       <div className="mx-auto w-full max-w-[1030px] px-4 lg:px-0">
         {/* Header Block: Badge + Title */}
         <div className="flex flex-col items-start gap-8">
-          {/* Badge */}
-
           <SectionBadge variant="outline" showDot>
             {data.badge}
           </SectionBadge>
 
-          {/* Title */}
           <h2 className="font-inter-tight max-w-[358px] text-[34px] leading-[41px] font-medium text-[#0D1A14] md:max-w-[633px] lg:text-[64px] lg:leading-[77px]">
-            {data.title}
+            {data.title.includes("Malik Seeds") ? (
+              <>
+                {data.title.split("Malik Seeds")[0]}
+                <span className="text-[#195236]">Malik Seeds</span>
+                {data.title.split("Malik Seeds")[1]}
+              </>
+            ) : (
+              data.title
+            )}
           </h2>
         </div>
 
@@ -96,3 +101,4 @@ export default memo(function OpenPositionsSection({
     </section>
   );
 });
+

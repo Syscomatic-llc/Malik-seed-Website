@@ -85,8 +85,8 @@ export default memo(function CVDropSection() {
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
-      await hiringApi.uploadResume(formData);
+      formData.append("file", file, file.name);
+      await hiringApi.uploadResume(formData, "general");
       setIsSubmitted(true);
       setFile(null);
     } catch (err: any) {

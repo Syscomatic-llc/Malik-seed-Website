@@ -76,7 +76,15 @@ export default memo(function OpenPositionsCardsSection({
 
           {/* Title */}
           <h2 className="font-inter-tight text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
-            {data.title}
+            {data.title.includes("Malik Seeds") ? (
+              <>
+                {data.title.split("Malik Seeds")[0]}
+                <span className="text-[#195236]">Malik Seeds</span>
+                {data.title.split("Malik Seeds")[1]}
+              </>
+            ) : (
+              data.title
+            )}
           </h2>
         </div>
 
