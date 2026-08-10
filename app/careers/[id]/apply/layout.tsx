@@ -15,7 +15,7 @@ async function getPosition(id: string): Promise<JobPosition | null> {
   const numId = parseInt(id);
   if (!isNaN(numId)) {
     try {
-      const res = await hiringApi.getPositionById(numId, { revalidate: 60 });
+      const res = await hiringApi.getPositionById(numId, { revalidate: 15, tags: ["careers"] });
       if (res && res.position) {
         return mapApiPositionToJobPosition(res.position);
       }
@@ -24,7 +24,7 @@ async function getPosition(id: string): Promise<JobPosition | null> {
 
   // 2. Try to fetch by slug
   try {
-    const res = await hiringApi.getPositionBySlug(id, { revalidate: 60 });
+    const res = await hiringApi.getPositionBySlug(id, { revalidate: 15, tags: ["careers"] });
     if (res && res.position) {
       return mapApiPositionToJobPosition(res.position);
     }

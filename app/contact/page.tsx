@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 
   try {
-    const data = await contactApi.getContact({ revalidate: 60 });
+    const data = await contactApi.getContact({ revalidate: 15, tags: ["contact"] });
     if (data) {
       fallback = {
         title: `${data.title} - ${SITE_NAME}`,
@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
     console.error("Failed to fetch contact page metadata from API:", err);
   }
 
-  return getPageMetadata("/contact", fallback, { revalidate: 60 });
+  return getPageMetadata("/contact", fallback, { revalidate: 15, tags: ["contact", "seo"] });
 }
 
 
@@ -32,7 +32,7 @@ export default async function ContactPage() {
   let apiData = null;
 
   try {
-    apiData = await contactApi.getContact({ revalidate: 60 });
+    apiData = await contactApi.getContact({ revalidate: 15, tags: ["contact"] });
   } catch (err) {
     console.error("Failed to fetch contact page data from API:", err);
   }

@@ -42,7 +42,7 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await settingsApi.getSettings({ revalidate: 300 });
+  const settings = await settingsApi.getSettings({ revalidate: 15, tags: ["settings"] });
   const title = settings.siteName || "Malik Seeds";
   const tagLine = settings.siteTagline;
 
@@ -117,7 +117,7 @@ export default async function RootLayout({
 }>) {
   let brands: { name: string; description: string; href: string }[] = [];
   try {
-    const data = await homepageApi.getServices({ revalidate: 60 });
+    const data = await homepageApi.getServices({ revalidate: 15, tags: ["services"] });
     if (data && data.length > 0) {
       brands = data.map((s) => ({
         name: s.title,
@@ -131,7 +131,7 @@ export default async function RootLayout({
 
   let settings = null;
   try {
-    settings = await settingsApi.getSettings({ revalidate: 300 });
+    settings = await settingsApi.getSettings({ revalidate: 15, tags: ["settings"] });
   } catch (err) {
     console.error("Failed to load settings in RootLayout:", err);
   }

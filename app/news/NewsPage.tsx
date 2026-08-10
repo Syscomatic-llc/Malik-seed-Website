@@ -6,7 +6,7 @@ const ALL_CATEGORY = "All News";
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "motion/react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import {
   type NewsArticle,
@@ -24,18 +24,43 @@ interface NewsPageProps {
 const CATEGORY_PARAM = "category";
 
 export default function NewsPage({ apiData }: NewsPageProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const [isCategoryLoading, setIsCategoryLoading] = useState(false);
-
-  const activeCategory = useMemo(() => {
+  const [activeCategory, setActiveCategory] = useState<string>(() => {
     const cat = searchParams.get(CATEGORY_PARAM);
-    if (!cat) return ALL_CATEGORY;
-    return cat;
-  }, [searchParams]);
+    return cat || ALL_CATEGORY;
+  });
+
+  const [currentPage, setCurrentPage] = useState<number>(() => {
+    const raw = Number(searchParams.get(PAGE_PARAM));
+    if (!Number.isFinite(raw) || raw < 1) return 1;
+    return raw;
+  });
+
+  const [isCategoryLoading, setIsCategoryLoading] = useState(false);
+  const [totalArticles, setTotalArticles] = useState<number>(0);
+  const [loadedArticles, setLoadedArticles] = useState<NewsArticle[]>([]);
+
+  // Client-side cache to make revisiting categories/pages instantaneous
+  const cacheRef = useRef<Map<string, { items: NewsArticle[]; total: number }>>(new Map());
+  const isFirstRender = useRef(true);
+
+  // Sync state with browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get(CATEGORY_PARAM) || ALL_CATEGORY;
+      const raw = Number(params.get(PAGE_PARAM));
+      const pg = Number.isFinite(raw) && raw >= 1 ? raw : 1;
+      setActiveCategory(cat);
+      setCurrentPage(pg);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   const categoriesList = useMemo(() => {
     if (!apiData?.categories) return [ALL_CATEGORY];
@@ -44,12 +69,6 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     );
     return [ALL_CATEGORY, ...sorted.map((c) => c.name)];
   }, [apiData]);
-
-  const currentPage = useMemo(() => {
-    const raw = Number(searchParams.get(PAGE_PARAM));
-    if (!Number.isFinite(raw) || raw < 1) return 1;
-    return raw;
-  }, [searchParams]);
 
   const allInitialArticles = useMemo(() => {
     if (!apiData?.articles) return [];
@@ -63,20 +82,40 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     );
   }, [allInitialArticles, activeCategory]);
 
-  const [totalArticles, setTotalArticles] = useState<number>(0);
-  const [loadedArticles, setLoadedArticles] = useState<NewsArticle[]>([]);
-
-  const isFirstRender = useRef(true);
-
-  // Single unified fetch effect driven by currentPage and activeCategory
+  // Fetch or retrieve from cache on activeCategory / currentPage change
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      if (currentPage === 1 && activeCategory === ALL_CATEGORY && apiData?.articles && apiData.articles.length > 0) {
-        return;
-      }
+    const cacheKey = `${activeCategory}:${currentPage}`;
+
+    if (cacheRef.current.has(cacheKey)) {
+      const cached = cacheRef.current.get(cacheKey)!;
+      setLoadedArticles(cached.items);
+      setTotalArticles(cached.total);
+      setIsCategoryLoading(false);
+      return;
     }
 
+    if (
+      isFirstRender.current &&
+      currentPage === 1 &&
+      activeCategory === ALL_CATEGORY &&
+      apiData?.articles &&
+      apiData.articles.length > 0
+    ) {
+      isFirstRender.current = false;
+      const initialMapped = apiData.articles.map(mapApiArticleToNewsArticle);
+      const total = initialMapped.length;
+      const initialPageSlice = initialMapped.slice(0, ARTICLES_PER_PAGE);
+      cacheRef.current.set(cacheKey, {
+        items: initialPageSlice,
+        total: total,
+      });
+      setLoadedArticles(initialPageSlice);
+      setTotalArticles(total);
+      setIsCategoryLoading(false);
+      return;
+    }
+
+    isFirstRender.current = false;
     let isCancelled = false;
     setIsCategoryLoading(true);
 
@@ -88,7 +127,9 @@ export default function NewsPage({ apiData }: NewsPageProps) {
       })
       .then((res) => {
         if (!isCancelled) {
-          setLoadedArticles(res.items.map(mapApiArticleToNewsArticle));
+          const mapped = res.items.map(mapApiArticleToNewsArticle);
+          cacheRef.current.set(cacheKey, { items: mapped, total: res.total });
+          setLoadedArticles(mapped);
           setTotalArticles(res.total);
         }
       })
@@ -123,36 +164,44 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     return categoryFilteredArticles.slice(start, start + ARTICLES_PER_PAGE);
   }, [loadedArticles, categoryFilteredArticles, currentPage]);
 
+  const updateUrl = (category: string, page: number) => {
+    const params = new URLSearchParams();
+    if (category !== ALL_CATEGORY) {
+      params.set(CATEGORY_PARAM, category);
+    }
+    if (page > 1) {
+      params.set(PAGE_PARAM, String(page));
+    }
+    const queryString = params.toString();
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+    window.history.pushState(null, "", newUrl);
+  };
+
   const handleCategoryChange = (category: string) => {
     if (category === activeCategory && !isCategoryLoading) return;
 
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete(PAGE_PARAM);
-    if (category === ALL_CATEGORY) {
-      params.delete(CATEGORY_PARAM);
-    } else {
-      params.set(CATEGORY_PARAM, category);
-    }
+    const cacheKey = `${category}:1`;
+    const isCached = cacheRef.current.has(cacheKey);
 
-    router.replace(
-      params.size > 0 ? `${pathname}?${params.toString()}` : pathname,
-      { scroll: false }
-    );
+    setActiveCategory(category);
+    setCurrentPage(1);
+    if (!isCached) {
+      setIsCategoryLoading(true);
+    }
+    updateUrl(category, 1);
   };
 
   const handlePageChange = (newPage: number) => {
     if (newPage === currentPage || isCategoryLoading || newPage < 1 || newPage > totalPages) return;
 
-    const params = new URLSearchParams(searchParams.toString());
-    if (newPage === 1) {
-      params.delete(PAGE_PARAM);
-    } else {
-      params.set(PAGE_PARAM, String(newPage));
+    const cacheKey = `${activeCategory}:${newPage}`;
+    const isCached = cacheRef.current.has(cacheKey);
+
+    setCurrentPage(newPage);
+    if (!isCached) {
+      setIsCategoryLoading(true);
     }
-    router.replace(
-      params.size > 0 ? `${pathname}?${params.toString()}` : pathname,
-      { scroll: false }
-    );
+    updateUrl(activeCategory, newPage);
 
     if (gridRef.current) {
       gridRef.current.scrollIntoView({ behavior: "smooth", block: "start" });

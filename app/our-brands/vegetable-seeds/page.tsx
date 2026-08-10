@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: vegetableSeedsData.meta.title,
     description: vegetableSeedsData.meta.description,
   };
-  return getPageMetadata("/our-brands/vegetable-seeds", fallback, { revalidate: 60 });
+  return getPageMetadata("/our-brands/vegetable-seeds", fallback, { revalidate: 15, tags: ["brands", "seo"] });
 }
 
 

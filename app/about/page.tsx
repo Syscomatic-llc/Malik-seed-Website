@@ -17,21 +17,21 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       "Discover the historical journey of A.R. Malik, our mission, core brand values, and agricultural milestones from 1962 to today.",
   };
-  return getPageMetadata("/about", fallback, { revalidate: 60 });
+  return getPageMetadata("/about", fallback, { revalidate: 15, tags: ["about", "seo"] });
 }
 
 
 export default async function AboutPage() {
   let ourStoryData = null;
   try {
-    ourStoryData = await aboutpageApi.getAll({ revalidate: 60 });
+    ourStoryData = await aboutpageApi.getAll({ revalidate: 15, tags: ["about"] });
   } catch (err) {
     console.error("Failed to fetch our story data from API:", err);
   }
 
   let galleryData = null;
   try {
-    galleryData = await galleryApi.getAll({ revalidate: 60 });
+    galleryData = await galleryApi.getAll({ revalidate: 15, tags: ["gallery"] });
   } catch (err) {
     console.error("Failed to fetch gallery data from API:", err);
   }

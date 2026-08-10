@@ -5,23 +5,20 @@ import JoinTeamSection from "@/components/sections/JoinTeamSection";
 import { newsApi, getPageMetadata } from "@/lib/api";
 import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata(): Promise<Metadata> {
   const fallback: Metadata = {
     title: "News & Updates | Malik Seed",
     description:
       "Stay up to date with the latest research, farmer stories, partnerships, and innovations from Malik Seed.",
   };
-  return getPageMetadata("/news", fallback, { revalidate: 60 });
+  return getPageMetadata("/news", fallback, { revalidate: 10, tags: ["news", "seo"] });
 }
 
 
 export default async function NewsRoute() {
   let apiData = null;
   try {
-    // Large payload (>2MB) cannot be cached by Next.js. Disable cache to silence build warnings.
-    apiData = await newsApi.getAll({ cache: "no-store", revalidate: 0 });
+    apiData = await newsApi.getAll({ revalidate: 10, tags: ["news"] });
   } catch (err) {
     console.error("Failed to fetch news from API:", err);
   }

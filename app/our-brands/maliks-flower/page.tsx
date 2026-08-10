@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: maliksFlowerData.meta.title,
     description: maliksFlowerData.meta.description,
   };
-  return getPageMetadata("/our-brands/maliks-flower", fallback, { revalidate: 60 });
+  return getPageMetadata("/our-brands/maliks-flower", fallback, { revalidate: 15, tags: ["brands", "seo"] });
 }
 
 

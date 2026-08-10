@@ -10,14 +10,14 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       "We are committed to delivering high-performance hybrid seed varieties. Discover our six major brands and their missions.",
   };
-  return getPageMetadata("/our-brands", fallback, { revalidate: 60 });
+  return getPageMetadata("/our-brands", fallback, { revalidate: 15, tags: ["brands", "seo"] });
 }
 
 
 export default async function BrandsPage() {
   let apiBrands = null;
   try {
-    apiBrands = await brandsApi.getBrands(null, { revalidate: 60 });
+    apiBrands = await brandsApi.getBrands(null, { revalidate: 15, tags: ["brands"] });
     if (apiBrands && apiBrands.length > 0) {
       apiBrands.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
     }

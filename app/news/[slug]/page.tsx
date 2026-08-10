@@ -127,7 +127,7 @@ export async function generateMetadata({
   let fallback: Metadata = { title: `Article Not Found - ${SITE_NAME}` };
 
   try {
-    const found = await newsApi.getArticleBySlug(slug, { revalidate: 60 });
+    const found = await newsApi.getArticleBySlug(slug, { revalidate: 10, tags: ["news"] });
     if (found) {
       fallback = {
         title: `${found.title} - ${SITE_NAME}`,
@@ -138,7 +138,7 @@ export async function generateMetadata({
     console.error("Failed to fetch article metadata from API:", err);
   }
 
-  return getPageMetadata(`/news/${slug}`, fallback, { revalidate: 60 });
+  return getPageMetadata(`/news/${slug}`, fallback, { revalidate: 10, tags: ["news", "seo"] });
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
@@ -149,11 +149,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   try {
     const [apiArticle, apiData] = await Promise.all([
-      newsApi.getArticleBySlug(slug, { revalidate: 60 }).catch((err) => {
+      newsApi.getArticleBySlug(slug, { revalidate: 10, tags: ["news"] }).catch((err) => {
         console.error("Failed to fetch single article by slug:", err);
         return null;
       }),
-      newsApi.getNews({ revalidate: 60 }).catch((err) => {
+      newsApi.getNews({ revalidate: 10, tags: ["news"] }).catch((err) => {
         console.error("Failed to fetch all articles for navigation:", err);
         return null;
       }),

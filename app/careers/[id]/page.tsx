@@ -45,7 +45,7 @@ function isHtmlContent(str: string): boolean {
 /** Statically pre-generate dynamic routes for all job positions at build time. */
 export async function generateStaticParams() {
   try {
-    const apiPositions = await hiringApi.getPositions(undefined, { revalidate: 60 });
+    const apiPositions = await hiringApi.getPositions(undefined, { revalidate: 10, tags: ["careers"] });
     if (apiPositions && apiPositions.length > 0) {
       return apiPositions.map((pos) => ({
         id: pos.slug || pos.id.toString(),
@@ -69,12 +69,12 @@ export async function generateMetadata({
   const isNumeric = /^\d+$/.test(id);
   try {
     if (isNumeric) {
-      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 10, tags: ["careers"] });
       if (res && res.position) {
         position = mapApiPositionToJobPosition(res.position);
       }
     } else {
-      const res = await hiringApi.getPositionBySlug(id, { revalidate: 60 });
+      const res = await hiringApi.getPositionBySlug(id, { revalidate: 10, tags: ["careers"] });
       if (res && res.position) {
         position = mapApiPositionToJobPosition(res.position);
       }
@@ -90,7 +90,7 @@ export async function generateMetadata({
   }
 
   if (!position) {
-    return getPageMetadata(`/careers/${id}`, { title: `Position Not Found - ${SITE_NAME}` }, { revalidate: 60 });
+    return getPageMetadata(`/careers/${id}`, { title: `Position Not Found - ${SITE_NAME}` }, { revalidate: 10, tags: ["careers", "seo"] });
   }
 
   const cleanDescription = cleanHtml(position.description);
@@ -105,7 +105,7 @@ export async function generateMetadata({
     },
   };
 
-  return getPageMetadata(`/careers/${id}`, fallback, { revalidate: 60 });
+  return getPageMetadata(`/careers/${id}`, fallback, { revalidate: 10, tags: ["careers", "seo"] });
 }
 
 export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
@@ -115,12 +115,12 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
   const isNumeric = /^\d+$/.test(id);
   try {
     if (isNumeric) {
-      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 60 });
+      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 10, tags: ["careers"] });
       if (res && res.position) {
         position = mapApiPositionToJobPosition(res.position);
       }
     } else {
-      const res = await hiringApi.getPositionBySlug(id, { revalidate: 60 });
+      const res = await hiringApi.getPositionBySlug(id, { revalidate: 10, tags: ["careers"] });
       if (res && res.position) {
         position = mapApiPositionToJobPosition(res.position);
       }

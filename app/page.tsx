@@ -10,7 +10,7 @@ import { homepageApi, newsApi, getPageMetadata } from "@/lib/api";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getPageMetadata("/", {}, { revalidate: 60 });
+  return getPageMetadata("/", {}, { revalidate: 15, tags: ["seo", "homepage"] });
 }
 
 export default async function Home() {
@@ -18,13 +18,13 @@ export default async function Home() {
   let newsPageData = null;
 
   try {
-    apiData = await homepageApi.getAll({ revalidate: 60 });
+    apiData = await homepageApi.getAll({ revalidate: 15, tags: ["homepage"] });
   } catch (err) {
     console.error("Failed to fetch homepage data from API:", err);
   }
 
   try {
-    newsPageData = await newsApi.getArticles({ limit: 6 }, { revalidate: 60 });
+    newsPageData = await newsApi.getArticles({ limit: 6 }, { revalidate: 10, tags: ["news"] });
   } catch (err) {
     console.error("Failed to fetch news from API:", err);
   }

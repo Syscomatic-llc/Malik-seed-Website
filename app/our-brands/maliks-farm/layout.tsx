@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: maliksFarmData.meta.title,
     description: maliksFarmData.meta.description,
   };
-  return getPageMetadata("/our-brands/maliks-farm", fallback, { revalidate: 60 });
+  return getPageMetadata("/our-brands/maliks-farm", fallback, { revalidate: 15, tags: ["brands", "seo"] });
 }
 
 

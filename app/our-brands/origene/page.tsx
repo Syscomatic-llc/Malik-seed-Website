@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: origeneData.meta.title,
     description: origeneData.meta.description,
   };
-  return getPageMetadata("/our-brands/origene", fallback, { revalidate: 60 });
+  return getPageMetadata("/our-brands/origene", fallback, { revalidate: 15, tags: ["brands", "seo"] });
 }
 
 

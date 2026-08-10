@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: innovationDevelopmentData.meta.title,
     description: innovationDevelopmentData.meta.description,
   };
-  return getPageMetadata("/our-brands/innovation-development", fallback, { revalidate: 60 });
+  return getPageMetadata("/our-brands/innovation-development", fallback, { revalidate: 15, tags: ["brands", "seo"] });
 }
 
 

@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
     },
   };
-  return getPageMetadata("/careers", fallback, { revalidate: 60 });
+  return getPageMetadata("/careers", fallback, { revalidate: 15, tags: ["careers", "seo"] });
 }
 
 
@@ -41,9 +41,9 @@ export default async function CareersPage() {
 
   try {
     const [positionsRes, testimonialsRes, benefitsRes] = await Promise.all([
-      hiringApi.getPositions(undefined, { revalidate: 60 }),
-      hiringApi.getTestimonials({ revalidate: 60 }),
-      hiringApi.getBenefits({ revalidate: 60 }),
+      hiringApi.getPositions(undefined, { revalidate: 15, tags: ["careers"] }),
+      hiringApi.getTestimonials({ revalidate: 15, tags: ["careers"] }),
+      hiringApi.getBenefits({ revalidate: 15, tags: ["careers"] }),
     ]);
     apiPositions = positionsRes || [];
     apiTestimonials = testimonialsRes || [];

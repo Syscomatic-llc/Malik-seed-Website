@@ -10,14 +10,14 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       "Explore the visual journey of Malik Seeds. Browse photos of our field activities, research and development, farmer training programs, and product showcase.",
   };
-  return getPageMetadata("/our-gallery", fallback, { revalidate: 60 });
+  return getPageMetadata("/our-gallery", fallback, { revalidate: 15, tags: ["gallery", "seo"] });
 }
 
 
 export default async function OurGalleryPage() {
   let galleryData = null;
   try {
-    galleryData = await galleryApi.getAll({ revalidate: 60 });
+    galleryData = await galleryApi.getAll({ revalidate: 15, tags: ["gallery"] });
   } catch (err) {
     console.error("Failed to fetch gallery data from API:", err);
   }

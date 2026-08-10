@@ -10,14 +10,14 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       "Explore open roles and career opportunities at Malik Seeds. Join our team and shape the future of agriculture.",
   };
-  return getPageMetadata("/careers/open-positions", fallback, { revalidate: 60 });
+  return getPageMetadata("/careers/open-positions", fallback, { revalidate: 10, tags: ["careers", "seo"] });
 }
 
 
 export default async function OpenPositionsPage() {
   let apiPositions: ApiJobPosition[] = [];
   try {
-    apiPositions = await hiringApi.getPositions(undefined, { revalidate: 60 });
+    apiPositions = await hiringApi.getPositions(undefined, { revalidate: 10, tags: ["careers"] });
   } catch (err) {
     console.error("Failed to fetch open positions:", err);
   }
