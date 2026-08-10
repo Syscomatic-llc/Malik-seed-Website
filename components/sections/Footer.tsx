@@ -1,5 +1,4 @@
 import Link from "next/link";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 import NextImage from "next/image";
 import Logo from "@/components/Logo";
 import { footerData, FooterLink, SocialLink } from "@/data/sections-data";
@@ -132,20 +131,7 @@ export default async function Footer() {
   const displaySocials =
     socials.length > 0
       ? socials
-      : [
-        {
-          label: "Facebook",
-          href: "https://facebook.com/malikseeds",
-        },
-        {
-          label: "YouTube",
-          href: "https://facebook.com/malikseeds",
-        },
-        {
-          label: "Instagram",
-          href: "https://instagram.com/malikseed",
-        },
-      ];
+      : [];
 
   const phoneLabel = contactInfo?.phone_primary || footerData.contact.phone.label;
   const phoneHref = contactInfo?.phone_primary ? `tel:${contactInfo.phone_primary}` : footerData.contact.phone.href;
