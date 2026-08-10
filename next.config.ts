@@ -17,8 +17,8 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 
     // Extend fetch timeout for the slow API origin (default is ~7s).
-    // The origin serves 8MB+ PNGs at ~500KB/s, so allow up to 30s.
-    minimumCacheTTL: 2592000, // 30 days — once optimised, keep the cache hot.
+    // The origin serves 8MB+ PNGs at ~500KB/s. Keep cache fresh (1 hour TTL).
+    minimumCacheTTL: 3600, // 1 hour — allows updated CMS images to refresh within 1 hour.
 
     remotePatterns: [
       {

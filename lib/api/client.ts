@@ -48,6 +48,8 @@ export interface RequestOptions {
   cache?: RequestCache;
   /** Next.js ISR revalidation (seconds), or false to force `no-store` semantics via cache */
   revalidate?: number | false;
+  /** Next.js cache tags for tag-based revalidation */
+  tags?: string[];
   signal?: AbortSignal;
   headers?: HeadersInit;
 }
@@ -78,14 +80,19 @@ async function request<T>(
       ? "no-store"
       : undefined);
 
+  const nextOptions: { revalidate?: number | false; tags?: string[] } = {};
+  if (options?.revalidate !== undefined) {
+    nextOptions.revalidate = options.revalidate;
+  }
+  if (options?.tags && options.tags.length > 0) {
+    nextOptions.tags = options.tags;
+  }
+
   const res = await fetch(url, {
     ...init,
     cache: fetchCache,
     signal: options?.signal,
-    next:
-      options?.revalidate !== undefined
-        ? { revalidate: options.revalidate }
-        : undefined,
+    next: Object.keys(nextOptions).length > 0 ? nextOptions : undefined,
     headers: {
       Accept: "application/json",
       ...(init.headers ?? {}),
