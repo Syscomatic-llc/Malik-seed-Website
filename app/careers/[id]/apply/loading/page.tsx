@@ -49,8 +49,8 @@ export default function AssessmentLoadingPage() {
           // MCQ: always go to result page first (result handles pass/fail branching)
           router.replace(`/careers/${id}/apply/result`);
         } else {
-          // Written or mixed flow: skip pass/fail result stage and go to additional info
-          router.replace(`/careers/${id}/apply/additional-info`);
+          // Written or mixed flow: assessment evaluated, proceed to submitted
+          router.replace(`/careers/${id}/apply/submitted`);
         }
       }, 3000);
 

@@ -68,6 +68,9 @@ export const hiringApi = {
     form: Record<string, string | number | boolean | undefined | null>,
     options?: RequestOptions
   ) {
+    if (form.position_id === undefined || form.position_id === null) {
+      console.error("applyStep1 missing required position_id in form payload:", form);
+    }
     return apiPostForm<unknown>("/api/v1/hiring/apply/step-1", form, options);
   },
 

@@ -9,6 +9,7 @@ import { gradeMcqAssessment } from "@/lib/assessment-grading";
 const PAGES = [
   { label: "Info", path: "info" },
   { label: "OTP", path: "otp" },
+  { label: "Additional Info", path: "additional-info" },
   { label: "Start", path: "start" },
   { label: "MCQ", path: "mcq" },
   { label: "Short Answers", path: "short-answers" },
@@ -16,7 +17,6 @@ const PAGES = [
   { label: "Review", path: "review" },
   { label: "Loading", path: "loading" },
   { label: "Result", path: "result" },
-  { label: "Additional Info", path: "additional-info" },
   { label: "Submitted", path: "submitted" },
 ];
 

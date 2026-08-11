@@ -145,7 +145,7 @@ export default function ReviewPage() {
           <button
             onClick={() => {
               if (isCompleted) {
-                router.push(`/careers/${id}/apply/additional-info`);
+                router.push(`/careers/${id}/apply/submitted`);
               } else {
                 router.push(backRoute);
               }
@@ -407,7 +407,7 @@ export default function ReviewPage() {
           {isCompleted ? (
             <Button
               onClick={() => {
-                router.push(`/careers/${id}/apply/additional-info`);
+                router.push(`/careers/${id}/apply/submitted`);
               }}
               className="font-inter-tight h-[46px] cursor-pointer rounded-[60px] border border-[#E4E7EC] bg-[#F2F4F7] px-8 font-semibold text-[#414E62] hover:bg-[#e4e7ec]"
             >

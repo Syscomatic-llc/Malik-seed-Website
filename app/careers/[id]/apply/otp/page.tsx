@@ -43,10 +43,7 @@ export default function OtpPage() {
 
       if (expectedOtp && cleanOtp === expectedOtp) {
         setOtpVerified(true);
-        router.push(`/careers/${id}/apply/start`);
-      } else if (cleanOtp === "123456" || cleanOtp === "7752") {
-        setOtpVerified(true);
-        router.push(`/careers/${id}/apply/start`);
+        router.push(`/careers/${id}/apply/additional-info`);
       } else {
         setError("Invalid verification code. Please check and try again.");
         setLoading(false);

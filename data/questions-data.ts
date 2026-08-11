@@ -1287,13 +1287,12 @@ export interface JobAssessmentConfig {
 }
 
 export function buildSteps(job: JobAssessmentConfig): Step[] {
-  const steps: Step[] = ["info", "otp", "start"];
+  const steps: Step[] = ["info", "otp", "additional-info", "start"];
   if (job.hasMcq) steps.push("mcq");
   if (job.hasShortAnswers) steps.push("short-answers");
   if (job.hasLongAnswers) steps.push("long-answers");
   steps.push("review");
   if (job.autoGrade) steps.push("result");
-  steps.push("additional-info");
   steps.push("submitted");
   return steps;
 }

@@ -9,12 +9,14 @@ import {
   type LongAnswerQuestion,
 } from "@/data/questions-data";
 import { apiGet } from "@/lib/api/client";
+import { hiringApi } from "@/lib/api/hiring";
 import { openPositionsData } from "@/data/career-data";
 
 export interface ApplicationState {
   // Job context
   positionId: number | null;
   positionTitle: string;
+  positionSlug: string | null;
 
   // Personal Info
   name: string;
@@ -93,6 +95,7 @@ export const useApplicationStore = create<ApplicationState>()(
       // Initial state
       positionId: null,
       positionTitle: "",
+      positionSlug: null,
       name: "",
       email: "",
       isOtpVerified: false,
@@ -294,55 +297,108 @@ export const useApplicationStore = create<ApplicationState>()(
 
       fetchAssessment: async (slugOrId) => {
         set({ isLoadingAssessment: true, assessmentLoadError: null });
+        const searchStr = String(slugOrId).trim();
+        const isNum = !isNaN(Number(searchStr)) && /^\d+$/.test(searchStr);
+        const numId = isNum ? Number(searchStr) : null;
+
+        let realPosition: { id: number; title: string; slug?: string } | null = null;
+
+        // 1. Direct API lookup via hiringApi by slug or ID
         try {
-          // Resolve real backend ID from title or slug
-          const positions = await apiGet<any[]>("/api/v1/hiring/positions");
-          let realPosition = null;
-
-          const searchStr = String(slugOrId).toLowerCase();
-          const numId = Number(slugOrId);
-
-          if (!isNaN(numId)) {
-            realPosition = positions.find((p: any) => p.id === numId);
-          }
-          if (!realPosition) {
-            realPosition = positions.find(
-              (p: any) => p.slug?.toLowerCase() === searchStr || p.title?.toLowerCase() === searchStr
-            );
-          }
-
-          // Fallback to static mock data if API doesn't have it (or if offline)
-          if (!realPosition) {
-            const staticPos = openPositionsData.positions.find(
-              (pos) => pos.id.toString() === searchStr || pos.slug === searchStr
-            );
-            if (staticPos) {
+          if (isNum && numId !== null) {
+            const res = await hiringApi.getPositionById(numId);
+            if (res?.position) {
               realPosition = {
-                id: staticPos.id,
-                title: staticPos.title,
-                slug: staticPos.slug,
+                id: res.position.id,
+                title: res.position.title,
+                slug: res.position.slug,
+              };
+            }
+          } else {
+            const res = await hiringApi.getPositionBySlug(searchStr);
+            if (res?.position) {
+              realPosition = {
+                id: res.position.id,
+                title: res.position.title,
+                slug: res.position.slug,
               };
             }
           }
+        } catch (err) {
+          console.warn(`Direct fetch position for ${slugOrId} failed, falling back to list...`, err);
+        }
 
-          if (!realPosition) {
-            console.warn(`Could not resolve backend position for ${slugOrId}.`);
-            set({
-              isLoadingAssessment: false,
-              assessmentLoadError: "This position does not require an assessment.",
-            });
-            return false;
+        // 2. Fallback to positions list endpoint
+        if (!realPosition) {
+          try {
+            const res = await apiGet<any>("/api/v1/hiring/positions");
+            const positionsList: any[] = Array.isArray(res)
+              ? res
+              : Array.isArray(res?.positions)
+              ? res.positions
+              : Array.isArray(res?.data)
+              ? res.data
+              : [];
+
+            if (positionsList.length > 0) {
+              const found = positionsList.find((p: any) => {
+                const rawId = p.id ?? p.position_id;
+                if (numId !== null && (rawId === numId || Number(rawId) === numId)) return true;
+                if (rawId !== undefined && rawId !== null && String(rawId).toLowerCase() === searchStr.toLowerCase()) return true;
+                if (p.slug && String(p.slug).toLowerCase() === searchStr.toLowerCase()) return true;
+                if (p.title && String(p.title).toLowerCase() === searchStr.toLowerCase()) return true;
+                return false;
+              });
+              if (found) {
+                const rawPosId = found.id ?? found.position_id;
+                const realId = typeof rawPosId === "number" ? rawPosId : Number(rawPosId) || rawPosId;
+                realPosition = {
+                  id: realId,
+                  title: found.title,
+                  slug: found.slug,
+                };
+              }
+            }
+          } catch (err) {
+            console.warn("Positions list fallback failed:", err);
           }
+        }
 
-          const realId = realPosition.id;
-          const realTitle = realPosition.title;
+        // 3. Fallback to static mock position data
+        if (!realPosition) {
+          const staticPos = openPositionsData.positions.find(
+            (pos) => pos.id.toString() === searchStr || pos.slug?.toLowerCase() === searchStr.toLowerCase()
+          );
+          if (staticPos) {
+            realPosition = {
+              id: staticPos.id,
+              title: staticPos.title,
+              slug: staticPos.slug,
+            };
+          }
+        }
 
-          // Save resolved position in the store
+        if (!realPosition) {
+          console.warn(`Could not resolve backend position for ${slugOrId}.`);
           set({
-            positionId: realId,
-            positionTitle: realTitle,
+            isLoadingAssessment: false,
+            assessmentLoadError: "This position does not require an assessment.",
           });
+          return false;
+        }
 
+        const realId = realPosition.id;
+        const realTitle = realPosition.title;
+        const realSlug = realPosition.slug ?? null;
+
+        // Save resolved position in the store
+        set({
+          positionId: realId,
+          positionTitle: realTitle,
+          positionSlug: realSlug,
+        });
+
+        try {
           const data = await apiGet<any>(`/api/v1/hiring/positions/${realId}/assessment`);
           console.log("=== ASSESSMENT API DATA ===", data);
           
@@ -427,6 +483,18 @@ export const useApplicationStore = create<ApplicationState>()(
           return true;
         } catch (err: any) {
           console.error("Failed to fetch assessment from API:", err);
+
+          // Fallback to static position data if API fails so positionId is still resolved
+          const staticPos = openPositionsData.positions.find(
+            (pos) => pos.id.toString() === searchStr || pos.slug?.toLowerCase() === searchStr.toLowerCase()
+          );
+          if (staticPos) {
+            set({
+              positionId: staticPos.id,
+              positionTitle: staticPos.title,
+              positionSlug: staticPos.slug,
+            });
+          }
 
           set({
             isLoadingAssessment: false,

@@ -21,13 +21,14 @@ export default function ApplicationSubmittedPage() {
   );
   const positionId = position ? position.id : parseInt(id as string);
   
-  let hasWritten = false;
-  if (assessmentConfig) {
-    const types = assessmentConfig.assessmentTypes ?? [assessmentConfig.assessmentType];
-    hasWritten = types.includes("short_answers") || types.includes("long_answers");
-  } else {
-    hasWritten = hasWrittenAssessment(positionId);
-  }
+  // Stable state for hasWritten so store reset does not trigger layout flicker during navigation
+  const [hasWritten] = useState(() => {
+    if (assessmentConfig) {
+      const types = assessmentConfig.assessmentTypes ?? [assessmentConfig.assessmentType];
+      return types.includes("short_answers") || types.includes("long_answers");
+    }
+    return hasWrittenAssessment(positionId);
+  });
 
   useEffect(() => {
     setHydrated(true);

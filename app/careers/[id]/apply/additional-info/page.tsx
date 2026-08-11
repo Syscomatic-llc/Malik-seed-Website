@@ -75,7 +75,7 @@ export default function AdditionalInfoPage() {
   const [location, setLocation] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [portfolio, setPortfolio] = useState("");
-  const [heardAbout, setHeardAbout] = useState<string[]>(["LinkedIn"]); // Checked LinkedIn by default in Figma
+  const [heardAbout, setHeardAbout] = useState<string[]>([]);
 
   // File upload state
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -97,7 +97,7 @@ export default function AdditionalInfoPage() {
       setLocation(storeLoc || "");
       setLinkedin(store.linkedin || "");
       setPortfolio(store.portfolio || "");
-      setHeardAbout(store.heardAbout?.length ? store.heardAbout : ["LinkedIn"]);
+      setHeardAbout(store.heardAbout || []);
       if (storeCvName) {
         setCvFile({ name: storeCvName, size: storeCvSize || 0 });
       }
@@ -109,15 +109,11 @@ export default function AdditionalInfoPage() {
     if (hydrated) {
       if (!isOtpVerified) {
         router.replace(`/careers/${id}/apply/otp`);
-      } else if (!isCompleted) {
-        router.replace(`/careers/${id}/apply/start`);
-      } else if (isAutoGrade && !isPassed) {
-        router.replace(`/careers/${id}/apply/result`);
       }
     }
-  }, [isOtpVerified, isCompleted, isPassed, isAutoGrade, hydrated, id, router]);
+  }, [isOtpVerified, hydrated, id, router]);
 
-  if (!hydrated || !isCompleted || (isAutoGrade && !isPassed)) {
+  if (!hydrated || !isOtpVerified) {
     return <div className="py-10 text-center">Loading form...</div>;
   }
 
@@ -172,9 +168,37 @@ export default function AdditionalInfoPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!phoneNumber || !location) {
-      setError("Please fill out all required fields");
+    const cleanPhone = phoneNumber.trim();
+    if (!cleanPhone) {
+      setError("Phone number is required");
       return;
+    }
+    const phoneRegex = /^[\d\s\+\-\(\)]{6,20}$/;
+    if (!phoneRegex.test(cleanPhone)) {
+      setError("Please enter a valid phone number (6-20 characters/digits)");
+      return;
+    }
+
+    const cleanLocation = location.trim();
+    if (!cleanLocation || cleanLocation.length < 2) {
+      setError("Current location is required");
+      return;
+    }
+
+    if (linkedin && linkedin.trim()) {
+      const cleanLink = linkedin.trim();
+      if (!cleanLink.toLowerCase().includes("linkedin.com") && !cleanLink.startsWith("http")) {
+        setError("Please enter a valid LinkedIn URL (e.g. linkedin.com/in/yourprofile)");
+        return;
+      }
+    }
+
+    if (portfolio && portfolio.trim()) {
+      const cleanPort = portfolio.trim();
+      if (!cleanPort.includes(".") && !cleanPort.startsWith("http")) {
+        setError("Please enter a valid portfolio or website URL");
+        return;
+      }
     }
 
     if (!cvFile) {
@@ -254,7 +278,12 @@ export default function AdditionalInfoPage() {
         cvUrl,
       });
 
-      router.push(`/careers/${id}/apply/submitted`);
+      const hasNoAssessment = store.assessmentLoadError === "This position does not require an assessment.";
+      if (hasNoAssessment) {
+        router.push(`/careers/${id}/apply/submitted`);
+      } else {
+        router.push(`/careers/${id}/apply/start`);
+      }
     } catch (err: any) {
       console.error("Failed to submit application:", err);
       setError(err?.message || "An error occurred. Please try again.");

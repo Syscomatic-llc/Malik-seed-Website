@@ -102,7 +102,7 @@ export default function AssessmentResultPage() {
       } else if (!isCompleted) {
         router.replace(`/careers/${id}/apply/start`);
       } else if (!isAutoGrade) {
-        router.replace(`/careers/${id}/apply/additional-info`);
+        router.replace(`/careers/${id}/apply/submitted`);
       }
     }
   }, [isOtpVerified, isCompleted, hydrated, id, router, positionId, isLeaving, isAutoGrade]);
@@ -124,6 +124,12 @@ export default function AssessmentResultPage() {
       </div>
     );
   }
+
+  const handleReturnHome = () => {
+    setIsLeaving(true);
+    reset();
+    router.push("/");
+  };
 
   const handleBackToCareers = () => {
     setIsLeaving(true);
@@ -155,47 +161,39 @@ export default function AssessmentResultPage() {
                   criteria.
                 </h2>
                 <p className="font-inter mt-2 text-[15px] leading-[150%] text-[#0D1A14]/70">
-                  You can now proceed to the next step of the application
-                  process by submitting your CV, cover letter, and supporting
-                  documents. Our recruitment team will review your complete
-                  application after submission.
+                  Thank you for completing your application and assessment for Malik Seeds. Your responses and details have been successfully recorded. Our recruitment team will review your complete submission and contact you via email regarding the next steps.
                 </p>
               </div>
             </div>
 
             <hr className="my-2 w-full border-t border-[#E4E7EC]" />
 
-            <div className="flex flex-col gap-4">
-              <h3 className="font-inter-tight text-[18px] font-semibold text-[#0D1A14]">
+            <div className="flex w-full flex-col items-start gap-[8px]">
+              <h2
+                className="text-[16px] leading-[24px] font-medium text-[#0D1A14]"
+                style={{ fontFamily: "var(--font-inter)" }}
+              >
                 What Happens Next
-              </h3>
-              <ol className="font-inter flex flex-col gap-3 pl-2 text-[16px] font-medium text-[#0D1A14]/80">
-                <li className="flex items-center gap-1">
-                  <span className="shrink-0 text-[16px] font-medium text-[#195236]">
-                    1.{" "}
-                  </span>
-                  <span>Upload your CV, cover letter, and other details.</span>
-                </li>
-                <li className="flex items-center gap-1">
-                  <span className="shrink-0 text-[16px] font-medium text-[#195236]">
-                    2.{" "}
-                  </span>
-                  <span>
-                    Our recruitment team reviews your full profile, including
-                    assessment results.
-                  </span>
-                </li>
-                <li className="flex items-center gap-1">
-                  <span className="shrink-0 text-[16px] font-medium text-[#195236]">
-                    3.{" "}
-                  </span>
-                  <span>
-                    Shortlisted candidates will be contacted directly for the
-                    next interview stages.
-                  </span>
-                </li>
-              </ol>
+              </h2>
+              <div className="flex w-full flex-col items-start gap-[8px]">
+                {[
+                  "Our team reviews your assessment and submitted documents",
+                  "Shortlisted candidates will be contacted for further evaluation",
+                  "Updates will be shared through the contact details you provided",
+                ].map((text, idx) => (
+                  <div key={idx} className="flex w-full items-start gap-[12px]">
+                    <div className="mt-[9px] h-[6px] w-[6px] shrink-0 rounded-full bg-[#195236]" />
+                    <p
+                      className="text-[16px] leading-[24px] text-[#0D1A14]/70"
+                      style={{ fontFamily: "var(--font-inter)" }}
+                    >
+                      {text}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
+
             <div className="h-px w-full bg-[#E4E7EC]" />
 
             <div className="flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
@@ -208,13 +206,11 @@ export default function AssessmentResultPage() {
                 <span>Review Your Responses</span>
               </button>
               <button
-                onClick={() =>
-                  router.push(`/careers/${id}/apply/additional-info`)
-                }
+                onClick={handleReturnHome}
                 className="flex h-[46px] w-full cursor-pointer items-center justify-center gap-[10px] rounded-[60px] bg-[#195236] px-6 text-[16px] leading-[19px] font-medium text-[#F2F7F1] transition-all hover:bg-[#153e28] hover:shadow-sm sm:w-auto"
                 style={{ fontFamily: "var(--font-inter-tight)" }}
               >
-                <span>Continue</span>
+                <span>Return Home</span>
                 <ArrowIcon direction="right" size={20} />
               </button>
             </div>

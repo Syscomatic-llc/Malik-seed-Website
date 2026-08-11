@@ -28,16 +28,11 @@ export default async function OpenPositionsPage() {
     return orderA - orderB;
   });
 
-  const fallbackSortedPositions = [...openPositionsData.positions].sort((a, b) => {
-    const orderA = a.sort_order ?? a.id;
-    const orderB = b.sort_order ?? b.id;
-    return orderA - orderB;
-  });
 
   const resolvedPositions =
     sortedApiPositions.length > 0
       ? sortedApiPositions.map(mapApiPositionToJobPosition)
-      : fallbackSortedPositions;
+      : [];
 
   return (
     <div className="min-h-screen bg-[#F2F7F1] pt-[120px] lg:pt-[160px]">

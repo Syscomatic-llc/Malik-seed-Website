@@ -26,15 +26,27 @@ export default function StartPage() {
     skipAssessmentFlow,
     positionId: storePositionId,
     positionTitle: storePositionTitle,
+    positionSlug: storePositionSlug,
   } = useApplicationStore();
   const [hydrated, setHydrated] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
-  const position = openPositionsData.positions.find(
-    (pos) => pos.id.toString() === id || pos.slug === id
+  const isStorePosMatching = Boolean(
+    storePositionId &&
+      (String(storePositionId) === String(id) ||
+        (storePositionSlug && storePositionSlug.toLowerCase() === String(id).toLowerCase()))
   );
-  const resolvedPositionId = position ? position.id : (storePositionId || parseInt(id as string));
-  const resolvedPositionTitle = position ? position.title : (storePositionTitle || "selected");
+
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug?.toLowerCase() === String(id).toLowerCase()
+  );
+  const parsedUrlId = !isNaN(parseInt(id as string, 10)) ? parseInt(id as string, 10) : null;
+  const resolvedPositionId = isStorePosMatching
+    ? storePositionId
+    : (position ? position.id : parsedUrlId);
+  const resolvedPositionTitle = isStorePosMatching && storePositionTitle
+    ? storePositionTitle
+    : (position ? position.title : "selected");
 
   useEffect(() => {
     setHydrated(true);
@@ -171,7 +183,7 @@ export default function StartPage() {
   }
 
   const handleStart = () => {
-    if (!agreed) return;
+    if (!agreed || !resolvedPositionId) return;
 
     // Start timer and configure state in Zustand
     startAssessment(resolvedPositionId, resolvedPositionTitle, config);

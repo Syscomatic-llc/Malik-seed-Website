@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 const STEPS = [
   { id: "info", label: "Personal Info", paths: ["/info"] },
   { id: "otp", label: "Verification", paths: ["/otp"] },
+  { id: "additional", label: "Additional Info", paths: ["/additional-info"] },
   { id: "start", label: "Instructions", paths: ["/start"] },
   {
     id: "assessment",
@@ -14,7 +15,6 @@ const STEPS = [
     paths: ["/mcq", "/written", "/short-answers", "/long-answers", "/loading"],
   },
   { id: "result", label: "Results", paths: ["/result", "/review"] },
-  { id: "additional", label: "Additional Info", paths: ["/additional-info"] },
   { id: "completed", label: "Completed", paths: ["/submitted"] },
 ];
 

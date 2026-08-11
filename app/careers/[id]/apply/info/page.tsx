@@ -25,6 +25,9 @@ export default function PersonalInfoPage() {
     assessmentLoadError,
     positionId: storePositionId,
     positionTitle: storePositionTitle,
+    positionSlug: storePositionSlug,
+    isCompleted: isStoreCompleted,
+    reset: resetStore,
   } = useApplicationStore();
 
   const [name, setName] = useState("");
@@ -33,12 +36,22 @@ export default function PersonalInfoPage() {
   const [error, setError] = useState("");
   const [hydrated, setHydrated] = useState(false);
 
+  const isStorePosMatching = Boolean(
+    storePositionId &&
+      (String(storePositionId) === String(id) ||
+        (storePositionSlug && storePositionSlug.toLowerCase() === String(id).toLowerCase()))
+  );
+
   const position = openPositionsData.positions.find(
-    (pos) => pos.id.toString() === id || pos.slug === id
+    (pos) => pos.id.toString() === id || pos.slug?.toLowerCase() === String(id).toLowerCase()
   );
   const parsedUrlId = !isNaN(parseInt(id as string, 10)) ? parseInt(id as string, 10) : null;
-  const resolvedPositionId = storePositionId ?? (position ? position.id : parsedUrlId);
-  const resolvedPositionTitle = storePositionTitle || (position ? position.title : "selected");
+  const resolvedPositionId = isStorePosMatching
+    ? storePositionId
+    : (position ? position.id : parsedUrlId);
+  const resolvedPositionTitle = isStorePosMatching && storePositionTitle
+    ? storePositionTitle
+    : (position ? position.title : "selected");
 
   const isAlreadySubmitted = Boolean(
     applicationId &&
@@ -50,11 +63,17 @@ export default function PersonalInfoPage() {
 
   // Sync state with store on hydration and load assessment
   useEffect(() => {
-    setName(storeName);
-    setEmail(storeEmail);
+    if ((storePositionId && !isStorePosMatching) || isStoreCompleted) {
+      resetStore();
+      setName("");
+      setEmail("");
+    } else {
+      setName(storeName);
+      setEmail(storeEmail);
+    }
     setHydrated(true);
     fetchAssessment(id as string);
-  }, [storeName, storeEmail, id, fetchAssessment]);
+  }, [storePositionId, isStorePosMatching, isStoreCompleted, storeName, storeEmail, id, fetchAssessment, resetStore]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,6 +86,12 @@ export default function PersonalInfoPage() {
       return;
     }
 
+    const targetPositionId = resolvedPositionId ?? storePositionId ?? (position ? position.id : parsedUrlId);
+    console.log("target position id", targetPositionId)
+    if (!targetPositionId) {
+      setError("Position ID could not be resolved. Please select a position from the careers page.");
+      return;
+    }
     if (isAlreadySubmitted) {
       router.push(`/careers/${id}/apply/otp`);
       return;
@@ -79,14 +104,14 @@ export default function PersonalInfoPage() {
 
     const nameParts = name.trim().split(" ");
     const firstName = nameParts[0] || name.trim();
-    const lastName = nameParts.slice(1).join(" ") || " ";
+    const lastName = nameParts.slice(1).join(" ");
 
     try {
       const response = await hiringApi.applyStep1({
         first_name: firstName,
         last_name: lastName,
         email: email.trim(),
-        position_id: resolvedPositionId,
+        position_id: targetPositionId,
       }) as any;
 
       const appId = response?.application_id ?? response?.application?.id ?? null;
