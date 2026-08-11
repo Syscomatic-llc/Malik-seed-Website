@@ -262,6 +262,25 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                   />
                 )}
 
+                {/* Salary Section */}
+                {position.salary && (
+                  <div className="flex flex-col gap-4">
+                    <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
+                      Salary
+                    </h2>
+                    <div className="flex flex-col gap-2 rounded-[16px] border border-[#E4E7EC] bg-white p-5 sm:flex-row sm:items-baseline sm:gap-3 lg:p-6">
+                      <span className="font-inter-tight text-[24px] leading-[30px] font-bold text-[#195236] lg:text-[28px] lg:leading-[34px]">
+                        {position.salary}
+                      </span>
+                      {position.salaryNote && (
+                        <span className="font-inter text-[15px] leading-[22px] text-[#0D1A14]/70 lg:text-[16px]">
+                          {position.salaryNote}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Basics & Benefits */}
                 {position.benefitsList && position.benefitsList.length > 0 && (
                   <div className="flex flex-col gap-6">
@@ -365,6 +384,25 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                           </li>
                         ))}
                       </ul>
+                    </div>
+                  )}
+
+                  {/* Salary Section */}
+                  {position.salary && (
+                    <div className="flex flex-col gap-4">
+                      <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
+                        Salary
+                      </h2>
+                      <div className="flex flex-col gap-2 rounded-[16px] border border-[#E4E7EC] bg-white p-5 sm:flex-row sm:items-baseline sm:gap-3 lg:p-6">
+                        <span className="font-inter-tight text-[24px] leading-[30px] font-bold text-[#195236] lg:text-[28px] lg:leading-[34px]">
+                          {position.salary}
+                        </span>
+                        {position.salaryNote && (
+                          <span className="font-inter text-[15px] leading-[22px] text-[#0D1A14]/70 lg:text-[16px]">
+                            {position.salaryNote}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
 

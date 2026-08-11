@@ -34,7 +34,7 @@ export interface PositionAssessmentConfig {
   timeLimitMinutes: number;
   stageTimeLimits?: Record<string, number>;
   totalQuestions: number;
-  passingScorePercent: number;
+  passingScorePercent?: number | null;
   title: string;
 }
 

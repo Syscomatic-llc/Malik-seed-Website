@@ -394,8 +394,10 @@ export interface ApiJobPosition {
   job_type: string;
   experience_required: string;
   education_required: string | null;
+  salary?: string | null;
   salary_range: string | null;
   salary_currency: string;
+  salary_note?: string | null;
   is_active: boolean;
   is_featured: boolean;
   is_urgent: boolean;
@@ -408,7 +410,7 @@ export interface ApiJobPosition {
   benefits: string[];
   has_assessment: boolean;
   assessment_duration: number;
-  passing_score: number;
+  passing_score?: number | null;
   view_count: number;
   application_count: number;
   application_deadline: string | null;

@@ -229,7 +229,9 @@ export default function StartPage() {
           <div className="font-inter flex flex-col text-[16px] leading-[24px] whitespace-pre-line text-[#0D1A14]">
             <span>Total questions: {config.totalQuestions}</span>
             <span>Time limit: {config.timeLimitMinutes} minutes</span>
-            <span>Passing score: {config.passingScorePercent}%</span>
+            {Boolean(config.passingScorePercent && config.passingScorePercent > 0) && (
+              <span>Passing score: {config.passingScorePercent}%</span>
+            )}
           </div>
 
           {/* Important Note */}

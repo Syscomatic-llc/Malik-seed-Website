@@ -188,9 +188,8 @@ export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
       .replace(/\u00a0/g, " ")
       .trim(),
     tags,
-    salary: item.salary_range
-      ? `${item.salary_range} ${item.salary_currency}`
-      : undefined,
+    salary: item.salary || item.salary_range || undefined,
+    salaryNote: item.salary_note || (item as any).salaryNote || undefined,
     location: locationLabel,
     jobType: jobTypeLabel,
     experience: item.experience_required,

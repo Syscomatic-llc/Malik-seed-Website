@@ -66,14 +66,17 @@ export function gradeMcqAssessment(
   });
 
   const score = Math.round((correctCount / questions.length) * 100);
-  const isPassed = score >= config.passingScorePercent;
+  const minPassing = (config.passingScorePercent !== undefined && config.passingScorePercent !== null && config.passingScorePercent > 0)
+    ? config.passingScorePercent
+    : null;
+  const isPassed = minPassing !== null ? score >= minPassing : true;
 
   return {
     score,
     isPassed,
     correctCount,
     totalCount: questions.length,
-    passingScorePercent: config.passingScorePercent,
+    passingScorePercent: minPassing ?? 0,
     breakdown,
   };
 }

@@ -469,7 +469,10 @@ export const useApplicationStore = create<ApplicationState>()(
             timeLimitMinutes: totalTimeLimitMinutes,
             stageTimeLimits,
             totalQuestions: data.total_questions ?? (mcq.length + short.length + long.length),
-            passingScorePercent: data.passing_score ?? 70,
+            passingScorePercent:
+              data.passing_score !== undefined && data.passing_score !== null && Number(data.passing_score) > 0
+                ? Number(data.passing_score)
+                : null,
             title: `${realTitle} Screening`,
           };
 
