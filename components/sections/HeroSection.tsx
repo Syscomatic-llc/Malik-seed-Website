@@ -205,21 +205,20 @@ const HeroContentDesktop = memo(function HeroContentDesktop({
 }) {
   return (
     <div
-      className="absolute right-0 left-0 z-30 mx-auto hidden w-full max-w-[786px] flex-col items-center px-6 md:flex"
+      className="absolute top-[calc(53%+55px)] right-0 left-0 z-30 mx-auto hidden w-full max-w-[786px] -translate-y-1/2 flex-col items-center px-6 md:flex"
       style={{
-        top: "45vh",
-        gap: "clamp(24px, 4vh, 48px)",
+        gap: "clamp(16px, 3vh, 48px)",
       }}
     >
       {/* Frame 2147229465 — text stack */}
-      <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
+      <div className="flex w-full flex-col items-center gap-2 lg:gap-4">
         <FadingTitle
           text={data.titleDesktop || ""}
           className="text-display text-brand-bg w-full text-center"
         />
         {data.subtitle && (
           <p
-            className="text-brand-bg text-center text-[16px] leading-[24px] font-semibold lg:text-[18px] lg:leading-[27px]"
+            className="text-brand-bg text-center text-[15px] leading-[22px] font-semibold lg:text-[18px] lg:leading-[27px]"
             style={{ fontFamily: "var(--font-inter)" }}
           >
             {data.subtitle}
@@ -263,10 +262,9 @@ const HeroContentMobile = memo(function HeroContentMobile({
 }) {
   return (
     <div
-      className="absolute right-0 left-0 z-30 mx-auto flex w-full max-w-[358px] flex-col px-4 md:hidden"
+      className="absolute top-[calc(50%+45px)] right-0 left-0 z-30 mx-auto flex w-full max-w-[358px] -translate-y-1/2 flex-col px-4 md:hidden"
       style={{
-        top: "55vh",
-        gap: 32,
+        gap: "clamp(16px, 3.5vh, 32px)",
       }}
     >
       {/* Text block: col, gap:8, items-center */}
@@ -326,10 +324,10 @@ export const ScrollIndicator = memo(function ScrollIndicator({
       {/* Desktop */}
       <div
         aria-label={scrollText}
-        className="absolute right-0 bottom-[85px] left-0 z-30 mx-auto hidden w-fit items-center gap-[10px] px-[24px] py-[13px] md:flex"
+        className="absolute right-0 bottom-4 lg:bottom-12 left-0 z-30 mx-auto hidden w-fit items-center gap-[10px] px-[24px] py-[10px] md:flex"
       >
         <span
-          className="text-brand-bg text-[18px] leading-[22px] font-medium"
+          className="text-brand-bg text-[16px] leading-[20px] lg:text-[18px] lg:leading-[22px] font-medium"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
           {scrollText}
@@ -343,7 +341,7 @@ export const ScrollIndicator = memo(function ScrollIndicator({
       <Link
         href="#about"
         aria-label={scrollText}
-        className="absolute right-0 bottom-[67px] left-0 z-30 mx-auto flex w-fit cursor-pointer items-center gap-[10px] px-[24px] py-[13px] md:hidden"
+        className="absolute right-0 bottom-3 left-0 z-30 mx-auto flex w-fit cursor-pointer items-center gap-[10px] px-[24px] py-[10px] md:hidden"
       >
         <span
           className="text-brand-bg text-[14px] leading-[17px] font-medium"
@@ -474,7 +472,7 @@ export default function HeroSection({
     <section
       id="hero"
       aria-label={`Hero section - ${finalData.titleMobile}`}
-      className="bg-brand-hero-dark relative h-screen w-full overflow-hidden"
+      className="bg-brand-hero-dark relative h-screen min-h-[560px] w-full overflow-hidden"
     >
       <HeroSlideshow slides={finalSlides} currentIndex={currentIndex} />
       <HeroOverlays />
