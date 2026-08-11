@@ -46,11 +46,7 @@ const SocialIcon = ({ social }: { social: { label: string; href: string } }) => 
         <path d="M9.33268 9.0026H10.9993L11.666 6.33594H9.33268V5.0026C9.33268 4.31594 9.33268 3.66927 10.666 3.66927H11.666V1.42927C11.4487 1.4006 10.628 1.33594 9.76135 1.33594C7.95135 1.33594 6.66602 2.4406 6.66602 4.46927V6.33594H4.66602V9.0026H6.66602V14.6693H9.33268V9.0026Z" fill="currentColor" />
       </svg>
     );
-  } else if (
-    social.label.toLowerCase() === "instagram" ||
-    social.label.toLowerCase() === "insta" ||
-    social.label.toLowerCase() === "linkedin"
-  ) {
+  } else if (social.label.toLowerCase() === "linkedin") {
     svgIcon = (
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-200 group-hover:scale-110">
         <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" fill="currentColor" />
@@ -119,15 +115,15 @@ export default async function Footer() {
         href: contactInfo.youtube_url,
       });
     }
-    if (contactInfo.instagram_url) {
+    if (contactInfo.linkedin_url) {
       socials.push({
-        label: "Instagram",
-        href: contactInfo.instagram_url,
+        label: "LinkedIn",
+        href: contactInfo.linkedin_url,
       });
     }
   }
 
-  // Fallback only contains Facebook, YouTube, and Instagram (which shows LinkedIn logo)
+  // Fallback if no socials returned from API
   const displaySocials =
     socials.length > 0
       ? socials

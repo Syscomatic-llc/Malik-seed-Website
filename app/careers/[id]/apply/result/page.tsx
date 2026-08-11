@@ -102,7 +102,7 @@ export default function AssessmentResultPage() {
       } else if (!isCompleted) {
         router.replace(`/careers/${id}/apply/start`);
       } else if (!isAutoGrade) {
-        router.replace(`/careers/${id}/apply/submitted`);
+        router.replace(`/careers/${id}/apply/additional-info`);
       }
     }
   }, [isOtpVerified, isCompleted, hydrated, id, router, positionId, isLeaving, isAutoGrade]);

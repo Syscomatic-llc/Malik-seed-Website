@@ -12,7 +12,7 @@ import { useApplicationStore } from "@/store/applicationStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Upload, FileText, Trash2, ArrowRight } from "lucide-react";
+import { Upload, FileText, Trash2, ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { hiringApi } from "@/lib/api";
@@ -481,11 +481,20 @@ export default function AdditionalInfoPage() {
             <Button
               type="submit"
               disabled={loading || !phoneNumber || !location || !cvFile}
-              className="flex h-[46px] w-[155px] cursor-pointer items-center justify-center gap-2 rounded-[60px] border border-transparent bg-[#195236] text-[16px] font-medium text-[#F2F7F1] transition-all duration-200 select-none hover:bg-[#153e28] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-[46px] min-w-[160px] cursor-pointer items-center justify-center gap-2 rounded-[60px] border border-transparent bg-[#195236] px-6 text-[16px] font-medium text-[#F2F7F1] transition-all duration-200 select-none hover:bg-[#153e28] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
-              <span>Apply Now</span>
-              <ArrowRight className="h-5 w-5" />
+              {loading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <span>Submitting...</span>
+                </>
+              ) : (
+                <>
+                  <span>Apply Now</span>
+                  <ArrowRight className="h-5 w-5" />
+                </>
+              )}
             </Button>
           </div>
         </form>

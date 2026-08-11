@@ -415,6 +415,7 @@ export interface ApiJobPosition {
   created_at: string;
   updated_at: string | null;
   details_pdf_url: string | null;
+  sort_order?: number;
 }
 
 export interface ApiJobPositionDetailResponse {

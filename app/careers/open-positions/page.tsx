@@ -23,11 +23,15 @@ export default async function OpenPositionsPage() {
   }
 
   const sortedApiPositions = [...apiPositions].sort((a, b) => {
-    return Number(a.id) - Number(b.id);
+    const orderA = a.sort_order ?? a.id;
+    const orderB = b.sort_order ?? b.id;
+    return orderA - orderB;
   });
 
   const fallbackSortedPositions = [...openPositionsData.positions].sort((a, b) => {
-    return Number(a.id) - Number(b.id);
+    const orderA = a.sort_order ?? a.id;
+    const orderB = b.sort_order ?? b.id;
+    return orderA - orderB;
   });
 
   const resolvedPositions =

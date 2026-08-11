@@ -103,6 +103,7 @@ export interface JobPosition {
   whyJoin?: string[];
   benefitsList?: { text: string; icon: string }[];
   detailsPdfUrl?: string;
+  sort_order?: number;
 }
 
 export const openPositionsData = {

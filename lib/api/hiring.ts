@@ -206,5 +206,6 @@ export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
       icon: getBenefitIcon(b),
     })),
     detailsPdfUrl: normalizeFileUrl(item.details_pdf_url),
+    sort_order: item.sort_order,
   };
 }

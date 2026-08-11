@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { openPositionsData } from "@/data/career-data";
 import { hiringApi } from "@/lib/api";
@@ -14,6 +14,7 @@ export default function PersonalInfoPage() {
   const router = useRouter();
   const { id } = useParams();
   const {
+    applicationId,
     name: storeName,
     email: storeEmail,
     setPersonalInfo,
@@ -39,6 +40,14 @@ export default function PersonalInfoPage() {
   const resolvedPositionId = storePositionId ?? (position ? position.id : parsedUrlId);
   const resolvedPositionTitle = storePositionTitle || (position ? position.title : "selected");
 
+  const isAlreadySubmitted = Boolean(
+    applicationId &&
+      storeName &&
+      storeEmail &&
+      storeName.trim() === name.trim() &&
+      storeEmail.trim() === email.trim()
+  );
+
   // Sync state with store on hydration and load assessment
   useEffect(() => {
     setName(storeName);
@@ -55,6 +64,11 @@ export default function PersonalInfoPage() {
     }
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
       setError("A valid email address is required");
+      return;
+    }
+
+    if (isAlreadySubmitted) {
+      router.push(`/careers/${id}/apply/otp`);
       return;
     }
 
@@ -287,8 +301,17 @@ export default function PersonalInfoPage() {
               )}
               style={{ fontFamily: "var(--font-inter-tight)" }}
             >
-              <span>{loading ? "Submitting..." : "Submit & Next"}</span>
-              <ArrowRight className="h-4 w-4 shrink-0 md:h-5 md:w-5" />
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin shrink-0 md:h-5 md:w-5" />
+                  <span>Submitting...</span>
+                </>
+              ) : (
+                <>
+                  <span>{isAlreadySubmitted ? "Next" : "Submit & Next"}</span>
+                  <ArrowRight className="h-4 w-4 shrink-0 md:h-5 md:w-5" />
+                </>
+              )}
             </button>
           </div>
         </form>

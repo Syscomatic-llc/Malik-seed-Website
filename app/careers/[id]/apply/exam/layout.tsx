@@ -179,11 +179,9 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
   // Redirect on finish
   useEffect(() => {
     if (isCompleted && hydrated) {
-      const isAutoGrade = types.length === 1 && types[0] === "mcq";
-      const nextRoute = isAutoGrade ? "/loading" : "/submitted";
-      router.replace(`/careers/${id}/apply${nextRoute}`);
+      router.replace(`/careers/${id}/apply/loading`);
     }
-  }, [isCompleted, hydrated, id, router, types]);
+  }, [isCompleted, hydrated, id, router]);
 
   if (!hydrated || !isStarted || isCompleted) {
     return (
