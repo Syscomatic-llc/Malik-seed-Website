@@ -16,6 +16,11 @@ import { Upload, FileText, Trash2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { hiringApi } from "@/lib/api";
+import {
+  shouldAutoGradeAssessment,
+  assessmentConfigs,
+} from "@/data/questions-data";
+import { openPositionsData } from "@/data/career-data";
 
 const HEARD_ABOUT_OPTIONS = [
   "Company Website",
@@ -44,12 +49,27 @@ export default function AdditionalInfoPage() {
     isOtpVerified,
     isCompleted,
     isPassed,
+    assessmentConfig,
     phoneNumber: storePhone,
     location: storeLoc,
     cvFileName: storeCvName,
     cvFileSize: storeCvSize,
     setAdditionalInfo,
   } = store;
+
+  const position = openPositionsData.positions.find(
+    (pos) => pos.id.toString() === id || pos.slug === id
+  );
+  const positionId = position ? position.id : (typeof id === "string" ? parseInt(id, 10) : 0);
+
+  let isAutoGrade = false;
+  const config = assessmentConfig ?? assessmentConfigs[positionId];
+  if (config) {
+    const types = config.assessmentTypes ?? [config.assessmentType];
+    isAutoGrade = types.length === 1 && types[0] === "mcq";
+  } else if (positionId) {
+    isAutoGrade = shouldAutoGradeAssessment(positionId);
+  }
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [location, setLocation] = useState("");
@@ -91,13 +111,13 @@ export default function AdditionalInfoPage() {
         router.replace(`/careers/${id}/apply/otp`);
       } else if (!isCompleted) {
         router.replace(`/careers/${id}/apply/start`);
-      } else if (!isPassed) {
+      } else if (isAutoGrade && !isPassed) {
         router.replace(`/careers/${id}/apply/result`);
       }
     }
-  }, [isOtpVerified, isCompleted, isPassed, hydrated, id, router]);
+  }, [isOtpVerified, isCompleted, isPassed, isAutoGrade, hydrated, id, router]);
 
-  if (!hydrated || !isCompleted || !isPassed) {
+  if (!hydrated || !isCompleted || (isAutoGrade && !isPassed)) {
     return <div className="py-10 text-center">Loading form...</div>;
   }
 

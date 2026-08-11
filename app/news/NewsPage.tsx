@@ -203,9 +203,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     }
     updateUrl(activeCategory, newPage);
 
-    if (gridRef.current) {
-      gridRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (

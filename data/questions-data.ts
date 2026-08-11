@@ -1292,8 +1292,9 @@ export function buildSteps(job: JobAssessmentConfig): Step[] {
   if (job.hasShortAnswers) steps.push("short-answers");
   if (job.hasLongAnswers) steps.push("long-answers");
   steps.push("review");
-  steps.push(job.autoGrade ? "result" : "submitted");
-  if (job.autoGrade) steps.push("additional-info");
+  if (job.autoGrade) steps.push("result");
+  steps.push("additional-info");
+  steps.push("submitted");
   return steps;
 }
 

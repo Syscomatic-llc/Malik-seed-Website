@@ -129,9 +129,7 @@ export default function ReviewPage() {
   const hasWritten = hasShortAnswers || hasLongAnswers;
 
   const optionPrefixes = ["A. ", "B. ", "C. ", "D. "];
-  const submitRoute = hasWritten
-    ? `/careers/${id}/apply/submitted`
-    : `/careers/${id}/apply/loading`;
+  const submitRoute = `/careers/${id}/apply/loading`;
   const backRoute =
     longQuestions.length > 0
       ? `/careers/${id}/apply/exam/long-answers`
@@ -147,7 +145,7 @@ export default function ReviewPage() {
           <button
             onClick={() => {
               if (isCompleted) {
-                router.push(`/careers/${id}/apply/submitted`);
+                router.push(`/careers/${id}/apply/additional-info`);
               } else {
                 router.push(backRoute);
               }

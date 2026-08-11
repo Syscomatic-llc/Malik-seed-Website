@@ -71,7 +71,8 @@ export default function MaliksFarmPage() {
               alt={maliksFarmData.split1.title}
               fill
               className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-              sizes="(max-width: 1240px) 100vw, 608px"
+              sizes="(max-width: 1240px) 100vw, 1240px"
+              quality={90}
               priority
             />
           </div>
