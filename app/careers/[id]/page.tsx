@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import ActionButton from "@/components/ActionButton";
 import { hiringApi, mapApiPositionToJobPosition, getPageMetadata } from "@/lib/api";
+import { BenefitBadge } from "@/components/ui/BenefitBadge";
 
 interface JobDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -35,6 +36,16 @@ function cleanHtml(html: string): string {
   cleaned = cleaned.replace(emojiRegex, (match, emoji, text) => {
     const cleanText = text.trim();
     return `<span class="job-benefit-pill"><span class="job-benefit-emoji">${emoji}</span><span class="job-benefit-text">${cleanText}</span></span>`;
+  });
+
+  // Ensure external links in rich text open safely in a new tab
+  cleaned = cleaned.replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1([^>]*)>/gi, (match, quote, href, rest) => {
+    if (!href) return match;
+    const isExternal = /^https?:\/\//i.test(href) || /^mailto:/i.test(href) || /^tel:/i.test(href) || href.startsWith("//");
+    if (isExternal && !/target=/i.test(match)) {
+      return `<a href="${href}" target="_blank" rel="noopener noreferrer"${rest}>`;
+    }
+    return match;
   });
 
   return cleaned;
@@ -281,22 +292,11 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                     </h2>
                     <div className="flex flex-wrap gap-3">
                       {position.benefitsList.map((benefit, index) => (
-                        <div
+                        <BenefitBadge
                           key={index}
-                          className="flex items-center gap-2 rounded-[40px] border border-[#E4E7EC] bg-[#F9FAFB] px-3 py-2 lg:gap-[10px] lg:px-4 lg:py-2"
-                        >
-                          <span className="font-inter text-[14px] leading-[21px] text-[#0D1A14] lg:text-[16px] lg:leading-[24px]">
-                            {benefit.text}
-                          </span>
-                          <div className="relative h-[14px] w-[14px] shrink-0 lg:h-[18px] lg:w-[18px]">
-                            <OptimizedImage
-                              src={`/images/careers/${benefit.icon}`}
-                              alt=""
-                              fill
-                              className="object-contain"
-                            />
-                          </div>
-                        </div>
+                          text={benefit.text}
+                          icon={benefit.icon}
+                        />
                       ))}
                     </div>
                   </div>
@@ -387,22 +387,11 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                       </h2>
                       <div className="flex flex-wrap gap-3">
                         {position.benefitsList.map((benefit, index) => (
-                          <div
+                          <BenefitBadge
                             key={index}
-                            className="flex items-center gap-2 rounded-[40px] border border-[#E4E7EC] bg-[#F9FAFB] px-3 py-2 lg:gap-[10px] lg:px-4 lg:py-2"
-                          >
-                            <span className="font-inter text-[14px] leading-[21px] text-[#0D1A14] lg:text-[16px] lg:leading-[24px]">
-                              {benefit.text}
-                            </span>
-                            <div className="relative h-[14px] w-[14px] shrink-0 lg:h-[18px] lg:w-[18px]">
-                              <OptimizedImage
-                                src={`/images/careers/${benefit.icon}`}
-                                alt=""
-                                fill
-                                className="object-contain"
-                              />
-                            </div>
-                          </div>
+                            text={benefit.text}
+                            icon={benefit.icon}
+                          />
                         ))}
                       </div>
                     </div>

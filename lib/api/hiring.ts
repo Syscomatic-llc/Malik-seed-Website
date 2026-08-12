@@ -154,11 +154,11 @@ export function normalizeFileUrl(url: string | null): string | undefined {
 
 export function getBenefitIcon(text: string): string {
   const t = text.toLowerCase();
-  if (t.includes("salary") || t.includes("pay") || t.includes("compensation")) return "briefcase-01.svg";
-  if (t.includes("incentive") || t.includes("bonus") || t.includes("commission") || t.includes("target")) return "target-01.svg";
-  if (t.includes("travel") || t.includes("allowance") || t.includes("transport") || t.includes("fuel")) return "location-03.svg";
-  if (t.includes("development") || t.includes("growth") || t.includes("training") || t.includes("learn")) return "rocket-01.svg";
-  if (t.includes("insurance") || t.includes("health") || t.includes("medical") || t.includes("provident") || t.includes("leave")) return "shield-tick.svg";
+  if (t.includes("salary") || t.includes("pay") || t.includes("compensation") || t.includes("wage") || t.includes("earnings")) return "briefcase-01.svg";
+  if (t.includes("incentive") || t.includes("bonus") || t.includes("commission") || t.includes("target") || t.includes("performance")) return "target-01.svg";
+  if (t.includes("travel") || t.includes("allowance") || t.includes("transport") || t.includes("fuel") || t.includes("location") || t.includes("commute")) return "location-03.svg";
+  if (t.includes("development") || t.includes("growth") || t.includes("training") || t.includes("learn") || t.includes("skill") || t.includes("career")) return "rocket-01.svg";
+  if (t.includes("workplace") || t.includes("culture") || t.includes("environment") || t.includes("team") || t.includes("plant") || t.includes("supportive")) return "plant-03.svg";
   return "briefcase-01.svg";
 }
 

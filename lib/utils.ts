@@ -12,10 +12,22 @@ export function isHtmlContent(str?: string | null): boolean {
 
 export function cleanHtml(html?: string | null): string {
   if (!html) return "";
-  return html
+  let cleaned = html
     .replace(/&nbsp;/g, " ")
     .replace(/\u00a0/g, " ")
     .replace(/<p>\s*<\/p>/gi, "");
+
+  // Format any rich text anchor link: external links open safely in a new tab
+  cleaned = cleaned.replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1([^>]*)>/gi, (match, quote, href, rest) => {
+    if (!href) return match;
+    const isExternal = /^https?:\/\//i.test(href) || /^mailto:/i.test(href) || /^tel:/i.test(href) || href.startsWith("//");
+    if (isExternal && !/target=/i.test(match)) {
+      return `<a href="${href}" target="_blank" rel="noopener noreferrer"${rest}>`;
+    }
+    return match;
+  });
+
+  return cleaned;
 }
 
 /**
