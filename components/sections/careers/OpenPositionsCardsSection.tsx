@@ -22,9 +22,11 @@ const PositionCard = memo(function PositionCard({
           <h3 className="font-inter-tight text-[24px] leading-[36px] font-medium text-[#0D1A14]">
             {position.title}
           </h3>
-          <p className="font-inter line-clamp-2 text-[16px] leading-[24px] text-[#0D1A14]/70">
-            {position.description}
-          </p>
+          {position.description && (
+            <p className="font-inter line-clamp-2 text-[16px] leading-[24px] text-[#0D1A14]/70">
+              {position.description}
+            </p>
+          )}
         </div>
 
         {/* Tags */}

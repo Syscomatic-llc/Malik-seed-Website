@@ -26,10 +26,28 @@ const cvSchema = z.object({
     }),
 });
 
-export default memo(function CVDropSection() {
+export interface CVDropSectionProps {
+  showInterestedRole?: boolean;
+}
+
+const INTERESTED_ROLE_OPTIONS = [
+  "Agronomy & Crop Research",
+  "Field Development & Operations",
+  "Seed Production & Processing",
+  "Quality Control & Testing",
+  "Marketing & Sales",
+  "IT & Systems Development",
+  "Supply Chain & Logistics",
+  "Finance & Human Resources",
+  "Other / General Application",
+];
+
+export default memo(function CVDropSection({ showInterestedRole = false }: CVDropSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [interestedRole, setInterestedRole] = useState("");
+  const [customRole, setCustomRole] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,9 +104,21 @@ export default memo(function CVDropSection() {
     try {
       const formData = new FormData();
       formData.append("file", file, file.name);
+
+      const finalRole = interestedRole === "Other / General Application" && customRole.trim()
+        ? customRole.trim()
+        : interestedRole;
+
+      if (finalRole) {
+        formData.append("interested_role", finalRole);
+        formData.append("interested_department", finalRole);
+      }
+
       await hiringApi.uploadResume(formData, "general");
       setIsSubmitted(true);
       setFile(null);
+      setInterestedRole("");
+      setCustomRole("");
     } catch (err: any) {
       console.error("Failed to upload CV:", err);
       setError(err?.message || "Something went wrong. Please try again.");
@@ -101,12 +131,48 @@ export default memo(function CVDropSection() {
     <section className="w-full bg-[#F2F7F1] pt-12 pb-[100px] lg:pt-0 lg:pb-[100px]">
       <div className="mx-auto w-full max-w-[1030px] px-4 lg:px-0">
         <div className="relative w-full rounded-[24px] border border-[#E4E7EC] bg-[#0D1A14] px-4 py-8 md:px-15 md:py-16 lg:rounded-[32px]">
-          <div className="mx-auto flex max-w-[910px] flex-col items-center gap-[32px] md:gap-[48px]">
+          <div className="mx-auto flex max-w-[910px] flex-col items-center gap-[28px] md:gap-[36px]">
             {/* Title */}
             <h2 className="font-inter-tight max-w-[650px] text-center text-[24px] leading-[28.8px] font-medium text-[#F2F7F1] md:text-[32px] md:leading-[38px]">
               Don&apos;t see a role suitable for you but interested in working
               at Malik Seeds?
             </h2>
+
+            {/* Interested Role / Department Selector (Only when enabled) */}
+            {showInterestedRole && (
+              <div className="flex w-full max-w-[736px] flex-col gap-3">
+                <label htmlFor="interested-role-select" className="font-inter-tight text-[14px] font-medium text-[#A9E179] md:text-[16px]">
+                  Interested Department or Role
+                </label>
+                <select
+                  id="interested-role-select"
+                  value={interestedRole}
+                  onChange={(e) => setInterestedRole(e.target.value)}
+                  disabled={isSubmitting}
+                  className="font-inter w-full cursor-pointer rounded-[14px] border border-[rgba(117,188,67,0.4)] bg-[rgba(17,58,38,0.4)] px-4 py-3 text-[14px] text-[#F2F7F1] transition-all hover:border-[#A9E179] focus:border-[#A9E179] focus:outline-none md:text-[16px]"
+                >
+                  <option value="" disabled className="bg-[#0D1A14] text-gray-400">
+                    Select department or role...
+                  </option>
+                  {INTERESTED_ROLE_OPTIONS.map((opt, idx) => (
+                    <option key={idx} value={opt} className="bg-[#0D1A14] text-[#F2F7F1]">
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+
+                {interestedRole === "Other / General Application" && (
+                  <input
+                    type="text"
+                    value={customRole}
+                    onChange={(e) => setCustomRole(e.target.value)}
+                    placeholder="Specify your interested role..."
+                    disabled={isSubmitting}
+                    className="font-inter mt-1 w-full rounded-[14px] border border-[rgba(117,188,67,0.4)] bg-[rgba(17,58,38,0.4)] px-4 py-3 text-[14px] text-[#F2F7F1] placeholder:text-gray-400 focus:border-[#A9E179] focus:outline-none md:text-[16px]"
+                  />
+                )}
+              </div>
+            )}
 
             {/* Drag & Drop Area */}
             <div

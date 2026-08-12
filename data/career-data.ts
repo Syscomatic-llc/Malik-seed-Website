@@ -91,6 +91,7 @@ export interface JobPosition {
   is_active?: boolean;
   title: string;
   description: string;
+  shortDescription?: string;
   tags: string[];
   salary?: string;
   salaryNote?: string;

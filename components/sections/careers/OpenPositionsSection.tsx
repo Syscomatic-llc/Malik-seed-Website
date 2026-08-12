@@ -32,9 +32,11 @@ const JobRow = memo(function JobRow({ position }: { position: JobPosition }) {
       </div>
 
       {/* Description */}
-      <p className="font-inter text-[16px] leading-[24px] text-[#0D1A14] lg:-mt-2">
-        {position.description}
-      </p>
+      {position.description && (
+        <p className="font-inter text-[16px] leading-[24px] text-[#0D1A14] lg:-mt-2">
+          {position.description}
+        </p>
+      )}
 
       {/* Tags (Mobile: below description) */}
       <div className="flex flex-wrap gap-2 lg:hidden">

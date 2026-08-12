@@ -48,7 +48,7 @@ export default async function OpenPositionsPage() {
         />
       </div>
 
-      <CVDropSection />
+      <CVDropSection showInterestedRole={true} />
     </div>
   );
 }

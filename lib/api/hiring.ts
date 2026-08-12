@@ -198,11 +198,21 @@ export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
     slug: item.slug,
     is_active: item.is_active !== undefined ? item.is_active : true,
     title: item.title,
-    description: (item.short_description || item.description || "")
-      .replace(/<[^>]*>/g, "")
-      .replace(/&nbsp;/g, " ")
-      .replace(/\u00a0/g, " ")
-      .trim(),
+    shortDescription: item.short_description
+      ? item.short_description
+          .replace(/<[^>]*>/g, "")
+          .replace(/&nbsp;/g, " ")
+          .replace(/\u00a0/g, " ")
+          .trim()
+      : "",
+    description: item.short_description
+      ? item.short_description
+          .replace(/<[^>]*>/g, "")
+          .replace(/&nbsp;/g, " ")
+          .replace(/\u00a0/g, " ")
+          .trim()
+      : "",
+    fullDescription: item.description || (item as any).full_description || "",
     tags,
     salary: item.salary || item.salary_range || undefined,
     salaryNote: item.salary_note || (item as any).salaryNote || undefined,
@@ -218,7 +228,6 @@ export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
       if (rawDate) return formatDeadlineDate(rawDate);
       return "N/A";
     })(),
-    fullDescription: item.description,
     whatYoullDo: item.responsibilities || [],
     whatWereLookingFor: item.requirements || [],
     skillsAndCompetencies: item.skills_required || [],
