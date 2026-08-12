@@ -97,6 +97,7 @@ export interface JobPosition {
   location?: string;
   jobType?: string;
   experience?: string;
+  deadline?: string;
   fullDescription?: string;
   whatYoullDo?: string[];
   whatWereLookingFor?: string[];
@@ -122,6 +123,7 @@ export const openPositionsData = {
       location: "Bogura",
       jobType: "Full-time",
       experience: "Senior Level",
+      deadline: "31 Aug 2026",
       fullDescription:
         "A R Malik Seeds is seeking a Senior Agronomist to lead multi-location crop performance trials and support the development of high-yield, climate-resilient varieties. This role plays a critical part in ensuring our seed products meet the highest standards of quality, adaptability, and farmer satisfaction.",
       whatYoullDo: [
@@ -179,6 +181,7 @@ export const openPositionsData = {
       location: "Bogura",
       jobType: "Full-time",
       experience: "Mid Level (2-3 years)",
+      deadline: "15 Sep 2026",
       fullDescription:
         "We are looking for a dedicated Field Development Officer to conduct field demonstrations, provide agronomic support to farmers, and establish strong relationships with key stakeholders in Bogura region. You will act as the direct link between our research team and the farming community, driving seed adoption and crop success.",
       whatYoullDo: [
@@ -233,6 +236,7 @@ export const openPositionsData = {
       location: "Rangpur",
       jobType: "Full-time",
       experience: "Managerial Level (6+ years)",
+      deadline: "30 Sep 2026",
       fullDescription:
         "The Seed Production Manager will oversee our seed multiplication program, managing contracted farmers and production facilities in Rangpur. You will ensure seed production meets strict genetic purity, physical quality, and volume targets, securing our supply chain.",
       whatYoullDo: [
@@ -287,6 +291,7 @@ export const openPositionsData = {
       location: "Rajshahi",
       jobType: "Full-time",
       experience: "Mid Level (3+ years)",
+      deadline: "15 Oct 2026",
       fullDescription:
         "A R Malik Seeds is seeking a detail-oriented Quality Control Officer to oversee seed testing, purity checks, and germination assays at our Rajshahi laboratory. You will ensure that every bag of seed reaching farmers complies with highest national and international standards.",
       whatYoullDo: [
@@ -340,6 +345,7 @@ export const openPositionsData = {
       location: "Dhaka",
       jobType: "Full-time",
       experience: "Mid Level (2+ years)",
+      deadline: "31 Oct 2026",
       fullDescription:
         "We are looking for a creative and result-oriented Marketing Executive to join our team in Dhaka. You will design, coordinate, and execute marketing campaigns, brand activities, and digital content specifically tailored to the agricultural sector, dealers, and farmers of Bangladesh.",
       whatYoullDo: [
@@ -393,6 +399,7 @@ export const openPositionsData = {
       location: "Bogura",
       jobType: "Full-time",
       experience: "Mid Level (3+ years)",
+      deadline: "15 Nov 2026",
       fullDescription:
         "We are seeking a Supply Chain & Distribution Coordinator to oversee inventory, warehousing, and transportation of seeds from processing plants to our dealer network. Based in Bogura, you will ensure timely, cost-effective, and safe distribution of seeds to support seasonal planting schedules.",
       whatYoullDo: [

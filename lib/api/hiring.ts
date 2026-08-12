@@ -162,6 +162,21 @@ export function getBenefitIcon(text: string): string {
   return "briefcase-01.svg";
 }
 
+export function formatDeadlineDate(dateStr?: string | null): string {
+  if (!dateStr) return "31 Aug 2026";
+  try {
+    const d = new Date(dateStr);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+    }
+  } catch {}
+  return dateStr;
+}
+
 export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
   const jobTypeLabel =
     item.job_type === "full_time"
@@ -194,6 +209,15 @@ export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
     location: locationLabel,
     jobType: jobTypeLabel,
     experience: item.experience_required,
+    deadline: (function () {
+      const rawDate =
+        item.application_deadline ||
+        (item as any).deadline ||
+        (item as any).deadline_date ||
+        (item as any).applicationDeadline;
+      if (rawDate) return formatDeadlineDate(rawDate);
+      return "N/A";
+    })(),
     fullDescription: item.description,
     whatYoullDo: item.responsibilities || [],
     whatWereLookingFor: item.requirements || [],

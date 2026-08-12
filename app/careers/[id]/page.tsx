@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 import { notFound } from "next/navigation";
 import { openPositionsData } from "@/data/career-data";
 import {
@@ -209,46 +208,54 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                 </h1>
 
                 {position.salary && (
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline">
-                    <span className="font-inter-tight text-[24px] leading-[24px] font-semibold text-[#0D1A14]">
+                  <div className="flex flex-col gap-2 md:items-center sm:flex-row sm:items-baseline sm:gap-4">
+                    <span className="font-inter-tight text-[24px] leading-[24px] font-semibold text-[#0D1A14]" style={{ fontFamily: "var(--font-inter-tight)" }}>
                       {position.salary}
                     </span>
-                    {position.salaryNote && (
-                      <span className="font-inter-tight text-[14px] leading-[24px] text-[#0D1A14]/70 lg:text-[16px]">
-                        {position.salaryNote}
+                      <span className="font-inter-tight text-[14px] leading-[24px] text-[#0D1A14] lg:text-[16px]" style={{ fontFamily: "var(--font-inter-tight)" }}>
+                        (On-target earnings; base + commission)
                       </span>
-                    )}
                   </div>
                 )}
               </div>
-              <div className="flex flex-wrap gap-x-12 gap-y-6">
+              <div className="flex flex-row items-start justify-between gap-3 overflow-x-auto scrollbar-none pb-1 sm:flex-wrap sm:justify-start sm:gap-x-8 sm:gap-y-6 lg:gap-x-12">
                 {position.location && (
-                  <div className="flex flex-col gap-2">
-                    <span className="font-inter-tight text-[14px] text-[#0D1A14]/60 lg:text-[16px]">
+                  <div className="flex shrink-0 flex-col gap-1 sm:gap-2">
+                    <span className="font-inter-tight text-[12px] text-[#0D1A14]/60 sm:text-[14px] lg:text-[16px]">
                       Location
                     </span>
-                    <span className="font-inter-tight text-[18px] font-medium text-[#0D1A14] lg:text-[24px]">
+                    <span className="font-inter-tight text-[14px] font-medium text-[#0D1A14] sm:text-[18px] lg:text-[24px]">
                       {position.location}
                     </span>
                   </div>
                 )}
                 {position.jobType && (
-                  <div className="flex flex-col gap-2">
-                    <span className="font-inter-tight text-[14px] text-[#0D1A14]/60 lg:text-[16px]">
+                  <div className="flex shrink-0 flex-col gap-1 sm:gap-2">
+                    <span className="font-inter-tight text-[12px] text-[#0D1A14]/60 sm:text-[14px] lg:text-[16px]">
                       Job Type
                     </span>
-                    <span className="font-inter-tight text-[18px] font-medium text-[#0D1A14] lg:text-[24px]">
+                    <span className="font-inter-tight text-[14px] font-medium text-[#0D1A14] sm:text-[18px] lg:text-[24px]">
                       {position.jobType}
                     </span>
                   </div>
                 )}
                 {position.experience && (
-                  <div className="flex flex-col gap-2">
-                    <span className="font-inter-tight text-[14px] text-[#0D1A14]/60 lg:text-[16px]">
+                  <div className="flex shrink-0 flex-col gap-1 sm:gap-2">
+                    <span className="font-inter-tight text-[12px] text-[#0D1A14]/60 sm:text-[14px] lg:text-[16px]">
                       Experience
                     </span>
-                    <span className="font-inter-tight text-[18px] font-medium text-[#0D1A14] lg:text-[24px]">
+                    <span className="font-inter-tight text-[14px] font-medium text-[#0D1A14] sm:text-[18px] lg:text-[24px]">
                       {position.experience}
+                    </span>
+                  </div>
+                )}
+                {position.deadline && (
+                  <div className="flex shrink-0 flex-col gap-1 sm:gap-2">
+                    <span className="font-inter-tight text-[12px] text-[#0D1A14]/60 sm:text-[14px] lg:text-[16px]">
+                      Deadline
+                    </span>
+                    <span className="font-inter-tight text-[14px] font-medium text-[#0D1A14] sm:text-[18px] lg:text-[24px]">
+                      {position.deadline}
                     </span>
                   </div>
                 )}
