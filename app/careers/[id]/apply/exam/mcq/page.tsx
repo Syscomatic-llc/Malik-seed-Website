@@ -183,12 +183,12 @@ export default function MCQAssessmentPage() {
       <hr className="mt-4 w-full border-t border-[#E4E7EC]" />
 
       {/* Action Row */}
-      <div className="flex w-full items-center justify-between pt-2">
+      <div className="flex w-full flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-0 pt-2">
         {/* Previous Button */}
         <button
           type="button"
           onClick={handlePrevious}
-          className="flex h-[46px] w-[113px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border border-[#E4E7EC] bg-[#F2F4F7] text-[16px] font-medium text-[#414E62] transition-all duration-200 select-none hover:bg-gray-100 active:scale-95"
+          className="flex h-[44px] w-full sm:h-[46px] sm:w-[113px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border border-[#E4E7EC] bg-[#F2F4F7] text-[16px] font-medium text-[#414E62] transition-all duration-200 select-none hover:bg-gray-100 active:scale-95"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
           <ArrowIcon className="h-5 w-5" direction="left" />
@@ -199,7 +199,7 @@ export default function MCQAssessmentPage() {
         <button
           type="button"
           onClick={handleNext}
-          className="flex h-[46px] w-[112px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border border-transparent bg-[#195236] text-[16px] font-medium text-[#F2F7F1] transition-all duration-200 select-none hover:bg-[#153e28] active:scale-95"
+          className="flex h-[44px] w-full sm:h-[46px] sm:w-[112px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border border-transparent bg-[#195236] text-[16px] font-medium text-[#F2F7F1] transition-all duration-200 select-none hover:bg-[#153e28] active:scale-95"
           style={{ fontFamily: "var(--font-inter-tight)" }}
         >
           <span>Next</span>

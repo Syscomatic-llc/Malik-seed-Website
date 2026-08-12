@@ -304,7 +304,7 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
       )}
 
       {/* Details Header */}
-      <div className="font-inter flex w-full items-center justify-between px-1 text-[16px] leading-6 text-[#0D1A14]">
+      <div className="font-inter flex w-full flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-0 px-1 text-[14px] sm:text-[16px] leading-6 text-[#0D1A14]">
         <span>Total questions: {questions.length}</span>
         <div className="flex items-center gap-2">
           <span className="font-normal">Time remaining:</span>
@@ -322,8 +322,8 @@ export default function ExamLayout({ children }: ExamLayoutProps) {
       </div>
 
       {/* Main Card Content */}
-      <div className="w-full rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10">
-        <div className="relative flex flex-col gap-12">
+      <div className="w-full rounded-[24px] border border-[#E4E7EC] bg-white p-5 sm:p-6 md:p-10 shadow-sm">
+        <div className="relative flex flex-col gap-8 sm:gap-12">
           {children}
         </div>
       </div>

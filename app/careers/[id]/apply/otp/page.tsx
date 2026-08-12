@@ -120,7 +120,7 @@ export default function OtpPage() {
               type="submit"
               disabled={loading || !isOtpValid}
               className={cn(
-                "flex h-[46px] w-[112px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border text-[16px] font-medium transition-all duration-200 select-none active:scale-95",
+                "flex h-[44px] w-full sm:h-[46px] sm:w-[112px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border text-[16px] font-medium transition-all duration-200 select-none active:scale-95",
                 !isOtpValid
                   ? "cursor-not-allowed border-[#E4E7EC] bg-[#F2F4F7] text-[#97A1AF]"
                   : "border-transparent bg-[#195236] text-[#F2F7F1] hover:bg-[#153e28]"

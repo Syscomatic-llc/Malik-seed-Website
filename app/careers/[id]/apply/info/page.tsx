@@ -252,6 +252,44 @@ export default function PersonalInfoPage() {
     );
   }
 
+  // Case: Position is marked inactive / closed
+  if (position?.is_active === false) {
+    return (
+      <div className="mx-auto w-full max-w-[816px] rounded-[24px] border border-[#E4E7EC] bg-white p-6 shadow-sm md:p-10 font-inter">
+        <div className="flex w-full flex-col items-start gap-8">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FF4242]/10 text-[#FF4242]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </div>
+          <div className="flex flex-col gap-3">
+            <h1
+              className="text-[24px] leading-[29px] font-semibold tracking-tight text-[#0D1A14]"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
+              Applications Closed
+            </h1>
+            <p className="text-[16px] leading-[24px] text-[#0D1A14]/80">
+              Applications for <strong>{resolvedPositionTitle}</strong> are currently inactive and no longer accepting new candidates.
+            </p>
+          </div>
+          <div className="h-[1px] w-full bg-[#E4E7EC]" />
+          <div className="flex flex-wrap gap-4 w-full">
+            <button
+              onClick={() => router.push("/careers/open-positions")}
+              className="flex h-[46px] w-full cursor-pointer items-center justify-center gap-[10px] rounded-[60px] bg-[#195236] px-6 text-[16px] leading-[19px] font-medium text-[#F2F7F1] transition-all hover:bg-[#153e28] sm:w-auto"
+              style={{ fontFamily: "var(--font-inter-tight)" }}
+            >
+              <span>Browse Open Positions</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const isFormValid =
     name.trim().length > 0 &&
     email.trim().length > 0 &&
@@ -333,7 +371,7 @@ export default function PersonalInfoPage() {
               disabled={loading || !isFormValid}
               className={cn(
                 "flex cursor-pointer items-center justify-center gap-[10px] rounded-[60px] font-medium transition-all duration-200 select-none active:scale-95",
-                "h-[41px] w-[140px] border text-[14px] md:h-[46px] md:w-[178px] md:text-[16px]",
+                "h-[44px] w-full border text-[15px] sm:h-[46px] sm:w-[178px] sm:text-[16px]",
                 !isFormValid
                   ? "cursor-not-allowed border-[#E4E7EC] bg-[#F2F4F7] text-[#97A1AF]"
                   : "border-transparent bg-[#195236] text-[#F2F7F1] hover:bg-[#153e28]"

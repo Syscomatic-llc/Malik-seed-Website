@@ -88,6 +88,7 @@ export const careerManifestoData = {
 export interface JobPosition {
   id: number;
   slug?: string;
+  is_active?: boolean;
   title: string;
   description: string;
   tags: string[];

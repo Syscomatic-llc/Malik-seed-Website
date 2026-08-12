@@ -29,9 +29,11 @@ export default async function OpenPositionsPage() {
   });
 
 
+  const activeApiPositions = sortedApiPositions.filter((p) => p.is_active !== false);
+
   const resolvedPositions =
-    sortedApiPositions.length > 0
-      ? sortedApiPositions.map(mapApiPositionToJobPosition)
+    activeApiPositions.length > 0
+      ? activeApiPositions.map(mapApiPositionToJobPosition)
       : [];
 
   return (

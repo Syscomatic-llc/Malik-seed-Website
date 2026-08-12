@@ -181,6 +181,7 @@ export function mapApiPositionToJobPosition(item: ApiJobPosition): JobPosition {
   return {
     id: item.id,
     slug: item.slug,
+    is_active: item.is_active !== undefined ? item.is_active : true,
     title: item.title,
     description: (item.short_description || item.description || "")
       .replace(/<[^>]*>/g, "")

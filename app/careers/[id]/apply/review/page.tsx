@@ -403,13 +403,13 @@ export default function ReviewPage() {
           </div>
         )}
 
-        <div className="mt-6 flex justify-end border-t border-[#E4E7EC] pt-6">
+        <div className="mt-6 flex w-full justify-end border-t border-[#E4E7EC] pt-6">
           {isCompleted ? (
             <Button
               onClick={() => {
                 router.push(`/careers/${id}/apply/submitted`);
               }}
-              className="font-inter-tight h-[46px] cursor-pointer rounded-[60px] border border-[#E4E7EC] bg-[#F2F4F7] px-8 font-semibold text-[#414E62] hover:bg-[#e4e7ec]"
+              className="font-inter-tight h-[44px] w-full sm:h-[46px] sm:w-auto cursor-pointer rounded-[60px] border border-[#E4E7EC] bg-[#F2F4F7] px-8 font-semibold text-[#414E62] hover:bg-[#e4e7ec]"
             >
               Back to Status
             </Button>
@@ -418,7 +418,7 @@ export default function ReviewPage() {
               onClick={() => {
                 setShowConfirmPopup(true);
               }}
-              className="font-inter-tight h-[46px] cursor-pointer rounded-[60px] bg-[#195236] px-8 font-semibold text-white hover:bg-[#153e28]"
+              className="font-inter-tight h-[44px] w-full sm:h-[46px] sm:w-auto cursor-pointer rounded-[60px] bg-[#195236] px-8 font-semibold text-white hover:bg-[#153e28]"
             >
               Submit Assessment
             </Button>

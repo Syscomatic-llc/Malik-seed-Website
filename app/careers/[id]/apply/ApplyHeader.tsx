@@ -79,38 +79,38 @@ export default function ApplyHeader({ id, position }: ApplyHeaderProps) {
       </Breadcrumb>
 
       {/* Header (Job info) */}
-      <div className="flex flex-col gap-4">
-        <h1 className="font-inter-tight text-[38px] leading-[46px] font-medium tracking-tight text-[#141C24] lg:text-[48px] lg:leading-[58px]">
+      <div className="flex flex-col gap-3 sm:gap-4">
+        <h1 className="font-inter-tight text-[28px] leading-[34px] sm:text-[36px] sm:leading-[44px] lg:text-[48px] lg:leading-[58px] font-medium tracking-tight text-[#141C24] break-words">
           {position.title}
         </h1>
         <div className="flex flex-col gap-6">
-          <div className="flex flex-wrap gap-x-12 gap-y-6">
+          <div className="flex flex-wrap gap-x-6 sm:gap-x-12 gap-y-4 sm:gap-y-6">
             {position.location && (
-              <div className="flex flex-col gap-2">
-                <span className="font-inter-tight text-[14px] text-[#0D1A14]/60">
+              <div className="flex flex-col gap-1 sm:gap-2">
+                <span className="font-inter-tight text-[13px] sm:text-[14px] text-[#0D1A14]/60">
                   Location
                 </span>
-                <span className="font-inter-tight text-[18px] font-medium text-[#0D1A14]">
+                <span className="font-inter-tight text-[16px] sm:text-[18px] font-medium text-[#0D1A14]">
                   {position.location}
                 </span>
               </div>
             )}
             {position.jobType && (
-              <div className="flex flex-col gap-2">
-                <span className="font-inter-tight text-[14px] text-[#0D1A14]/60">
+              <div className="flex flex-col gap-1 sm:gap-2">
+                <span className="font-inter-tight text-[13px] sm:text-[14px] text-[#0D1A14]/60">
                   Job Type
                 </span>
-                <span className="font-inter-tight text-[18px] font-medium text-[#0D1A14]">
+                <span className="font-inter-tight text-[16px] sm:text-[18px] font-medium text-[#0D1A14]">
                   {position.jobType}
                 </span>
               </div>
             )}
             {position.experience && (
-              <div className="flex flex-col gap-2">
-                <span className="font-inter-tight text-[14px] text-[#0D1A14]/60">
+              <div className="flex flex-col gap-1 sm:gap-2">
+                <span className="font-inter-tight text-[13px] sm:text-[14px] text-[#0D1A14]/60">
                   Experience
                 </span>
-                <span className="font-inter-tight text-[18px] font-medium text-[#0D1A14]">
+                <span className="font-inter-tight text-[16px] sm:text-[18px] font-medium text-[#0D1A14]">
                   {position.experience}
                 </span>
               </div>

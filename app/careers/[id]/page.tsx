@@ -185,6 +185,14 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
             {/* Header Content (Title, Salary, Action Button) */}
             <div className="flex flex-col gap-6">
               <div className="flex max-w-[844px] flex-col gap-4">
+                {position.is_active === false && (
+                  <div className="flex items-center">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#FF4242]/30 bg-[#FF4242]/10 px-3.5 py-1 text-[13px] font-semibold text-[#FF4242]" style={{ fontFamily: "var(--font-inter-tight)" }}>
+                      <span className="h-2 w-2 rounded-full bg-[#FF4242] animate-pulse"></span>
+                      Position Closed / Inactive
+                    </span>
+                  </div>
+                )}
                 <h1 className="font-inter-tight text-[38px] leading-[46px] font-medium tracking-tight text-[#141C24] lg:text-[64px] lg:leading-[77px]">
                   {position.title}
                 </h1>
@@ -465,12 +473,22 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
               </div>
 
               {/* Scroll back to CV Drop form at bottom */}
-              <ActionButton
-                href={`/careers/${id}/apply/info`}
-                label="Apply Now"
-                variant="dark"
-                className="h-[41px] px-6 text-[14px] lg:h-[46px] lg:text-[16px]"
-              />
+              {position.is_active === false ? (
+                <button
+                  disabled
+                  className="flex h-[41px] w-fit cursor-not-allowed items-center justify-center rounded-[60px] bg-[#97A1AF] px-6 text-[14px] font-medium text-white lg:h-[46px] lg:text-[16px]"
+                  style={{ fontFamily: "var(--font-inter-tight)" }}
+                >
+                  Applications Closed
+                </button>
+              ) : (
+                <ActionButton
+                  href={`/careers/${id}/apply/info`}
+                  label="Apply Now"
+                  variant="dark"
+                  className="h-[41px] px-6 text-[14px] lg:h-[46px] lg:text-[16px]"
+                />
+              )}
             </div>
           </div>
         </div>

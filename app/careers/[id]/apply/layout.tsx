@@ -66,9 +66,9 @@ export default async function ApplyLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#F2F7F1] pt-[120px] pb-20 lg:pt-[160px]">
-      <div className="mx-auto w-full max-w-[818px] px-4 lg:px-0">
-        <div className="flex flex-col gap-8 lg:gap-10">
+    <div className="min-h-screen bg-[#F2F7F1] pt-[100px] pb-16 sm:pt-[120px] sm:pb-20 lg:pt-[160px]">
+      <div className="mx-auto w-full max-w-[818px] px-4 sm:px-6 md:px-8 lg:px-0">
+        <div className="flex flex-col gap-6 sm:gap-8 lg:gap-10">
           <ApplyHeader id={id} position={position} />
 
           {/* Main Card Content */}

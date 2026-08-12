@@ -290,12 +290,12 @@ export default function StartPage() {
         <hr className="w-full border-t border-[#E4E7EC]" />
 
         {/* Buttons Action Row */}
-        <div className="flex w-full items-center justify-between pt-4">
+        <div className="flex w-full flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-0 pt-4">
           {/* Back Button */}
           <button
             type="button"
             onClick={() => router.push(`/careers/${id}/apply/otp`)}
-            className="flex h-[46px] w-[113px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border border-[#E4E7EC] bg-[#F2F4F7] text-[16px] font-medium text-[#414E62] transition-all duration-200 select-none hover:bg-gray-100 active:scale-95"
+            className="flex h-[44px] w-full sm:h-[46px] sm:w-[113px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border border-[#E4E7EC] bg-[#F2F4F7] text-[16px] font-medium text-[#414E62] transition-all duration-200 select-none hover:bg-gray-100 active:scale-95"
             style={{ fontFamily: "var(--font-inter-tight)" }}
           >
             <ArrowLeft className="h-5 w-5" />
@@ -308,7 +308,7 @@ export default function StartPage() {
             disabled={!agreed}
             onClick={handleStart}
             className={cn(
-              "flex h-[46px] w-[188px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border text-[16px] font-medium transition-all duration-200 select-none active:scale-95",
+              "flex h-[44px] w-full sm:h-[46px] sm:w-[188px] cursor-pointer items-center justify-center gap-[10px] rounded-[60px] border text-[16px] font-medium transition-all duration-200 select-none active:scale-95",
               !agreed
                 ? "cursor-not-allowed border-[#E4E7EC] bg-[#F2F4F7] text-[#97A1AF]"
                 : "border-transparent bg-[#195236] text-[#F2F7F1] hover:bg-[#153e28]"

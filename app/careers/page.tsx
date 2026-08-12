@@ -58,7 +58,9 @@ export default async function CareersPage() {
     return orderA - orderB;
   });
 
-  const resolvedPositions = sortedApiPositions.map(mapApiPositionToJobPosition);
+  const activeApiPositions = sortedApiPositions.filter((p) => p.is_active !== false);
+
+  const resolvedPositions = activeApiPositions.map(mapApiPositionToJobPosition);
 
   const resolvedTestimonialsData = {
     ...employeeTestimonialsData,
