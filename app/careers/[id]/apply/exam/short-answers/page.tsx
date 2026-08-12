@@ -107,7 +107,7 @@ export default function ShortAnswersPage() {
         {questions.map((q, index) => {
           const answerText = shortAnswers[q.id] || "";
           const characterCount = answerText.length;
-          const limit = q.charLimit ?? 500;
+          const limit = q.charLimit || (q as any).max_length || (q as any).characterLimit;
 
           return (
             <div key={q.id} className="flex w-full flex-col gap-6">
@@ -203,16 +203,19 @@ export default function ShortAnswersPage() {
                 <div className="flex items-center justify-between border-b border-[#E4E7EC] bg-white px-6 py-4 text-[14px] text-[#414E62]">
                   <span className="font-inter">Your response here</span>
                   <span className="font-inter font-medium text-[#0D1A14]">
-                    {characterCount} / {limit}
+                    {limit ? `${characterCount} / ${limit}` : `${characterCount} characters`}
                   </span>
                 </div>
                 {/* Textarea input field */}
                 <textarea
                   value={answerText}
-                  maxLength={limit}
+                  maxLength={limit ? limit : undefined}
                   disabled={completedStages["short_answers"]}
                   onChange={(e) =>
-                    setShortAnswer(q.id, e.target.value.slice(0, limit))
+                    setShortAnswer(
+                      q.id,
+                      limit ? e.target.value.slice(0, limit) : e.target.value
+                    )
                   }
                   className={cn(
                     "font-inter min-h-[180px] w-full resize-none bg-white p-6 text-[14px] leading-[21px] text-[#414E62] placeholder:text-[#414E62]/40 focus:outline-none",
