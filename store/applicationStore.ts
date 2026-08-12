@@ -389,7 +389,7 @@ export const useApplicationStore = create<ApplicationState>()(
 
         const realId = realPosition.id;
         const realTitle = realPosition.title;
-        const realSlug = realPosition.slug ?? null;
+        const realSlug = realPosition.slug ?? searchStr;
 
         // Save resolved position in the store
         set({
@@ -482,26 +482,28 @@ export const useApplicationStore = create<ApplicationState>()(
             dynamicLongQuestions: long,
             assessmentConfig: config,
             isLoadingAssessment: false,
+            assessmentLoadError: null,
           });
           return true;
         } catch (err: any) {
-          console.error("Failed to fetch assessment from API:", err);
+          console.warn(`Assessment API fetch for position ${realId} failed, checking fallback:`, err);
 
-          // Fallback to static position data if API fails so positionId is still resolved
-          const staticPos = openPositionsData.positions.find(
-            (pos) => pos.id.toString() === searchStr || pos.slug?.toLowerCase() === searchStr.toLowerCase()
-          );
-          if (staticPos) {
+          // If static config exists for this position ID, use it
+          const staticConfig = assessmentConfigs[realId];
+          if (staticConfig) {
             set({
-              positionId: staticPos.id,
-              positionTitle: staticPos.title,
-              positionSlug: staticPos.slug,
+              assessmentConfig: staticConfig,
+              isLoadingAssessment: false,
+              assessmentLoadError: null,
             });
+            return true;
           }
 
+          // Position is valid but has no assessment configuration in database/static data
           set({
+            assessmentConfig: null,
             isLoadingAssessment: false,
-            assessmentLoadError: err?.message || "Failed to load assessment data",
+            assessmentLoadError: "This position does not require an assessment.",
           });
           return false;
         }

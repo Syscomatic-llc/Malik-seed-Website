@@ -10,12 +10,15 @@ interface ApplyLayoutProps {
   params: Promise<{ id: string }>;
 }
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 async function getPosition(id: string): Promise<JobPosition | null> {
   // 1. Try to parse ID and fetch by ID
   const numId = parseInt(id);
   if (!isNaN(numId)) {
     try {
-      const res = await hiringApi.getPositionById(numId, { revalidate: 15, tags: ["careers"] });
+      const res = await hiringApi.getPositionById(numId, { revalidate: 0, tags: ["careers"] });
       if (res && res.position) {
         return mapApiPositionToJobPosition(res.position);
       }
@@ -24,7 +27,7 @@ async function getPosition(id: string): Promise<JobPosition | null> {
 
   // 2. Try to fetch by slug
   try {
-    const res = await hiringApi.getPositionBySlug(id, { revalidate: 15, tags: ["careers"] });
+    const res = await hiringApi.getPositionBySlug(id, { revalidate: 0, tags: ["careers"] });
     if (res && res.position) {
       return mapApiPositionToJobPosition(res.position);
     }

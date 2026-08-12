@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
 import {
@@ -33,8 +33,8 @@ export default function StartPage() {
 
   const isStorePosMatching = Boolean(
     storePositionId &&
-      (String(storePositionId) === String(id) ||
-        (storePositionSlug && storePositionSlug.toLowerCase() === String(id).toLowerCase()))
+    (String(storePositionId) === String(id) ||
+      (storePositionSlug && storePositionSlug.toLowerCase() === String(id).toLowerCase()))
   );
 
   const position = openPositionsData.positions.find(
@@ -48,16 +48,21 @@ export default function StartPage() {
     ? storePositionTitle
     : (position ? position.title : "selected");
 
+  const fetchedIdRef = useRef<string | null>(null);
+
   useEffect(() => {
     setHydrated(true);
-    if (hydrated) {
-      if (!email) {
-        router.replace(`/careers/${id}/apply/info`);
-      } else if (!isOtpVerified) {
-        router.replace(`/careers/${id}/apply/otp`);
-      } else {
-        fetchAssessment(id as string);
-      }
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (!email) {
+      router.replace(`/careers/${id}/apply/info`);
+    } else if (!isOtpVerified) {
+      router.replace(`/careers/${id}/apply/otp`);
+    } else if (id && fetchedIdRef.current !== String(id)) {
+      fetchedIdRef.current = String(id);
+      fetchAssessment(id as string);
     }
   }, [email, isOtpVerified, hydrated, id, router, fetchAssessment]);
 
@@ -80,8 +85,13 @@ export default function StartPage() {
   }
 
   const config = assessmentConfig;
-  const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (resolvedPositionId !== null && !config && !assessmentLoadError);
-  const isConnectionError = assessmentLoadError && assessmentLoadError !== "This position does not require an assessment.";
+  const isNoAssessment =
+    !isLoadingAssessment &&
+    (assessmentLoadError === "This position does not require an assessment." ||
+      (resolvedPositionId !== null && !config && !assessmentLoadError));
+  const isConnectionError =
+    !isLoadingAssessment &&
+    Boolean(assessmentLoadError && assessmentLoadError !== "This position does not require an assessment.");
   const hasValidPosition = !!position || !!storePositionId;
   // Case A: Genuinely no assessment required
   if (hasValidPosition && (isNoAssessment || (!config && !isConnectionError))) {

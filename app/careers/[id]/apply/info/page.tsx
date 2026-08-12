@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApplicationStore } from "@/store/applicationStore";
 import { Input } from "@/components/ui/input";
@@ -36,10 +36,12 @@ export default function PersonalInfoPage() {
   const [error, setError] = useState("");
   const [hydrated, setHydrated] = useState(false);
 
+  const fetchedIdRef = useRef<string | null>(null);
+
   const isStorePosMatching = Boolean(
     storePositionId &&
-      (String(storePositionId) === String(id) ||
-        (storePositionSlug && storePositionSlug.toLowerCase() === String(id).toLowerCase()))
+    (String(storePositionId) === String(id) ||
+      (storePositionSlug && storePositionSlug.toLowerCase() === String(id).toLowerCase()))
   );
 
   const position = openPositionsData.positions.find(
@@ -55,25 +57,34 @@ export default function PersonalInfoPage() {
 
   const isAlreadySubmitted = Boolean(
     applicationId &&
-      storeName &&
-      storeEmail &&
-      storeName.trim() === name.trim() &&
-      storeEmail.trim() === email.trim()
+    storeName &&
+    storeEmail &&
+    storeName.trim() === name.trim() &&
+    storeEmail.trim() === email.trim()
   );
 
-  // Sync state with store on hydration and load assessment
   useEffect(() => {
-    if ((storePositionId && !isStorePosMatching) || isStoreCompleted) {
+    setHydrated(true);
+  }, []);
+
+  // Sync inputs from store once on mount or when matching
+  useEffect(() => {
+    if (isStoreCompleted) {
       resetStore();
       setName("");
       setEmail("");
-    } else {
-      setName(storeName);
-      setEmail(storeEmail);
+    } else if (storeName || storeEmail) {
+      if (storeName) setName(storeName);
+      if (storeEmail) setEmail(storeEmail);
     }
-    setHydrated(true);
+  }, [id, isStoreCompleted]);
+
+  // Fetch assessment ONCE per route ID change
+  useEffect(() => {
+    if (!id || fetchedIdRef.current === String(id)) return;
+    fetchedIdRef.current = String(id);
     fetchAssessment(id as string);
-  }, [storePositionId, isStorePosMatching, isStoreCompleted, storeName, storeEmail, id, fetchAssessment, resetStore]);
+  }, [id, fetchAssessment]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,7 +158,10 @@ export default function PersonalInfoPage() {
   }
 
   const config = assessmentConfig;
-  const isNoAssessment = assessmentLoadError === "This position does not require an assessment." || (resolvedPositionId !== null && !config && !assessmentLoadError);
+  const isNoAssessment =
+    !isLoadingAssessment &&
+    (assessmentLoadError === "This position does not require an assessment." ||
+      (resolvedPositionId !== null && !config && !assessmentLoadError));
   const isConnectionError = assessmentLoadError && assessmentLoadError !== "This position does not require an assessment.";
   const hasValidPosition = !!position || !!storePositionId;
 

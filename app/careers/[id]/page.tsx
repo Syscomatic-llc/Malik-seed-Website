@@ -18,6 +18,9 @@ interface JobDetailsPageProps {
   params: Promise<{ id: string }>;
 }
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const SITE_NAME = "Malik Seeds";
 
 function cleanHtml(html: string): string {
@@ -45,7 +48,7 @@ function isHtmlContent(str: string): boolean {
 /** Statically pre-generate dynamic routes for all job positions at build time. */
 export async function generateStaticParams() {
   try {
-    const apiPositions = await hiringApi.getPositions(undefined, { revalidate: 10, tags: ["careers"] });
+    const apiPositions = await hiringApi.getPositions(undefined, { revalidate: 0, tags: ["careers"] });
     if (apiPositions && apiPositions.length > 0) {
       return apiPositions.map((pos) => ({
         id: pos.slug || pos.id.toString(),
@@ -69,12 +72,12 @@ export async function generateMetadata({
   const isNumeric = /^\d+$/.test(id);
   try {
     if (isNumeric) {
-      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 10, tags: ["careers"] });
+      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 0, tags: ["careers"] });
       if (res && res.position) {
         position = mapApiPositionToJobPosition(res.position);
       }
     } else {
-      const res = await hiringApi.getPositionBySlug(id, { revalidate: 10, tags: ["careers"] });
+      const res = await hiringApi.getPositionBySlug(id, { revalidate: 0, tags: ["careers"] });
       if (res && res.position) {
         position = mapApiPositionToJobPosition(res.position);
       }
@@ -90,7 +93,7 @@ export async function generateMetadata({
   }
 
   if (!position) {
-    return getPageMetadata(`/careers/${id}`, { title: `Position Not Found - ${SITE_NAME}` }, { revalidate: 10, tags: ["careers", "seo"] });
+    return getPageMetadata(`/careers/${id}`, { title: `Position Not Found - ${SITE_NAME}` }, { revalidate: 0, tags: ["careers", "seo"] });
   }
 
   const cleanDescription = cleanHtml(position.description);
@@ -105,7 +108,7 @@ export async function generateMetadata({
     },
   };
 
-  return getPageMetadata(`/careers/${id}`, fallback, { revalidate: 10, tags: ["careers", "seo"] });
+  return getPageMetadata(`/careers/${id}`, fallback, { revalidate: 0, tags: ["careers", "seo"] });
 }
 
 export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
@@ -115,12 +118,12 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
   const isNumeric = /^\d+$/.test(id);
   try {
     if (isNumeric) {
-      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 10, tags: ["careers"] });
+      const res = await hiringApi.getPositionById(parseInt(id), { revalidate: 0, tags: ["careers"] });
       if (res && res.position) {
         position = mapApiPositionToJobPosition(res.position);
       }
     } else {
-      const res = await hiringApi.getPositionBySlug(id, { revalidate: 10, tags: ["careers"] });
+      const res = await hiringApi.getPositionBySlug(id, { revalidate: 0, tags: ["careers"] });
       if (res && res.position) {
         position = mapApiPositionToJobPosition(res.position);
       }
@@ -262,25 +265,6 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                   />
                 )}
 
-                {/* Salary Section */}
-                {position.salary && (
-                  <div className="flex flex-col gap-4">
-                    <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
-                      Salary
-                    </h2>
-                    <div className="flex flex-col gap-2 rounded-[16px] border border-[#E4E7EC] bg-white p-5 sm:flex-row sm:items-baseline sm:gap-3 lg:p-6">
-                      <span className="font-inter-tight text-[24px] leading-[30px] font-bold text-[#195236] lg:text-[28px] lg:leading-[34px]">
-                        {position.salary}
-                      </span>
-                      {position.salaryNote && (
-                        <span className="font-inter text-[15px] leading-[22px] text-[#0D1A14]/70 lg:text-[16px]">
-                          {position.salaryNote}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                )}
-
                 {/* Basics & Benefits */}
                 {position.benefitsList && position.benefitsList.length > 0 && (
                   <div className="flex flex-col gap-6">
@@ -384,25 +368,6 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                           </li>
                         ))}
                       </ul>
-                    </div>
-                  )}
-
-                  {/* Salary Section */}
-                  {position.salary && (
-                    <div className="flex flex-col gap-4">
-                      <h2 className="font-inter-tight text-[22px] leading-[24px] font-medium text-[#0D1A14] lg:text-[24px]">
-                        Salary
-                      </h2>
-                      <div className="flex flex-col gap-2 rounded-[16px] border border-[#E4E7EC] bg-white p-5 sm:flex-row sm:items-baseline sm:gap-3 lg:p-6">
-                        <span className="font-inter-tight text-[24px] leading-[30px] font-bold text-[#195236] lg:text-[28px] lg:leading-[34px]">
-                          {position.salary}
-                        </span>
-                        {position.salaryNote && (
-                          <span className="font-inter text-[15px] leading-[22px] text-[#0D1A14]/70 lg:text-[16px]">
-                            {position.salaryNote}
-                          </span>
-                        )}
-                      </div>
                     </div>
                   )}
 
