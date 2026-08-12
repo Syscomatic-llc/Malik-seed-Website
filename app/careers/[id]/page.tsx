@@ -13,6 +13,7 @@ import {
 import ActionButton from "@/components/ActionButton";
 import { hiringApi, mapApiPositionToJobPosition, getPageMetadata } from "@/lib/api";
 import { BenefitBadge } from "@/components/ui/BenefitBadge";
+import { resolveImageUrl } from "@/lib/utils";
 
 interface JobDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -30,10 +31,17 @@ function cleanHtml(html: string): string {
     .replace(/&nbsp;/g, " ")
     .replace(/\u00a0/g, " ");
 
-  // Identify paragraphs starting with an emoji and convert them to Figma benefit pills
-  const emojiRegex = /<p>\s*([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF])\s*([\s\S]*?)<\/p>/gi;
-  cleaned = cleaned.replace(emojiRegex, (match, emoji, text) => {
+  // Format heading tags (h1-h6) containing emojis cleanly without converting headings to pills
+  const headingEmojiRegex = /<(h[1-6])([^>]*)>\s*([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF])\s*([\s\S]*?)<\/\1>/gi;
+  cleaned = cleaned.replace(headingEmojiRegex, (match, tag, attrs, emoji, text) => {
+    return `<${tag}${attrs}><span class="heading-emoji">${emoji}</span> ${text.trim()}</${tag}>`;
+  });
+
+  // Convert ONLY short standalone benefit paragraphs (under 60 chars) starting with an emoji into Figma benefit pills
+  const benefitPillRegex = /<p>\s*([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF])\s*([\s\S]{1,60}?)<\/p>/gi;
+  cleaned = cleaned.replace(benefitPillRegex, (match, emoji, text) => {
     const cleanText = text.trim();
+    if (cleanText.includes("<h") || cleanText.length > 60) return match;
     return `<span class="job-benefit-pill"><span class="job-benefit-emoji">${emoji}</span><span class="job-benefit-text">${cleanText}</span></span>`;
   });
 
@@ -45,6 +53,13 @@ function cleanHtml(html: string): string {
       return `<a href="${href}" target="_blank" rel="noopener noreferrer"${rest}>`;
     }
     return match;
+  });
+
+  // Resolve image URLs inside rich text HTML content
+  cleaned = cleaned.replace(/<img\s+(?:[^>]*?\s+)?src=(["'])(.*?)\1([^>]*)>/gi, (match, quote, src, rest) => {
+    if (!src) return match;
+    const resolvedSrc = resolveImageUrl(src);
+    return `<img src="${resolvedSrc}"${rest}>`;
   });
 
   return cleaned;

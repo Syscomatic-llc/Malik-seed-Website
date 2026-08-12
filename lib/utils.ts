@@ -27,6 +27,13 @@ export function cleanHtml(html?: string | null): string {
     return match;
   });
 
+  // Resolve image URLs inside rich text HTML content
+  cleaned = cleaned.replace(/<img\s+(?:[^>]*?\s+)?src=(["'])(.*?)\1([^>]*)>/gi, (match, quote, src, rest) => {
+    if (!src) return match;
+    const resolvedSrc = resolveImageUrl(src);
+    return `<img src="${resolvedSrc}"${rest}>`;
+  });
+
   return cleaned;
 }
 

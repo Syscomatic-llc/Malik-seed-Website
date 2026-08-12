@@ -25,7 +25,7 @@ import {
   Smile,
   Zap,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, resolveImageUrl } from "@/lib/utils";
 
 export interface BenefitBadgeProps {
   text: string;
@@ -93,11 +93,9 @@ function resolveBenefitLucideIcon(text: string): React.ComponentType<{ className
 
 export function BenefitBadge({ text, icon, className }: BenefitBadgeProps) {
   const LucideIcon = resolveBenefitLucideIcon(text);
-  const hasLocalSvg = Boolean(
-    icon &&
-    (icon.endsWith(".svg") || icon.endsWith(".png")) &&
-    !icon.includes("shield-tick")
-  );
+
+  // Check if a direct backend icon path or URL is provided
+  const iconUrl = icon ? resolveImageUrl(icon) : null;
 
   return (
     <div
@@ -110,15 +108,12 @@ export function BenefitBadge({ text, icon, className }: BenefitBadgeProps) {
         {text}
       </span>
       <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#195236]/10 text-[#195236] transition-transform duration-300 group-hover:scale-110 group-hover:bg-[#195236]/20">
-        {hasLocalSvg && icon ? (
-          <div className="relative h-3.5 w-3.5 shrink-0 lg:h-4 lg:w-4">
-            <OptimizedImage
-              src={`/images/careers/${icon}`}
-              alt=""
-              fill
-              className="object-contain"
-            />
-          </div>
+        {iconUrl ? (
+          <img
+            src={iconUrl}
+            alt=""
+            className="h-3.5 w-3.5 shrink-0 object-contain lg:h-4 lg:w-4"
+          />
         ) : (
           <LucideIcon className="h-3.5 w-3.5 lg:h-4 lg:w-4 stroke-[2]" />
         )}
