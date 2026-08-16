@@ -139,7 +139,7 @@ export default memo(function CVDropSection({ showInterestedRole = false }: CVDro
             </h2>
 
             {/* Interested Role / Department Selector (Only when enabled) */}
-            {showInterestedRole && (
+            {/* {showInterestedRole && (
               <div className="flex w-full max-w-[736px] flex-col gap-3">
                 <label htmlFor="interested-role-select" className="font-inter-tight text-[14px] font-medium text-[#A9E179] md:text-[16px]">
                   Interested Department or Role
@@ -172,7 +172,7 @@ export default memo(function CVDropSection({ showInterestedRole = false }: CVDro
                   />
                 )}
               </div>
-            )}
+            )} */}
 
             {/* Drag & Drop Area */}
             <div

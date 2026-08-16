@@ -264,7 +264,7 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                     </span>
                   </div>
                 )}
-                {position.deadline && (
+                {/* {position.deadline && (
                   <div className="flex shrink-0 flex-col gap-1 sm:gap-2">
                     <span className="font-inter-tight text-[12px] text-[#0D1A14]/60 sm:text-[14px] lg:text-[16px]">
                       Deadline
@@ -273,7 +273,7 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                       {position.deadline}
                     </span>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
 
