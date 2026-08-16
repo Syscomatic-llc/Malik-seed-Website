@@ -52,7 +52,7 @@ export const vegetableSeedsData = {
   youtube: {
     badge: "Our Heritage",
     title: "Over half a century in \nthe field",
-    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    youtubeUrl: "https://www.youtube.com/@malikseeds",
     images: [
       "/images/brand/field_activities_9_1.png",
       "/images/brand/field_activities_5_1.png",
