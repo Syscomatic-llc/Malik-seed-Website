@@ -9,13 +9,6 @@ export interface TimelineSectionProps {
   apiData?: ApiTimelineItem[];
 }
 
-/** Glow images used for the timeline card backgrounds. */
-const GLOWS = [
-  "/images/timeline/frame_61.png",
-  "/images/timeline/frame_58.png",
-  "/images/timeline/frame_59.png",
-];
-
 /**
  * Convert API timeline items to the shape TimelineStory expects.
  * Uses only API data — no mixing with static fields.
@@ -29,7 +22,7 @@ function buildTimelineItems(
     const glow =
       item.gallery_images && item.gallery_images[0]
         ? resolveImageUrl(item.gallery_images[0])
-        : GLOWS[index % GLOWS.length];
+        : "";
 
     return {
       year: item.year,

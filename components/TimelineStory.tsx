@@ -340,7 +340,7 @@ function ImagePanel({ src, alt }: { src: string; alt: string }) {
           src={src}
           alt={alt}
           fill
-          className="object-cover scale-[1.04] transition-transform duration-700 ease-out group-hover:scale-110"
+          className="object-cover object-top scale-[1.04] transition-transform duration-700 ease-out group-hover:scale-110"
           sizes="(max-width: 1280px) 45vw, 503px"
         />
       )}
@@ -837,7 +837,7 @@ function TabletTimelineRow({
               src={item.image}
               alt={item.title}
               fill
-              className="object-cover scale-[1.04] transition-transform duration-700 ease-out group-hover:scale-110"
+              className="object-cover object-top scale-[1.04] transition-transform duration-700 ease-out group-hover:scale-110"
               sizes="(max-width: 1024px) 55vw, 503px"
             />
           )}
@@ -1111,7 +1111,7 @@ export default function TimelineStory({
                           src={item.image}
                           alt={item.title}
                           fill
-                          className="object-cover scale-[1.04]"
+                          className="object-cover object-top scale-[1.04]"
                           sizes="310px"
                         />
                       )}
