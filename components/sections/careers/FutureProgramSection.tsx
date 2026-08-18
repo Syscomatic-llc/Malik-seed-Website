@@ -89,18 +89,17 @@ export default memo(function FutureProgramSection({
     >
       <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-12 px-4 sm:px-8 xl:px-[100px]">
         {/* Main layout container (text left, image right on desktop) */}
-        <div className="flex flex-col items-start gap-10 lg:flex-row lg:items-stretch lg:gap-[137px]">
+        <div className="mx-auto flex w-full max-w-[1240px] flex-col items-start gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-[137px]">
           {/* ── Left column: text ── */}
           <div
-            className="flex w-full flex-col gap-12 lg:flex-1"
-            style={{ maxWidth: 600 }}
+            className="flex w-full flex-col gap-12 lg:w-[600px] lg:flex-1"
           >
             {/* Header: badge + title */}
             <div className="flex flex-col items-start gap-4">
               <SectionBadge variant="dark" showDot dotSize="8px">
                 {data.badge}
               </SectionBadge>
-              <h2 className="font-inter-tight text-brand-light-green text-[32px] leading-[1.2] font-medium tracking-tight md:text-[48px] md:leading-[58px]">
+              <h2 className="font-inter-tight text-brand-light-green text-[32px] leading-[38px] font-medium tracking-tight md:text-[48px] md:leading-[58px]">
                 {data.title}
               </h2>
             </div>
@@ -110,7 +109,7 @@ export default memo(function FutureProgramSection({
               {data.paragraphs.map((para, i) => (
                 <p
                   key={i}
-                  className="font-inter text-brand-bg text-[16px] leading-[24px]"
+                  className="font-inter text-brand-bg/70 text-[16px] leading-[24px]"
                 >
                   {para}
                 </p>
@@ -120,7 +119,7 @@ export default memo(function FutureProgramSection({
 
           {/* ── Right column: photo card (visible on mobile lower side, right on desktop) ── */}
           {data.image ? (
-            <div className="relative h-[280px] w-full max-w-[503px] self-center overflow-hidden rounded-[20px] bg-white sm:h-[380px] lg:h-[435px] lg:w-[503px] lg:shrink-0 lg:self-auto">
+            <div className="bg-brand-dark relative h-[280px] w-full max-w-[503px] self-center overflow-hidden rounded-[20px] sm:h-[380px] lg:h-[435px] lg:w-[503px] lg:shrink-0 lg:rounded-[24px] lg:self-center">
               <OptimizedImage
                 src={data.image}
                 alt="Future Leader Program - Malik Seeds"
@@ -147,7 +146,7 @@ export default memo(function FutureProgramSection({
             type="button"
             onClick={handleButtonClick}
             disabled={isSubmitting}
-            className="font-inter inline-flex h-[46px] cursor-pointer items-center justify-center gap-2 rounded-full bg-[#A9E179] px-6 text-[16px] font-medium text-[#0D1A14] transition-all hover:bg-[#A9E179]/90 focus:ring-2 focus:ring-[#A9E179] focus:outline-none active:scale-95 disabled:pointer-events-none disabled:opacity-50"
+            className="font-inter inline-flex h-[46px] cursor-pointer items-center justify-center gap-[10px] rounded-full bg-[#A9E179] px-6 text-[16px] font-medium text-[#0D1A14] transition-all hover:bg-[#A9E179]/90 focus:ring-2 focus:ring-[#A9E179] focus:outline-none active:scale-95 disabled:pointer-events-none disabled:opacity-50"
           >
             <svg
               width="20"

@@ -77,7 +77,7 @@ export default memo(function CareerHero({
     >
       {/* Inner wrapper: max-w-[1240px] centered, 100px horizontal gutters at xl */}
       <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-8 xl:px-[100px]">
-        <div className="flex w-full flex-col items-center justify-between gap-10 pt-[120px] pb-16 lg:flex-row lg:items-end lg:gap-8 lg:pt-[180px] lg:pb-[100px]">
+        <div className="flex w-full flex-col items-center justify-between gap-10 pt-[120px] pb-16 lg:flex-row lg:items-center lg:gap-8 lg:pt-[180px] lg:pb-[100px]">
           {/* ── Left column ── */}
           <div className="flex w-full max-w-[358px] flex-col items-center gap-8 md:max-w-[540px] lg:w-auto lg:max-w-none lg:flex-1 lg:items-start lg:gap-12">
             {/* Breadcrumb — Home / Hiring */}
@@ -138,31 +138,17 @@ export default memo(function CareerHero({
           </div>
 
           {/* ── Right column: team photo card ── */}
-          {/* Figma: 503×520 (Desktop) / 358x260 (Mobile), bg white, radius 24/20 */}
+          {/* Figma: 503×520 (Desktop) / 358x260 (Mobile), radius 24/20 */}
           {data.teamImage ? (
-            <div className="relative h-[260px] w-full max-w-[358px] flex-shrink-0 overflow-hidden rounded-[20px] bg-white md:h-[360px] md:max-w-[540px] lg:h-[420px] lg:w-[400px] lg:max-w-none lg:rounded-[24px] xl:h-[520px] xl:w-[503px]">
-              {/* Mobile view image */}
-              <div className="relative h-full w-full lg:hidden">
-                <OptimizedImage
-                  src={data.teamImage}
-                  alt="Malik Seeds team"
-                  fill
-                  sizes="(max-width: 768px) 358px, 540px"
-                  className="object-cover object-center"
-                  priority
-                />
-              </div>
-              {/* Desktop view image */}
-              <div className="relative hidden h-full w-full lg:block">
-                <OptimizedImage
-                  src={data.teamImage}
-                  alt="Malik Seeds team"
-                  fill
-                  sizes="(max-width: 1280px) 400px, 503px"
-                  className="object-cover object-center"
-                  priority
-                />
-              </div>
+            <div className="relative h-[260px] w-full max-w-[358px] flex-shrink-0 overflow-hidden rounded-[20px] md:h-[360px] md:max-w-[540px] lg:h-[420px] lg:w-[400px] lg:max-w-none lg:rounded-[24px] xl:h-[520px] xl:w-[503px]">
+              <OptimizedImage
+                src={data.teamImage}
+                alt="Malik Seeds team"
+                fill
+                sizes="(max-width: 768px) 358px, (max-width: 1280px) 400px, 503px"
+                className="object-cover object-center"
+                priority
+              />
             </div>
           ) : null}
         </div>
