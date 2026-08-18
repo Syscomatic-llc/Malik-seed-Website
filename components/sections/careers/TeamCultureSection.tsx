@@ -8,8 +8,12 @@ export default memo(function TeamCultureSection({
 }: {
   data: typeof teamCultureData;
 }) {
-  const { images } = data;
-  const [wide, narrow, ...thirds] = images;
+  if (!data.images || data.images.length === 0) return null;
+
+  const images = data.images;
+  const wide = images[0];
+  const narrow = images[1];
+  const thirds = images.slice(2);
 
   return (
     <section
@@ -35,31 +39,35 @@ export default memo(function TeamCultureSection({
             {/* Row 1: 768 + 448 */}
             <div className="flex flex-col gap-6 md:flex-row">
               {/* Wide image */}
-              <div
-                className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
-                style={{ height: 380, flex: "1 1 62%" }}
-              >
-                <OptimizedImage
-                  src={wide.src}
-                  alt={wide.alt}
-                  fill
-                  sizes="(min-width: 1280px) 768px, 100vw"
-                  className="object-cover object-bottom transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-              </div>
+              {wide && (
+                <div
+                  className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
+                  style={{ height: 380, flex: wide && narrow ? "1 1 62%" : "1 1 100%" }}
+                >
+                  <OptimizedImage
+                    src={wide.src}
+                    alt={wide.alt}
+                    fill
+                    sizes="(min-width: 1280px) 768px, 100vw"
+                    className="object-cover object-bottom transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                </div>
+              )}
               {/* Narrow image */}
-              <div
-                className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
-                style={{ height: 380, flex: "1 1 36%" }}
-              >
-                <OptimizedImage
-                  src={narrow.src}
-                  alt={narrow.alt}
-                  fill
-                  sizes="(min-width: 1280px) 448px, 100vw"
-                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-              </div>
+              {narrow && (
+                <div
+                  className="group relative overflow-hidden rounded-[24px] bg-[#F2F4F7]"
+                  style={{ height: 380, flex: wide && narrow ? "1 1 36%" : "1 1 100%" }}
+                >
+                  <OptimizedImage
+                    src={narrow.src}
+                    alt={narrow.alt}
+                    fill
+                    sizes="(min-width: 1280px) 448px, 100vw"
+                    className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Row 2: 3 × equal */}

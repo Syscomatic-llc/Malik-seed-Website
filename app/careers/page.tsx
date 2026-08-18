@@ -15,7 +15,7 @@ import {
   futureProgramData,
   employeeTestimonialsData,
 } from "@/data/career-data";
-import { hiringApi, mapApiPositionToJobPosition, ApiJobPosition, ApiHiringTestimonial, ApiHiringBenefit, getPageMetadata } from "@/lib/api";
+import { hiringApi, mapApiPositionToJobPosition, ApiJobPosition, ApiHiringTestimonial, ApiHiringBenefit, ApiHiringPageContent, getPageMetadata } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,16 +38,19 @@ export default async function CareersPage() {
   let apiPositions: ApiJobPosition[] = [];
   let apiTestimonials: ApiHiringTestimonial[] = [];
   let apiBenefits: ApiHiringBenefit[] = [];
+  let pageContentRes: ApiHiringPageContent | null = null;
 
   try {
-    const [positionsRes, testimonialsRes, benefitsRes] = await Promise.all([
+    const [positionsRes, testimonialsRes, benefitsRes, pageRes] = await Promise.all([
       hiringApi.getPositions(undefined, { revalidate: 15, tags: ["careers"] }),
       hiringApi.getTestimonials({ revalidate: 15, tags: ["careers"] }),
       hiringApi.getBenefits({ revalidate: 15, tags: ["careers"] }),
+      hiringApi.getPageContent({ revalidate: 15, tags: ["careers"] }),
     ]);
     apiPositions = positionsRes || [];
     apiTestimonials = testimonialsRes || [];
     apiBenefits = benefitsRes || [];
+    pageContentRes = pageRes || null;
   } catch (err) {
     console.error("Failed to fetch hiring content:", err);
   }
@@ -85,19 +88,65 @@ export default async function CareersPage() {
     })),
   };
 
+  const heroSectionApi = pageContentRes?.heroSection;
+  const resolvedCareerHeroData = {
+    ...careerHeroData,
+    badge: heroSectionApi?.badge || careerHeroData.badge,
+    ctaSecondary: heroSectionApi?.ctaSecondary
+      ? {
+          href: heroSectionApi.ctaSecondary.href || careerHeroData.ctaSecondary.href,
+          label: heroSectionApi.ctaSecondary.label || careerHeroData.ctaSecondary.label,
+        }
+      : careerHeroData.ctaSecondary,
+    teamImage: heroSectionApi?.teamImage
+      ? resolveImageUrl(heroSectionApi.teamImage)
+      : "",
+  };
+
+  const manifestoApi = pageContentRes?.careerManifesto;
+  const resolvedManifestoData = {
+    ...careerManifestoData,
+    badge: manifestoApi?.badge || careerManifestoData.badge,
+    images: manifestoApi?.images
+      ? manifestoApi.images.map((img) => resolveImageUrl(img))
+      : [],
+  };
+
+  const teamCultureApi = pageContentRes?.teamCulture;
+  const resolvedTeamCultureData = {
+    ...teamCultureData,
+    badge: teamCultureApi?.badge || teamCultureData.badge,
+    images: teamCultureApi?.images
+      ? teamCultureApi.images.map((img, i) => ({
+          src: resolveImageUrl(img),
+          alt: `Team culture photo ${i + 1}`,
+          colSpan: (i === 0 ? "wide" : i === 1 ? "narrow" : "third") as "wide" | "narrow" | "third",
+        }))
+      : [],
+  };
+
+  const futureProgramApi = pageContentRes?.futureProgram;
+  const resolvedFutureProgramData = {
+    ...futureProgramData,
+    badge: futureProgramApi?.badge || futureProgramData.badge,
+    image: futureProgramApi?.image
+      ? resolveImageUrl(futureProgramApi.image)
+      : "",
+  };
+
   return (
     <div className="min-h-screen bg-[#F2F7F1]">
-      <CareerHero data={careerHeroData} />
+      <CareerHero data={resolvedCareerHeroData} />
       <TalentStandardsSection data={resolvedStandardsData} />
-      <CareerManifestoSection data={careerManifestoData} />
+      <CareerManifestoSection data={resolvedManifestoData} />
       <OpenPositionsCardsSection
         data={{
           ...openPositionsData,
           positions: resolvedPositions.slice(0, 3),
         }}
       />
-      <TeamCultureSection data={teamCultureData} />
-      <FutureProgramSection data={futureProgramData} />
+      <TeamCultureSection data={resolvedTeamCultureData} />
+      <FutureProgramSection data={resolvedFutureProgramData} />
       <EmployeeTestimonialsSection data={resolvedTestimonialsData} />
     </div>
   );

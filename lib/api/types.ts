@@ -453,15 +453,30 @@ export interface ApiHiringTestimonial {
 }
 
 export interface ApiHiringPageContent {
-  id: number;
-  hero_title: string;
-  hero_subtitle: string;
-  hero_image: string | null;
-  manifesto_title: string | null;
-  manifesto_description: string | null;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string | null;
+  id?: number;
+  heroSection?: {
+    badge?: string;
+    ctaSecondary?: {
+      href: string;
+      label: string;
+    };
+    teamImage?: string;
+  };
+  careerManifesto?: {
+    badge?: string;
+    images?: string[];
+  };
+  teamCulture?: {
+    badge?: string;
+    images?: string[];
+  };
+  futureProgram?: {
+    badge?: string;
+    image?: string;
+  };
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string | null;
 }
 
 export interface ApiHiringData {

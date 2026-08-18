@@ -17,20 +17,7 @@ import type { careerManifestoData } from "@/data/career-data";
 // ────────────────────────────────────────────────────────────────────────────
 
 // Inline fake placeholder images using green gradient (since Figma images need download)
-const MANIFESTO_IMAGES = [
-  {
-    src: "/images/team/malik_farm_grid.png",
-    alt: "Malik Seeds farm - aerial view grid",
-  },
-  {
-    src: "/images/team/malik_seeds_team-5.png",
-    alt: "Malik Seeds team",
-  },
-  {
-    src: "/images/team/maliks_farm_rd.png",
-    alt: "Malik Seeds R&D farm",
-  },
-];
+
 
 // Side-fade gradients blend into the section bg (#0D1A14) — matches Figma exactly
 const LEFT_FADE =
@@ -41,7 +28,7 @@ const RIGHT_FADE =
 export default memo(function CareerManifestoSection({
   data,
 }: {
-  data: typeof careerManifestoData;
+  data: typeof careerManifestoData & { images?: string[] };
 }) {
   return (
     <section
@@ -94,44 +81,44 @@ export default memo(function CareerManifestoSection({
           </div>
         </div>
 
-        {/* ── Bottom image strip — centered peek layout ──────────────────────────
-             The middle card is centered on screen. The left & right cards peek
-             in from the sides. Deep gradient fades blend edges into the bg.
-             Matches Figma node 2424:13883 visual intent. */}
-        <div className="relative mt-16 w-full overflow-hidden pb-[100px] lg:pb-[104px]">
-          {/* Deep left-edge fade — blends first card into bg */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute top-0 left-0 z-10 h-[280px] w-[96px] lg:h-[360px] lg:w-[214px]"
-            style={{ background: LEFT_FADE }}
-          />
-          {/* Deep right-edge fade — blends last card into bg */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute top-0 right-0 z-10 h-[280px] w-[96px] lg:h-[360px] lg:w-[214px]"
-            style={{ background: RIGHT_FADE }}
-          />
+        {/* ── Bottom image strip ── */}
+        {data.images && data.images.length > 0 ? (
+          <div className="relative mt-16 w-full overflow-hidden pb-[100px] lg:pb-[104px]">
+            {/* Deep left-edge fade — blends first card into bg */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-0 left-0 z-10 h-[280px] w-[96px] lg:h-[360px] lg:w-[214px]"
+              style={{ background: LEFT_FADE }}
+            />
+            {/* Deep right-edge fade — blends last card into bg */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-0 right-0 z-10 h-[280px] w-[96px] lg:h-[360px] lg:w-[214px]"
+              style={{ background: RIGHT_FADE }}
+            />
 
-          {/* Centered strip — all 3 cards are 616×360px (aspect 77/45).
-              Total width 3×616 + 2×24gap = 1896px > viewport → side cards bleed off-screen. */}
-          <div className="flex items-center justify-center gap-4 lg:gap-6">
-            {MANIFESTO_IMAGES.map((img, i) => (
-              <div
-                key={i}
-                className="group relative h-[280px] w-[348px] shrink-0 overflow-hidden rounded-[20px] bg-[#1a2d24] lg:h-[360px] lg:w-[616px] lg:rounded-[24px]"
-                style={{ aspectRatio: "12/7" }}
-              >
-                <OptimizedImage
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  sizes="616px"
-                  className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-              </div>
-            ))}
+            {/* Centered strip — all cards are 616×360px (aspect 77/45). */}
+            <div className="flex items-center justify-center gap-4 lg:gap-6">
+              {data.images.map((src, i) => (
+                <div
+                  key={i}
+                  className="group relative h-[280px] w-[348px] shrink-0 overflow-hidden rounded-[20px] bg-[#1a2d24] lg:h-[360px] lg:w-[616px] lg:rounded-[24px]"
+                  style={{ aspectRatio: "12/7" }}
+                >
+                  <OptimizedImage
+                    src={src}
+                    alt={`Manifesto image ${i + 1}`}
+                    fill
+                    sizes="616px"
+                    className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="pb-[100px] lg:pb-[104px]" />
+        )}
       </div>
     </section>
   );

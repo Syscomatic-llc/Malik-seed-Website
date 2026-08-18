@@ -119,15 +119,17 @@ export default memo(function FutureProgramSection({
           </div>
 
           {/* ── Right column: photo card (visible on mobile lower side, right on desktop) ── */}
-          <div className="relative h-[280px] w-full max-w-[503px] self-center overflow-hidden rounded-[20px] bg-white sm:h-[380px] lg:h-[435px] lg:w-[503px] lg:shrink-0 lg:self-auto">
-            <OptimizedImage
-              src={data.image}
-              alt="Future Leader Program - Malik Seeds"
-              fill
-              sizes="(max-width: 1024px) 100vw, 503px"
-              className="object-cover object-center"
-            />
-          </div>
+          {data.image ? (
+            <div className="relative h-[280px] w-full max-w-[503px] self-center overflow-hidden rounded-[20px] bg-white sm:h-[380px] lg:h-[435px] lg:w-[503px] lg:shrink-0 lg:self-auto">
+              <OptimizedImage
+                src={data.image}
+                alt="Future Leader Program - Malik Seeds"
+                fill
+                sizes="(max-width: 1024px) 100vw, 503px"
+                className="object-cover object-center"
+              />
+            </div>
+          ) : null}
         </div>
 
         {/* ── Center-aligned button block (centered on the page in width) ── */}
