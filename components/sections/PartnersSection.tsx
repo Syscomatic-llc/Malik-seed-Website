@@ -1,6 +1,5 @@
 import { memo, useMemo } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { partnersData } from "@/data/sections-data";
 import { ApiPartner } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
@@ -39,6 +38,8 @@ export default memo(function PartnersSection({
     return partners || [];
   }, [partners, apiData]);
 
+  if (activePartners.length === 0) return null;
+
   // Dynamically split unique partners down the middle and duplicate the list for infinite loops
   const { row1Items, row2Items } = useMemo(() => {
     const half = Math.ceil(activePartners.length / 2);
@@ -61,7 +62,7 @@ export default memo(function PartnersSection({
       <div className="mx-auto max-w-[1440px]">
         {/* Title — Figma: "Our Development Partners", Inter 18px, weight 500, center */}
         <p className="font-inter text-brand-dark mb-8 text-center text-base leading-[22px] font-medium opacity-70 md:mb-12 md:text-lg">
-          {partnersData.title}
+          Our Development Partners
         </p>
 
         {/* Sliders Container — Figma Frame 16: gap 24px (mobile) to 40px (desktop) */}

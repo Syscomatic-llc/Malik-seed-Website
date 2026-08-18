@@ -5,7 +5,6 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import ActionButton from "@/components/ActionButton";
 import CountUp from "@/components/ui/CountUp";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { aboutData as staticAboutData } from "@/data/sections-data";
 import { ApiAbout, ApiAboutStat } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
@@ -194,6 +193,8 @@ function TypingText({ text, className = "" }: TypingTextProps) {
 // Main component
 // ---------------------------------------------------------------------------
 export default function AboutSection({ apiData }: AboutSectionProps) {
+  if (!apiData) return null;
+
   const aboutData = buildAboutData(apiData);
 
   return (

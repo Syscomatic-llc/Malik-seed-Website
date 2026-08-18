@@ -448,26 +448,26 @@ export default function HeroSection({
     return null;
   }, [apiData]);
 
-  const finalData: HeroData = activeSlide
-    ? {
-      slides: finalSlides,
-      intervalMs: 3000,
-      titleDesktop: activeSlide.title || "",
-      titleMobile: activeSlide.title || "",
-      // Subtitle is hardcoded as requested by the user
-      subtitle: data.subtitle,
-      ctaProducts: {
-        label: apiPrimaryCta?.label || data.ctaProducts.label,
-        href: apiPrimaryCta?.href || data.ctaProducts.href,
-      },
-      // Secondary CTA (About button) is hardcoded as requested by the user
-      ctaAbout: {
-        label: data.ctaAbout.label,
-        href: data.ctaAbout.href,
-      },
-      scrollText: data.scrollText,
-    }
-    : data;
+  if (!activeSlide || finalSlides.length === 0) {
+    return null;
+  }
+
+  const finalData: HeroData = {
+    slides: finalSlides,
+    intervalMs: 3000,
+    titleDesktop: activeSlide.title || "",
+    titleMobile: activeSlide.title || "",
+    subtitle: data.subtitle,
+    ctaProducts: {
+      label: apiPrimaryCta?.label || data.ctaProducts.label,
+      href: apiPrimaryCta?.href || data.ctaProducts.href,
+    },
+    ctaAbout: {
+      label: data.ctaAbout.label,
+      href: data.ctaAbout.href,
+    },
+    scrollText: data.scrollText,
+  };
   return (
     <section
       id="hero"

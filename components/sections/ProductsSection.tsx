@@ -1,7 +1,6 @@
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
-import { productsData as staticProductsData } from "@/data/sections-data";
 import { ApiService, ApiBrand } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
@@ -120,7 +119,7 @@ function buildProducts(apiData?: (ApiService | ApiBrand)[]): ProductItem[] {
       }
     });
   }
-  return staticProductsData.items;
+  return [];
 }
 
 export default function ProductsSection({
@@ -129,6 +128,8 @@ export default function ProductsSection({
 }: ProductsSectionProps) {
   const isVertical = direction === "vertical";
   const products = buildProducts(apiData);
+
+  if (products.length === 0) return null;
 
   return (
     <section className="bg-brand-bg w-full" id="products">

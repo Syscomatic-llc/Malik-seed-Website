@@ -1,6 +1,6 @@
-import { timelineItems, TimelineItem } from "@/data/sections-data";
 import TimelineStory from "../TimelineStory";
 import ActionButton from "../ActionButton";
+import { type TimelineItem } from "@/data/sections-data";
 import { ApiTimelineItem } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
@@ -41,8 +41,9 @@ export default function TimelineSection({
 }: TimelineSectionProps) {
   const resolvedItems = buildTimelineItems(apiData);
 
-  // Show first 3 on homepage; full list on /about#timeline
-  const items = (resolvedItems.length > 0 ? resolvedItems : (propItems ?? [])).slice(0, 3);
+  const items = resolvedItems.slice(0, 3);
+
+  if (items.length === 0) return null;
 
   return (
     <section className="bg-brand-dark relative overflow-hidden text-white">

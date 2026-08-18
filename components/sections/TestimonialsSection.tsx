@@ -5,7 +5,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import NextImage from "next/image";
 import { cn } from "@/lib/utils";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { testimonialsData, TestimonialItem } from "@/data/sections-data";
+import { TestimonialItem } from "@/data/sections-data";
 import { ApiTestimonial } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 
@@ -154,6 +154,8 @@ export default function TestimonialsSection({
 }: TestimonialsSectionProps) {
   const items = buildTestimonials(apiData);
 
+  if (items.length === 0) return null;
+
   const TESTIMONIALS_COUNT = items.length;
   const LOOP_SET_START = TESTIMONIALS_COUNT;
   const LOOP_RESET_LIMIT = TESTIMONIALS_COUNT * 2;
@@ -253,12 +255,12 @@ export default function TestimonialsSection({
         <div className="mb-[48px] flex flex-col items-center gap-6 md:mb-[64px] md:gap-4">
           {/* Badge - Figma: Success stories */}
           <SectionBadge variant="outline" showDot>
-            {testimonialsData.badge}
+            Success Stories
           </SectionBadge>
 
           {/* Title - Figma: "Voice of Impact", 48px/32px */}
           <h2 className="text-brand-dark font-sans text-[32px] leading-[38px] font-medium md:text-[48px] md:leading-[58px]">
-            {testimonialsData.title}
+            Voice of Impact
           </h2>
         </div>
 

@@ -20,34 +20,24 @@ export default async function JoinTeamSection({ apiData: initialApiData }: JoinT
     }
   }
 
-  const activeJoinTeamData =
-    Array.isArray(apiData) && apiData.length > 0
-      ? {
-          badge: apiData[0].title,
-          title: apiData[0].subtitle,
-          cta: {
-            label: apiData[0].cta_text,
-            href: apiData[0].cta_link,
-          },
-          images: {
-            desktop: resolveImageUrl(apiData[0].background_image),
-            mobile: resolveImageUrl(apiData[0].background_image),
-          },
-        }
-      : {
-          badge: "Join our Team",
-          title: "Grow Your Career\nWith Malik Seeds",
-          cta: {
-            label: "Explore Careers",
-            href: "/careers",
-          },
-          images: {
-            desktop: "/images/team/team-banner.png",
-            mobile: "/images/team/team-banner.png",
-          },
-        };
+  if (!Array.isArray(apiData) || apiData.length === 0 || !apiData[0]) {
+    return null;
+  }
 
-  const joinTeamData = activeJoinTeamData;
+  const banner = apiData[0];
+  const joinTeamData = {
+    badge: banner.title || "",
+    title: banner.subtitle || "",
+    cta: {
+      label: banner.cta_text || "",
+      href: banner.cta_link || "#",
+    },
+    images: {
+      desktop: resolveImageUrl(banner.background_image),
+      mobile: resolveImageUrl(banner.background_image),
+    },
+  };
+
   return (
     // Desktop: 1440x690, bg #F2F7F1 (Figma: Frame 2147229633)
     <section className="w-full bg-[#F2F7F1] py-10 md:py-16 xl:py-[100px]" id="careers">
@@ -77,7 +67,7 @@ export default async function JoinTeamSection({ apiData: initialApiData }: JoinT
                     fontWeight: 500,
                   }}
                 >
-                  {joinTeamData.title.split("\n").map((line, idx) => (
+                  {(joinTeamData.title || "").split("\n").map((line, idx) => (
                     <Fragment key={idx}>
                       {idx > 0 && <br className="hidden xl:inline" />}
                       {line}

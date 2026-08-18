@@ -6,7 +6,6 @@ import TimelineStory from "@/components/TimelineStory";
 import AboutMissionTwo from "@/components/sections/AboutMissionTwo";
 import GalleryHeroSection from "@/components/sections/GalleryHeroSection";
 import JoinTeamSection from "@/components/sections/JoinTeamSection";
-import { timelineItems } from "@/data/sections-data";
 import { galleryApi, aboutpageApi, getPageMetadata } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
 import { Metadata } from "next";
@@ -53,7 +52,6 @@ export default async function AboutPage() {
       <AboutMissionOne apiData={ourStoryData?.mission} />
       <AboutValues apiData={ourStoryData?.values} />
       <TimelineStory
-        items={timelineItems}
         apiData={ourStoryData?.timeline ? (ourStoryData.timeline as any) : undefined}
       />
       <AboutMissionTwo apiData={ourStoryData?.mission} />

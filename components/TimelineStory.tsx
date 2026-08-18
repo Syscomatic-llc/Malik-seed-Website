@@ -907,6 +907,8 @@ export default function TimelineStory({
     return items;
   }, [apiData, items]);
 
+  if (resolvedItems.length === 0) return null;
+
   // One shared, spring-smoothed scroll value drives every row's dashed-line
   // reveal (each sliced to its own pixel-accurate range) and the single
   // traveling dot — so all of it moves at identical speed, by construction.

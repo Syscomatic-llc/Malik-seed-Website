@@ -89,6 +89,10 @@ export default function NewsSection({ apiData }: NewsSectionProps) {
         }))
       : [],
   };
+
+  if (!newsData.items || newsData.items.length === 0) {
+    return null;
+  }
   const [activeIdx, setActiveIdx] = useState(0);
   const maxIdx = Math.max(0, newsData.items.length - 2);
 
