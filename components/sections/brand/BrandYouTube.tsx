@@ -25,6 +25,8 @@ export default function BrandYouTube({
   brandLogo,
   brandLogoAlt = "Brand logo",
 }: BrandYouTubeProps) {
+  if (!images || images.length === 0) return null;
+
   return (
     <section className="w-full bg-[#F2F7F1] px-4 py-10 md:px-8 md:py-[60px] lg:px-[100px] lg:py-[100px]">
       <div className="mx-auto flex max-w-[1240px] flex-col items-center">

@@ -228,15 +228,23 @@ function PaginationControls({
   );
 }
 
-export default function BrandProjectsTable() {
+interface BrandProjectsTableProps {
+  projects?: Project[];
+}
+
+export default function BrandProjectsTable({ projects }: BrandProjectsTableProps = {}) {
+  if (projects && projects.length === 0) return null;
+
+  const projectList = projects && projects.length > 0 ? projects : PROJECTS;
+
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedIdx, setExpandedIdx] = useState<number | null>(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const totalPages = Math.ceil(PROJECTS.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(projectList.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedProjects = PROJECTS.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const paginatedProjects = projectList.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handlePageChange = (page: number) => {
     setIsLoading(true);

@@ -1,5 +1,9 @@
 import { apiGet, RequestOptions } from "./client";
-import { ApiBrand } from "./types";
+import {
+  ApiBrand,
+  ApiPotatoSeedDataResponse,
+  ApiInnovationDevelopmentDataResponse,
+} from "./types";
 
 export const brandsApi = {
   getBrands(category?: string | null, options?: RequestOptions) {
@@ -10,5 +14,16 @@ export const brandsApi = {
         ...(category ? { category } : {}),
       },
     });
+  },
+
+  getPotatoSeedData(options?: RequestOptions) {
+    return apiGet<ApiPotatoSeedDataResponse>("/api/v1/our-brands/brands/potato-seeds/detail", options);
+  },
+
+  getInnovationDevelopmentData(options?: RequestOptions) {
+    return apiGet<ApiInnovationDevelopmentDataResponse>(
+      "/api/v1/our-brands/brands/innovation-development/detail",
+      options
+    );
   },
 };

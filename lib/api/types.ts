@@ -541,6 +541,68 @@ export interface ApiPageSeo {
   og_description?: string | null;
 }
 
+// Potato Seed Brand API Response
+export interface ApiPotatoSeedDataResponse {
+  potatoSeedData?: {
+    hero?: {
+      bgImage?: string;
+    };
+    intro?: {
+      highlights?: string[];
+    };
+    grid?: {
+      badge?: string;
+      images?: string[];
+    };
+    split?: {
+      badge?: string;
+      image?: string;
+    };
+    youtube?: {
+      youtubeUrl?: string;
+      images?: string[];
+      brandLogo?: string;
+    };
+  };
+}
+
+export interface ApiInnovationDevelopmentProject {
+  title?: string;
+  duration?: string;
+  focus?: string;
+  location?: string;
+  donor?: string;
+}
+
+export interface ApiInnovationDevelopmentDataResponse {
+  innovationDevelopmentData?: {
+    hero?: {
+      bgImage?: string;
+    };
+    intro?: {
+      stats?: Array<{
+        label?: string;
+        value?: number | string;
+        suffix?: string;
+      }>;
+      highlights?: string[];
+    };
+    split1?: {
+      badge?: string;
+      image?: string;
+    };
+    grid?: {
+      badge?: string;
+      images?: string[];
+    };
+    split2?: {
+      badge?: string;
+      image?: string;
+    };
+    Projects?: ApiInnovationDevelopmentProject[];
+  };
+}
+
 
 
 
