@@ -10,7 +10,7 @@ Icon-only images (chevrons, arrows, upload icons, indicators) have been skipped.
 
 | Page / Section | Image Description | Desktop Frame Size (W × H) | Codebase Component / File | Sizing Mechanism / Styling Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Hero Section** | Hero Background Slideshow | `1440 × 900 px` | [HeroSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/HeroSection.tsx#L32) | Uses `fill` layout with `object-cover` within a full-screen `h-screen w-full` section container. |
+| **Hero Section** | Hero Background Slideshow | `1440 × 900 px` | [HeroSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/HeroSection.tsx#L85) | Uses `fill` layout with `object-cover` within a full-screen `h-screen w-full` section container. |
 | **About Section** | Malik Seeds Team Banner | `503 × 340 px` | [AboutSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/AboutSection.tsx#L228) | Uses container aspect ratio `aspect-[503/340]` with a fixed width constraint `xl:w-[503px]`. |
 | **About Section** | Years of Experience Sub-image 1 | `243 × 226 px` | [AboutSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/AboutSection.tsx#L243) | Uses container aspect ratio `aspect-[243/226] flex-1` inside a `503px` width parent. |
 | **About Section** | Farmer Partners Sub-image 2 | `243 × 226 px` | [AboutSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/AboutSection.tsx#L254) | Uses container aspect ratio `aspect-[243/226] flex-1` inside a `503px` width parent. |
@@ -20,7 +20,7 @@ Icon-only images (chevrons, arrows, upload icons, indicators) have been skipped.
 | **Testimonials Section** | Active Testimonial Photo | `398 × 560 px` | [TestimonialsSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/TestimonialsSection.tsx#L49) | Card size is fixed at `398px` width. Active card height expands to `560px` with the image filling it. |
 | **Testimonials Section** | Inactive Testimonial Photo | `398 × 480 px` | [TestimonialsSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/TestimonialsSection.tsx#L50) | Inactive card height shrinks to `480px` with the image filling it. |
 | **Partners Section** | Development Partner Logos | `161 × 60 px` | [PartnersSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/PartnersSection.tsx#L87) | Uses fixed dimensions `width={161} height={60}` and class `shrink-0 object-contain` for loop scrolling. |
-| **News Section** | News Article Thumbnail (Home Grid) | `359 × 264 px` | [NewsSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/NewsSection.tsx#L37) | Standardizes thumbnail container height to `264px` with fixed card widths of `359px` on large viewports (`xl` and above). |
+| **News Section** | News Article Thumbnail (Home Grid) | `361 × 264 px` | [NewsSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/NewsSection.tsx#L36) | Standardizes thumbnail container height to `264px` with fixed card width of `361px` on large viewports (`xl` and above). |
 | **Join Our Team Section** | Overlapping Team Image | `726 × 544 px` | [JoinTeamSection.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/JoinTeamSection.tsx#L80) | Absolute positioned container size `w-[726px] h-[544px] top-[-32px] left-[-30px]` overflowing a parent `690x430` crop mask. |
 | **Global Footer** | Malik Seeds Brand Logo | `270 × 35 px` | [Footer.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/Footer.tsx#L164) | Renders with fixed dimensions `width={270} height={35}` and responsive width class `md:w-67.5` (`270px`). |
 | **Global Footer** | Bottom Brand Wordmark | `1225 × 151 px` | [Footer.tsx](file:///c:/Users/arafa/Documents/Arafat/malik-seed-website/components/sections/Footer.tsx#L231) | Renders with fixed dimensions `width={1225} height={151}` and class `md:max-w-306.25` (`1225px`). |
@@ -94,7 +94,25 @@ Icon-only images (chevrons, arrows, upload icons, indicators) have been skipped.
 
 ---
 
+## 6. Recommended CMS Image Crop Presets & Guidelines
+
+To prevent awkward image cropping or subject cut-offs across desktop and mobile screens, set up **5 unified crop presets** in your CMS based on target aspect ratios:
+
+| Preset Name | Aspect Ratio | Target Frame Sizes | Min CMS Upload (2x Retina) | Common Usage |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Full Banner / Hero** | **16 : 9** (~1.6:1) | `1440 × 900 px`, `1240 × 698 px`, `1030 × 520 px` | **2560 × 1440 px** | Hero Slideshow, Brand Banners, Farm Split Banner |
+| **2. Landscape Cards** | **1.6 : 1** (16:10) | `608 × 377 px`, `397 × 377 px`, `365 × 260 px`, `361 × 264 px` | **1216 × 754 px** | News Feed Cards, Product Grid, Brand Grid 2-Up/3-Up |
+| **3. Story & Split Blocks** | **1.47 : 1** (3:2 / 4:3) | `503 × 340 px`, `503 × 372 px`, `605 × 464 px`, `503 × 530 px` | **1006 × 680 px** | Timeline Story Photo, About Team Banner, Brand Split |
+| **4. Tall / Portrait Cards** | **1 : 1.4** (~1:1.5) | `398 × 560 px`, `398 × 598 px`, `608 × 714 px` | **800 × 1120 px** | Testimonial Cards, Guest Review Scans, Origene Intro |
+| **5. Square & Avatars** | **1 : 1** | `398 × 398 px`, `180 × 180 px`, `48 × 48 px` | **800 × 800 px** | Journey Bento Items, Career Testimonials, TOC Avatars |
+
+> [!TIP]
+> **Focal Point Selector**: Enable a Focal Point (Hotspot) selector in your CMS so content editors can pin key subjects (e.g. human faces, seeds, or flowers). Next.js will center the crop dynamically on smaller devices.
+
+---
+
 > [!NOTE]
 > All sizes computed here are based on the standard `1440px` desktop layout width defined in the Tailwind configuration and parent container limits (`max-w-[1440px]`, `max-w-[1240px]`, and `max-w-[1030px]`). 
 > 
 > Responsive widths scale dynamically to adapt to smaller viewports (down to 1024px for desktop mode boundaries) while retaining the specified aspect ratios or static height parameters.
+
