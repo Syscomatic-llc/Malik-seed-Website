@@ -47,23 +47,20 @@ export default function OptimizedImage({
 
   // Sync state if src changes
   useEffect(() => {
-    if (loadedCache.has(resolvedSrc)) {
-      setLoading(false);
-    } else {
-      setLoading(true);
-    }
-    setError(false);
+    const isCached = loadedCache.has(resolvedSrc);
+    setLoading((prev) => (prev !== !isCached ? !isCached : prev));
+    setError((prev) => (prev ? false : prev));
   }, [resolvedSrc]);
 
   const handleLoad = (e: any) => {
     loadedCache.add(resolvedSrc);
-    setLoading(false);
+    setLoading((prev) => (prev ? false : prev));
     if (onLoad) onLoad(e);
   };
 
   const handleError = (e: any) => {
-    setError(true);
-    setLoading(false);
+    setError((prev) => (!prev ? true : prev));
+    setLoading((prev) => (prev ? false : prev));
     if (onError) onError(e);
   };
 
@@ -71,7 +68,7 @@ export default function OptimizedImage({
     placeholder === "blur" && blurDataURL ? "blur" : undefined;
 
   return (
-    <div 
+    <div
       className="relative h-full w-full overflow-hidden"
       onTouchStart={() => setIsTouched(true)}
       onTouchEnd={() => setIsTouched(false)}
@@ -93,9 +90,8 @@ export default function OptimizedImage({
         blurDataURL={blurDataURL}
         onError={handleError}
         unoptimized={props.unoptimized ?? (isProxied || isSvg)}
-        className={`${className} transition-all duration-500 ${
-          loading ? "opacity-0" : "opacity-100"
-        } ${isTouched ? "scale-105" : ""}`}
+        className={`${className} transition-all duration-500 ${loading ? "opacity-0" : "opacity-100"
+          } ${isTouched ? "scale-105" : ""}`}
         style={style}
       />
     </div>

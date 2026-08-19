@@ -868,10 +868,130 @@ function TabletTimelineRow({
   );
 }
 
+function MobileTimelineItem({
+  item,
+  idx,
+  isEven,
+  isFirst,
+  isLast,
+  mobileSmoothProgress,
+  mobilePoints,
+  firstMobileBadgeRef,
+  lastMobileBadgeRef,
+}: {
+  item: TimelineItem;
+  idx: number;
+  isEven: boolean;
+  isFirst: boolean;
+  isLast: boolean;
+  mobileSmoothProgress: import("motion/react").MotionValue<number>;
+  mobilePoints: number[];
+  firstMobileBadgeRef: React.RefObject<HTMLDivElement | null>;
+  lastMobileBadgeRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const badgeRef = isFirst
+    ? firstMobileBadgeRef
+    : isLast
+      ? lastMobileBadgeRef
+      : undefined;
+
+  // Every year gets a glow now — prefer the dedicated glow
+  // image, fall back to the item's main photo so nobody
+  // renders blank.
+  const glowSrc = item.glow || item.image;
+  const yearOpacity = useYearHighlight(
+    mobileSmoothProgress,
+    idx,
+    mobilePoints,
+    0.7
+  );
+
+  const imageEl = (
+    <div
+      className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] isolate [transform:translate3d(0,0,0)] ${
+        isEven ? "top-0" : "top-[392px]"
+      }`}
+    >
+      {item.image && (
+        <OptimizedImage
+          src={item.image}
+          alt={item.title}
+          fill
+          className="object-cover object-top scale-[1.04]"
+          sizes="310px"
+        />
+      )}
+    </div>
+  );
+
+  const textEl = (
+    <div
+      className={cn(
+        "absolute left-[28px] w-[310px] h-[240px] rounded-[24px]",
+        isEven ? "top-[392px]" : "top-0"
+      )}
+    >
+      <GlowOverlay
+        src={glowSrc}
+        className={cn(
+          "h-[100px] w-[140px] rounded-[16px]",
+          isEven ? "bottom-[8px] left-[8px]" : "top-[8px] right-[8px]"
+        )}
+      />
+
+      <div
+        className={cn(
+          "absolute left-4 right-4 z-10 flex flex-col gap-4 text-center items-center",
+          isEven ? "top-0" : "bottom-0"
+        )}
+      >
+        <h3
+          className="font-anton text-brand-bg text-[30px] leading-[38px] whitespace-pre-line"
+          style={{ fontFamily: "var(--font-anton)" }}
+        >
+          {item.title}
+        </h3>
+        <p
+          className="text-brand-bg/95 text-[13px] leading-[19px] text-center whitespace-pre-line"
+          style={{ fontFamily: "var(--font-inter)" }}
+        >
+          {item.description}
+        </p>
+      </div>
+    </div>
+  );
+
+  const yearEl = (
+    <div className="pointer-events-none absolute top-[296px] left-0 z-30 flex h-[48px] w-full items-center justify-center">
+      <div
+        ref={badgeRef}
+        className="bg-brand-dark relative z-30 flex h-full items-center select-none px-[24px]"
+      >
+        <motion.span
+          className="font-anton text-brand-light-green text-center text-[40px] leading-[48px]"
+          style={{ fontFamily: "var(--font-anton)", opacity: yearOpacity }}
+        >
+          {item.year}
+        </motion.span>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="relative h-[632px] w-[366px] shrink-0 snap-center">
+      {imageEl}
+      {yearEl}
+      {textEl}
+    </div>
+  );
+}
+
 /* ────────────────── main section ────────────────── */
 
+const EMPTY_ITEMS: TimelineItem[] = [];
+
 export default function TimelineStory({
-  items = [],
+  items = EMPTY_ITEMS,
   apiData,
 }: {
   items?: TimelineItem[];
@@ -938,9 +1058,13 @@ export default function TimelineStory({
     const updateWidths = () => {
       const firstW = firstMobileBadgeRef.current?.offsetWidth || 148;
       const lastW = lastMobileBadgeRef.current?.offsetWidth || 148;
-      setMobileBadgeWidths({ first: firstW, last: lastW });
+      setMobileBadgeWidths((prev) => {
+        if (prev.first === firstW && prev.last === lastW) return prev;
+        return { first: firstW, last: lastW };
+      });
       // scrollWidth of the overflow container = total content width
-      setMobileContentWidth(mobileRef.current?.scrollWidth ?? 0);
+      const scrollW = mobileRef.current?.scrollWidth ?? 0;
+      setMobileContentWidth((prev) => (prev === scrollW ? prev : scrollW));
     };
 
     updateWidths();
@@ -1086,106 +1210,22 @@ export default function TimelineStory({
                   const isEven = idx % 2 === 0;
                   const isFirst = idx === 0;
                   const isLast = idx === resolvedItems.length - 1;
-                  const badgeRef = isFirst
-                    ? firstMobileBadgeRef
-                    : isLast
-                      ? lastMobileBadgeRef
-                      : undefined;
-
-                  // Every year gets a glow now — prefer the dedicated glow
-                  // image, fall back to the item's main photo so nobody
-                  // renders blank.
-                  const glowSrc = item.glow || item.image;
-                  const yearOpacity = useYearHighlight(
-                    mobileSmoothProgress,
-                    idx,
-                    mobilePoints,
-                    0.70
-                  );
-
-                  const imageEl = (
-                    <div
-                      className={`absolute left-[28px] h-[240px] w-[310px] overflow-hidden rounded-[24px] isolate [transform:translate3d(0,0,0)] ${isEven ? "top-0" : "top-[392px]"
-                        }`}
-                    >
-                      {item.image && (
-                        <OptimizedImage
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover object-top scale-[1.04]"
-                          sizes="310px"
-                        />
-                      )}
-                    </div>
-                  );
-
-                  const textEl = (
-                    <div
-                      className={cn(
-                        "absolute left-[28px] w-[310px] h-[240px] rounded-[24px]",
-                        isEven ? "top-[392px]" : "top-0"
-                      )}
-                    >
-                      <GlowOverlay
-                        src={glowSrc}
-                        className={cn(
-                          "h-[100px] w-[140px] rounded-[16px]",
-                          isEven
-                            ? "bottom-[8px] left-[8px]"
-                            : "top-[8px] right-[8px]"
-                        )}
-                      />
-
-                      <div
-                        className={cn(
-                          "absolute left-4 right-4 z-10 flex flex-col gap-4 text-center items-center",
-                          isEven ? "top-0" : "bottom-0"
-                        )}
-                      >
-                        <h3
-                          className="font-anton text-brand-bg text-[30px] leading-[38px] whitespace-pre-line"
-                          style={{ fontFamily: "var(--font-anton)" }}
-                        >
-                          {item.title}
-                        </h3>
-                        <p
-                          className="text-brand-bg/95 text-[13px] leading-[19px] text-center whitespace-pre-line"
-                          style={{ fontFamily: "var(--font-inter)" }}
-                        >
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  );
-
-                  const yearEl = (
-                    <div className="pointer-events-none absolute top-[296px] left-0 z-30 flex h-[48px] w-full items-center justify-center">
-                      <div
-                        ref={badgeRef}
-                        className="bg-brand-dark relative z-30 flex h-full items-center select-none px-[24px]"
-                      >
-                        <motion.span
-                          className="font-anton text-brand-light-green text-center text-[40px] leading-[48px]"
-                          style={{ fontFamily: "var(--font-anton)", opacity: yearOpacity }}
-                        >
-                          {item.year}
-                        </motion.span>
-                      </div>
-                    </div>
-                  );
 
                   return (
-                    <div
+                    <MobileTimelineItem
                       key={item.year}
-                      className="relative h-[632px] w-[366px] shrink-0 snap-center"
-                    >
-                      {imageEl}
-                      {yearEl}
-                      {textEl}
-                    </div>
+                      item={item}
+                      idx={idx}
+                      isEven={isEven}
+                      isFirst={isFirst}
+                      isLast={isLast}
+                      mobileSmoothProgress={mobileSmoothProgress}
+                      mobilePoints={mobilePoints}
+                      firstMobileBadgeRef={firstMobileBadgeRef}
+                      lastMobileBadgeRef={lastMobileBadgeRef}
+                    />
                   );
-                })
+                });
               })()}
             </div>
           </div>

@@ -176,8 +176,8 @@ const GalleryHeroSection = ({
             {visibleImages.map((image, index) => {
               const mobileHideClass =
                 !hasExpanded &&
-                index >= MOBILE_INITIAL_VISIBLE &&
-                index < INITIAL_VISIBLE
+                  index >= MOBILE_INITIAL_VISIBLE &&
+                  index < INITIAL_VISIBLE
                   ? "hidden xl:block"
                   : "";
 
