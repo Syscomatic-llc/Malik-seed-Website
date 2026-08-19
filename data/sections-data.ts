@@ -221,7 +221,7 @@ export const productsData: ProductsData = {
       name: "Potato Seed",
       description: "Bringing Next-Generation Potato Seeds to Farmers",
       image: "/images/products/product-2.png",
-      href: "/our-brands/potato-seed",
+      href: "/our-brands/potato-seeds",
     },
     {
       id: 3,

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ApiService, ApiBrand } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
+import { productsData } from "@/data/sections-data";
 
 type Direction = "horizontal" | "vertical";
 
@@ -89,22 +90,50 @@ function CardContent({
   );
 }
 
+const FALLBACK_HREFS: Record<string, string> = {
+  vegetable: "/our-brands/vegetable-seeds",
+  potato: "/our-brands/potato-seeds",
+  farm: "/our-brands/maliks-farm",
+  origene: "/our-brands/origene",
+  flower: "/our-brands/maliks-flower",
+  innovation: "/our-brands/innovation-development",
+  development: "/our-brands/innovation-development",
+};
+
+function getFallbackHref(item: ApiService | ApiBrand, index: number): string {
+  const nameOrTitle = ("name" in item ? item.name : item.title) || "";
+  const slug = ("slug" in item ? item.slug : "") || "";
+  const searchStr = `${nameOrTitle} ${slug}`.toLowerCase();
+
+  for (const [key, route] of Object.entries(FALLBACK_HREFS)) {
+    if (searchStr.includes(key)) {
+      return route;
+    }
+  }
+
+  return productsData.items[index]?.href || "/our-brands";
+}
+
 /**
  * Map API services to the internal ProductItem shape.
  * If API data is missing, falls back to static data.
+ * Always resolves to canonical static fallback routes for href.
  */
 function buildProducts(apiData?: (ApiService | ApiBrand)[]): ProductItem[] {
   if (Array.isArray(apiData) && apiData.length > 0) {
-    return apiData.map((item) => {
+    return apiData.map((item, index) => {
+      const fallbackItem = productsData.items[index];
+      const fallbackHref = getFallbackHref(item, index);
+
       // Check if it is ApiBrand by verifying if 'name' property exists
       if ("name" in item) {
         return {
           id: item.id,
           category: item.name,
           name: item.name,
-          description: item.description || item.tagline || "",
-          image: resolveImageUrl(item.logo_url || item.image_url || ""),
-          href: `/our-brands/${item.slug}`,
+          description: item.description || item.tagline || fallbackItem?.description || "",
+          image: resolveImageUrl(item.logo_url || item.image_url || fallbackItem?.image || ""),
+          href: fallbackHref,
         };
       } else {
         // It is ApiService
@@ -112,14 +141,14 @@ function buildProducts(apiData?: (ApiService | ApiBrand)[]): ProductItem[] {
           id: item.id,
           category: item.title,
           name: item.title,
-          description: item.description || "",
-          image: resolveImageUrl(item.image_url || ""),
-          href: item.link || "",
+          description: item.description || fallbackItem?.description || "",
+          image: resolveImageUrl(item.image_url || fallbackItem?.image || ""),
+          href: fallbackHref,
         };
       }
     });
   }
-  return [];
+  return productsData.items;
 }
 
 export default function ProductsSection({
