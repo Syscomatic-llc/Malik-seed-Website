@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import sharp from "sharp";
 import crypto from "crypto";
 import fs from "fs/promises";
 import path from "path";
+import os from "os";
 
 // Helper to extract hostname from URL
 function getHostname(urlStr: string | undefined): string {
@@ -14,9 +14,25 @@ function getHostname(urlStr: string | undefined): string {
   }
 }
 
+// Lazy-load sharp to prevent module load failures on environments missing platform binaries
+let sharpInstance: any = null;
+async function getSharp() {
+  if (sharpInstance) return sharpInstance;
+  try {
+    const mod = await import("sharp");
+    sharpInstance = mod.default || mod;
+    return sharpInstance;
+  } catch (err) {
+    console.warn("[image-proxy] Native sharp module unavailable, using passthrough:", err);
+    return null;
+  }
+}
+
 // Allow proxying from our CMS domain
 const ALLOWED_HOSTNAME = getHostname(process.env.API_BACKEND_URL);
-const CACHE_DIR = path.join(process.cwd(), ".image-cache");
+
+// Serverless-safe cache directory in /tmp (works across Vercel, AWS Lambda, Linux, Windows)
+const CACHE_DIR = path.join(os.tmpdir(), "malik-seed-image-cache");
 
 // The CMS serves files slowly (e.g. 569 KB/s for 8MB+ PNGs), so we use a 45s timeout
 const FETCH_TIMEOUT_MS = 45000;
@@ -64,7 +80,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Invalid url" }, { status: 400 });
   }
 
-  if (parsedUrl.hostname !== ALLOWED_HOSTNAME) {
+  if (ALLOWED_HOSTNAME && parsedUrl.hostname !== ALLOWED_HOSTNAME) {
     return NextResponse.json({ error: "Host not allowed" }, { status: 403 });
   }
 
@@ -76,17 +92,16 @@ export async function GET(req: NextRequest) {
     ? Math.min(100, Math.max(10, parseInt(qualityParam, 10)))
     : 75;
 
-  // Check disk cache
-  await fs.mkdir(CACHE_DIR, { recursive: true });
   const key = getCacheKey(imageUrl, width, quality);
   const cachePath = path.join(CACHE_DIR, `${key}.webp`);
 
+  // Check disk cache in /tmp
   try {
     const cached = await fs.readFile(cachePath);
     return new NextResponse(cached, {
       headers: {
         "Content-Type": "image/webp",
-        "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, immutable`,
+        "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, stale-while-revalidate=86400, immutable`,
         "X-Image-Proxy-Cache": "HIT",
       },
     });
@@ -110,40 +125,45 @@ export async function GET(req: NextRequest) {
 
     const arrayBuffer = await upstream.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    const contentType = upstream.headers.get("content-type") || "image/png";
 
-    // Optimize with sharp
-    let optimized: Buffer;
-    try {
-      optimized = await sharp(buffer)
-        .resize({ width, withoutEnlargement: true })
-        .webp({ quality, effort: 4, smartSubsample: true })
-        .toBuffer();
-    } catch (sharpError) {
-      console.error(
-        "[image-proxy] sharp optimization failed, serving raw image:",
-        sharpError
-      );
-      // Fallback: serve raw buffer if sharp fails (e.g. unsupported format/corrupted file)
-      const contentType = upstream.headers.get("content-type") || "image/png";
-      return new NextResponse(new Uint8Array(buffer), {
-        headers: {
-          "Content-Type": contentType,
-          "Cache-Control": "no-store",
-          "X-Image-Proxy-Cache": "BYPASS",
-        },
-      });
+    // Attempt optimization with sharp if available
+    const sharp = await getSharp();
+    if (sharp) {
+      try {
+        const optimized = await sharp(buffer)
+          .resize({ width, withoutEnlargement: true })
+          .webp({ quality, effort: 4, smartSubsample: true })
+          .toBuffer();
+
+        // Write to disk cache in background (non-blocking)
+        fs.mkdir(CACHE_DIR, { recursive: true })
+          .then(() => fs.writeFile(cachePath, optimized))
+          .catch((err) => {
+            console.error("[image-proxy] failed to write cache file:", err);
+          });
+
+        return new NextResponse(new Uint8Array(optimized), {
+          headers: {
+            "Content-Type": "image/webp",
+            "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, stale-while-revalidate=86400, immutable`,
+            "X-Image-Proxy-Cache": "MISS",
+          },
+        });
+      } catch (sharpError) {
+        console.error(
+          "[image-proxy] sharp optimization failed, serving raw image:",
+          sharpError
+        );
+      }
     }
 
-    // Write to disk cache in background
-    fs.writeFile(cachePath, optimized).catch((err) => {
-      console.error("[image-proxy] failed to write cache file:", err);
-    });
-
-    return new NextResponse(new Uint8Array(optimized), {
+    // Fallback: serve raw buffer if sharp fails or is not available
+    return new NextResponse(new Uint8Array(buffer), {
       headers: {
-        "Content-Type": "image/webp",
-        "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, immutable`,
-        "X-Image-Proxy-Cache": "MISS",
+        "Content-Type": contentType,
+        "Cache-Control": `public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400`,
+        "X-Image-Proxy-Cache": "BYPASS",
       },
     });
   } catch (err: any) {

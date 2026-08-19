@@ -4,6 +4,7 @@ import dns from "dns";
 dns.setDefaultResultOrder("ipv4first");
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["sharp"],
   images: {
     // Serve modern formats — WebP is ~30% smaller than JPEG at same quality.
     formats: ["image/webp"],
