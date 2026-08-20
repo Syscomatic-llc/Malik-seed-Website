@@ -37,64 +37,7 @@ const ASSETS = {
 } as const;
 
 // ---------------------------------------------------------------------------
-// Heading regex — compiled once at module load
-// ---------------------------------------------------------------------------
-const HEADING_REGEX = /<(h2|h3)(\s+[^>]*)?>[\s\S]*?<\/\1>/gi;
-const TAG_REGEX = /<[^>]*>/g;
-const SLUG_STRIP_REGEX = /[^a-z0-9]+/g;
-const SLUG_TRIM_REGEX = /(^-|-$)/g;
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Parses all `<h2>`/`<h3>` nodes from `html`, injects unique IDs for
- * scroll-anchoring, and returns a heading manifest consumed by `NewsTOC`.
- */
-function parseHeadings(html: string): {
-  headings: { text: string; id: string; level: number }[];
-  parsedHtml: string;
-} {
-  const headings: { text: string; id: string; level: number }[] = [];
-  let counter = 0;
-
-  HEADING_REGEX.lastIndex = 0;
-
-  const parsedHtml = html.replace(
-    /<(h2|h3)(\s+[^>]*)?>([\s\S]*?)<\/\1>/gi,
-    (match, tag, attrs, innerHtml: string) => {
-      const cleanText = innerHtml
-        .replace(/&nbsp;/g, " ")
-        .replace(/\u00a0/g, " ")
-        .replace(TAG_REGEX, "")
-        .trim();
-      const id = `heading-${cleanText
-        .toLowerCase()
-        .replace(SLUG_STRIP_REGEX, "-")
-        .replace(SLUG_TRIM_REGEX, "")}-${counter++}`;
-      const level = tag.toLowerCase() === "h2" ? 2 : 3;
-      headings.push({ text: cleanText, id, level });
-
-      const attributes = attrs || "";
-      let headingAttrs = attributes;
-      const classRegex = /class=(['"])(.*?)\1/i;
-      if (classRegex.test(headingAttrs)) {
-        headingAttrs = headingAttrs.replace(
-          classRegex,
-          (_: string, quote: string, classVal: string) =>
-            `class=${quote}scroll-mt-[120px] ${classVal}${quote}`
-        );
-      } else {
-        headingAttrs += ' class="scroll-mt-[120px]"';
-      }
-
-      return `<${tag} id="${id}"${headingAttrs}>${innerHtml}</${tag}>`;
-    }
-  );
-
-  return { headings, parsedHtml };
-}
+import { formatRichTextWithHeadings } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Route exports
@@ -195,7 +138,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       </div>
     );
   }
-  const { headings, parsedHtml } = parseHeadings(article.contentHtml);
+
+  const { headings, html: parsedHtml } = formatRichTextWithHeadings(
+    article.contentHtml,
+    { mode: "news" }
+  );
   const author = article.author ?? DEFAULT_AUTHOR;
 
   // Circular prev/next navigation

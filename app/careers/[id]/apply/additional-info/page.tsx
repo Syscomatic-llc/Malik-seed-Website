@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Upload, FileText, Trash2, ArrowRight, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, isValidBangladeshiPhone } from "@/lib/utils";
 
 import { hiringApi } from "@/lib/api";
 import {
@@ -173,9 +173,8 @@ export default function AdditionalInfoPage() {
       setError("Phone number is required");
       return;
     }
-    const phoneRegex = /^[\d\s\+\-\(\)]{6,20}$/;
-    if (!phoneRegex.test(cleanPhone)) {
-      setError("Please enter a valid phone number (6-20 characters/digits)");
+    if (!isValidBangladeshiPhone(cleanPhone)) {
+      setError("Please enter a valid Bangladeshi phone number (e.g. 017XXXXXXXX or +88017XXXXXXXX)");
       return;
     }
 
@@ -321,7 +320,7 @@ export default function AdditionalInfoPage() {
                 </Label>
                 <Input
                   id="phone"
-                  placeholder="Enter your phone number"
+                  placeholder="e.g. 01712345678 or +8801712345678"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   disabled={loading}

@@ -10,31 +10,31 @@ export function isHtmlContent(str?: string | null): boolean {
   return /<[a-z][\s\S]*>/i.test(str);
 }
 
-export function cleanHtml(html?: string | null): string {
-  if (!html) return "";
-  let cleaned = html
-    .replace(/&nbsp;/g, " ")
-    .replace(/\u00a0/g, " ")
-    .replace(/<p>\s*<\/p>/gi, "");
+/**
+ * Validates Bangladeshi mobile phone numbers:
+ * Accepts formats like:
+ * - 01712345678 (11 digits starting with 013-019)
+ * - +8801712345678 or 8801712345678 (with country code)
+ * - Allows spaces and hyphens e.g. "+880 1712-345678" or "01712 345678"
+ */
+export function isValidBangladeshiPhone(phone?: string | null): boolean {
+  if (!phone) return false;
+  const clean = phone.trim().replace(/[\s\-\(\)]/g, "");
+  return /^(?:\+88|88)?01[3-9]\d{8}$/.test(clean);
+}
 
-  // Format any rich text anchor link: external links open safely in a new tab
-  cleaned = cleaned.replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1([^>]*)>/gi, (match, quote, href, rest) => {
-    if (!href) return match;
-    const isExternal = /^https?:\/\//i.test(href) || /^mailto:/i.test(href) || /^tel:/i.test(href) || href.startsWith("//");
-    if (isExternal && !/target=/i.test(match)) {
-      return `<a href="${href}" target="_blank" rel="noopener noreferrer"${rest}>`;
-    }
-    return match;
-  });
+export {
+  formatRichText,
+  formatRichTextWithHeadings,
+  type FormatRichTextOptions,
+  type FormatRichTextResult,
+  type HeadingItem,
+  type RichTextMode,
+} from "./rich-text-formatter";
+import { formatRichText, type FormatRichTextOptions } from "./rich-text-formatter";
 
-  // Resolve image URLs inside rich text HTML content
-  cleaned = cleaned.replace(/<img\s+(?:[^>]*?\s+)?src=(["'])(.*?)\1([^>]*)>/gi, (match, quote, src, rest) => {
-    if (!src) return match;
-    const resolvedSrc = resolveImageUrl(src);
-    return `<img src="${resolvedSrc}"${rest}>`;
-  });
-
-  return cleaned;
+export function cleanHtml(html?: string | null, options?: FormatRichTextOptions): string {
+  return formatRichText(html, options);
 }
 
 /**

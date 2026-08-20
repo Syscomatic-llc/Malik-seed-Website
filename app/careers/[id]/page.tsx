@@ -13,7 +13,7 @@ import {
 import ActionButton from "@/components/ActionButton";
 import { hiringApi, mapApiPositionToJobPosition, getPageMetadata } from "@/lib/api";
 import { BenefitBadge } from "@/components/ui/BenefitBadge";
-import { resolveImageUrl } from "@/lib/utils";
+import { resolveImageUrl, cleanHtml, isHtmlContent } from "@/lib/utils";
 
 interface JobDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -23,54 +23,6 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 const SITE_NAME = "Malik Seeds";
-
-function cleanHtml(html: string): string {
-  if (!html) return "";
-  
-  let cleaned = html
-    .replace(/&nbsp;/g, " ")
-    .replace(/\u00a0/g, " ");
-
-  // Format heading tags (h1-h6) containing emojis cleanly without converting headings to pills
-  const headingEmojiRegex = /<(h[1-6])([^>]*)>\s*([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF])\s*([\s\S]*?)<\/\1>/gi;
-  cleaned = cleaned.replace(headingEmojiRegex, (match, tag, attrs, emoji, text) => {
-    return `<${tag}${attrs}><span class="heading-emoji">${emoji}</span> ${text.trim()}</${tag}>`;
-  });
-
-  // Convert ONLY short standalone benefit paragraphs (under 60 chars) starting with an emoji into Figma benefit pills
-  const benefitPillRegex = /<p>\s*([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF])\s*([\s\S]{1,60}?)<\/p>/gi;
-  cleaned = cleaned.replace(benefitPillRegex, (match, emoji, text) => {
-    const cleanText = text.trim();
-    if (cleanText.includes("<h") || cleanText.length > 60) return match;
-    return `<span class="job-benefit-pill"><span class="job-benefit-emoji">${emoji}</span><span class="job-benefit-text">${cleanText}</span></span>`;
-  });
-
-  // Ensure external links in rich text open safely in a new tab
-  cleaned = cleaned.replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1([^>]*)>/gi, (match, quote, href, rest) => {
-    if (!href) return match;
-    const isExternal = /^https?:\/\//i.test(href) || /^mailto:/i.test(href) || /^tel:/i.test(href) || href.startsWith("//");
-    if (isExternal && !/target=/i.test(match)) {
-      return `<a href="${href}" target="_blank" rel="noopener noreferrer"${rest}>`;
-    }
-    return match;
-  });
-
-  // Resolve image URLs inside rich text HTML content
-  cleaned = cleaned.replace(/<img\s+(?:[^>]*?\s+)?src=(["'])(.*?)\1([^>]*)>/gi, (match, quote, src, rest) => {
-    if (!src) return match;
-    const resolvedSrc = resolveImageUrl(src);
-    return `<img src="${resolvedSrc}"${rest}>`;
-  });
-
-  return cleaned;
-}
-
-function isHtmlContent(str: string): boolean {
-  if (!str) return false;
-  return /<[a-z][\s\S]*>/i.test(str);
-}
-
-/** Statically pre-generate dynamic routes for all job positions at build time. */
 export async function generateStaticParams() {
   try {
     const apiPositions = await hiringApi.getPositions(undefined, { revalidate: 0, tags: ["careers"] });
@@ -301,7 +253,7 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                   <div
                     className="job-prose"
                     dangerouslySetInnerHTML={{
-                      __html: cleanHtml(position.fullDescription),
+                      __html: cleanHtml(position.fullDescription, { mode: "job" }),
                     }}
                   />
                 )}
