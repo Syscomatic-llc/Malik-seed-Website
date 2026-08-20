@@ -3,6 +3,8 @@ import {
   ApiBrand,
   ApiPotatoSeedDataResponse,
   ApiInnovationDevelopmentDataResponse,
+  ApiMaliksFarmDataResponse,
+  ApiMaliksFlowerDataResponse,
 } from "./types";
 
 export const brandsApi = {
@@ -26,4 +28,20 @@ export const brandsApi = {
       options
     );
   },
+
+  getMaliksFarmData(options?: RequestOptions) {
+    return apiGet<ApiMaliksFarmDataResponse>(
+      "/api/v1/our-brands/brands/maliks-farm/detail",
+      options
+    );
+  },
+
+  getMaliksFlowerData(options?: RequestOptions) {
+    return apiGet<ApiMaliksFlowerDataResponse>(
+      "/api/v1/our-brands/brands/maliks-flower/detail",
+      options
+    );
+  },
 };
+
+

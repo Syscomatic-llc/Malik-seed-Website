@@ -75,16 +75,42 @@ function FacilityCard({
   );
 }
 
+export interface BrandTrainingProps {
+  contactInfo?: ApiContactInfo | null;
+  trainingData?: {
+    badge?: string;
+    programs?: Array<{
+      id: string;
+      title: string;
+      image: string;
+    }>;
+    facilities?: Array<{
+      title: string;
+      description: string;
+      image: string;
+    }>;
+  };
+  showTestimonials?: boolean;
+}
+
 export default function BrandTraining({
   contactInfo,
-}: {
-  contactInfo?: ApiContactInfo | null;
-}) {
-  const [activeTab, setActiveTab] = useState("global-gap");
-  const facilities = maliksFarmData.training.facilities;
+  trainingData,
+  showTestimonials = true,
+}: BrandTrainingProps) {
+  const badge = trainingData?.badge || maliksFarmData.training.badge;
+  const programs = trainingData?.programs && trainingData.programs.length > 0
+    ? trainingData.programs
+    : maliksFarmData.training.programs;
+  const facilities = trainingData?.facilities && trainingData.facilities.length > 0
+    ? trainingData.facilities
+    : maliksFarmData.training.facilities;
+
+  const [activeTab, setActiveTab] = useState(programs[0]?.id || "global-gap");
 
   const titleRef = useRef<HTMLDivElement>(null);
   const [titleVisible, setTitleVisible] = useState(false);
+
 
   useEffect(() => {
     const el = titleRef.current;
@@ -209,7 +235,7 @@ export default function BrandTraining({
           {/* Header */}
           <div className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-6 text-center">
             <SectionBadge variant="dark" showDot>
-              {maliksFarmData.training.badge}
+              {badge}
             </SectionBadge>
             <div className="flex flex-col gap-3">
               <h2 className="font-sans text-[32px] leading-[38px] font-medium text-[#F2F7F1] md:text-[48px] md:leading-[58px]">
@@ -221,7 +247,7 @@ export default function BrandTraining({
           {/* Interactive Program Tabs */}
           <div className="flex w-full flex-col items-center gap-8">
             <div className="flex w-full max-w-[851px] flex-col items-center justify-between gap-2 rounded-[16px] bg-[#112019] p-2 md:flex-row">
-              {maliksFarmData.training.programs.map((prog) => {
+              {programs.map((prog) => {
                 const isActive = activeTab === prog.id;
                 return (
                   <button
@@ -248,7 +274,7 @@ export default function BrandTraining({
             </div>
             {/* Active Tab Image Frame */}
             <div className="group relative h-[350px] w-full max-w-[1030px] overflow-hidden rounded-[20px] bg-[#112019] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:aspect-[1030/475] md:h-auto md:rounded-[24px]">
-              {maliksFarmData.training.programs.map((prog) => {
+              {programs.map((prog) => {
                 const isSelected = prog.id === activeTab;
                 return (
                   <div
@@ -297,169 +323,190 @@ export default function BrandTraining({
         </div>
       </section>
 
-      {/* 7. Testimonials from Malik's Farm guests */}
-      <section className="w-full overflow-hidden bg-[#DCF3C7] py-[80px] text-[#0D1A14] md:py-[130px]">
-        {/* Constrained Header */}
-        <div className="mx-auto mb-16 flex max-w-[1240px] flex-col items-center gap-8 px-4 text-center md:mb-20 md:px-8 lg:px-[100px]">
-          <SectionBadge variant="outline" showDot>
-            {maliksFarmData.testimonials.badge}
-          </SectionBadge>
-          <h2 className="font-sans text-[32px] leading-[38px] font-medium tracking-tight text-black md:text-[48px] md:leading-[58px]">
-            {maliksFarmData.testimonials.title}
-          </h2>
-        </div>
-
-        {/* ── Scans Carousel ── */}
-
-        {/* Desktop (≥768px) */}
-        <div
-          className="hidden w-full overflow-hidden md:block"
-          onMouseEnter={() => setScanPaused(true)}
-          onMouseLeave={() => setScanPaused(false)}
-        >
-          <div className="relative h-[598px] w-full overflow-visible">
-            <div
-              className={cn(
-                "flex items-center gap-6 overflow-visible",
-                isTransitionEnabled
-                  ? "transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
-                  : "transition-none"
-              )}
-              style={{
-                transform: `translateX(calc(50vw - ${SCAN_HALF_DESKTOP}px - (${scanIndex} * ${SCAN_SLOT_DESKTOP}px)))`,
-                willChange: "transform",
-              }}
-            >
-              {extendedScans.map((scan, idx) => {
-                const isActive = idx % scansCount === scanIndex % scansCount;
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => {
-                      if (isTransitioning) return;
-                      setScanIndex(idx);
-                    }}
-                    className="group relative h-[598px] w-[398px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
-                    style={{
-                      border: "1.5px solid rgba(25, 82, 54, 0.2)",
-                    }}
-                  >
-                    <div className="absolute inset-0">
-                      <OptimizedImage
-                        src={scan.image}
-                        alt={scan.title}
-                        fill
-                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                        sizes="398px"
-                        priority={idx === scanLoopStart}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+      {/* 7. Testimonials & Contact CTA */}
+      {showTestimonials ? (
+        <section className="w-full overflow-hidden bg-[#DCF3C7] py-[80px] text-[#0D1A14] md:py-[130px]">
+          {/* Constrained Header */}
+          <div className="mx-auto mb-16 flex max-w-[1240px] flex-col items-center gap-8 px-4 text-center md:mb-20 md:px-8 lg:px-[100px]">
+            <SectionBadge variant="outline" showDot>
+              {maliksFarmData.testimonials.badge}
+            </SectionBadge>
+            <h2 className="font-sans text-[32px] leading-[38px] font-medium tracking-tight text-black md:text-[48px] md:leading-[58px]">
+              {maliksFarmData.testimonials.title}
+            </h2>
           </div>
-        </div>
 
-        {/* Mobile (<768px) */}
-        <div
-          className="block w-full overflow-hidden md:hidden"
-          onTouchStart={handleScanTouchStart}
-          onTouchMove={handleScanTouchMove}
-          onTouchEnd={handleScanTouchEnd}
-        >
-          <div className="relative h-[420px] w-full touch-pan-y overflow-visible">
-            <div
-              className={cn(
-                "flex items-center gap-4 overflow-visible",
-                isTransitionEnabled
-                  ? "transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
-                  : "transition-none"
-              )}
-              style={{
-                transform: `translateX(calc(50vw - ${SCAN_HALF_MOBILE}px - (${scanIndex} * ${SCAN_SLOT_MOBILE}px)))`,
-                willChange: "transform",
-              }}
-            >
-              {extendedScans.map((scan, idx) => {
-                const isActive = idx % scansCount === scanIndex % scansCount;
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => {
-                      if (isTransitioning) return;
-                      setScanIndex(idx);
-                    }}
-                    className="group relative h-[420px] w-[280px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
-                    style={{
-                      border: "1.5px solid rgba(25, 82, 54, 0.2)",
-                    }}
-                  >
-                    <div className="absolute inset-0">
-                      <OptimizedImage
-                        src={scan.image}
-                        alt={scan.title}
-                        fill
-                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                        sizes="280px"
-                        priority={idx === scanLoopStart}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+          {/* ── Scans Carousel ── */}
 
-        {/* Navigation Arrows - Figma: w-12 h-12, rounded-full bg-brand-active, arrows from /arrow.svg, 16px gap, hidden on mobile */}
-        <div
-          className="mt-[48px] hidden justify-center gap-4 sm:flex"
-          onMouseEnter={() => setScanPaused(true)}
-          onMouseLeave={() => setScanPaused(false)}
-        >
-          <button
-            onClick={scanPrev}
-            aria-label="Previous testimonial"
-            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
+          {/* Desktop (≥768px) */}
+          <div
+            className="hidden w-full overflow-hidden md:block"
+            onMouseEnter={() => setScanPaused(true)}
+            onMouseLeave={() => setScanPaused(false)}
           >
-            <NextImage
-              src="/arrow.svg"
-              alt="Previous"
-              width={24}
-              height={24}
-              className="rotate-180"
-            />
-          </button>
-          <button
-            onClick={scanNext}
-            aria-label="Next testimonial"
-            className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
-          >
-            <NextImage src="/arrow.svg" alt="Next" width={24} height={24} />
-          </button>
-        </div>
-
-        {/* Contact Call to Action Banner */}
-        <div className="mx-auto mt-16 max-w-[1240px] px-4 md:mt-24 md:px-8 lg:px-[100px]">
-          <div className="mx-auto flex w-full max-w-[784px] items-center justify-center rounded-[24px] bg-[#0D1A14] p-6 text-center text-[#F2F7F1] md:p-10">
-            <p className="max-w-[677px] font-sans text-[18px] leading-[28px] text-white/90 md:text-[20px] md:leading-[30px]">
-              If you are interested in hosting a program at our facility or
-              purchasing GAP certified fruits and vegetables, contact us at{" "}
-              <Link
-                href={`mailto:${contactInfo?.email_primary || maliksFarmData.contact.email}`}
-                className="font-semibold text-[#A9E179] transition-all hover:underline"
+            <div className="relative h-[598px] w-full overflow-visible">
+              <div
+                className={cn(
+                  "flex items-center gap-6 overflow-visible",
+                  isTransitionEnabled
+                    ? "transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
+                    : "transition-none"
+                )}
+                style={{
+                  transform: `translateX(calc(50vw - ${SCAN_HALF_DESKTOP}px - (${scanIndex} * ${SCAN_SLOT_DESKTOP}px)))`,
+                  willChange: "transform",
+                }}
               >
-                {contactInfo?.email_primary || maliksFarmData.contact.email}
-              </Link>{" "}
-              or hotline at{" "}
-              <span className="font-semibold text-[#A9E179]">
-                {contactInfo?.phone_primary || maliksFarmData.contact.hotline}
-              </span>
-            </p>
+                {extendedScans.map((scan, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => {
+                        if (isTransitioning) return;
+                        setScanIndex(idx);
+                      }}
+                      className="group relative h-[598px] w-[398px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
+                      style={{
+                        border: "1.5px solid rgba(25, 82, 54, 0.2)",
+                      }}
+                    >
+                      <div className="absolute inset-0">
+                        <OptimizedImage
+                          src={scan.image}
+                          alt={scan.title}
+                          fill
+                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                          sizes="398px"
+                          priority={idx === scanLoopStart}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+
+          {/* Mobile (<768px) */}
+          <div
+            className="block w-full overflow-hidden md:hidden"
+            onTouchStart={handleScanTouchStart}
+            onTouchMove={handleScanTouchMove}
+            onTouchEnd={handleScanTouchEnd}
+          >
+            <div className="relative h-[420px] w-full touch-pan-y overflow-visible">
+              <div
+                className={cn(
+                  "flex items-center gap-4 overflow-visible",
+                  isTransitionEnabled
+                    ? "transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
+                    : "transition-none"
+                )}
+                style={{
+                  transform: `translateX(calc(50vw - ${SCAN_HALF_MOBILE}px - (${scanIndex} * ${SCAN_SLOT_MOBILE}px)))`,
+                  willChange: "transform",
+                }}
+              >
+                {extendedScans.map((scan, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => {
+                        if (isTransitioning) return;
+                        setScanIndex(idx);
+                      }}
+                      className="group relative h-[420px] w-[280px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
+                      style={{
+                        border: "1.5px solid rgba(25, 82, 54, 0.2)",
+                      }}
+                    >
+                      <div className="absolute inset-0">
+                        <OptimizedImage
+                          src={scan.image}
+                          alt={scan.title}
+                          fill
+                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                          sizes="280px"
+                          priority={idx === scanLoopStart}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Arrows */}
+          <div
+            className="mt-[48px] hidden justify-center gap-4 sm:flex"
+            onMouseEnter={() => setScanPaused(true)}
+            onMouseLeave={() => setScanPaused(false)}
+          >
+            <button
+              onClick={scanPrev}
+              aria-label="Previous testimonial"
+              className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
+            >
+              <NextImage
+                src="/arrow.svg"
+                alt="Previous"
+                width={24}
+                height={24}
+                className="rotate-180"
+              />
+            </button>
+            <button
+              onClick={scanNext}
+              aria-label="Next testimonial"
+              className="bg-brand-active hover:bg-brand-primary-hover flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow-md transition-all duration-300 active:scale-95"
+            >
+              <NextImage src="/arrow.svg" alt="Next" width={24} height={24} />
+            </button>
+          </div>
+
+          {/* Contact Call to Action Banner */}
+          <div className="mx-auto mt-16 max-w-[1240px] px-4 md:mt-24 md:px-8 lg:px-[100px]">
+            <div className="mx-auto flex w-full max-w-[784px] items-center justify-center rounded-[24px] bg-[#0D1A14] p-6 text-center text-[#F2F7F1] md:p-10">
+              <p className="max-w-[677px] font-sans text-[18px] leading-[28px] text-white/90 md:text-[20px] md:leading-[30px]">
+                If you are interested in hosting a program at our facility or
+                purchasing GAP certified fruits and vegetables, contact us at{" "}
+                <Link
+                  href={`mailto:${contactInfo?.email_primary || maliksFarmData.contact.email}`}
+                  className="font-semibold text-[#A9E179] transition-all hover:underline"
+                >
+                  {contactInfo?.email_primary || maliksFarmData.contact.email}
+                </Link>{" "}
+                or hotline at{" "}
+                <span className="font-semibold text-[#A9E179]">
+                  {contactInfo?.phone_primary || maliksFarmData.contact.hotline}
+                </span>
+              </p>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="w-full bg-[#F2F7F1] py-12 md:py-16">
+          <div className="mx-auto max-w-[1240px] px-4 md:px-8 lg:px-[100px]">
+            <div className="mx-auto flex w-full max-w-[784px] items-center justify-center rounded-[24px] bg-[#0D1A14] p-6 text-center text-[#F2F7F1] md:p-10">
+              <p className="max-w-[677px] font-sans text-[18px] leading-[28px] text-white/90 md:text-[20px] md:leading-[30px]">
+                If you are interested in hosting a program at our facility or
+                purchasing GAP certified fruits and vegetables, contact us at{" "}
+                <Link
+                  href={`mailto:${contactInfo?.email_primary || maliksFarmData.contact.email}`}
+                  className="font-semibold text-[#A9E179] transition-all hover:underline"
+                >
+                  {contactInfo?.email_primary || maliksFarmData.contact.email}
+                </Link>{" "}
+                or hotline at{" "}
+                <span className="font-semibold text-[#A9E179]">
+                  {contactInfo?.phone_primary || maliksFarmData.contact.hotline}
+                </span>
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }

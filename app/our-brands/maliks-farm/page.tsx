@@ -1,50 +1,109 @@
-"use client";
-
-import { useRef, useEffect, useState } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import BrandHero from "@/components/sections/brand/BrandHero";
 import BrandIntro from "@/components/sections/brand/BrandIntro";
-import BrandCropPortfolio from "@/components/sections/brand/BrandCropPortfolio";
 import BrandTraining from "@/components/sections/brand/BrandTraining";
 import { maliksFarmData } from "@/data/brands/maliks-farm";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { contactApi, ApiContactInfo } from "@/lib/api";
+import { Metadata } from "next";
+import { getPageMetadata, brandsApi, contactApi } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/utils";
 
-export default function MaliksFarmPage() {
-  const bottomImagesContainerRef = useRef<HTMLDivElement>(null);
-  const [contactInfo, setContactInfo] = useState<ApiContactInfo | null>(null);
+export async function generateMetadata(): Promise<Metadata> {
+  const fallback: Metadata = {
+    title: maliksFarmData.meta.title,
+    description: maliksFarmData.meta.description,
+  };
+  return getPageMetadata("/our-brands/maliks-farm", fallback, { revalidate: 15, tags: ["brands", "seo"] });
+}
 
-  useEffect(() => {
-    contactApi
-      .getContact()
-      .then((data) => {
-        if (data) setContactInfo(data);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch contact info for Maliks Farm page:", err);
-      });
-  }, []);
+export default async function MaliksFarmPage() {
+  let apiBrandData = null;
+  let contactInfo = null;
 
-  useEffect(() => {
-    const container = bottomImagesContainerRef.current;
-    if (container) {
-      const secondElement = container.children[1] as HTMLElement;
-      if (secondElement) {
-        const containerWidth = container.offsetWidth;
-        const elementWidth = secondElement.offsetWidth;
-        const elementLeft = secondElement.offsetLeft;
-        container.scrollLeft =
-          elementLeft - (containerWidth - elementWidth) / 2;
-      }
-    }
-  }, []);
+  try {
+    const [brandRes, contactRes] = await Promise.all([
+      brandsApi.getMaliksFarmData({ revalidate: 15, tags: ["brands"] }).catch(() => null),
+      contactApi.getContact().catch(() => null),
+    ]);
+    apiBrandData = brandRes;
+    contactInfo = contactRes;
+  } catch (err) {
+    console.error("Failed to fetch maliks farm brand page content:", err);
+  }
+
+  const dynamicData = apiBrandData?.maliksFarmData || apiBrandData;
+
+  const resolvedHero = {
+    ...maliksFarmData.hero,
+    bgImage: dynamicData?.hero?.bgImage
+      ? resolveImageUrl(dynamicData.hero.bgImage)
+      : maliksFarmData.hero.bgImage,
+  };
+
+  const resolvedIntro = {
+    ...maliksFarmData.intro,
+    stats: dynamicData?.intro?.stats && dynamicData.intro.stats.length > 0
+      ? dynamicData.intro.stats.map((s) => ({
+          value: `${s.value ?? ""}${s.suffix ?? ""}`,
+          label: s.label || "",
+        }))
+      : maliksFarmData.intro.stats,
+  };
+
+  const resolvedSplit1 = {
+    ...maliksFarmData.split1,
+    badge: dynamicData?.split1?.badge || maliksFarmData.split1.badge,
+    image: dynamicData?.split1?.image
+      ? resolveImageUrl(dynamicData.split1.image)
+      : maliksFarmData.split1.image,
+  };
+
+  const resolvedProcess = {
+    ...maliksFarmData.process,
+    badge: dynamicData?.process?.badge || maliksFarmData.process.badge,
+    images: dynamicData?.process?.images && dynamicData.process.images.length > 0
+      ? dynamicData.process.images.map((img) => resolveImageUrl(img))
+      : maliksFarmData.process.images,
+  };
+
+  const resolvedSplit2 = {
+    ...maliksFarmData.split2,
+    badge: dynamicData?.split2?.badge || maliksFarmData.split2.badge,
+    images: dynamicData?.split2?.images && dynamicData.split2.images.filter(Boolean).length > 0
+      ? dynamicData.split2.images.filter(Boolean).map((img) => resolveImageUrl(img))
+      : dynamicData?.split2?.image
+      ? [resolveImageUrl(dynamicData.split2.image)]
+      : maliksFarmData.split2.images,
+    gallery: dynamicData?.split2?.gallery && dynamicData.split2.gallery.length > 0
+      ? dynamicData.split2.gallery.map((img) => resolveImageUrl(img))
+      : maliksFarmData.split2.gallery,
+  };
+
+  const resolvedTraining = {
+    badge: dynamicData?.training?.badge || maliksFarmData.training.badge,
+    programs: dynamicData?.training?.programs && dynamicData.training.programs.length > 0
+      ? dynamicData.training.programs.map((p, idx) => ({
+          id: p.id || `program-${idx}`,
+          title: p.title || "",
+          image: p.image ? resolveImageUrl(p.image) : "",
+        }))
+      : maliksFarmData.training.programs,
+    facilities: dynamicData?.training?.facilities && dynamicData.training.facilities.length > 0
+      ? dynamicData.training.facilities.map((f) => ({
+          title: f.title || "",
+          description: f.description || "",
+          image: f.image ? resolveImageUrl(f.image) : "",
+        }))
+      : maliksFarmData.training.facilities,
+  };
+
   return (
     <div className="min-h-screen bg-[#F2F7F1]">
-      {/* 1. Brand Hero (Untouched) */}
-      <BrandHero {...maliksFarmData.hero} />
+      {/* 1. Brand Hero */}
+      <BrandHero {...resolvedHero} />
 
-      {/* 2. Brand Intro (Untouched) */}
-      <BrandIntro {...maliksFarmData.intro} />
+      {/* 2. Brand Intro */}
+      <BrandIntro {...resolvedIntro} />
 
       {/* 3. Custom Brand Split 1 (The Farm) */}
       <section className="w-full bg-[#F2F7F1] px-4 py-12 md:px-8 md:py-16 lg:px-[100px] lg:py-[100px]">
@@ -52,23 +111,23 @@ export default function MaliksFarmPage() {
           {/* Left: Text */}
           <div className="flex max-w-[863px] shrink-0 flex-col items-center justify-center gap-6">
             <SectionBadge variant="outline" showDot dotSize="6px">
-              {maliksFarmData.split1.badge}
+              {resolvedSplit1.badge}
             </SectionBadge>
             <div className="flex flex-col gap-4">
               <h2 className="text-center font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px] lg:text-left">
-                {maliksFarmData.split1.title}
+                {resolvedSplit1.title}
               </h2>
             </div>
             <div className="flex flex-col gap-4 text-center font-sans text-[16px] leading-[24px] text-[#0D1A14]/70 lg:text-left">
-              <p className="text-center">{maliksFarmData.split1.description}</p>
+              <p className="text-center">{resolvedSplit1.description}</p>
             </div>
           </div>
 
           {/* Right: Image */}
           <div className="group relative aspect-[16/9] w-full overflow-hidden rounded-[20px] bg-neutral-200 lg:rounded-[24px]">
             <OptimizedImage
-              src={maliksFarmData.split1.image}
-              alt={maliksFarmData.split1.title}
+              src={resolvedSplit1.image}
+              alt={resolvedSplit1.title}
               fill
               className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
               sizes="(max-width: 1240px) 100vw, 1240px"
@@ -85,21 +144,21 @@ export default function MaliksFarmPage() {
           {/* Header */}
           <div className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-6 text-center">
             <SectionBadge variant="outline" showDot dotSize="6px">
-              {maliksFarmData.process.badge}
+              {resolvedProcess.badge}
             </SectionBadge>
             <div className="flex flex-col gap-4">
               <h2 className="max-w-[862px] font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
-                {maliksFarmData.process.title}
+                {resolvedProcess.title}
               </h2>
               <p className="mx-auto max-w-[770px] font-sans text-[15px] leading-[24px] text-[#0D1A14]/65 md:text-[16px]">
-                {maliksFarmData.process.description}
+                {resolvedProcess.description}
               </p>
             </div>
           </div>
 
           {/* Step Cards Grid */}
           <div className="mx-auto flex w-full max-w-[728px] flex-col items-start gap-8">
-            {maliksFarmData.process.steps.map((step, i) => (
+            {resolvedProcess.steps.map((step, i) => (
               <div key={i} className="flex w-full items-start gap-6">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[#0F3221] font-sans text-[18px] leading-[22px] font-medium text-[#F2F7F1]">
                   {step.number}
@@ -117,28 +176,24 @@ export default function MaliksFarmPage() {
           </div>
 
           {/* R&D Images Row */}
-          <div
-            className="flex w-full snap-x snap-mandatory scrollbar-none gap-4 overflow-x-auto pb-4 md:gap-6"
-          >
-            <div className="group relative h-[290px] w-[280px] shrink-0 snap-center overflow-hidden rounded-[24px] bg-neutral-200 md:h-[377px] md:w-[608px]">
-              <OptimizedImage
-                src={maliksFarmData.process.images[0]}
-                alt="Structured field trials variety check"
-                fill
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                sizes="(max-width: 768px) 280px, 608px"
-              />
+          {resolvedProcess.images.length > 0 && (
+            <div className="flex w-full snap-x snap-mandatory scrollbar-none gap-4 overflow-x-auto pb-4 md:gap-6">
+              {resolvedProcess.images.map((imgUrl, idx) => (
+                <div
+                  key={idx}
+                  className="group relative h-[290px] w-[280px] shrink-0 snap-center overflow-hidden rounded-[24px] bg-neutral-200 md:h-[377px] md:w-[608px]"
+                >
+                  <OptimizedImage
+                    src={imgUrl}
+                    alt={`Research process image ${idx + 1}`}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    sizes="(max-width: 768px) 280px, 608px"
+                  />
+                </div>
+              ))}
             </div>
-            <div className="group relative h-[290px] w-[280px] shrink-0 snap-center overflow-hidden rounded-[24px] bg-neutral-200 md:h-[377px] md:w-[608px]">
-              <OptimizedImage
-                src={maliksFarmData.process.images[1]}
-                alt="Product evaluation during harvest"
-                fill
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                sizes="(max-width: 768px) 280px, 608px"
-              />
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -148,11 +203,11 @@ export default function MaliksFarmPage() {
           {/* Header */}
           <div className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-6 text-center">
             <SectionBadge variant="outline" showDot dotSize="6px">
-              {maliksFarmData.split2.badge}
+              {resolvedSplit2.badge}
             </SectionBadge>
             <div className="flex flex-col gap-3">
               <h2 className="font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
-                {maliksFarmData.split2.title}
+                {resolvedSplit2.title}
               </h2>
             </div>
           </div>
@@ -165,7 +220,7 @@ export default function MaliksFarmPage() {
                 <div className="flex items-center gap-4 md:gap-6">
                   <div className="relative h-14 w-14 shrink-0 md:h-20 md:w-20">
                     <OptimizedImage
-                      src={maliksFarmData.split2.gapLogo}
+                      src={resolvedSplit2.gapLogo}
                       alt="Global GAP badge"
                       fill
                       className="object-contain"
@@ -177,7 +232,7 @@ export default function MaliksFarmPage() {
                 </div>
               </div>
               <div className="flex flex-col gap-4 text-[15px] leading-[24px] text-[#0D1A14]/65 md:text-[16px]">
-                {maliksFarmData.split2.description
+                {resolvedSplit2.description
                   .split("\n\n")
                   .map((para, idx) => (
                     <p key={idx}>{para}</p>
@@ -185,52 +240,15 @@ export default function MaliksFarmPage() {
               </div>
             </div>
 
-            {/* Small image card 1 */}
-            <div className="group relative aspect-square min-h-[320px] overflow-hidden rounded-[24px] bg-neutral-200 lg:aspect-auto lg:h-full">
-              <OptimizedImage
-                src={maliksFarmData.split2.images[0]}
-                alt="GAP Certified field crop"
-                fill
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 292px"
-              />
-            </div>
-
-            {/* Small image card 2 */}
-            <div className="group relative aspect-square min-h-[320px] overflow-hidden rounded-[24px] bg-neutral-200 lg:aspect-auto lg:h-full">
-              <OptimizedImage
-                src={maliksFarmData.split2.images[1]}
-                alt="Quality control checking"
-                fill
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 292px"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Brand Crop Portfolio for Malik's Farm */}
-      <BrandCropPortfolio {...maliksFarmData.cropPortfolio} />
-
-      {/* Commercial Farming Gallery Row */}
-      <section className="w-full bg-[#F2F7F1] px-4 pb-[80px] md:px-8 md:pb-[100px] lg:px-[100px]">
-        <div className="mx-auto max-w-[1240px]">
-          <div
-            ref={bottomImagesContainerRef}
-            className="flex w-full snap-x snap-mandatory scrollbar-none gap-4 overflow-x-auto px-10 pb-4 md:grid md:grid-cols-3 md:gap-6 md:overflow-x-visible md:px-0 md:pb-0"
-          >
-            {maliksFarmData.split2.gallery.map((imgUrl, idx) => (
-              <div
-                key={idx}
-                className="group relative h-[290px] w-[280px] shrink-0 snap-center overflow-hidden rounded-[24px] bg-neutral-200 md:h-[377px] md:w-full md:shrink"
-              >
+            {/* Small image cards from split2.images */}
+            {resolvedSplit2.images.slice(0, 2).map((img, idx) => (
+              <div key={idx} className="group relative aspect-square min-h-[320px] overflow-hidden rounded-[24px] bg-neutral-200 lg:aspect-auto lg:h-full">
                 <OptimizedImage
-                  src={imgUrl}
-                  alt={`Agricultural field view ${idx + 1}`}
+                  src={img}
+                  alt={`Commercial farming item ${idx + 1}`}
                   fill
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  sizes="(max-width: 768px) 280px, 397px"
+                  sizes="(max-width: 1024px) 100vw, 292px"
                 />
               </div>
             ))}
@@ -238,8 +256,36 @@ export default function MaliksFarmPage() {
         </div>
       </section>
 
-      {/* 6. Training Centre, Facilities & Visitor Testimonial Scans */}
-      <BrandTraining contactInfo={contactInfo} />
+      {/* Commercial Farming Gallery Row */}
+      {resolvedSplit2.gallery.length > 0 && (
+        <section className="w-full bg-[#F2F7F1] px-4 pb-[80px] md:px-8 md:pb-[100px] lg:px-[100px]">
+          <div className="mx-auto max-w-[1240px]">
+            <div className="flex w-full snap-x snap-mandatory scrollbar-none gap-4 overflow-x-auto px-10 pb-4 md:grid md:grid-cols-3 md:gap-6 md:overflow-x-visible md:px-0 md:pb-0">
+              {resolvedSplit2.gallery.map((imgUrl, idx) => (
+                <div
+                  key={idx}
+                  className="group relative h-[290px] w-[280px] shrink-0 snap-center overflow-hidden rounded-[24px] bg-neutral-200 md:h-[377px] md:w-full md:shrink"
+                >
+                  <OptimizedImage
+                    src={imgUrl}
+                    alt={`Agricultural field view ${idx + 1}`}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    sizes="(max-width: 768px) 280px, 397px"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 6. Training Centre, Facilities & Testimonials */}
+      <BrandTraining
+        contactInfo={contactInfo}
+        trainingData={resolvedTraining}
+        showTestimonials={true}
+      />
     </div>
   );
 }

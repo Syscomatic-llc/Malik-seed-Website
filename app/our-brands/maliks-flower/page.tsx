@@ -16,7 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return getPageMetadata("/our-brands/maliks-flower", fallback, { revalidate: 15, tags: ["brands", "seo"] });
 }
 
-
 export default function MaliksFlowerPage() {
   return (
     <div className="min-h-screen bg-[#F2F7F1]">

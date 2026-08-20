@@ -603,6 +603,96 @@ export interface ApiInnovationDevelopmentDataResponse {
   };
 }
 
+export interface ApiMaliksFarmContent {
+  hero?: {
+    bgImage?: string;
+  };
+  intro?: {
+    stats?: Array<{
+      label?: string;
+      value?: number | string;
+      suffix?: string;
+    }>;
+  };
+  split1?: {
+    badge?: string;
+    image?: string;
+  };
+  split2?: {
+    badge?: string;
+    image?: string;
+    images?: string[];
+    gallery?: string[];
+    tags?: Record<string, string[]>;
+  };
+  process?: {
+    badge?: string;
+    images?: string[];
+  };
+  training?: {
+    badge?: string;
+    programs?: Array<{
+      id?: string;
+      title?: string;
+      image?: string;
+    }>;
+    facilities?: Array<{
+      title?: string;
+      description?: string;
+      image?: string;
+      beds?: number;
+      capacity?: number;
+    }>;
+  };
+  testimonials?: {
+    badge?: string;
+    visitorScans?: Array<{
+      image?: string;
+      title?: string;
+    }>;
+  };
+  cropPortfolio?: {
+    groups?: Array<{
+      category?: string;
+      items?: any[];
+    }>;
+  };
+}
+
+export interface ApiMaliksFarmDataResponse extends ApiMaliksFarmContent {
+  maliksFarmData?: ApiMaliksFarmContent;
+}
+
+export interface ApiMaliksFlowerContent {
+  hero?: {
+    bgImage?: string;
+  };
+  intro?: {
+    highlights?: string[];
+  };
+  grid?: {
+    badge?: string;
+    images?: string[];
+  };
+  split?: {
+    badge?: string;
+    image?: string;
+  };
+  portfolio?: {
+    badge?: string;
+    card?: Array<{
+      name?: string;
+      image?: string;
+    }>;
+  };
+}
+
+export interface ApiMaliksFlowerDataResponse extends ApiMaliksFlowerContent {
+  maliksFlowerData?: ApiMaliksFlowerContent;
+}
+
+
+
 
 
 
