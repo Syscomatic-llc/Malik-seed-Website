@@ -59,10 +59,35 @@ const SEGMENTS: FlowerSegment[] = [
   },
 ];
 
-export default function BrandFlowerPortfolio() {
-  const [activeTab, setActiveTab] = useState("cut-flower");
-  const currentSegment =
-    SEGMENTS.find((s) => s.id === activeTab) || SEGMENTS[0];
+export interface BrandFlowerPortfolioProps {
+  badge?: string;
+  cards?: Array<{
+    name: string;
+    image: string;
+  }>;
+}
+
+export default function BrandFlowerPortfolio({
+  badge,
+  cards,
+}: BrandFlowerPortfolioProps) {
+  const segments = cards && cards.length > 0
+    ? cards.map((card, idx) => {
+        const matchedStatic = SEGMENTS.find(
+          (s) => s.name.trim().toLowerCase() === card.name.trim().toLowerCase()
+        );
+        return {
+          id: matchedStatic?.id || card.name.trim().toLowerCase().replace(/\s+/g, "-") || `card-${idx}`,
+          name: card.name.trim(),
+          image: card.image,
+          description: matchedStatic?.description || "",
+          varieties: matchedStatic?.varieties || [],
+        };
+      })
+    : SEGMENTS;
+
+  const [activeTab, setActiveTab] = useState(segments[0]?.id || "cut-flower");
+
 
   return (
     <section className="w-full bg-[#0D1A14] px-4 py-12 text-white md:px-8 md:py-[80px] lg:px-[100px] lg:py-[100px]">
@@ -70,7 +95,7 @@ export default function BrandFlowerPortfolio() {
         {/* Header */}
         <div className="mx-auto flex max-w-[700px] flex-col gap-4 text-center">
           <SectionBadge className="mx-auto" showDot variant="dark">
-            OUR FLOWER PORTFOLIO
+            {badge || "OUR FLOWER PORTFOLIO"}
           </SectionBadge>
           <h2 className="font-sans text-[28px] leading-[34px] font-medium text-[#F2F7F1] md:text-[40px] md:leading-[48px]">
             Varieties across three segments
@@ -82,7 +107,7 @@ export default function BrandFlowerPortfolio() {
           <div
             className="flex max-w-full scrollbar-none gap-[8px] overflow-x-auto rounded-[16px] bg-[#112019] p-[8px]"
           >
-            {SEGMENTS.map((seg) => {
+            {segments.map((seg) => {
               const isActive = activeTab === seg.id;
               return (
                 <button
@@ -113,7 +138,7 @@ export default function BrandFlowerPortfolio() {
         <div className="mt-4 flex items-center justify-center">
           <div className="w-full shrink-0 lg:w-[790px]">
             <div className="group relative h-[360px] w-full overflow-hidden rounded-[20px] border border-white/10 bg-neutral-900 lg:h-[475px] lg:rounded-[24px]">
-              {SEGMENTS.map((seg) => {
+              {segments.map((seg) => {
                 const isSelected = seg.id === activeTab;
                 return (
                   <div
@@ -137,6 +162,7 @@ export default function BrandFlowerPortfolio() {
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );
