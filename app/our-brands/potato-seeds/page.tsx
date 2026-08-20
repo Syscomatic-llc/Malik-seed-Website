@@ -60,12 +60,12 @@ export default async function PotatoSeedPage() {
   const resolvedYoutube = {
     ...potatoSeedData.youtube,
     youtubeUrl: dynamicData?.youtube?.youtubeUrl || potatoSeedData.youtube.youtubeUrl,
-    images: dynamicData?.youtube?.images
-      ? dynamicData.youtube.images.map((img) => resolveImageUrl(img))
-      : [],
-    brandLogo: dynamicData?.youtube?.brandLogo
-      ? resolveImageUrl(dynamicData.youtube.brandLogo)
-      : "",
+    images:
+      dynamicData?.youtube?.images && dynamicData.youtube.images.length > 0
+        ? dynamicData.youtube.images.map((img) => resolveImageUrl(img))
+        : potatoSeedData.youtube.images,
+    brandLogo: potatoSeedData.youtube.brandLogo,
+    brandLogoAlt: potatoSeedData.youtube.brandLogoAlt,
   };
 
   return (
