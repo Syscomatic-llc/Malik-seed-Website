@@ -8,8 +8,7 @@ import LenisProvider from "@/components/LenisProvider";
 import "lenis/dist/lenis.css";
 import Script from "next/script";
 import InitialLoader from "@/components/InitialLoader";
-
-
+import { getSiteUrl } from "@/lib/site-url";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -45,6 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const settings = await settingsApi.getSettings({ revalidate: 15, tags: ["settings"] });
   const title = settings.siteName || "Malik Seeds";
   const tagLine = settings.siteTagline;
+  const siteUrl = getSiteUrl();
 
   // Cap the title length dynamically to stay in the 60-character sweet spot
   let fullTitle = tagLine ? `${title} - ${tagLine}` : title;
@@ -64,6 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
+    metadataBase: new URL(siteUrl),
     title: fullTitle,
     description: description,
     verification: settings.googleSearchConsoleVerification
@@ -95,11 +96,11 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: fullTitle,
       description: description,
-      url: "https://malik-seed-website.vercel.app",
+      url: siteUrl,
       siteName: title,
       images: [
         {
-          url: settings.logoUrl || "https://malik-seed-website.vercel.app/og-image.png",
+          url: settings.logoUrl || `${siteUrl}/og-image.png`,
           width: 1200,
           height: 630,
           alt: title,
