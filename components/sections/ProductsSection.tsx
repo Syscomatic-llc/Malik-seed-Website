@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ApiService, ApiBrand } from "@/lib/api";
 import { resolveImageUrl } from "@/lib/utils";
-import { productsData } from "@/data/sections-data";
 
 type Direction = "horizontal" | "vertical";
 
@@ -90,7 +89,7 @@ function CardContent({
   );
 }
 
-const FALLBACK_HREFS: Record<string, string> = {
+const BRAND_HREFS: Record<string, string> = {
   vegetable: "/our-brands/vegetable-seeds",
   potato: "/our-brands/potato-seeds",
   farm: "/our-brands/maliks-farm",
@@ -100,30 +99,38 @@ const FALLBACK_HREFS: Record<string, string> = {
   development: "/our-brands/innovation-development",
 };
 
-function getFallbackHref(item: ApiService | ApiBrand, index: number): string {
+const INDEX_HREFS: string[] = [
+  "/our-brands/vegetable-seeds",
+  "/our-brands/potato-seeds",
+  "/our-brands/maliks-farm",
+  "/our-brands/origene",
+  "/our-brands/maliks-flower",
+  "/our-brands/innovation-development",
+];
+
+function getBrandHref(item: ApiService | ApiBrand, index: number): string {
   const nameOrTitle = ("name" in item ? item.name : item.title) || "";
   const slug = ("slug" in item ? item.slug : "") || "";
   const searchStr = `${nameOrTitle} ${slug}`.toLowerCase();
 
-  for (const [key, route] of Object.entries(FALLBACK_HREFS)) {
+  for (const [key, route] of Object.entries(BRAND_HREFS)) {
     if (searchStr.includes(key)) {
       return route;
     }
   }
 
-  return productsData.items[index]?.href || "/our-brands";
+  return INDEX_HREFS[index] || "/our-brands";
 }
 
 /**
  * Map API services to the internal ProductItem shape.
- * If API data is missing, falls back to static data.
- * Always resolves to canonical static fallback routes for href.
+ * Images and content come purely dynamically from CMS API uploads.
+ * Hrefs resolve to hardcoded canonical brand routes.
  */
 function buildProducts(apiData?: (ApiService | ApiBrand)[]): ProductItem[] {
   if (Array.isArray(apiData) && apiData.length > 0) {
     return apiData.map((item, index) => {
-      const fallbackItem = productsData.items[index];
-      const fallbackHref = getFallbackHref(item, index);
+      const cardHref = getBrandHref(item, index);
 
       // Check if it is ApiBrand by verifying if 'name' property exists
       if ("name" in item) {
@@ -131,9 +138,9 @@ function buildProducts(apiData?: (ApiService | ApiBrand)[]): ProductItem[] {
           id: item.id,
           category: item.name,
           name: item.name,
-          description: item.description || item.tagline || fallbackItem?.description || "",
-          image: resolveImageUrl(item.logo_url || item.image_url || fallbackItem?.image || ""),
-          href: fallbackHref,
+          description: item.description || item.tagline || "",
+          image: resolveImageUrl(item.logo_url || item.image_url || ""),
+          href: cardHref,
         };
       } else {
         // It is ApiService
@@ -141,14 +148,14 @@ function buildProducts(apiData?: (ApiService | ApiBrand)[]): ProductItem[] {
           id: item.id,
           category: item.title,
           name: item.title,
-          description: item.description || fallbackItem?.description || "",
-          image: resolveImageUrl(item.image_url || fallbackItem?.image || ""),
-          href: fallbackHref,
+          description: item.description || "",
+          image: resolveImageUrl(item.image_url || ""),
+          href: cardHref,
         };
       }
     });
   }
-  return productsData.items;
+  return [];
 }
 
 export default function ProductsSection({

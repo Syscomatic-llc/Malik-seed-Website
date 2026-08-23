@@ -35,8 +35,8 @@ export default memo(function PartnersSection({
         src: resolveImageUrl(item.logo_url),
       }));
     }
-    return partners || [];
-  }, [partners, apiData]);
+    return [];
+  }, [apiData]);
 
   if (activePartners.length === 0) return null;
 

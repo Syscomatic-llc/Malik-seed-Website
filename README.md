@@ -39,7 +39,7 @@ cp .env.example .env.local
 | Environment Variable | Secret / Public | Required | Default Value / Example | Description |
 | :--- | :---: | :---: | :--- | :--- |
 | `API_BACKEND_URL` | Server Only | **Yes** | `https://apimalikseed.syscomatic.cloud/api/v1` | Backend REST API endpoint origin used for server-side fetches and Next.js path rewrites. |
-| `NEXT_PUBLIC_SITE_URL` | Public | Optional | `https://malikseed.com` | Canonical public site URL for SEO metadata, dynamic open-graph images, and `sitemap.xml`. (Falls back to `VERCEL_URL` or `http://localhost:3000`). |
+| `NEXT_PUBLIC_SITE_URL` | Public | Optional | `https://malikseeds.com` | Canonical public site URL for SEO metadata, dynamic open-graph images, and `sitemap.xml`. (Falls back to `VERCEL_URL` or `http://localhost:3000`). |
 | `REVALIDATE_SECRET` | **Secret Token** | **Yes** | `malik-seed-revalidate-secret` | **Authentication secret** required to authorize calls to the `/api/revalidate` webhook endpoint. |
 | `DEFAULT_REVALIDATE_SECONDS` | Server Only | Optional | `15` | Default Time-To-Live (TTL) cache revalidation interval in seconds. |
 | `NEXT_PUBLIC_API_BASE_URL` | Public | Optional | `""` | Optional direct public API base URL if client-side requests bypass the proxy. |

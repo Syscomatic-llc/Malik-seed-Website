@@ -44,7 +44,9 @@ export default function AboutValues({ apiData }: AboutValuesProps) {
           src: resolveImageUrl(val.image_url),
           alt: val.title,
         }))
-    : BRAND_VALUES;
+    : [];
+
+  if (values.length === 0) return null;
 
   return (
     <section className="bg-brand-bg w-full pb-12 md:pb-[100px]" id="values">
