@@ -715,3 +715,33 @@ export interface ApiOrigeneContent {
 export interface ApiOrigeneDataResponse extends ApiOrigeneContent {
   origeneData?: ApiOrigeneContent;
 }
+
+export interface ApiVegetableSeedContent {
+  hero?: {
+    bgImage?: string;
+  };
+  intro?: {
+    tags?: string[];
+    highlights?: string[];
+  };
+  grid?: {
+    badge?: string;
+    images?: string[];
+  };
+  youtube?: {
+    badge?: string;
+    youtubeUrl?: string;
+    images?: string[];
+  };
+  cropPortfolio?: {
+    badge?: string;
+    tags?: string[][];
+    crops?: string[][];
+  };
+}
+
+export interface ApiVegetableSeedDataResponse extends ApiVegetableSeedContent {
+  vegetableSeedData?: ApiVegetableSeedContent;
+  vegetableSeedsData?: ApiVegetableSeedContent;
+}
+
