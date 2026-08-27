@@ -692,11 +692,26 @@ export interface ApiMaliksFlowerDataResponse extends ApiMaliksFlowerContent {
   maliksFlowerData?: ApiMaliksFlowerContent;
 }
 
+export interface ApiOrigeneContent {
+  hero?: {
+    bgImage?: string;
+  };
+  grid?: {
+    badge?: string;
+    images?: string[];
+  };
+  split1?: {
+    badge?: string;
+    image?: string;
+  };
+  process2?: {
+    badge?: string;
+    images?: string[];
+    buttonText?: string;
+    buttonLink?: string;
+  };
+}
 
-
-
-
-
-
-
-
+export interface ApiOrigeneDataResponse extends ApiOrigeneContent {
+  origeneData?: ApiOrigeneContent;
+}

@@ -5,6 +5,7 @@ import {
   ApiInnovationDevelopmentDataResponse,
   ApiMaliksFarmDataResponse,
   ApiMaliksFlowerDataResponse,
+  ApiOrigeneDataResponse,
 } from "./types";
 
 export const brandsApi = {
@@ -42,6 +43,11 @@ export const brandsApi = {
       options
     );
   },
+
+  getOrigeneData(options?: RequestOptions) {
+    return apiGet<ApiOrigeneDataResponse>(
+      "/api/v1/our-brands/brands/origene/detail",
+      options
+    );
+  },
 };
-
-

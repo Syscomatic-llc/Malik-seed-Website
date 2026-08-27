@@ -7,7 +7,8 @@ import { origeneData } from "@/data/brands/origene";
 import { Metadata } from "next";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { getPageMetadata } from "@/lib/api";
+import { getPageMetadata, brandsApi } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
   const fallback: Metadata = {
@@ -17,13 +18,58 @@ export async function generateMetadata(): Promise<Metadata> {
   return getPageMetadata("/our-brands/origene", fallback, { revalidate: 15, tags: ["brands", "seo"] });
 }
 
+export default async function OrigenePage() {
+  let apiBrandData = null;
+  try {
+    apiBrandData = await brandsApi
+      .getOrigeneData({ revalidate: 15, tags: ["brands"] })
+      .catch(() => null);
+  } catch (err) {
+    console.error("Failed to fetch origene brand page content:", err);
+  }
 
-export default function OrigenePage() {
+  const dynamicData = apiBrandData?.origeneData || apiBrandData;
+
+  const resolvedHero = {
+    ...origeneData.hero,
+    bgImage: dynamicData?.hero?.bgImage
+      ? resolveImageUrl(dynamicData.hero.bgImage)
+      : "",
+  };
+
+  const resolvedGrid = {
+    ...origeneData.grid,
+    badge: dynamicData?.grid?.badge || "",
+    images:
+      dynamicData?.grid?.images && dynamicData.grid.images.length > 0
+        ? dynamicData.grid.images.map((img) => resolveImageUrl(img))
+        : [],
+  };
+
+  const resolvedSplit1 = {
+    ...origeneData.split1,
+    badge: dynamicData?.split1?.badge || "",
+    image: dynamicData?.split1?.image
+      ? resolveImageUrl(dynamicData.split1.image)
+      : "",
+  };
+
+  const resolvedProcess2 = {
+    ...origeneData.process2,
+    badge: dynamicData?.process2?.badge || "",
+    images:
+      dynamicData?.process2?.images && dynamicData.process2.images.length > 0
+        ? dynamicData.process2.images.map((img) => resolveImageUrl(img))
+        : [],
+    buttonText: dynamicData?.process2?.buttonText || "",
+    buttonLink: dynamicData?.process2?.buttonLink || "",
+  };
+
   return (
     <div className="min-h-screen bg-[#F2F7F1]">
-      <BrandHero {...origeneData.hero} />
+      <BrandHero {...resolvedHero} />
       <BrandIntro {...origeneData.intro} />
-      <BrandGrid {...origeneData.grid} />
+      <BrandGrid {...resolvedGrid} />
 
       {/* THE PROBLEM WE'RE SOLVING */}
       <section className="w-full bg-[#0D1A14] px-4 py-12 md:px-8 md:py-16 lg:px-[100px] lg:py-[100px]">
@@ -31,9 +77,11 @@ export default function OrigenePage() {
           {/* Left Column: Text + Stat Card */}
           <div className="flex w-full shrink-0 flex-col items-start justify-between gap-8 lg:h-[714px] lg:max-w-[576px] lg:gap-0">
             {/* Badge */}
-            <SectionBadge variant="dark" showDot className="mb-2">
-              {origeneData.split1.badge}
-            </SectionBadge>
+            {resolvedSplit1.badge ? (
+              <SectionBadge variant="dark" showDot className="mb-2">
+                {resolvedSplit1.badge}
+              </SectionBadge>
+            ) : null}
 
             {/* Title */}
             <div className="flex flex-col gap-4">
@@ -73,21 +121,23 @@ export default function OrigenePage() {
           </div>
 
           {/* Right Column: Image */}
-          <div className="relative h-[220px] w-full shrink-0 overflow-hidden rounded-[20px] bg-neutral-200 lg:h-[714px] lg:max-w-[608px] lg:rounded-[24px]">
-            <OptimizedImage
-              src={origeneData.split1.image}
-              alt={origeneData.split1.title.join(" ").replace(/\n/g, "")}
-              fill
-              className="object-cover transition-transform duration-700 ease-out hover:scale-105"
-              sizes="(max-width: 1024px) 100vw, 608px"
-              priority
-            />
-          </div>
+          {resolvedSplit1.image ? (
+            <div className="relative h-[220px] w-full shrink-0 overflow-hidden rounded-[20px] bg-neutral-200 lg:h-[714px] lg:max-w-[608px] lg:rounded-[24px]">
+              <OptimizedImage
+                src={resolvedSplit1.image}
+                alt={origeneData.split1.title.join(" ").replace(/\n/g, "")}
+                fill
+                className="object-cover transition-transform duration-700 ease-out hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 608px"
+                priority
+              />
+            </div>
+          ) : null}
         </div>
       </section>
 
       <BrandProcess {...origeneData.process1} variant="dark" />
-      <BrandProcess {...origeneData.process2} variant="default" />
+      <BrandProcess {...resolvedProcess2} variant="default" />
       <BrandSplit
         {...origeneData.split2}
         bgTheme="dark"
