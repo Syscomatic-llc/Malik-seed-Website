@@ -10,7 +10,6 @@ interface McqDevHintsProps {
   selectedOption?: number;
   variant?: "inline" | "compact";
 }
-
 export function McqDevAnswerKey({
   question,
   questionIndex,
