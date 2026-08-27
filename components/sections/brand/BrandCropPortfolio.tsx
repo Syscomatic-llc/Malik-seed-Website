@@ -10,7 +10,7 @@ interface BrandCropPortfolioProps {
   badge?: string;
   title: string;
   description: string;
-  crops?: string[][];
+  crops?: (string[] | string)[] | string[][];
   groups?: CropGroup[];
 }
 
@@ -31,15 +31,40 @@ export default function BrandCropPortfolio({
   crops,
   groups,
 }: BrandCropPortfolioProps) {
+  // Normalize crops to guaranteed string[][] structure (whether 1D or 2D array is passed)
+  const normalizedCrops: string[][] = crops
+    ? Array.isArray(crops)
+      ? crops
+          .map((row) =>
+            Array.isArray(row)
+              ? row.map((item) => String(item ?? "").trim()).filter(Boolean)
+              : typeof row === "string" && row.trim() !== ""
+              ? [row.trim()]
+              : []
+          )
+          .filter((r) => r.length > 0)
+      : []
+    : [];
+
+  if (!groups && normalizedCrops.length === 0) return null;
+
+  // If crops contains explicitly structured rows with >1 items per row, preserve rows.
+  // Otherwise (flat list or 1-item arrays), render a centered wrapping flex container.
+  const hasStructuredRows =
+    normalizedCrops.length > 1 &&
+    normalizedCrops.some((row) => row.length > 1);
+
   return (
     <section className="w-full bg-[#F2F7F1] px-4 pt-10 pb-10 md:px-8 md:pt-[60px] md:pb-[60px] lg:px-[100px]">
       <div className="mx-auto flex max-w-[1240px] flex-col items-center gap-8 md:gap-12">
         {/* Header */}
         {!groups && (
           <div className="flex max-w-[800px] flex-col items-center gap-8 text-center">
-            <SectionBadge showDot variant="outline">
-              {badge}
-            </SectionBadge>
+            {badge && badge.trim() !== "" && (
+              <SectionBadge showDot variant="outline">
+                {badge}
+              </SectionBadge>
+            )}
             <div className="flex flex-col items-center gap-4">
               <h2 className="font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
                 {title}
@@ -74,7 +99,7 @@ export default function BrandCropPortfolio({
                         key={rowIndex}
                         className="flex flex-wrap justify-start gap-x-3 gap-y-4"
                       >
-                        {row.map((item, idx) => (
+                        {row.map((item) => (
                           <CropPill
                             key={`${groupIdx}-${rowIndex}-${item}`}
                             label={item}
@@ -85,7 +110,7 @@ export default function BrandCropPortfolio({
                   </div>
                   {/* Mobile Layout: flat list wrapping */}
                   <div className="flex max-w-[310px] flex-wrap items-center justify-start gap-x-2 gap-y-4 md:hidden">
-                    {group.items.flat().map((item, idx) => (
+                    {group.items.flat().map((item) => (
                       <CropPill
                         key={`mobile-${groupIdx}-${item}`}
                         label={item}
@@ -96,26 +121,39 @@ export default function BrandCropPortfolio({
               ))}
             </div>
           </div>
-        ) : crops ? (
-          /* Row-by-row Layout (for Vegetable Seeds) */
+        ) : normalizedCrops.length > 0 ? (
+          /* Vegetable Seeds Layout */
           <div className="flex w-full max-w-[1030px] flex-col items-center gap-y-4 rounded-[24px] bg-[#0D1A14] px-6 py-8 md:rounded-[32px] md:px-[56px] md:py-16">
-            {crops.map((row, rowIndex) => (
-              <div
-                key={rowIndex}
-                className="flex hidden flex-wrap items-center justify-center gap-x-3 gap-y-4 md:flex"
-              >
-                {row.map((crop, idx) => (
-                  <CropPill key={`${rowIndex}-${crop}`} label={crop} />
+            {hasStructuredRows ? (
+              /* Preserved Explicit Rows */
+              <div className="hidden w-full flex-col items-center gap-y-4 md:flex">
+                {normalizedCrops.map((row, rowIndex) => (
+                  <div
+                    key={rowIndex}
+                    className="flex flex-wrap items-center justify-center gap-x-3 gap-y-4"
+                  >
+                    {row.map((crop, idx) => (
+                      <CropPill
+                        key={`${rowIndex}-${idx}-${crop}`}
+                        label={crop}
+                      />
+                    ))}
+                  </div>
                 ))}
               </div>
-            ))}
+            ) : (
+              /* Centered Wrapping Grid for flat list or 1-item arrays */
+              <div className="hidden max-w-[860px] flex-wrap items-center justify-center gap-x-3 gap-y-4 md:flex">
+                {normalizedCrops.flat().map((crop, idx) => (
+                  <CropPill key={`${idx}-${crop}`} label={crop} />
+                ))}
+              </div>
+            )}
 
-            <div
-              key={"mobile"}
-              className="mx-auto flex max-w-[310px] flex-wrap items-center justify-start gap-x-2 gap-y-4 md:hidden"
-            >
-              {crops.flat().map((crop) => (
-                <CropPill key={`mobile-${crop}`} label={crop} />
+            {/* Mobile Layout */}
+            <div className="mx-auto flex max-w-[310px] flex-wrap items-center justify-start gap-x-2 gap-y-4 md:hidden">
+              {normalizedCrops.flat().map((crop, idx) => (
+                <CropPill key={`mobile-${idx}-${crop}`} label={crop} />
               ))}
             </div>
           </div>

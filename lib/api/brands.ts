@@ -6,6 +6,7 @@ import {
   ApiMaliksFarmDataResponse,
   ApiMaliksFlowerDataResponse,
   ApiOrigeneDataResponse,
+  ApiVegetableSeedDataResponse,
 } from "./types";
 
 export const brandsApi = {
@@ -47,6 +48,13 @@ export const brandsApi = {
   getOrigeneData(options?: RequestOptions) {
     return apiGet<ApiOrigeneDataResponse>(
       "/api/v1/our-brands/brands/origene/detail",
+      options
+    );
+  },
+
+  getVegetableSeedData(options?: RequestOptions) {
+    return apiGet<ApiVegetableSeedDataResponse>(
+      "/api/v1/our-brands/brands/vegetable-seeds/detail",
       options
     );
   },
