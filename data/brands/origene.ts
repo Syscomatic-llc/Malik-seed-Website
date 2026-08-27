@@ -82,7 +82,7 @@ export const origeneData = {
     steps: [],
     images: ["/images/brand/dscf8661_1.png", "/images/brand/planted_04_1.png"],
     buttonText: "Visit our Ecommerce Shop",
-    buttonLink: "/",
+    buttonLink: "/coming-soon",
   },
   split2: {
     badge: "OUR MISSION",
@@ -95,3 +95,4 @@ export const origeneData = {
     bgTheme: "dark" as const,
   },
 };
+
