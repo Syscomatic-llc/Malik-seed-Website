@@ -1,5 +1,5 @@
 // ─── Career Page Data ───────────────────────────────────────────────────────
-// Extracted from Figma node 2424:13740 "Hiring" frame
+
 
 // ── Section 1: Hero ─────────────────────────────────────────────────────────
 export const careerHeroData = {
