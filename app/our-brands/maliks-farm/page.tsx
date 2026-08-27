@@ -37,7 +37,7 @@ export default async function MaliksFarmPage() {
     ...maliksFarmData.hero,
     bgImage: dynamicData?.hero?.bgImage
       ? resolveImageUrl(dynamicData.hero.bgImage)
-      : maliksFarmData.hero.bgImage,
+      : "",
   };
 
   const resolvedIntro = {
@@ -47,54 +47,67 @@ export default async function MaliksFarmPage() {
           value: `${s.value ?? ""}${s.suffix ?? ""}`,
           label: s.label || "",
         }))
-      : maliksFarmData.intro.stats,
+      : [],
   };
 
   const resolvedSplit1 = {
     ...maliksFarmData.split1,
-    badge: dynamicData?.split1?.badge || maliksFarmData.split1.badge,
+    badge: dynamicData?.split1?.badge || "",
     image: dynamicData?.split1?.image
       ? resolveImageUrl(dynamicData.split1.image)
-      : maliksFarmData.split1.image,
+      : "",
   };
 
   const resolvedProcess = {
     ...maliksFarmData.process,
-    badge: dynamicData?.process?.badge || maliksFarmData.process.badge,
+    badge: dynamicData?.process?.badge || "",
     images: dynamicData?.process?.images && dynamicData.process.images.length > 0
       ? dynamicData.process.images.map((img) => resolveImageUrl(img))
-      : maliksFarmData.process.images,
+      : [],
   };
 
   const resolvedSplit2 = {
     ...maliksFarmData.split2,
-    badge: dynamicData?.split2?.badge || maliksFarmData.split2.badge,
+    badge: dynamicData?.split2?.badge || "",
     images: dynamicData?.split2?.images && dynamicData.split2.images.filter(Boolean).length > 0
       ? dynamicData.split2.images.filter(Boolean).map((img) => resolveImageUrl(img))
       : dynamicData?.split2?.image
       ? [resolveImageUrl(dynamicData.split2.image)]
-      : maliksFarmData.split2.images,
+      : [],
     gallery: dynamicData?.split2?.gallery && dynamicData.split2.gallery.length > 0
       ? dynamicData.split2.gallery.map((img) => resolveImageUrl(img))
-      : maliksFarmData.split2.gallery,
+      : [],
   };
 
   const resolvedTraining = {
-    badge: dynamicData?.training?.badge || maliksFarmData.training.badge,
+    badge: dynamicData?.training?.badge || "",
     programs: dynamicData?.training?.programs && dynamicData.training.programs.length > 0
       ? dynamicData.training.programs.map((p, idx) => ({
           id: p.id || `program-${idx}`,
           title: p.title || "",
           image: p.image ? resolveImageUrl(p.image) : "",
         }))
-      : maliksFarmData.training.programs,
+      : [],
     facilities: dynamicData?.training?.facilities && dynamicData.training.facilities.length > 0
       ? dynamicData.training.facilities.map((f) => ({
           title: f.title || "",
           description: f.description || "",
           image: f.image ? resolveImageUrl(f.image) : "",
         }))
-      : maliksFarmData.training.facilities,
+      : [],
+  };
+
+  const resolvedTestimonials = {
+    badge: dynamicData?.testimonials?.badge || "",
+    images: dynamicData?.testimonials?.images && dynamicData.testimonials.images.length > 0
+      ? dynamicData.testimonials.images.map((img) => resolveImageUrl(img))
+      : [],
+    visitorScans: dynamicData?.testimonials?.visitorScans && dynamicData.testimonials.visitorScans.length > 0
+      ? dynamicData.testimonials.visitorScans.map((s) => ({
+          image: resolveImageUrl(s.image || ""),
+          title: s.title || "",
+        }))
+      : [],
   };
 
   return (
@@ -110,9 +123,11 @@ export default async function MaliksFarmPage() {
         <div className="mx-auto flex max-w-[1240px] flex-col items-center gap-8 lg:gap-[64px]">
           {/* Left: Text */}
           <div className="flex max-w-[863px] shrink-0 flex-col items-center justify-center gap-6">
-            <SectionBadge variant="outline" showDot dotSize="6px">
-              {resolvedSplit1.badge}
-            </SectionBadge>
+            {resolvedSplit1.badge && (
+              <SectionBadge variant="outline" showDot dotSize="6px">
+                {resolvedSplit1.badge}
+              </SectionBadge>
+            )}
             <div className="flex flex-col gap-4">
               <h2 className="text-center font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px] lg:text-left">
                 {resolvedSplit1.title}
@@ -124,17 +139,19 @@ export default async function MaliksFarmPage() {
           </div>
 
           {/* Right: Image */}
-          <div className="group relative aspect-[16/9] w-full overflow-hidden rounded-[20px] bg-neutral-200 lg:rounded-[24px]">
-            <OptimizedImage
-              src={resolvedSplit1.image}
-              alt={resolvedSplit1.title}
-              fill
-              className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-              sizes="(max-width: 1240px) 100vw, 1240px"
-              quality={90}
-              priority
-            />
-          </div>
+          {resolvedSplit1.image && (
+            <div className="group relative aspect-[16/9] w-full overflow-hidden rounded-[20px] bg-neutral-200 lg:rounded-[24px]">
+              <OptimizedImage
+                src={resolvedSplit1.image}
+                alt={resolvedSplit1.title}
+                fill
+                className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                sizes="(max-width: 1240px) 100vw, 1240px"
+                quality={90}
+                priority
+              />
+            </div>
+          )}
         </div>
       </section>
 
@@ -143,9 +160,11 @@ export default async function MaliksFarmPage() {
         <div className="mx-auto flex max-w-[1240px] flex-col gap-12 md:gap-16">
           {/* Header */}
           <div className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-6 text-center">
-            <SectionBadge variant="outline" showDot dotSize="6px">
-              {resolvedProcess.badge}
-            </SectionBadge>
+            {resolvedProcess.badge && (
+              <SectionBadge variant="outline" showDot dotSize="6px">
+                {resolvedProcess.badge}
+              </SectionBadge>
+            )}
             <div className="flex flex-col gap-4">
               <h2 className="max-w-[862px] font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
                 {resolvedProcess.title}
@@ -202,9 +221,11 @@ export default async function MaliksFarmPage() {
         <div className="mx-auto flex max-w-[1240px] flex-col gap-12 md:gap-16">
           {/* Header */}
           <div className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-6 text-center">
-            <SectionBadge variant="outline" showDot dotSize="6px">
-              {resolvedSplit2.badge}
-            </SectionBadge>
+            {resolvedSplit2.badge && (
+              <SectionBadge variant="outline" showDot dotSize="6px">
+                {resolvedSplit2.badge}
+              </SectionBadge>
+            )}
             <div className="flex flex-col gap-3">
               <h2 className="font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
                 {resolvedSplit2.title}
@@ -284,6 +305,7 @@ export default async function MaliksFarmPage() {
       <BrandTraining
         contactInfo={contactInfo}
         trainingData={resolvedTraining}
+        testimonialsData={resolvedTestimonials}
         showTestimonials={true}
       />
     </div>

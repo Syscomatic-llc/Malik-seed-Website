@@ -646,6 +646,7 @@ export interface ApiMaliksFarmContent {
   };
   testimonials?: {
     badge?: string;
+    images?: string[];
     visitorScans?: Array<{
       image?: string;
       title?: string;
