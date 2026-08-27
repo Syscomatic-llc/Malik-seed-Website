@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { sitemapApi, parseSitemapXml } from "@/lib/api/sitemap";
 import { newsApi } from "@/lib/api/newspage";
 import { hiringApi } from "@/lib/api/hiring";
 import { getSiteUrl } from "@/lib/site-url";
@@ -6,6 +7,27 @@ import { getSiteUrl } from "@/lib/site-url";
 const BASE_URL = getSiteUrl();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // 1. Try to fetch fully dynamic sitemap from CMS endpoint /api/v1/sitemap.xml
+  try {
+    const xml = await sitemapApi.getSitemapXml({
+      revalidate: 3600,
+      tags: ["sitemap", "seo"],
+    });
+
+    if (xml && xml.trim() !== "") {
+      const dynamicEntries = parseSitemapXml(xml, BASE_URL);
+      if (dynamicEntries.length > 0) {
+        return dynamicEntries;
+      }
+    }
+  } catch (error) {
+    console.error(
+      "Sitemap: Failed to fetch dynamic XML sitemap from CMS, using fallback generation:",
+      error
+    );
+  }
+
+  // 2. Fallback: Generate sitemap from static routes + dynamic news/careers
   const staticRoutes = [
     "",
     "/about",
@@ -37,7 +59,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (articles && Array.isArray(articles)) {
       articles.forEach((article) => {
         const slug = (article as any).slug || (article as any).article_slug;
-        const rawDate = (article as any).updated_at || (article as any).updatedAt || (article as any).created_at;
+        const rawDate =
+          (article as any).updated_at ||
+          (article as any).updatedAt ||
+          (article as any).created_at;
         if (slug) {
           sitemapEntries.push({
             url: `${BASE_URL}/news/${slug}`,

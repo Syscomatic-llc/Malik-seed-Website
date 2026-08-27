@@ -173,3 +173,68 @@ export const apiPostMultipart = <T = unknown>(
   formData: FormData,
   options?: RequestOptions
 ) => request<T>(path, { method: "POST", body: formData }, options);
+
+async function requestText(
+  path: string,
+  init: RequestInit,
+  options?: RequestOptions
+): Promise<string> {
+  const isServer = typeof window === "undefined";
+  const backendUrl = process.env.API_BACKEND_URL ?? "";
+
+  let baseUrl = API_BASE_URL;
+  let cleanPath = path;
+
+  if (isServer && backendUrl) {
+    if (cleanPath.startsWith("/api/v1")) {
+      cleanPath = cleanPath.slice("/api/v1".length);
+    }
+    baseUrl = backendUrl;
+  }
+
+  const url = `${baseUrl}${cleanPath}${buildQuery(options?.params)}`;
+
+  const fetchCache =
+    options?.cache ??
+    (options?.revalidate === 0 || options?.revalidate === false
+      ? "no-store"
+      : undefined);
+
+  const nextOptions: { revalidate?: number | false; tags?: string[] } = {};
+  if (options?.revalidate !== undefined) {
+    nextOptions.revalidate = options.revalidate;
+  }
+  if (options?.tags && options.tags.length > 0) {
+    nextOptions.tags = options.tags;
+  }
+
+  const res = await fetch(url, {
+    ...init,
+    cache: fetchCache,
+    signal: options?.signal,
+    next: Object.keys(nextOptions).length > 0 ? nextOptions : undefined,
+    headers: {
+      Accept: "application/xml, text/xml, text/plain, */*",
+      ...(init.headers ?? {}),
+    },
+  });
+
+  if (!res.ok) {
+    let detail: unknown;
+    try {
+      detail = await res.text();
+    } catch {
+      detail = undefined;
+    }
+    throw new ApiError(
+      `Request failed: ${res.status} ${res.statusText}`,
+      res.status,
+      detail
+    );
+  }
+
+  return await res.text();
+}
+
+export const apiGetText = (path: string, options?: RequestOptions) =>
+  requestText(path, { method: "GET" }, options);

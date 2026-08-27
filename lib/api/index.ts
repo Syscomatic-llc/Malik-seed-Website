@@ -9,7 +9,4 @@ export * from "./hiring";
 export * from "./brands";
 export * from "./settings";
 export * from "./seo";
-
-
-
-
+export * from "./sitemap";
