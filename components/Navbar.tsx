@@ -474,14 +474,47 @@ function MobileNav({
   );
 }
 
+const HARDCODED_NAVBAR_BRANDS = [
+  {
+    name: "Vegetable Seeds",
+    description: "Research-Backed Vegetable Seeds Farmers rely on",
+    href: "/our-brands/vegetable-seeds",
+  },
+  {
+    name: "Potato Seed",
+    description: "Bringing Next-Generation Potato Seeds to Farmers",
+    href: "/our-brands/potato-seeds",
+  },
+  {
+    name: "Malik’s Farm",
+    description: "Research and Innovation Hub Behind Malik Seeds",
+    href: "/our-brands/maliks-farm",
+  },
+  {
+    name: "Origene by Malik",
+    description: "Safe Fruits and Vegetables for Health Conscious Urban Consumers",
+    href: "/our-brands/origene",
+  },
+  {
+    name: "Malik’s Flower",
+    description: "Premium Flower Varieties Bringing Global Genetics to Local Growers",
+    href: "/our-brands/maliks-flower",
+  },
+  {
+    name: "Innovation & Development",
+    description: "Empowering Farmers Through Knowledge, Technology, and Market Access",
+    href: "/our-brands/innovation-development",
+  },
+];
+
 interface NavbarProps {
   brands?: { name: string; description: string; href: string }[];
 }
 
-export default function Navbar({ brands: initialBrands = [] }: NavbarProps) {
+export default function Navbar({ brands: initialBrands = HARDCODED_NAVBAR_BRANDS }: NavbarProps) {
   const [brands, setBrands] = useState<
     { name: string; description: string; href: string }[]
-  >(initialBrands);
+  >(initialBrands.length > 0 ? initialBrands : HARDCODED_NAVBAR_BRANDS);
 
   useEffect(() => {
     if (initialBrands && initialBrands.length > 0) {
@@ -494,10 +527,10 @@ export default function Navbar({ brands: initialBrands = [] }: NavbarProps) {
       .then((data) => {
         if (active && data && data.length > 0) {
           setBrands(
-            data.map((s) => ({
+            data.map((s, idx) => ({
               name: s.title,
               description: s.description,
-              href: s.link,
+              href: HARDCODED_NAVBAR_BRANDS[idx]?.href || "/our-brands",
             }))
           );
         }

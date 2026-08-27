@@ -84,13 +84,22 @@ export default async function Footer() {
     console.error("Failed to fetch contact details for footer:", err);
   }
 
+  const BRAND_ROUTES = [
+    "/our-brands/vegetable-seeds",
+    "/our-brands/potato-seeds",
+    "/our-brands/maliks-farm",
+    "/our-brands/origene",
+    "/our-brands/maliks-flower",
+    "/our-brands/innovation-development",
+  ];
+
   let brands: FooterLink[] = [];
   try {
     const services = await homepageApi.getServices({ revalidate: 60 });
     if (services && services.length > 0) {
-      brands = services.map((s) => ({
+      brands = services.map((s, idx) => ({
         label: s.title,
-        href: s.link,
+        href: BRAND_ROUTES[idx] || "/our-brands",
       }));
     }
   } catch (err) {

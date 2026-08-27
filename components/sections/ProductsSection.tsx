@@ -89,17 +89,7 @@ function CardContent({
   );
 }
 
-const BRAND_HREFS: Record<string, string> = {
-  vegetable: "/our-brands/vegetable-seeds",
-  potato: "/our-brands/potato-seeds",
-  farm: "/our-brands/maliks-farm",
-  origene: "/our-brands/origene",
-  flower: "/our-brands/maliks-flower",
-  innovation: "/our-brands/innovation-development",
-  development: "/our-brands/innovation-development",
-};
-
-const INDEX_HREFS: string[] = [
+const HARDCODED_BRAND_ROUTES: string[] = [
   "/our-brands/vegetable-seeds",
   "/our-brands/potato-seeds",
   "/our-brands/maliks-farm",
@@ -108,29 +98,15 @@ const INDEX_HREFS: string[] = [
   "/our-brands/innovation-development",
 ];
 
-function getBrandHref(item: ApiService | ApiBrand, index: number): string {
-  const nameOrTitle = ("name" in item ? item.name : item.title) || "";
-  const slug = ("slug" in item ? item.slug : "") || "";
-  const searchStr = `${nameOrTitle} ${slug}`.toLowerCase();
-
-  for (const [key, route] of Object.entries(BRAND_HREFS)) {
-    if (searchStr.includes(key)) {
-      return route;
-    }
-  }
-
-  return INDEX_HREFS[index] || "/our-brands";
-}
-
 /**
  * Map API services to the internal ProductItem shape.
- * Images and content come purely dynamically from CMS API uploads.
- * Hrefs resolve to hardcoded canonical brand routes.
+ * Images and content come dynamically from CMS API uploads.
+ * Hrefs resolve directly to the 6 canonical brand routes.
  */
 function buildProducts(apiData?: (ApiService | ApiBrand)[]): ProductItem[] {
   if (Array.isArray(apiData) && apiData.length > 0) {
     return apiData.map((item, index) => {
-      const cardHref = getBrandHref(item, index);
+      const cardHref = HARDCODED_BRAND_ROUTES[index] || "/our-brands";
 
       // Check if it is ApiBrand by verifying if 'name' property exists
       if ("name" in item) {

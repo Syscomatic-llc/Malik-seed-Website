@@ -116,14 +116,23 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const BRAND_ROUTES = [
+    "/our-brands/vegetable-seeds",
+    "/our-brands/potato-seeds",
+    "/our-brands/maliks-farm",
+    "/our-brands/origene",
+    "/our-brands/maliks-flower",
+    "/our-brands/innovation-development",
+  ];
+
   let brands: { name: string; description: string; href: string }[] = [];
   try {
     const data = await homepageApi.getServices({ revalidate: 15, tags: ["services"] });
     if (data && data.length > 0) {
-      brands = data.map((s) => ({
+      brands = data.map((s, idx) => ({
         name: s.title,
         description: s.description,
-        href: s.link,
+        href: BRAND_ROUTES[idx] || "/our-brands",
       }));
     }
   } catch (err) {
