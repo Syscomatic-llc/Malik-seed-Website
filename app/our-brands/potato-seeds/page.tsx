@@ -20,7 +20,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PotatoSeedPage() {
   let apiBrandData = null;
   try {
-    apiBrandData = await brandsApi.getPotatoSeedData({ revalidate: 15, tags: ["brands"] });
+    apiBrandData = await brandsApi
+      .getPotatoSeedData({ revalidate: 15, tags: ["brands"] })
+      .catch(() => null);
   } catch (err) {
     console.error("Failed to fetch potato seed brand page content:", err);
   }
@@ -43,15 +45,15 @@ export default async function PotatoSeedPage() {
 
   const resolvedGrid = {
     ...potatoSeedData.grid,
-    badge: dynamicData?.grid?.badge || potatoSeedData.grid.badge,
-    images: dynamicData?.grid?.images
+    badge: dynamicData?.grid?.badge || "",
+    images: dynamicData?.grid?.images && dynamicData.grid.images.length > 0
       ? dynamicData.grid.images.map((img) => resolveImageUrl(img))
       : [],
   };
 
   const resolvedSplit = {
     ...potatoSeedData.split,
-    badge: dynamicData?.split?.badge || potatoSeedData.split.badge,
+    badge: dynamicData?.split?.badge || "",
     image: dynamicData?.split?.image
       ? resolveImageUrl(dynamicData.split.image)
       : "",
@@ -59,12 +61,14 @@ export default async function PotatoSeedPage() {
 
   const resolvedYoutube = {
     ...potatoSeedData.youtube,
-    youtubeUrl: dynamicData?.youtube?.youtubeUrl || potatoSeedData.youtube.youtubeUrl,
+    youtubeUrl: dynamicData?.youtube?.youtubeUrl || "",
     images:
       dynamicData?.youtube?.images && dynamicData.youtube.images.length > 0
         ? dynamicData.youtube.images.map((img) => resolveImageUrl(img))
-        : potatoSeedData.youtube.images,
-    brandLogo: potatoSeedData.youtube.brandLogo,
+        : [],
+    brandLogo: dynamicData?.youtube?.brandLogo
+      ? resolveImageUrl(dynamicData.youtube.brandLogo)
+      : "",
     brandLogoAlt: potatoSeedData.youtube.brandLogoAlt,
   };
 

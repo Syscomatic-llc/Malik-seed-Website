@@ -20,7 +20,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function InnovationDevelopmentPage() {
   let apiBrandData = null;
   try {
-    apiBrandData = await brandsApi.getInnovationDevelopmentData({ revalidate: 15, tags: ["brands"] });
+    apiBrandData = await brandsApi
+      .getInnovationDevelopmentData({ revalidate: 15, tags: ["brands"] })
+      .catch(() => null);
   } catch (err) {
     console.error("Failed to fetch innovation & development brand page content:", err);
   }

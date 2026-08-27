@@ -43,16 +43,12 @@ export const maliksFlowerData = {
     ],
   },
   grid: {
-    badge: "FROM TRIAL BEDS",
     title: "From our trial beds \nto your fields",
-    description:
-      "We test and prove every variety under local conditions before recommending it.",
     images: [
       "/images/brand/dscf7210.png",
       "/images/brand/dscf7401.png",
       "/images/brand/dscf7207_1.png",
     ],
-    descriptionClassName: "hidden md:block",
   },
   split: {
     badge: "SEED INNOVATION",

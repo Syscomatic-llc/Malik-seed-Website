@@ -24,7 +24,7 @@ export const brandsApi = {
 
   getInnovationDevelopmentData(options?: RequestOptions) {
     return apiGet<ApiInnovationDevelopmentDataResponse>(
-      "/api/v1/our-brands/brands/innovation-development/detail",
+      "/api/v1/our-brands/brands/innovation/detail",
       options
     );
   },
@@ -38,7 +38,7 @@ export const brandsApi = {
 
   getMaliksFlowerData(options?: RequestOptions) {
     return apiGet<ApiMaliksFlowerDataResponse>(
-      "/api/v1/our-brands/brands/maliks-flower/detail",
+      "/api/v1/our-brands/brands/malik-flower/detail",
       options
     );
   },

@@ -6,9 +6,9 @@ import { SectionBadge } from "@/components/ui/SectionBadge";
 import { cn } from "@/lib/utils";
 
 interface BrandGridProps {
-  badge: string;
+  badge?: string;
   title: string;
-  description: string;
+  description?: string;
   images: string[];
   descriptionClassName?: string;
 }
@@ -148,9 +148,11 @@ export default function BrandGrid({
       <div className="mx-auto flex max-w-[1240px] flex-col gap-[32px] md:gap-[48px] lg:gap-[64px]">
         {/* Header */}
         <div className="mx-auto flex max-w-[958px] flex-col items-center gap-6 text-center md:gap-8">
-          <SectionBadge variant="outline" showDot={true} className="bg-white">
-            {badge}
-          </SectionBadge>
+          {badge && badge.trim() !== "" && (
+            <SectionBadge variant="outline" showDot={true} className="bg-white">
+              {badge}
+            </SectionBadge>
+          )}
           <div className="flex flex-col items-center gap-4">
             <h2 className="mx-auto max-w-[958px] font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
               {title.split("\n").map((part, i, arr) => (
@@ -160,19 +162,21 @@ export default function BrandGrid({
                 </span>
               ))}
             </h2>
-            <p
-              className={cn(
-                "mx-auto max-w-[866px] font-sans text-[15px] leading-[24px] text-[#0D1A14]/65 md:text-[16px]",
-                descriptionClassName
-              )}
-            >
-              {description.split("\n").map((part, i, arr) => (
-                <span key={i}>
-                  {part}
-                  {i < arr.length - 1 && <br className="md:hidden" />}
-                </span>
-              ))}
-            </p>
+            {description && description.trim() !== "" && (
+              <p
+                className={cn(
+                  "mx-auto max-w-[866px] font-sans text-[15px] leading-[24px] text-[#0D1A14]/65 md:text-[16px]",
+                  descriptionClassName
+                )}
+              >
+                {description.split("\n").map((part, i, arr) => (
+                  <span key={i}>
+                    {part}
+                    {i < arr.length - 1 && <br className="md:hidden" />}
+                  </span>
+                ))}
+              </p>
+            )}
           </div>
         </div>
 

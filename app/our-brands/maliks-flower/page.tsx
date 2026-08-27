@@ -20,7 +20,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MaliksFlowerPage() {
   let apiBrandData = null;
   try {
-    apiBrandData = await brandsApi.getMaliksFlowerData({ revalidate: 15, tags: ["brands"] });
+    apiBrandData = await brandsApi
+      .getMaliksFlowerData({ revalidate: 15, tags: ["brands"] })
+      .catch(() => null);
   } catch (err) {
     console.error("Failed to fetch maliks flower brand page content:", err);
   }
@@ -43,7 +45,8 @@ export default async function MaliksFlowerPage() {
 
   const resolvedGrid = {
     ...maliksFlowerData.grid,
-    badge: dynamicData?.grid?.badge || "",
+    badge: "",
+    description: "",
     images: dynamicData?.grid?.images
       ? dynamicData.grid.images.map((img) => resolveImageUrl(img))
       : [],
