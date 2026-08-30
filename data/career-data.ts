@@ -1,6 +1,4 @@
 // ─── Career Page Data ───────────────────────────────────────────────────────
-
-
 // ── Section 1: Hero ─────────────────────────────────────────────────────────
 export const careerHeroData = {
   badge: "Join Our Mission",
