@@ -63,20 +63,34 @@ export default async function VegetableSeedsPage() {
     dynamicData?.cropPortfolio?.crops ||
     [];
 
+  const defaultCrops = vegetableSeedsData.cropPortfolio.crops;
+  const flatCropsList = Array.isArray(rawCrops)
+    ? rawCrops.flat().map((c: any) => String(c ?? "").trim()).filter(Boolean)
+    : [];
+
+  let resolvedCrops: string[][] = [];
+  if (flatCropsList.length > 0) {
+    const rowSizes = [3, 6, 6];
+    let currentIndex = 0;
+    rowSizes.forEach((size) => {
+      if (currentIndex < flatCropsList.length) {
+        resolvedCrops.push(flatCropsList.slice(currentIndex, currentIndex + size));
+        currentIndex += size;
+      }
+    });
+    // Chunk any remaining items into rows of size 4 to maintain the current layout style
+    while (currentIndex < flatCropsList.length) {
+      resolvedCrops.push(flatCropsList.slice(currentIndex, currentIndex + 4));
+      currentIndex += 4;
+    }
+  } else {
+    resolvedCrops = defaultCrops;
+  }
+
   const resolvedCropPortfolio = {
     ...vegetableSeedsData.cropPortfolio,
-    badge: dynamicData?.cropPortfolio?.badge || "",
-    crops: Array.isArray(rawCrops)
-      ? (rawCrops
-          .map((row: any) =>
-            Array.isArray(row)
-              ? row.map((item) => String(item ?? "").trim()).filter(Boolean)
-              : typeof row === "string" && row.trim() !== ""
-              ? [row.trim()]
-              : []
-          )
-          .filter((r) => r.length > 0) as string[][])
-      : [],
+    badge: (dynamicData as any)?.cropPortfolio?.badge || "",
+    crops: resolvedCrops,
   };
 
   const resolvedYoutube = {

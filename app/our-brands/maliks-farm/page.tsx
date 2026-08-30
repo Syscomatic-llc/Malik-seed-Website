@@ -2,6 +2,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import BrandHero from "@/components/sections/brand/BrandHero";
 import BrandIntro from "@/components/sections/brand/BrandIntro";
 import BrandTraining from "@/components/sections/brand/BrandTraining";
+import BrandCropPortfolio from "@/components/sections/brand/BrandCropPortfolio";
 import { maliksFarmData } from "@/data/brands/maliks-farm";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { Metadata } from "next";
@@ -108,6 +109,48 @@ export default async function MaliksFarmPage() {
           title: s.title || "",
         }))
       : [],
+  };
+
+  // Convert split2 tags object to CropGroup[] layout for BrandCropPortfolio
+  const rawTags = dynamicData?.split2?.tags || (dynamicData as any)?.cropPortfolio?.tags || null;
+  let resolvedGroups = undefined;
+  if (rawTags && typeof rawTags === "object" && !Array.isArray(rawTags)) {
+    resolvedGroups = Object.entries(rawTags).map(([category, items]) => {
+      const normalizedItems: string[][] = [];
+      if (Array.isArray(items)) {
+        let currentRow: string[] = [];
+        items.forEach((item: any) => {
+          if (Array.isArray(item)) {
+            if (currentRow.length > 0) {
+              normalizedItems.push(currentRow);
+              currentRow = [];
+            }
+            normalizedItems.push(item.map(String));
+          } else if (typeof item === "string") {
+            currentRow.push(item);
+            if (currentRow.length >= 5) {
+              normalizedItems.push(currentRow);
+              currentRow = [];
+            }
+          }
+        });
+        if (currentRow.length > 0) {
+          normalizedItems.push(currentRow);
+        }
+      }
+      return {
+        category,
+        items: normalizedItems,
+      };
+    });
+  } else if ((dynamicData as any)?.cropPortfolio?.groups) {
+    resolvedGroups = (dynamicData as any).cropPortfolio.groups;
+  }
+
+  const resolvedCropPortfolio = {
+    title: (dynamicData as any)?.cropPortfolio?.title || "",
+    description: (dynamicData as any)?.cropPortfolio?.description || "",
+    groups: resolvedGroups && resolvedGroups.length > 0 ? resolvedGroups : undefined,
   };
 
   return (
@@ -300,6 +343,9 @@ export default async function MaliksFarmPage() {
           </div>
         </section>
       )}
+
+      {/* Brand Crop Portfolio Section */}
+      <BrandCropPortfolio {...resolvedCropPortfolio} />
 
       {/* 6. Training Centre, Facilities & Testimonials */}
       <BrandTraining
