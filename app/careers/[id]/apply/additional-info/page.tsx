@@ -248,17 +248,6 @@ export default function AdditionalInfoPage() {
           console.warn("submitAdditionalInfo API call warning/error:", apiErr);
           // Non-blocking fallback so user experience is smooth even in offline or partial backend environments
         }
-
-        // Also trigger background upload for stand-alone file storage
-        if (cvFileObject) {
-          try {
-            const uploadData = new FormData();
-            uploadData.append("file", cvFileObject, cvFileObject.name);
-            await hiringApi.uploadResume(uploadData, "general");
-          } catch (uploadErr) {
-            console.warn("uploadResume background upload error:", uploadErr);
-          }
-        }
       }
 
       // Update local store
