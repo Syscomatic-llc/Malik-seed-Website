@@ -45,3 +45,7 @@ next-env.d.ts
 
 # image proxy cache
 .image-cache
+
+// remove the md files from the build output
+*.md
+
