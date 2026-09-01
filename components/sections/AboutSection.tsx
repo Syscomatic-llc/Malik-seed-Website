@@ -337,9 +337,9 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
               </div>
 
               {/* Frame 35 — 358x160, gap 16 */}
-              <div className="flex flex-row gap-[16px]">
+              <div className="flex flex-row gap-4">
                 {/* Frame 33 — 171x160 */}
-                <div className="relative h-[160px] flex-1">
+                <div className="relative h-40 flex-1 rounded-2xl overflow-hidden">
                   <OptimizedImage
                     src={aboutData.images.about1Mobile}
                     alt="Years of Experience"
@@ -350,7 +350,7 @@ export default function AboutSection({ apiData }: AboutSectionProps) {
                   />
                 </div>
                 {/* Frame 34 — 171x160 */}
-                <div className="relative h-[160px] flex-1">
+                <div className="relative h-40 flex-1 rounded-2xl overflow-hidden">
                   <OptimizedImage
                     src={aboutData.images.about2Mobile}
                     alt="Farmer Partners"

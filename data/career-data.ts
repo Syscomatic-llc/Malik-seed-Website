@@ -531,12 +531,66 @@ export const employeeTestimonialsData = {
     },
     {
       id: 3,
-      name: "Nadia Islam",
-      designation: "Product Development Lead",
-      department: "Product Development",
+      name: "Israt Jahan",
+      designation: "Designer",
+      department: "Media & Communications",
       quote:
-        "The Future Leader Program gave me a real shot at building something meaningful. The mentorship and exposure you get here is unmatched in the industry.",
+        "Since joining, I’ve learned so much about digital marketing, AI in content creation and establishing brand presence online. My experience at Malik Seeds has been a journey of growth, learning, and meaningful contribution alongside a great team. I look forward to continuing my learning journey here.",
       avatar: "/images/testimonials/testimonial_3.png",
+    },
+    {
+      id: 4,
+      name: "Abdul Kaium",
+      designation: "Senior Researcher",
+      department: "Research & Development",
+      quote:
+        "At Malik Seeds, I have developed my skills in seed research, crop evaluation and cultivated a mindset centered on innovation. This experience has shaped me into a confident researcher, enabling me to share valuable agricultural knowledge effectively with farmers.",
+      avatar: "/images/testimonials/testimonial_4.png",
+    },
+    {
+      id: 5,
+      name: "Md. Shamim Hossen",
+      designation: "Executive - Sales Admin",
+      department: "Management Information System",
+      quote:
+        "I have been developing my skills extensively with sales data analytics, farmer/distributor networks, and advanced reporting systems. Over the next chapter, I aim to learn more on different analytics tools and further improve my technical knowledge with data. I appreciate the growth mindset my team-members around me have.",
+      avatar: "/images/testimonials/testimonial_5.png",
+    },
+    {
+      id: 6,
+      name: "Fatima Tuz Johra",
+      designation: "Senior Executive",
+      department: "Human Resource",
+      quote:
+        "I lead strategic HR initiatives that align people strategies with organizational objectives. Through a focus on recruitment, talent development, employee engagement, and organizational growth, I drive a cultured based on high-performance.",
+      avatar: "/images/testimonials/testimonial_6.png",
+    },
+    {
+      id: 7,
+      name: "Md. Sojol Mia",
+      designation: "Sr. Store Assistant",
+      department: "Logistics",
+      quote:
+        "My journey with Malik Seeds began in 2013. Over more than a decade, I have dedicated myself to maintaining the highest standards in inventory and store operations. As a Senior Store Assistant, I am focused on ensuring our operations run like clockwork every single day.",
+      avatar: "/images/testimonials/testimonial_7.png",
+    },
+    {
+      id: 8,
+      name: "Md. Moheuddin",
+      designation: "Manager",
+      department: "Logistics",
+      quote:
+        "My journey with the company began in 2014, and over the last decade, I have had the privilege of growing alongside the organization. Starting in the Logistics department, I immersed myself in the complexities of our supply chain and eventually moved into my current role as Logistics Manager.",
+      avatar: "/images/testimonials/testimonial_8.png",
+    },
+    {
+      id: 9,
+      name: "Md. Rifat",
+      designation: "Territory Sales Officer",
+      department: "Sales, Dohazari, Chattogram",
+      quote:
+        "My main objective is to serve the farmers, and I feel extremely proud to be a part of this noble service. At the same time, I enjoy introducing farmers to new and improved seed varieties which results in farmer prosperity. This has been a source of great joy for me.",
+      avatar: "/images/testimonials/testimonial_9.png",
     },
   ] as EmployeeTestimonial[],
 };
