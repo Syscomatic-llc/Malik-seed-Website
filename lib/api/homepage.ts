@@ -35,12 +35,12 @@ export const homepageApi = {
     return apiGet<ApiPartner[]>("/api/v1/homepage/partners", options);
   },
   getNews(options?: RequestOptions) {
-    return apiGet<ApiNewsArticle[]>("/api/v1/news/news", options);
+    return apiGet<ApiNewsArticle[]>("/api/v1/news/articles", options);
   },
   getCtaBanners(options?: RequestOptions) {
     return apiGet<ApiCtaBanner[]>("/api/v1/homepage/cta-banners", options);
   },
   getAll(options?: RequestOptions) {
-    return apiGet<ApiHomepageData>("/api/v1/homepage", options);
+    return apiGet<ApiHomepageData>("/api/v1/homepage/", options);
   },
 };
