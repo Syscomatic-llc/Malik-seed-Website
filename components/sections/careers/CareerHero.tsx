@@ -145,7 +145,7 @@ export default memo(function CareerHero({
                 src={data.teamImage}
                 alt="Malik Seeds team"
                 fill
-                sizes="(max-width: 768px) 358px, (max-width: 1280px) 400px, 503px"
+                sizes="(max-width: 767px) 358px, (max-width: 1023px) 540px, (max-width: 1279px) 400px, 503px"
                 className="object-cover object-center"
                 priority
               />
