@@ -508,6 +508,10 @@ export interface ApiBrand {
   updated_at: string | null;
 }
 
+export interface ApiSectionBackgroundResponse {
+  image: string | null;
+}
+
 export interface SiteSettings {
   siteName: string;
   siteTagline: string;

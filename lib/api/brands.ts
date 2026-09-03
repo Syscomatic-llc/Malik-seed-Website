@@ -1,6 +1,7 @@
 import { apiGet, RequestOptions } from "./client";
 import {
   ApiBrand,
+  ApiSectionBackgroundResponse,
   ApiPotatoSeedDataResponse,
   ApiInnovationDevelopmentDataResponse,
   ApiMaliksFarmDataResponse,
@@ -10,6 +11,13 @@ import {
 } from "./types";
 
 export const brandsApi = {
+  getSectionBackground(options?: RequestOptions) {
+    return apiGet<ApiSectionBackgroundResponse>(
+      "/api/v1/our-brands/section-background",
+      options
+    );
+  },
+
   getBrands(category?: string | null, options?: RequestOptions) {
     return apiGet<ApiBrand[]>("/api/v1/our-brands/brands", {
       ...options,
@@ -33,7 +41,7 @@ export const brandsApi = {
 
   getMaliksFarmData(options?: RequestOptions) {
     return apiGet<ApiMaliksFarmDataResponse>(
-      "/api/v1/our-brands/brands/maliks-farm/detail",
+      "/api/v1/our-brands/brands/malik-farm/detail",
       options
     );
   },

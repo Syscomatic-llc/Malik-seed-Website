@@ -16,6 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function BrandsPage() {
   let apiBrands = null;
+  let sectionBackground = null;
   try {
     apiBrands = await brandsApi.getBrands(null, { revalidate: 15, tags: ["brands"] });
     if (apiBrands && apiBrands.length > 0) {
@@ -23,6 +24,14 @@ export default async function BrandsPage() {
     }
   } catch (err) {
     console.error("Failed to fetch brands from API:", err);
+  }
+  try {
+    sectionBackground = await brandsApi.getSectionBackground({
+      revalidate: 15,
+      tags: ["brands"],
+    });
+  } catch (err) {
+    console.error("Failed to fetch brands section background from API:", err);
   }
 
   return (
@@ -40,7 +49,7 @@ export default async function BrandsPage() {
           {/* Hero Image */}
           <div className="group relative h-[240px] w-full overflow-hidden rounded-[24px] bg-[#1a2d24] sm:h-[400px] md:h-[520px]">
             <OptimizedImage
-              src="/images/brand/dscf8592_1.png"
+              src={sectionBackground?.image || "/images/brand/dscf8592_1.png"}
               alt="Building a Connected Agricultural Ecosystem"
               fill
               priority
