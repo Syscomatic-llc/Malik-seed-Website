@@ -72,7 +72,9 @@ export default function NewsPage({ apiData }: NewsPageProps) {
 
   const allInitialArticles = useMemo(() => {
     if (!apiData?.articles) return [];
-    return apiData.articles.map(mapApiArticleToNewsArticle);
+    return [...apiData.articles]
+      .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+      .map(mapApiArticleToNewsArticle);
   }, [apiData]);
 
   const categoryFilteredArticles = useMemo(() => {
@@ -102,7 +104,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
       apiData.articles.length > 0
     ) {
       isFirstRender.current = false;
-      const initialMapped = apiData.articles.map(mapApiArticleToNewsArticle);
+      const initialMapped = allInitialArticles;
       const total = initialMapped.length;
       const initialPageSlice = initialMapped.slice(0, ARTICLES_PER_PAGE);
       cacheRef.current.set(cacheKey, {
@@ -147,7 +149,7 @@ export default function NewsPage({ apiData }: NewsPageProps) {
     return () => {
       isCancelled = true;
     };
-  }, [currentPage, activeCategory, apiData]);
+  }, [currentPage, activeCategory, apiData, allInitialArticles]);
 
   // Total count for current category (uses API total if fetched, otherwise local category count)
   const effectiveTotalArticles = useMemo(() => {

@@ -18,6 +18,9 @@ export interface PaginatedArticlesResponse {
   total: number;
 }
 
+const sortArticles = (articles: ApiNewsArticle[]) =>
+  [...articles].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+
 export const newsApi = {
   getArticlesPaginated(params?: GetArticlesParams, options?: RequestOptions): Promise<PaginatedArticlesResponse> {
     const query = new URLSearchParams();
@@ -32,10 +35,10 @@ export const newsApi = {
       options
     ).then((res) => {
       if (Array.isArray(res)) {
-        return { items: res, total: res.length };
+        return { items: sortArticles(res), total: res.length };
       }
       return {
-        items: res?.items || [],
+        items: sortArticles(res?.items || []),
         total: res?.total ?? (res?.items?.length || 0),
       };
     });
@@ -90,6 +93,9 @@ export const newsApi = {
   },
   getAll(options?: RequestOptions) {
     return apiGet<ApiNewsPageData>("/api/v1/news/", options).then((res) => {
+      if (res && Array.isArray(res.articles)) {
+        res.articles = sortArticles(res.articles);
+      }
       if (res && Array.isArray(res.categories)) {
         res.categories.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
       }
