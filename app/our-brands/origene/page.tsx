@@ -72,10 +72,10 @@ export default async function OrigenePage() {
       <BrandGrid {...resolvedGrid} />
 
       {/* THE PROBLEM WE'RE SOLVING */}
-      <section className="w-full bg-[#0D1A14] px-4 py-12 md:px-8 md:py-16 lg:px-[100px] lg:py-[100px]">
-        <div className="mx-auto flex max-w-[1240px] flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-[56px]">
+      <section className="w-full bg-[#0D1A14] px-4 py-12 md:px-8 md:py-16 lg:px-25 lg:py-25">
+        <div className="mx-auto flex max-w-310 flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-14">
           {/* Left Column: Text + Stat Card */}
-          <div className="flex w-full shrink-0 flex-col items-start justify-between gap-8 lg:h-[714px] lg:max-w-[576px] lg:gap-0">
+          <div className="flex w-full shrink-0 flex-col items-start justify-between gap-8 lg:h-178.5 lg:max-w-xl lg:gap-0">
             {/* Badge */}
             {resolvedSplit1.badge ? (
               <SectionBadge variant="dark" showDot className="mb-2">
@@ -85,7 +85,7 @@ export default async function OrigenePage() {
 
             {/* Title */}
             <div className="flex flex-col gap-4">
-              <h2 className="text-left font-sans text-[32px] leading-[38px] font-medium whitespace-pre-line text-white md:text-[48px] md:leading-[58px]">
+              <h2 className="text-left font-sans text-[32px] leading-9.5 font-medium whitespace-pre-line text-white md:text-[48px] md:leading-14.5">
                 {origeneData.split1.title.map((part, i) => {
                   if (part.includes("\n")) {
                     return (
@@ -107,13 +107,13 @@ export default async function OrigenePage() {
               >
                 {origeneData.split1.statCard.value}
               </div>
-              <div className="font-sans text-[14px] leading-[22px] text-[#F2F7F1]/90 md:text-[16px] md:leading-[24px]">
+              <div className="font-sans text-[14px] leading-5.5 text-[#F2F7F1]/90 md:text-[16px] md:leading-6">
                 {origeneData.split1.statCard.label}
               </div>
             </div>
 
             {/* Description */}
-            <div className="flex flex-col gap-4 text-left font-sans text-[16px] leading-[24px] text-[#F2F7F1]/70">
+            <div className="flex flex-col gap-4 text-left font-sans text-[16px] leading-6 text-[#F2F7F1]/70">
               {origeneData.split1.description.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
@@ -122,7 +122,7 @@ export default async function OrigenePage() {
 
           {/* Right Column: Image */}
           {resolvedSplit1.image ? (
-            <div className="relative h-[220px] w-full shrink-0 overflow-hidden rounded-[20px] bg-neutral-200 lg:h-[714px] lg:max-w-[608px] lg:rounded-[24px]">
+            <div className="relative h-55 w-full shrink-0 overflow-hidden rounded-[20px] bg-neutral-200 lg:h-178.5 lg:max-w-152 lg:rounded-[24px]">
               <OptimizedImage
                 src={resolvedSplit1.image}
                 alt={origeneData.split1.title.join(" ").replace(/\n/g, "")}
