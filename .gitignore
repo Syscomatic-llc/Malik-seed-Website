@@ -48,4 +48,5 @@ next-env.d.ts
 
 // remove the md files from the build output
 *.md
+!PAGE_PATHS.md
 
