@@ -19,6 +19,7 @@ interface BrandProcessProps {
   images?: string[];
   bottomQuote?: string;
   variant?: "default" | "light" | "dark";
+  layout?: "default" | "2x2";
   buttonText?: string;
   buttonLink?: string;
   buttonTarget?: string;
@@ -33,11 +34,13 @@ export default function BrandProcess({
   images,
   bottomQuote,
   variant = "default",
+  layout = "default",
   buttonText,
   buttonLink,
   buttonTarget,
   buttonVariant,
 }: BrandProcessProps) {
+  const is2x2 = layout === "2x2";
   const stepCols =
     steps.length === 3
       ? "md:grid-cols-3"
@@ -50,15 +53,25 @@ export default function BrandProcess({
       <div className="mx-auto flex max-w-[1240px] flex-col items-center gap-8 md:gap-16">
         {/* Header */}
         <div className="flex w-full max-w-[900px] flex-col items-center justify-center gap-6 text-center">
-          <SectionBadge variant="outline" showDot>
+          <SectionBadge variant="outline" showDot dotPosition={is2x2 ? "right" : "left"}>
             {badge}
           </SectionBadge>
           <div className="flex flex-col gap-2 md:gap-3">
-            <h2 className="font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]">
+            <h2
+              className={cn(
+                "font-sans text-[32px] leading-[38px] font-medium text-[#0D1A14] md:text-[48px] md:leading-[58px]",
+                is2x2 && "max-w-[784px] mx-auto"
+              )}
+            >
               {title}
             </h2>
             {description && (
-              <p className="mx-auto mt-2 max-w-[830px] font-sans text-[15px] leading-[24px] text-[#0D1A14]/65 md:text-[16px]">
+              <p
+                className={cn(
+                  "mx-auto mt-2 max-w-[830px] font-sans text-[15px] leading-[24px] md:text-[16px]",
+                  is2x2 ? "text-[#0D1A14]" : "text-[#0D1A14]/65"
+                )}
+              >
                 {description}
               </p>
             )}
@@ -67,23 +80,39 @@ export default function BrandProcess({
 
         {/* Steps */}
         {steps.length > 0 && (
-          <div className={`grid grid-cols-1 ${stepCols} gap-5 md:gap-6`}>
+          <div
+            className={cn(
+              "grid gap-5 md:gap-6",
+              is2x2
+                ? "w-full max-w-[1030px] grid-cols-1 md:grid-cols-2"
+                : `grid-cols-1 ${stepCols}`
+            )}
+          >
             {steps.map((step, i) => (
               <div
                 key={i}
                 className={cn(
                   "brand-card group relative h-full w-full",
-                  variant === "default" ? "rounded-[20px]" : "rounded-[24px]"
+                  is2x2
+                    ? "rounded-[24px] min-h-[277px]"
+                    : variant === "default"
+                      ? "rounded-[20px]"
+                      : "rounded-[24px]"
                 )}
               >
                 <div
                   className={cn(
-                    "flex h-full w-full flex-col gap-6 justify-start overflow-hidden rounded-[inherit] transition-all duration-300 md:gap-12",
-                    variant === "light"
-                      ? "border border-[#E4E7EC] bg-[#F9FAFB] p-8"
-                      : variant === "dark"
-                        ? "border border-white/5 bg-[#0F3221] p-8"
-                        : "border border-[#0D1A14]/8 bg-white p-6 hover:shadow-md"
+                    "flex h-full w-full flex-col justify-between overflow-hidden rounded-[inherit] transition-all duration-300",
+                    is2x2
+                      ? "gap-6 rounded-[24px] bg-[#0F3221] px-8 py-10 md:px-10 md:py-12"
+                      : cn(
+                          "gap-6 justify-start md:gap-12",
+                          variant === "light"
+                            ? "border border-[#E4E7EC] bg-[#F9FAFB] p-8"
+                            : variant === "dark"
+                              ? "border border-white/5 bg-[#0F3221] p-8"
+                              : "border border-[#0D1A14]/8 bg-white p-6 hover:shadow-md"
+                        )
                   )}
                 >
                   {/* Tag Badge or Number */}
@@ -95,10 +124,15 @@ export default function BrandProcess({
                     step.number && (
                       <div
                         className={cn(
-                          "flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-sans text-[18px] font-[500]",
-                          variant === "dark"
-                            ? "bg-[#A9E179] text-[#0D1A14]"
-                            : "bg-[#195236] text-white"
+                          "flex h-10 w-10 shrink-0 items-center justify-center font-sans text-[18px] font-medium leading-[22px]",
+                          is2x2
+                            ? "rounded-[10px] bg-[#A9E179] text-[#0D1A14]"
+                            : cn(
+                                "rounded-full font-[500]",
+                                variant === "dark"
+                                  ? "bg-[#A9E179] text-[#0D1A14]"
+                                  : "bg-[#195236] text-white"
+                              )
                         )}
                       >
                         {step.number}
@@ -109,7 +143,7 @@ export default function BrandProcess({
                     <h3
                       className={cn(
                         "font-sans text-[20px] leading-[24px] font-medium md:text-[24px] md:leading-[29px]",
-                        variant === "dark" ? "text-[#F2F7F1]" : "text-[#0D1A14]"
+                        variant === "dark" || is2x2 ? "text-[#F2F7F1]" : "text-[#0D1A14]"
                       )}
                     >
                       {step.title}
@@ -117,9 +151,11 @@ export default function BrandProcess({
                     <p
                       className={cn(
                         "font-sans text-[16px] leading-[24px]",
-                        variant === "dark"
-                          ? "text-[#F2F7F1]/70"
-                          : "text-[#0D1A14]/65"
+                        is2x2
+                          ? "text-[#F2F7F1]"
+                          : variant === "dark"
+                            ? "text-[#F2F7F1]/70"
+                            : "text-[#0D1A14]/65"
                       )}
                     >
                       {step.description}
@@ -127,11 +163,11 @@ export default function BrandProcess({
                   </div>
                 </div>
                 <BrandCardBorder
-                  isDark={variant === "dark"}
+                  isDark={variant === "dark" || is2x2}
                   strokeColor={
                     step.tag
                       ? "#a9e179"
-                      : variant === "dark"
+                      : variant === "dark" || is2x2
                         ? "#a9e179"
                         : "#195236"
                   }
@@ -145,24 +181,36 @@ export default function BrandProcess({
         {bottomQuote && (
           <div
             className={cn(
-              "flex w-full items-center justify-center gap-4 pt-4 lg:justify-start",
-              variant === "dark"
-                ? "gap-6 border-none pt-0 md:gap-8"
-                : "border-t border-[#0D1A14]/10"
+              "flex w-full items-center",
+              is2x2
+                ? "max-w-[824px] mx-auto gap-6 md:gap-8 pt-4 md:pt-6 justify-start"
+                : cn(
+                    "justify-center gap-4 pt-4 lg:justify-start",
+                    variant === "dark"
+                      ? "gap-6 border-none pt-0 md:gap-8"
+                      : "border-t border-[#0D1A14]/10"
+                  )
             )}
           >
             <div
               className={cn(
-                "h-[54px] w-[2px] shrink-0 rounded-[10px]",
-                variant === "dark" ? "bg-[#0D1A14]" : "bg-[#195236]"
+                "shrink-0 rounded-[10px]",
+                is2x2
+                  ? "h-[40px] w-[3px] bg-[#0D1A14]"
+                  : cn(
+                      "h-[54px] w-[2px]",
+                      variant === "dark" ? "bg-[#0D1A14]" : "bg-[#195236]"
+                    )
               )}
             />
             <p
               className={cn(
                 "font-sans font-medium",
-                variant === "dark"
-                  ? "text-[24px] leading-[29px] text-[#0F3221] md:text-[32px] md:leading-[38px]"
-                  : "text-[18px] text-[#0D1A14] md:text-[22px]"
+                is2x2
+                  ? "text-[22px] leading-[28px] text-[#0F3221] md:text-[32px] md:leading-[38px]"
+                  : variant === "dark"
+                    ? "text-[24px] leading-[29px] text-[#0F3221] md:text-[32px] md:leading-[38px]"
+                    : "text-[18px] text-[#0D1A14] md:text-[22px]"
               )}
             >
               {bottomQuote}

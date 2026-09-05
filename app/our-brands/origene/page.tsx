@@ -136,7 +136,7 @@ export default async function OrigenePage() {
         </div>
       </section>
 
-      <BrandProcess {...origeneData.process1} variant="dark" />
+      <BrandProcess {...origeneData.process1} variant="dark" layout="2x2" />
       <BrandProcess {...resolvedProcess2} variant="default" />
       <BrandSplit
         {...origeneData.split2}
