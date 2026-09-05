@@ -66,9 +66,7 @@ export default async function PotatoSeedPage() {
       dynamicData?.youtube?.images && dynamicData.youtube.images.length > 0
         ? dynamicData.youtube.images.map((img) => resolveImageUrl(img))
         : [],
-    brandLogo: dynamicData?.youtube?.brandLogo
-      ? resolveImageUrl(dynamicData.youtube.brandLogo)
-      : "",
+    brandLogo: potatoSeedData.youtube.brandLogo,
     brandLogoAlt: potatoSeedData.youtube.brandLogoAlt,
   };
 
