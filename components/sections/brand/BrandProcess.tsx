@@ -207,7 +207,7 @@ export default function BrandProcess({
               className={cn(
                 "font-sans font-medium",
                 is2x2
-                  ? "text-[22px] leading-[28px] text-[#0F3221] md:text-[32px] md:leading-[38px]"
+                  ? "text-[22px] leading-[28px] italic text-[#0F3221] md:text-[32px] md:leading-[38px]"
                   : variant === "dark"
                     ? "text-[24px] leading-[29px] text-[#0F3221] md:text-[32px] md:leading-[38px]"
                     : "text-[18px] text-[#0D1A14] md:text-[22px]"
