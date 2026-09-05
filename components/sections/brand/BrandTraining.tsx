@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { motion } from "motion/react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Link from "next/link";
@@ -59,7 +59,7 @@ function FacilityCard({
       }}
     >
       {facility.image && (
-        <div className="relative h-[200px] w-[310px] flex-shrink-0 overflow-hidden rounded-2xl border border-white/5 bg-[#0F3221] lg:h-[240px] lg:w-[372px] lg:rounded-3xl">
+        <div className="relative h-50 w-77.5 shrink-0 overflow-hidden rounded-2xl border border-white/5 bg-[#0F3221] lg:h-60 lg:w-93 lg:rounded-3xl">
           <OptimizedImage
             src={facility.image}
             alt={facility.title}
@@ -73,7 +73,7 @@ function FacilityCard({
         <h3 className="font-sans text-xl leading-tight font-medium text-[#A9E179] lg:text-2xl">
           {facility.title}
         </h3>
-        <p className="max-w-[297px] font-sans text-[15px] leading-relaxed font-normal text-[#F2F7F1]/70 lg:max-w-none lg:text-base">
+        <p className="max-w-74.25 font-sans text-[15px] leading-relaxed font-normal text-[#F2F7F1]/70 lg:max-w-none lg:text-base">
           {facility.description}
         </p>
       </div>
@@ -102,10 +102,6 @@ export interface BrandTrainingProps {
     badge?: string;
     title?: string;
     images?: string[];
-    visitorScans?: Array<{
-      image: string;
-      title?: string;
-    }>;
     visitorScans?:
       | Array<{
           image: string;
@@ -126,16 +122,18 @@ export default function BrandTraining({
   showTestimonials = true,
 }: BrandTrainingProps) {
   const badge = trainingData?.badge || "";
-  const programs = trainingData?.programs || [];
+  const programs = useMemo(() => trainingData?.programs || [], [trainingData?.programs]);
   const facilities = trainingData?.facilities || [];
 
-  const [activeTab, setActiveTab] = useState(programs[0]?.id || "");
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    return programs.length > 0 ? programs[0].id : "";
+  });
 
   useEffect(() => {
-    if (programs.length > 0 && (!activeTab || !programs.some((p) => p.id === activeTab))) {
+    if (programs.length > 0 && activeTab && !programs.some((p) => p.id === activeTab)) {
       setActiveTab(programs[0].id);
     }
-  }, [programs, activeTab]);
+  }, [programs]);
 
   const titleRef = useRef<HTMLDivElement>(null);
   const [titleVisible, setTitleVisible] = useState(false);
@@ -153,21 +151,7 @@ export default function BrandTraining({
     return () => observer.disconnect();
   }, []);
 
-  // Scans derived dynamically
-  const visitorScans: Array<{ image: string; title: string }> =
-    testimonialsData?.images && testimonialsData.images.length > 0
-      ? testimonialsData.images.filter(Boolean).map((img, idx) => ({
-          image: img,
-          title: `Visitor Log Entry ${idx + 1}`,
-        }))
-      : Array.isArray(testimonialsData?.visitorScans) && testimonialsData.visitorScans.length > 0
-      ? testimonialsData.visitorScans
-          .filter((s): s is { image: string; title?: string } => Boolean(s?.image))
-          .map((s, idx) => ({
-            image: s.image,
-            title: s.title || `Visitor Log Entry ${idx + 1}`,
-          }))
-      : [];
+
   let derivedScans: Array<{ image: string; title: string }> = [];
 
   if (testimonialsData?.images && testimonialsData.images.length > 0) {
@@ -209,8 +193,10 @@ export default function BrandTraining({
   const [scanTouchEnd, setScanTouchEnd] = useState<number | null>(null);
 
   useEffect(() => {
-    setScanIndex(scanLoopStart);
-  }, [scanLoopStart]);
+    if (scansCount > 0) {
+      setScanIndex(scanLoopStart);
+    }
+  }, [scansCount, scanLoopStart]);
 
   const scanNext = useCallback(() => {
     if (isTransitioning || scansCount <= 1) return;
@@ -299,17 +285,17 @@ export default function BrandTraining({
     <>
       {/* 6. Training Centre & Facilities Section */}
       {(badge || programs.length > 0 || facilities.length > 0) && (
-        <section className="w-full bg-[#0D1A14] px-4 py-12 text-[#F2F7F1] md:px-8 md:py-[100px] lg:px-[100px]">
-          <div className="mx-auto flex max-w-[1240px] flex-col gap-12 md:gap-20">
+        <section className="w-full bg-[#0D1A14] px-4 py-12 text-[#F2F7F1] md:px-8 md:py-25 lg:px-25">
+          <div className="mx-auto flex max-w-310 flex-col gap-12 md:gap-20">
             {/* Header */}
-            <div className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-6 text-center">
+            <div className="mx-auto flex w-full max-w-225 flex-col items-center gap-6 text-center">
               {badge && (
                 <SectionBadge variant="dark" showDot>
                   {badge}
                 </SectionBadge>
               )}
               <div className="flex flex-col gap-3">
-                <h2 className="font-sans text-[32px] leading-[38px] font-medium text-[#F2F7F1] md:text-[48px] md:leading-[58px]">
+                <h2 className="font-sans text-[32px] leading-9.5 font-medium text-[#F2F7F1] md:text-[48px] md:leading-14.5">
                   {trainingData?.title || maliksFarmData.training.title}
                 </h2>
               </div>
@@ -318,7 +304,7 @@ export default function BrandTraining({
             {/* Interactive Program Tabs */}
             {programs.length > 0 && (
               <div className="flex w-full flex-col items-center gap-8">
-                <div className="flex w-full max-w-[851px] flex-col items-center justify-between gap-2 rounded-[16px] bg-[#112019] p-2 md:flex-row">
+                <div className="flex w-full max-w-212.75 flex-col items-center justify-between gap-2 rounded-[16px] bg-[#112019] p-2 md:flex-row">
                   {programs.map((prog) => {
                     const isActive = activeTab === prog.id;
                     return (
@@ -326,7 +312,7 @@ export default function BrandTraining({
                         key={prog.id}
                         onClick={() => setActiveTab(prog.id)}
                         className={cn(
-                          "relative flex h-[39px] w-full items-center justify-center rounded-[10px] px-4 py-2 text-center font-sans text-[14px] whitespace-nowrap transition-colors duration-300 ease-in-out select-none md:h-auto md:flex-1 md:py-3.5 md:text-[16px]",
+                          "relative flex h-9.75 w-full items-center justify-center rounded-[10px] px-4 py-2 text-center font-sans text-[14px] whitespace-nowrap transition-colors duration-300 ease-in-out select-none md:h-auto md:flex-1 md:py-3.5 md:text-[16px]",
                           isActive
                             ? "font-medium text-[#0D1A14]"
                             : "bg-[#0D291C] text-[#F2F7F1] hover:bg-white/5 hover:text-white md:bg-transparent md:text-white/70"
@@ -345,7 +331,7 @@ export default function BrandTraining({
                   })}
                 </div>
                 {/* Active Tab Image Frame */}
-                <div className="group relative h-[350px] w-full max-w-[1030px] overflow-hidden rounded-[20px] bg-[#112019] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:aspect-[1030/475] md:h-auto md:rounded-[24px]">
+                <div className="group relative h-87.5 w-full max-w-257.5 overflow-hidden rounded-[20px] bg-[#112019] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:aspect-1030/475 md:h-auto md:rounded-[24px]">
                   {programs.map((prog, idx) => {
                     const isSelected = prog.id === activeTab || (!activeTab && idx === 0);
                     if (!prog.image) return null;
@@ -377,13 +363,13 @@ export default function BrandTraining({
                 {/* Sticky title column */}
                 <div
                   ref={titleRef}
-                  className="w-full flex-shrink-0 text-center transition-all duration-700 ease-out lg:sticky lg:top-32 lg:col-span-4 lg:text-left"
+                  className="w-full shrink-0 text-center transition-all duration-700 ease-out lg:sticky lg:top-32 lg:col-span-4 lg:text-left"
                   style={{
                     opacity: titleVisible ? 1 : 0,
                     transform: titleVisible ? "translateY(0)" : "translateY(30px)",
                   }}
                 >
-                  <h3 className="font-sans text-[32px] leading-[38px] font-medium whitespace-pre-line text-[#F2F7F1] lg:text-[48px] lg:leading-[58px]">
+                  <h3 className="font-sans text-[32px] leading-9.5 font-medium whitespace-pre-line text-[#F2F7F1] lg:text-[48px] lg:leading-14.5">
                     {trainingData?.facilitiesHeader || maliksFarmData.training.facilitiesHeader}
                   </h3>
                 </div>
@@ -402,15 +388,15 @@ export default function BrandTraining({
 
       {/* 7. Testimonials & Contact CTA */}
       {showTestimonials ? (
-        <section className="w-full overflow-hidden bg-[#DCF3C7] py-[80px] text-[#0D1A14] md:py-[130px]">
+        <section className="w-full overflow-hidden bg-[#DCF3C7] py-20 text-[#0D1A14] md:py-32.5">
           {/* Constrained Header */}
-          <div className="mx-auto mb-16 flex max-w-[1240px] flex-col items-center gap-8 px-4 text-center md:mb-20 md:px-8 lg:px-[100px]">
+          <div className="mx-auto mb-16 flex max-w-310 flex-col items-center gap-8 px-4 text-center md:mb-20 md:px-8 lg:px-25">
             {(testimonialsData?.badge || maliksFarmData.testimonials.badge) && (
               <SectionBadge variant="outline" showDot>
                 {testimonialsData?.badge || maliksFarmData.testimonials.badge}
               </SectionBadge>
             )}
-            <h2 className="font-sans text-[32px] leading-[38px] font-medium tracking-tight text-black md:text-[48px] md:leading-[58px]">
+            <h2 className="font-sans text-[32px] leading-9.5 font-medium tracking-tight text-black md:text-[48px] md:leading-14.5">
               {testimonialsData?.title || maliksFarmData.testimonials.title}
             </h2>
           </div>
@@ -424,12 +410,12 @@ export default function BrandTraining({
                 onMouseEnter={() => setScanPaused(true)}
                 onMouseLeave={() => setScanPaused(false)}
               >
-                <div className="relative h-[598px] w-full overflow-visible">
+                <div className="relative h-149.5 w-full overflow-visible">
                   <div
                     className={cn(
                       "flex items-center gap-6 overflow-visible",
                       isTransitionEnabled
-                        ? "transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
+                        ? "transition-transform duration-400 ease-in-out"
                         : "transition-none"
                     )}
                     style={{
@@ -445,7 +431,7 @@ export default function BrandTraining({
                             if (isTransitioning) return;
                             setScanIndex(idx);
                           }}
-                          className="group relative h-[598px] w-[398px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
+                          className="group relative h-149.5 w-99.5 shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
                           style={{
                             border: "1.5px solid rgba(25, 82, 54, 0.2)",
                           }}
@@ -474,12 +460,12 @@ export default function BrandTraining({
                 onTouchMove={handleScanTouchMove}
                 onTouchEnd={handleScanTouchEnd}
               >
-                <div className="relative h-[420px] w-full touch-pan-y overflow-visible">
+                <div className="relative h-105 w-full touch-pan-y overflow-visible">
                   <div
                     className={cn(
                       "flex items-center gap-4 overflow-visible",
                       isTransitionEnabled
-                        ? "transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
+                        ? "transition-transform duration-400 ease-in-out"
                         : "transition-none"
                     )}
                     style={{
@@ -495,7 +481,7 @@ export default function BrandTraining({
                             if (isTransitioning) return;
                             setScanIndex(idx);
                           }}
-                          className="group relative h-[420px] w-[280px] shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
+                          className="group relative h-105 w-70 shrink-0 cursor-pointer overflow-hidden rounded-[20px] bg-white"
                           style={{
                             border: "1.5px solid rgba(25, 82, 54, 0.2)",
                           }}
@@ -520,7 +506,7 @@ export default function BrandTraining({
               {/* Navigation Arrows */}
               {scansCount > 1 && (
                 <div
-                  className="mt-[48px] hidden justify-center gap-4 sm:flex"
+                  className="mt-12 hidden justify-center gap-4 sm:flex"
                   onMouseEnter={() => setScanPaused(true)}
                   onMouseLeave={() => setScanPaused(false)}
                 >
@@ -550,9 +536,9 @@ export default function BrandTraining({
           )}
 
           {/* Contact Call to Action Banner */}
-          <div className="mx-auto mt-16 max-w-[1240px] px-4 md:mt-24 md:px-8 lg:px-[100px]">
-            <div className="mx-auto flex w-full max-w-[784px] items-center justify-center rounded-[24px] bg-[#0D1A14] p-6 text-center text-[#F2F7F1] md:p-10">
-              <p className="max-w-[677px] font-sans text-[18px] leading-[28px] text-white/90 md:text-[20px] md:leading-[30px]">
+          <div className="mx-auto mt-16 max-w-310 px-4 md:mt-24 md:px-8 lg:px-25">
+            <div className="mx-auto flex w-full max-w-196 items-center justify-center rounded-[24px] bg-[#0D1A14] p-6 text-center text-[#F2F7F1] md:p-10">
+              <p className="max-w-169.25 font-sans text-[18px] leading-7 text-white/90 md:text-[20px] md:leading-7.5">
                 If you are interested in hosting a program at our facility or
                 purchasing GAP certified fruits and vegetables, contact us at{" "}
                 <Link
@@ -571,9 +557,9 @@ export default function BrandTraining({
         </section>
       ) : (
         <section className="w-full bg-[#F2F7F1] py-12 md:py-16">
-          <div className="mx-auto max-w-[1240px] px-4 md:px-8 lg:px-[100px]">
-            <div className="mx-auto flex w-full max-w-[784px] items-center justify-center rounded-[24px] bg-[#0D1A14] p-6 text-center text-[#F2F7F1] md:p-10">
-              <p className="max-w-[677px] font-sans text-[18px] leading-[28px] text-white/90 md:text-[20px] md:leading-[30px]">
+          <div className="mx-auto max-w-310 px-4 md:px-8 lg:px-25">
+            <div className="mx-auto flex w-full max-w-196 items-center justify-center rounded-[24px] bg-[#0D1A14] p-6 text-center text-[#F2F7F1] md:p-10">
+              <p className="max-w-169.25 font-sans text-[18px] leading-7 text-white/90 md:text-[20px] md:leading-7.5">
                 If you are interested in hosting a program at our facility or
                 purchasing GAP certified fruits and vegetables, contact us at{" "}
                 <Link
