@@ -157,7 +157,11 @@ function PaginationControls({
   onPageChange: (page: number) => void;
   className?: string;
 }) {
+  if (totalItems === 0) return null;
+
   const pageNumbers = getPageNumbers(currentPage, totalPages);
+  const currentStart = totalItems === 0 ? 0 : startIndex + 1;
+  const currentEnd = Math.min(startIndex + itemsPerPage, totalItems);
 
   return (
     <div
@@ -167,63 +171,66 @@ function PaginationControls({
       )}
     >
       <div className="text-[13px] sm:text-[14px] font-sans text-[#0D1A14]/70 order-2 sm:order-1">
-        Showing <span className="font-medium text-[#0D1A14]">{startIndex + 1}</span> to{" "}
+        Showing <span className="font-medium text-[#0D1A14]">{currentStart}</span> to{" "}
         <span className="font-medium text-[#0D1A14]">
-          {Math.min(startIndex + itemsPerPage, totalItems)}
+          {currentEnd}
         </span>{" "}
-        of <span className="font-medium text-[#0D1A14]">{totalItems}</span> projects
+        of <span className="font-medium text-[#0D1A14]">{totalItems}</span>{" "}
+        {totalItems === 1 ? "project" : "projects"}
       </div>
 
-      <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
-        {/* Previous page button */}
-        <button
-          onClick={() => onPageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
-          aria-label="Previous page"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
+      {totalPages > 1 && (
+        <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
+          {/* Previous page button */}
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
 
-        {/* Page buttons / Ellipsis */}
-        {pageNumbers.map((page, i) => {
-          if (typeof page === "string") {
+          {/* Page buttons / Ellipsis */}
+          {pageNumbers.map((page, i) => {
+            if (typeof page === "string") {
+              return (
+                <span
+                  key={`ellipsis-${i}`}
+                  className="flex h-8 w-6 sm:h-9 sm:w-8 items-center justify-center text-xs sm:text-sm font-medium text-[#0D1A14]/40 select-none"
+                >
+                  •••
+                </span>
+              );
+            }
+
             return (
-              <span
-                key={`ellipsis-${i}`}
-                className="flex h-8 w-6 sm:h-9 sm:w-8 items-center justify-center text-xs sm:text-sm font-medium text-[#0D1A14]/40 select-none"
+              <button
+                key={page}
+                onClick={() => onPageChange(page)}
+                className={cn(
+                  "flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer",
+                  currentPage === page
+                    ? "bg-[#0F3221] text-[#F2F7F1] font-semibold"
+                    : "border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60"
+                )}
               >
-                •••
-              </span>
+                {page}
+              </button>
             );
-          }
+          })}
 
-          return (
-            <button
-              key={page}
-              onClick={() => onPageChange(page)}
-              className={cn(
-                "flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer",
-                currentPage === page
-                  ? "bg-[#0F3221] text-[#F2F7F1] font-semibold"
-                  : "border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60"
-              )}
-            >
-              {page}
-            </button>
-          );
-        })}
-
-        {/* Next page button */}
-        <button
-          onClick={() => onPageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
-          aria-label="Next page"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
+          {/* Next page button */}
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-[#E4E7EC] text-[#0D1A14] hover:bg-[#F2F7F1]/60 disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer disabled:cursor-not-allowed"
+            aria-label="Next page"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -325,7 +332,7 @@ export default function BrandProjectsTable({ projects }: BrandProjectsTableProps
             totalPages={totalPages}
             startIndex={startIndex}
             itemsPerPage={ITEMS_PER_PAGE}
-            totalItems={PROJECTS.length}
+            totalItems={projectList.length}
             onPageChange={handlePageChange}
             className="px-8 py-5"
           />
@@ -445,7 +452,7 @@ export default function BrandProjectsTable({ projects }: BrandProjectsTableProps
             totalPages={totalPages}
             startIndex={startIndex}
             itemsPerPage={ITEMS_PER_PAGE}
-            totalItems={PROJECTS.length}
+            totalItems={projectList.length}
             onPageChange={handlePageChange}
             className="px-6 py-4"
           />
