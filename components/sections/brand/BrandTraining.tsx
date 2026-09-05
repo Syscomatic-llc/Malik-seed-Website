@@ -106,6 +106,15 @@ export interface BrandTrainingProps {
       image: string;
       title?: string;
     }>;
+    visitorScans?:
+      | Array<{
+          image: string;
+          title?: string;
+        }>
+      | {
+          image?: string[];
+          images?: string[];
+        };
   };
   showTestimonials?: boolean;
 }
@@ -159,6 +168,32 @@ export default function BrandTraining({
             title: s.title || `Visitor Log Entry ${idx + 1}`,
           }))
       : [];
+  let derivedScans: Array<{ image: string; title: string }> = [];
+
+  if (testimonialsData?.images && testimonialsData.images.length > 0) {
+    derivedScans = testimonialsData.images.filter(Boolean).map((img, idx) => ({
+      image: img,
+      title: `Visitor Log Entry ${idx + 1}`,
+    }));
+  } else if (Array.isArray(testimonialsData?.visitorScans)) {
+    derivedScans = testimonialsData.visitorScans
+      .filter((s): s is { image: string; title?: string } => Boolean(s?.image))
+      .map((s, idx) => ({
+        image: s.image,
+        title: s.title || `Visitor Log Entry ${idx + 1}`,
+      }));
+  } else if (testimonialsData?.visitorScans && typeof testimonialsData.visitorScans === "object") {
+    const scanObj = testimonialsData.visitorScans as { image?: string[]; images?: string[] };
+    const scanImgs = scanObj.image || scanObj.images || [];
+    if (Array.isArray(scanImgs)) {
+      derivedScans = scanImgs.filter(Boolean).map((img, idx) => ({
+        image: img,
+        title: `Visitor Log Entry ${idx + 1}`,
+      }));
+    }
+  }
+
+  const visitorScans = derivedScans;
 
   const scansCount = visitorScans.length;
   const scanLoopStart = scansCount; // index into middle set

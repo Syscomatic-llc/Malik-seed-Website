@@ -650,11 +650,17 @@ export interface ApiMaliksFarmContent {
   };
   testimonials?: {
     badge?: string;
+    title?: string;
     images?: string[];
-    visitorScans?: Array<{
-      image?: string;
-      title?: string;
-    }>;
+    visitorScans?:
+      | Array<{
+          image?: string;
+          title?: string;
+        }>
+      | {
+          image?: string[];
+          images?: string[];
+        };
   };
   cropPortfolio?: {
     groups?: Array<{

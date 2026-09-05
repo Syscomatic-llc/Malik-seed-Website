@@ -98,18 +98,44 @@ export default async function MaliksFarmPage() {
       : [],
   };
 
+  // Extract visitor scans images from dynamic API data ({ image: string[] } or array) or fallback
+  const rawVisitorScans = dynamicData?.testimonials?.visitorScans;
+  let rawScanImages: string[] = [];
+
+  if (rawVisitorScans) {
+    if (Array.isArray(rawVisitorScans)) {
+      rawScanImages = rawVisitorScans
+        .map((s: any) => (typeof s === "string" ? s : s?.image || s?.img || ""))
+        .filter(Boolean);
+    } else if (typeof rawVisitorScans === "object") {
+      const imgArray = (rawVisitorScans as any).image || (rawVisitorScans as any).images || [];
+      if (Array.isArray(imgArray)) {
+        rawScanImages = imgArray.filter(Boolean);
+      }
+    }
+  }
+
+  // Also check dynamicData?.testimonials?.images
+  if (rawScanImages.length === 0 && Array.isArray(dynamicData?.testimonials?.images)) {
+    rawScanImages = dynamicData.testimonials.images.filter(Boolean);
+  }
+
   const resolvedTestimonials = {
-    badge: dynamicData?.testimonials?.badge || "",
-    images: dynamicData?.testimonials?.images && dynamicData.testimonials.images.length > 0
-      ? dynamicData.testimonials.images.map((img) => resolveImageUrl(img))
-      : [],
-    visitorScans: dynamicData?.testimonials?.visitorScans && dynamicData.testimonials.visitorScans.length > 0
-      ? dynamicData.testimonials.visitorScans.map((s) => ({
-          image: resolveImageUrl(s.image || ""),
-          title: s.title || "",
-        }))
-      : [],
+    badge: dynamicData?.testimonials?.badge || maliksFarmData.testimonials.badge || "",
+    title: dynamicData?.testimonials?.title || maliksFarmData.testimonials.title,
+    images: rawScanImages.map((img) => resolveImageUrl(img)),
+    visitorScans:
+      rawScanImages.length > 0
+        ? rawScanImages.map((img, idx) => ({
+            image: resolveImageUrl(img),
+            title: `Visitor Log Entry ${idx + 1}`,
+          }))
+        : maliksFarmData.testimonials.visitorScans.map((s) => ({
+            image: resolveImageUrl(s.image),
+            title: s.title,
+          })),
   };
+  
 
   // Convert split2 tags object to CropGroup[] layout for BrandCropPortfolio
   const rawTags = dynamicData?.split2?.tags || (dynamicData as any)?.cropPortfolio?.tags || null;
