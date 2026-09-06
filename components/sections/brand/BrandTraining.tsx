@@ -387,18 +387,20 @@ export default function BrandTraining({
       )}
 
       {/* 7. Testimonials & Contact CTA */}
-      {showTestimonials ? (
+      {showTestimonials && scansCount > 0 ? (
         <section className="w-full overflow-hidden bg-[#DCF3C7] py-20 text-[#0D1A14] md:py-32.5">
           {/* Constrained Header */}
           <div className="mx-auto mb-16 flex max-w-310 flex-col items-center gap-8 px-4 text-center md:mb-20 md:px-8 lg:px-25">
-            {(testimonialsData?.badge || maliksFarmData.testimonials.badge) && (
+            {testimonialsData?.badge && (
               <SectionBadge variant="outline" showDot>
-                {testimonialsData?.badge || maliksFarmData.testimonials.badge}
+                {testimonialsData.badge}
               </SectionBadge>
             )}
-            <h2 className="font-sans text-[32px] leading-9.5 font-medium tracking-tight text-black md:text-[48px] md:leading-14.5">
-              {testimonialsData?.title || maliksFarmData.testimonials.title}
-            </h2>
+            {testimonialsData?.title && (
+              <h2 className="font-sans text-[32px] leading-9.5 font-medium tracking-tight text-black md:text-[48px] md:leading-14.5">
+                {testimonialsData.title}
+              </h2>
+            )}
           </div>
 
           {/* ── Scans Carousel ── */}

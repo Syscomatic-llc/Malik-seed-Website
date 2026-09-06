@@ -28,6 +28,7 @@ export default async function MaliksFarmPage() {
     ]);
     apiBrandData = brandRes;
     contactInfo = contactRes;
+    console.log("Fetched maliks farm brand page content:", apiBrandData);
   } catch (err) {
     console.error("Failed to fetch maliks farm brand page content:", err);
   }
@@ -121,8 +122,8 @@ export default async function MaliksFarmPage() {
   }
 
   const resolvedTestimonials = {
-    badge: dynamicData?.testimonials?.badge || maliksFarmData.testimonials.badge || "",
-    title: dynamicData?.testimonials?.title || maliksFarmData.testimonials.title,
+    badge: dynamicData?.testimonials?.badge || "",
+    title: dynamicData?.testimonials?.title || "",
     images: rawScanImages.map((img) => resolveImageUrl(img)),
     visitorScans:
       rawScanImages.length > 0
@@ -130,10 +131,7 @@ export default async function MaliksFarmPage() {
             image: resolveImageUrl(img),
             title: `Visitor Log Entry ${idx + 1}`,
           }))
-        : maliksFarmData.testimonials.visitorScans.map((s) => ({
-            image: resolveImageUrl(s.image),
-            title: s.title,
-          })),
+        : [],
   };
   
 
@@ -378,7 +376,7 @@ export default async function MaliksFarmPage() {
         contactInfo={contactInfo}
         trainingData={resolvedTraining}
         testimonialsData={resolvedTestimonials}
-        showTestimonials={true}
+        showTestimonials={resolvedTestimonials.visitorScans.length > 0}
       />
     </div>
   );

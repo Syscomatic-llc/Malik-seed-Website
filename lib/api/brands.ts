@@ -95,6 +95,18 @@ export const brandsApi: BrandsApi = {
     );
     if (normalized?.slug) return normalized.slug;
 
+    // Handle maliks-farm vs malik-farms plural variations
+    if (target === "maliksfarm" || target === "malikfarms") {
+      const match = brands.find(
+        (b) =>
+          normalizeKey(b.slug) === "malikfarms" ||
+          normalizeKey(b.slug) === "maliksfarm" ||
+          normalizeKey(b.category) === "malikfarms" ||
+          normalizeKey(b.name) === "malikfarms"
+      );
+      if (match?.slug) return match.slug;
+    }
+
     // 3. Substring / partial match across environments
     const partial = brands.find((b) => {
       const bSlug = normalizeKey(b.slug);
@@ -155,7 +167,7 @@ export const brandsApi: BrandsApi = {
     const slug =
       typeof slugOrOptions === "string"
         ? slugOrOptions
-        : await brandsApi.resolveBrandSlug("maliks-farm", slugOrOptions);
+        : await brandsApi.resolveBrandSlug("malik-farms", slugOrOptions);
     const opts = typeof slugOrOptions === "string" ? options : slugOrOptions;
     return brandsApi.getBrandDetail<ApiMaliksFarmDataResponse>(slug, opts);
   },

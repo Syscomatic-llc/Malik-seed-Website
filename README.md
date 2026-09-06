@@ -149,26 +149,58 @@ Content-Type: application/json
 
 ---
 
-## 🗺️ Application Routes Reference
+## 🗺️ Application Routes & CMS Configuration Reference
 
-### 🌐 Public Static Routes (Included in Sitemap)
-- `/` — Homepage
-- `/about` — About Us page
-- `/contact` — Contact form & office details
-- `/our-products` — Seeds & Agricultural Products catalog
-- `/our-gallery` — Media & event gallery
-- `/news` — Company news & announcements
-- `/careers` — Careers main portal
-- `/careers/open-positions` — Open job vacancies listing
+###  Brand Portfolio Pages & Required CMS Slugs Reference
 
-#### 🌾 Brand Portfolio Routes (`/our-brands/*`)
-- `/our-brands` — Brands hub
-- `/our-brands/vegetable-seeds` — Vegetable Seeds showcase
-- `/our-brands/potato-seeds` — Potato Seeds showcase
-- `/our-brands/origene` — Origene brand showcase
-- `/our-brands/maliks-flower` — Malik's Flower brand showcase
-- `/our-brands/maliks-farm` — Malik's Farm brand showcase
-- `/our-brands/innovation-development` — R&D Innovation showcase
+Brand pages have **static frontend routes** in Next.js, while their content is dynamically fetched from backend CMS endpoints. When setting up or editing brands in the CMS database (`/api/v1/our-brands/brands`), use the exact required slugs below:
+
+| Brand Name | Frontend Page Path (`page_path` for SEO) | Required CMS Backend `slug` | Dynamic Content API Endpoint | Next.js Source File |
+| :--- | :--- | :--- | :--- | :--- |
+| **Vegetable Seeds** | `/our-brands/vegetable-seeds` | `vegetable-seeds` | `/api/v1/our-brands/brands/vegetable-seeds/detail` | `app/our-brands/vegetable-seeds/page.tsx` |
+| **Potato Seeds** | `/our-brands/potato-seeds` | `potato-seeds` | `/api/v1/our-brands/brands/potato-seeds/detail` | `app/our-brands/potato-seeds/page.tsx` |
+| **Malik's Farm** | `/our-brands/maliks-farm` | **`malik-farms`** <br/>*(singular "malik", plural "farms")* | `/api/v1/our-brands/brands/malik-farms/detail` | `app/our-brands/maliks-farm/page.tsx` |
+| **Origene by Malik** | `/our-brands/origene` | `Origene by Malik` *(or `origene`)* | `/api/v1/our-brands/brands/Origene%20by%20Malik/detail` | `app/our-brands/origene/page.tsx` |
+| **Malik's Flower** | `/our-brands/maliks-flower` | `maliks-flower` | `/api/v1/our-brands/brands/maliks-flower/detail` | `app/our-brands/maliks-flower/page.tsx` |
+| **Innovation & Development** | `/our-brands/innovation-development` | `innovation-development` *(or `innovation`)* | `/api/v1/our-brands/brands/innovation-development/detail` | `app/our-brands/innovation-development/page.tsx` |
+
+> [!IMPORTANT]
+> **CMS Brand Slug & Route Matching Notice (All Brands):**
+> Brand page content is fetched dynamically from `/api/v1/our-brands/brands/${slug}/detail`. If the slug configured in the CMS database does not match the slug expected by the frontend resolver, the API returns `404 Not Found` and dynamic content fails to load.
+> 
+> **Key Slug Conventions Across All Brands:**
+> 1. **Malik's Farm**: Frontend route is `/our-brands/maliks-farm`, but the CMS slug is **`malik-farms`** *(singular "malik", plural "farms")*.
+> 2. **Origene by Malik**: Frontend route is `/our-brands/origene`, but the CMS slug is **`Origene by Malik`** *(or `origene`)*.
+> 3. **Innovation & Development**: Frontend route is `/our-brands/innovation-development`, and CMS slug is **`innovation-development`** *(or `innovation` on staging)*.
+> 4. **Vegetable Seeds**: Must be **`vegetable-seeds`** *(plural "seeds", not singular "seed")*.
+> 5. **Potato Seeds**: Must be **`potato-seeds`** *(plural "seeds", not singular "seed")*.
+> 6. **Malik's Flower**: Must be **`maliks-flower`** *(with "s" on "maliks")*.
+> 
+> *The frontend `brandsApi.resolveBrandSlug()` includes built-in tolerance and alias matching, but maintaining these exact slugs in the CMS database guarantees direct cache hits and prevents 404 errors.*
+
+---
+
+### 🌐 All Website Page Paths (CMS SEO `page_path` Configuration)
+
+When configuring SEO metadata records in the CMS (`/api/v1/page-seo`), set the `page_path` column to the following exact paths:
+
+| # | Page / Feature | Exact `page_path` in CMS | Next.js Source File |
+| :---: | :--- | :--- | :--- |
+| 1 | **Home Page** | `/` | `app/page.tsx` |
+| 2 | **About Us** | `/about` | `app/about/page.tsx` |
+| 3 | **Our Brands (Overview)** | `/our-brands` | `app/our-brands/page.tsx` |
+| 4 | **Our Brands: Vegetable Seeds** | `/our-brands/vegetable-seeds` | `app/our-brands/vegetable-seeds/page.tsx` |
+| 5 | **Our Brands: Potato Seeds** | `/our-brands/potato-seeds` | `app/our-brands/potato-seeds/page.tsx` |
+| 6 | **Our Brands: Malik's Farm** | `/our-brands/maliks-farm` | `app/our-brands/maliks-farm/page.tsx` |
+| 7 | **Our Brands: Origene by Malik** | `/our-brands/origene` | `app/our-brands/origene/page.tsx` |
+| 8 | **Our Brands: Malik's Flower** | `/our-brands/maliks-flower` | `app/our-brands/maliks-flower/page.tsx` |
+| 9 | **Our Brands: Innovation & Development** | `/our-brands/innovation-development` | `app/our-brands/innovation-development/page.tsx` |
+| 10 | **Our Products (Catalog)** | `/our-products` | `app/our-products/page.tsx` |
+| 11 | **News & Announcements (Index)** | `/news` | `app/news/page.tsx` |
+| 12 | **Careers (Portal Overview)** | `/careers` | `app/careers/page.tsx` |
+| 13 | **Careers: Open Positions** | `/careers/open-positions` | `app/careers/open-positions/page.tsx` |
+| 14 | **Our Gallery (Media)** | `/our-gallery` | `app/our-gallery/page.tsx` |
+| 15 | **Contact Us** | `/contact` | `app/contact/page.tsx` |
 
 ### ⚡ Dynamic Routes (Sitemap Auto-Populated)
 - `/news/[slug]` — Individual news article page (dynamic slug)
